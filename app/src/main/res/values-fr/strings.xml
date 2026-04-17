@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">UpAgain</string>
+    <string name="shop">Magasin</string>
+    <string name="community">Communauté</string>
+    <string name="home">Accueil</string>
+    <string name="container">Containeur</string>
+    <string name="profile">Profil</string>
+</resources>
