@@ -1,48 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <!-- Headings -->
-    <style name="TextAppearance.UpAgain.H1">
-        <item name="android:fontFamily">@font/nunito_bold</item>
-        <item name="android:textSize">24sp</item>
-    </style>
-
-    <style name="TextAppearance.UpAgain.H2">
-        <item name="android:fontFamily">@font/nunito_semibold</item>
-        <item name="android:textSize">20sp</item>
-    </style>
-
-    <style name="TextAppearance.UpAgain.H3">
-        <item name="android:fontFamily">@font/nunito_semibold</item>
-        <item name="android:textSize">18sp</item>
-    </style>
-
-    <!-- Body -->
-    <style name="TextAppearance.UpAgain.BodyLarge">
-        <item name="android:fontFamily">@font/nunito_regular</item>
-        <item name="android:textSize">16sp</item>
-    </style>
-
-    <style name="TextAppearance.UpAgain.BodyMedium">
-        <item name="android:fontFamily">@font/nunito_regular</item>
-        <item name="android:textSize">14sp</item>
-    </style>
-
-    <style name="TextAppearance.UpAgain.BodySmall">
-        <item name="android:fontFamily">@font/nunito_regular</item>
-        <item name="android:textSize">12sp</item>
-    </style>
-
-    <!-- Buttons -->
-    <style name="TextAppearance.UpAgain.Button">
-        <item name="android:fontFamily">@font/nunito_semibold</item>
-        <item name="android:textSize">14sp</item>
-    </style>
-
-    <!-- Caption / meta -->
-    <style name="TextAppearance.UpAgain.Caption">
-        <item name="android:fontFamily">@font/nunito_italic</item>
-        <item name="android:textSize">12sp</item>
-    </style>
-
 </resources>
