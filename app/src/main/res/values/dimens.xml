@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!--Spacing-->
+    <dimen name="space_xs">4dp</dimen>
+    <dimen name="space_sm">8dp</dimen> <!--Elements space-->
+    <dimen name="space_md">12dp</dimen> <!--Elements space-->
+    <dimen name="space_lg">16dp</dimen> <!--Screen padding-->
+    <dimen name="space_xl">24dp</dimen> <!--Section space-->
+    <dimen name="space_xxl">32dp</dimen>
+
+
+
+    <!-- Touch targets -->
+    <dimen name="min_touch">48dp</dimen>
+
+    <!-- Buttons -->
+    <dimen name="button_height">48dp</dimen>
+    <dimen name="button_radius">12dp</dimen>
+
+    <!-- Cards -->
+    <dimen name="card_radius">16dp</dimen>
+    <dimen name="card_padding">16dp</dimen>
+
+    <!-- Inputs -->
+    <dimen name="input_radius">12dp</dimen>
+    <dimen name="input_padding">12dp</dimen>
+
+    <!-- Icons -->
+    <dimen name="icon_sm">16dp</dimen>
+    <dimen name="icon_md">24dp</dimen>
+    <dimen name="icon_lg">32dp</dimen>
+</resources>
