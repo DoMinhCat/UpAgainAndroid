@@ -17,15 +17,18 @@
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:padding="@dimen/space_lg">
+            android:paddingHorizontal="@dimen/space_lg"
+            android:paddingTop="@dimen/space_lg"
+            android:paddingBottom="@dimen/space_md">
 
             <TextView
                 android:id="@+id/tv_shop_title"
-                style="@style/TextAppearance.UpAgain.H1"
+                style="@style/TextAppearance.Material3.HeadlineMedium"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/shop"
                 android:textColor="@color/color_on_background"
+                android:textStyle="bold"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
@@ -44,32 +47,43 @@
                 app:tint="@color/color_secondary" />
         </androidx.constraintlayout.widget.ConstraintLayout>
 
-        <com.google.android.material.textfield.TextInputLayout
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="@dimen/button_height"
             android:layout_marginHorizontal="@dimen/space_lg"
-            android:hint="@string/placeholder_search"
-            app:boxBackgroundColor="@color/color_on_background"
-            app:boxCornerRadiusBottomEnd="@dimen/input_radius"
-            app:boxCornerRadiusBottomStart="@dimen/input_radius"
-            app:boxCornerRadiusTopEnd="@dimen/input_radius"
-            app:boxCornerRadiusTopStart="@dimen/input_radius"
-            app:boxStrokeWidth="0dp"
-            app:boxStrokeWidthFocused="1dp"
-            app:startIconDrawable="@drawable/ic_search">
+            android:layout_marginTop="@dimen/space_md"
+        android:background="@drawable/input_round"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:paddingHorizontal="@dimen/space_md">
 
-            <com.google.android.material.textfield.TextInputEditText
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/button_height"
-                android:inputType="text" />
-        </com.google.android.material.textfield.TextInputLayout>
+        <ImageView
+            android:layout_width="@dimen/icon_md"
+            android:layout_height="@dimen/icon_md"
+            android:src="@drawable/ic_search"
+            app:tint="@color/color_secondary" />
+
+        <EditText
+            android:id="@+id/et_search"
+            style="@style/TextAppearance.UpAgain.BodyMedium"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginStart="@dimen/space_sm"
+        android:background="@android:color/transparent"
+        android:hint="@string/placeholder_search"
+        android:inputType="text"
+        android:textColor="@color/color_on_background"
+        android:textColorHint="@color/color_secondary" />
+
+    </LinearLayout>
 
         <HorizontalScrollView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:clipToPadding="false"
             android:paddingHorizontal="@dimen/space_lg"
-            android:paddingVertical="@dimen/space_md"
+            android:paddingTop="@dimen/space_md"
+            android:paddingBottom="@dimen/space_sm"
             android:scrollbars="none">
 
             <com.google.android.material.chip.ChipGroup
@@ -84,51 +98,64 @@
                     style="@style/Widget.Material3.Chip.Filter"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textColor="@color/color_on_background"
                     android:text="@string/material_wood"
-                    app:chipBackgroundColor="@color/color_surface" />
+                    app:chipBackgroundColor="@color/color_surface"
+                    app:chipStrokeWidth="0dp"
+                    android:textColor="@color/color_on_background" />
+
                 <com.google.android.material.chip.Chip
                     style="@style/Widget.Material3.Chip.Filter"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/material_textile"
-                    android:textColor="@color/color_on_background"
-                    app:chipBackgroundColor="@color/color_surface" />
+                    app:chipBackgroundColor="@color/color_surface"
+                    app:chipStrokeWidth="0dp"
+                    android:textColor="@color/color_on_background" />
+
                 <com.google.android.material.chip.Chip
                     style="@style/Widget.Material3.Chip.Filter"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/material_glass"
-                    android:textColor="@color/color_on_background"
-                    app:chipBackgroundColor="@color/color_surface" />
+                    app:chipBackgroundColor="@color/color_surface"
+                    app:chipStrokeWidth="0dp"
+                    android:textColor="@color/color_on_background" />
+
                 <com.google.android.material.chip.Chip
                     style="@style/Widget.Material3.Chip.Filter"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/material_metal"
-                    android:textColor="@color/color_on_background"
-                    app:chipBackgroundColor="@color/color_surface" />
+                    app:chipBackgroundColor="@color/color_surface"
+                    app:chipStrokeWidth="0dp"
+                    android:textColor="@color/color_on_background" />
+
                 <com.google.android.material.chip.Chip
                     style="@style/Widget.Material3.Chip.Filter"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/material_plastic"
-                    android:textColor="@color/color_on_background"
-                    app:chipBackgroundColor="@color/color_surface" />
+                    app:chipBackgroundColor="@color/color_surface"
+                    app:chipStrokeWidth="0dp"
+                    android:textColor="@color/color_on_background" />
+
                 <com.google.android.material.chip.Chip
                     style="@style/Widget.Material3.Chip.Filter"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/material_mixed"
-                    android:textColor="@color/color_on_background"
-                    app:chipBackgroundColor="@color/color_surface" />
+                    app:chipBackgroundColor="@color/color_surface"
+                    app:chipStrokeWidth="0dp"
+                    android:textColor="@color/color_on_background" />
+
                 <com.google.android.material.chip.Chip
                     style="@style/Widget.Material3.Chip.Filter"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/material_other"
-                    android:textColor="@color/color_on_background"
-                    app:chipBackgroundColor="@color/color_surface" />
+                    app:chipBackgroundColor="@color/color_surface"
+                    app:chipStrokeWidth="0dp"
+                    android:textColor="@color/color_on_background" />
             </com.google.android.material.chip.ChipGroup>
         </HorizontalScrollView>
     </com.google.android.material.appbar.AppBarLayout>
@@ -138,7 +165,11 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:paddingHorizontal="@dimen/space_md"
+        android:clipToPadding="false"
+        android:paddingBottom="@dimen/space_xxl"
         app:layout_behavior="@string/appbar_scrolling_view_behavior"
-        tools:listitem="@layout/item_shop_card"/>
+        tools:listitem="@layout/item_shop_card"
+        tools:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
+        tools:spanCount="2"/>
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
