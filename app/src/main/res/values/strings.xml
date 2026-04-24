@@ -8,6 +8,13 @@
     <string name="container">Container</string>
     <string name="profile">Profile</string>
 
+    <!-- Image description -->
+    <string name="img_thumbnail_description">Thumbnail image</string>
+
+    <!-- Common buttons -->
+    <string name="btn_view">View</string>
+
+
     <!-- Login -->
     <string name="email" translatable="false">Email</string>
     <string name="password">Password</string>
@@ -22,11 +29,15 @@
     <!-- Placeholder -->
     <string name="placeholder_search">Search</string>
 
+    <!-- Common dynamic attributes  -->
+    <string name="string_dynamic" translatable="false">%1$s</string>
+    <string name="date_dynamic" translatable="false">\u2022 %1$s</string>
+    <string name="float_dynamic" translatable="false">%1$.2f</string>
+    <string name="author_dynamic">by %1$s</string>
+    <string name="count_dynamic" translatable="false">%1$.1f%2$c</string>
 
     <!-- Shop -->
     <string name="my_transactions">My Transactions</string>
-    <string name="item_title" translatable="false">%1$s</string>
-    <string name="item_price" translatable="false">%1$f</string>
     <string name="material_wood">Wood</string>
     <string name="material_metal">Metal</string>
     <string name="material_textile">Textile</string>
@@ -34,5 +45,15 @@
     <string name="material_plastic">Plastic</string>
     <string name="material_mixed">Mixed</string>
     <string name="material_other">Other</string>
+
+    <!-- Post -->
+    <string name="filter_most_like">Most liked</string>
+    <string name="filter_most_view">Most viewed</string>
+    <string name="category_tutorial">Tutorial</string>
+    <string name="category_project">Project</string>
+    <string name="category_tips">Tips</string>
+    <string name="category_news">News</string>
+    <string name="category_case_study">Case Study</string>
+    <string name="category_other">Other</string>
 
 </resources>

@@ -1,50 +1,143 @@
+<?xml version="1.0" encoding="utf-8"?>
 <com.google.android.material.card.MaterialCardView
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_margin="@dimen/space_sm"
+    android:layout_marginHorizontal="@dimen/space_md"
+    android:layout_marginVertical="@dimen/space_sm"
+    android:clickable="true"
+    android:focusable="true"
     app:cardBackgroundColor="@color/color_surface"
     app:cardCornerRadius="@dimen/card_radius"
-    app:cardElevation="2dp"
-    app:strokeColor="@color/color_outline"
-    app:strokeWidth="0.5dp">
+    app:cardElevation="1dp"
+    app:strokeWidth="0dp">
 
-    <LinearLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:padding="@dimen/card_padding">
+        android:layout_height="wrap_content">
 
         <ImageView
             android:id="@+id/item_image"
-            android:layout_width="match_parent"
-            android:layout_height="140dp"
+            android:layout_width="0dp"
+            android:layout_height="160dp"
             android:scaleType="centerCrop"
-            android:background="@color/color_background" />
+            android:background="@color/color_background"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:srcCompat="@tools:sample/backgrounds/scenic" />
 
-        <TextView
-            android:id="@+id/item_title"
-            style="@style/TextAppearance.UpAgain.H3"
-            android:layout_width="match_parent"
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/space_sm"
-            android:text="@string/item_title" />
+            android:padding="@dimen/card_padding"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/item_image">
 
-        <TextView
-            android:id="@+id/item_price"
-            style="@style/TextAppearance.UpAgain.BodyMedium"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/item_price"
-            android:textColor="@color/color_primary" />
+            <LinearLayout
+                android:id="@+id/category_layout"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
 
-        <com.google.android.material.button.MaterialButton
-            style="@style/Widget.Material3.Button.TonalButton"
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/button_height"
-            android:layout_marginTop="@dimen/space_md"
-            android:text="View Details"
-            app:cornerRadius="@dimen/button_radius" />
-    </LinearLayout>
+                <TextView
+                    android:id="@+id/item_category_1"
+                    style="@style/TextAppearance.UpAgain.BodySmall"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/input_round"
+                    android:backgroundTint="@color/color_primary"
+                    android:paddingHorizontal="@dimen/space_sm"
+                    android:paddingVertical="2dp"
+                    android:layout_marginEnd="@dimen/space_xs"
+                    android:textColor="@color/color_secondary"
+                    tools:text="@string/string_dynamic" />
+
+                <TextView
+                    android:id="@+id/item_category_2"
+                    style="@style/TextAppearance.UpAgain.BodySmall"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/space_xs"
+                    android:background="@drawable/input_round"
+                    android:backgroundTint="@color/color_secondary"
+                    android:paddingHorizontal="@dimen/space_sm"
+                    android:paddingVertical="2dp"
+                    android:textColor="@color/color_on_secondary"
+
+                    tools:text="@string/string_dynamic" />
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/item_title"
+                style="@style/TextAppearance.UpAgain.H3"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/space_sm"
+                android:ellipsize="end"
+                android:maxLines="1"
+                android:textColor="@color/color_on_surface"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/category_layout"
+                tools:text="@string/string_dynamic" />
+
+            <TextView
+                android:id="@+id/item_author"
+                style="@style/TextAppearance.UpAgain.BodySmall"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/color_secondary"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/item_title"
+                tools:text="@string/author_dynamic" />
+
+            <TextView
+                android:id="@+id/item_date"
+                style="@style/TextAppearance.UpAgain.BodySmall"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/space_xs"
+                android:textColor="@color/color_secondary"
+                app:layout_constraintStart_toEndOf="@+id/item_author"
+                app:layout_constraintTop_toBottomOf="@+id/item_title"
+                tools:text="@string/date_dynamic" />
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/space_md"
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/item_author">
+
+                <TextView
+                    android:id="@+id/item_price"
+                    style="@style/TextAppearance.UpAgain.H3"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:textColor="@color/color_on_background"
+                    tools:text="@string/float_dynamic" />
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btn_view"
+                    android:layout_width="wrap_content"
+                    android:layout_height="@dimen/button_height"
+                    android:text="@string/btn_view"
+                    android:backgroundTint="@color/color_primary"
+                    android:textColor="@color/color_on_primary"
+                    app:cornerRadius="@dimen/button_radius" />
+            </LinearLayout>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 </com.google.android.material.card.MaterialCardView>
