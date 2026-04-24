@@ -1,4 +1,46 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <style name="TextAppearance.UpAgain.H1">
+        <item name="android:textSize">24sp</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:lineHeight">32sp</item>
+    </style>
 
+    <!-- H2 -->
+    <style name="TextAppearance.UpAgain.H2">
+        <item name="android:textSize">20sp</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:lineHeight">28sp</item>
+    </style>
+
+    <!-- H3 -->
+    <style name="TextAppearance.UpAgain.H3">
+        <item name="android:textSize">18sp</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:lineHeight">26sp</item>
+    </style>
+
+    <!-- Body Large -->
+    <style name="TextAppearance.UpAgain.BodyLarge">
+        <item name="android:textSize">16sp</item>
+        <item name="android:lineHeight">22sp</item>
+    </style>
+
+    <!-- Body Medium -->
+    <style name="TextAppearance.UpAgain.BodyMedium">
+        <item name="android:textSize">14sp</item>
+        <item name="android:lineHeight">20sp</item>
+    </style>
+
+    <!-- Body Small -->
+    <style name="TextAppearance.UpAgain.BodySmall">
+        <item name="android:textSize">12sp</item>
+        <item name="android:lineHeight">16sp</item>
+    </style>
+
+    <!-- Button -->
+    <style name="TextAppearance.UpAgain.Button">
+        <item name="android:textSize">14sp</item>
+        <item name="android:textStyle">bold</item>
+    </style>
 </resources>

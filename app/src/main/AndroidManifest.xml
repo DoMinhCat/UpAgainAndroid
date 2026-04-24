@@ -12,9 +12,11 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.UpAgain">
         <activity
+            android:name=".LoginActivity"
+            android:exported="false" />
+        <activity
             android:name=".MainActivity"
             android:exported="true"
-            android:label="@string/app_name"
             android:theme="@style/Theme.UpAgain">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
