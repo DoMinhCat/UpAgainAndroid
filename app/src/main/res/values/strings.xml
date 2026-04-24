@@ -18,4 +18,21 @@
     <string name="invalid_email">Invalid email</string>
     <string name="incorrect_password">Incorrect password</string>
     <string name="login_footer">All rights reserved • UpAgain</string>
+
+    <!-- Placeholder -->
+    <string name="placeholder_search">Search</string>
+
+
+    <!-- Shop -->
+    <string name="my_transactions">My Transactions</string>
+    <string name="item_title" translatable="false">%1$s</string>
+    <string name="item_price" translatable="false">%1$f</string>
+    <string name="material_wood">Wood</string>
+    <string name="material_metal">Metal</string>
+    <string name="material_textile">Textile</string>
+    <string name="material_glass">Glass</string>
+    <string name="material_plastic">Plastic</string>
+    <string name="material_mixed">Mixed</string>
+    <string name="material_other">Other</string>
+
 </resources>

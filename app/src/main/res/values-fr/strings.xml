@@ -14,4 +14,13 @@
     <string name="incorrect_password">Mot de passe incorrect</string>
     <string name="login_footer">Tous droits réservés • UpAgain</string>
     <string name="no_account">Vous n\'avez pas encore un compte ?</string>
+    <string name="placeholder_search">Rechercher</string>
+    <string name="my_transactions">Mes Transactions</string>
+    <string name="material_wood">Bois</string>
+    <string name="material_metal">Métal</string>
+    <string name="material_textile">Textile</string>
+    <string name="material_glass">Verre</string>
+    <string name="material_plastic">Plastique</string>
+    <string name="material_mixed">Mixte</string>
+    <string name="material_other">Autre</string>
 </resources>
