@@ -56,4 +56,16 @@
     <string name="category_case_study">Case Study</string>
     <string name="category_other">Other</string>
 
+    <!-- Container -->
+    <string name="code_hint" translatable="false">ABC123</string>
+    <string name="code">6-digit code</string>
+    <string name="barcode">Barcode</string>
+    <string name="barcode_upload_hint">Tap to upload barcode</string>
+    <string name="container_desc">Enter the 6-digit security code or scan the barcode found on the container seal to proceed.</string>
+    <string name="container_how_to">You can find the code on the back of the physical tag or inside the shipping email.</string>
+    <string name="btn_open_container">Submit &amp; Open</string>
+
+
+
+
 </resources>
