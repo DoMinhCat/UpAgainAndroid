@@ -61,4 +61,19 @@ dependencies {
     // Pour les Coroutines
     implementation(libs.kotlinx.coroutines.core)
     implementation(libs.kotlinx.coroutines.android)
+
+    implementation(platform(libs.androidx.compose.bom))
+    implementation(libs.androidx.ui)
+    implementation(libs.androidx.ui.graphics)
+    implementation(libs.androidx.material3)
+
+    // 2. Coil (Image Loading)
+    implementation(libs.coil.compose)
+
+    // 3. OkHttp (Networking)
+    implementation(libs.okhttp)
+    implementation(libs.okhttp.logging)
+
+    // 4. EncryptedSharedPreferences (Security)
+    implementation(libs.androidx.security.crypto)
 }
