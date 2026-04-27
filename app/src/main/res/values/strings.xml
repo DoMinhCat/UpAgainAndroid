@@ -13,6 +13,8 @@
 
     <!-- Common buttons -->
     <string name="btn_view">View</string>
+    <string name="btn_home">Back to home</string>
+    <string name="btn_refresh">Refresh page</string>
 
 
     <!-- Login -->
@@ -61,11 +63,19 @@
     <string name="code">6-digit code</string>
     <string name="barcode">Barcode</string>
     <string name="barcode_upload_hint">Tap to upload barcode</string>
-    <string name="container_desc">Enter the 6-digit security code or scan the barcode found on the container seal to proceed.</string>
-    <string name="container_how_to">You can find the code on the back of the physical tag or inside the shipping email.</string>
+    <string name="container_desc">Enter the 6-digit security code or upload the barcode provided to open the container.</string>
+    <string name="container_how_to">You can find the code on the transaction detail page</string>
     <string name="btn_open_container">Submit &amp; Open</string>
 
-
+    <!-- Errors -->
+    <string name="error_404" translatable="false">404</string>
+    <string name="error_500" translatable="false">500</string>
+    <string name="error_404_description">Page Not Found</string>
+    <string name="error_500_description">Internal Server Error</string>
+    <string name="error_connection_description">No Internet Connection</string>
+    <string name="error_404_msg">Oops! It looks like this path has been reclaimed by nature. Let\'s get you back on track.</string>
+    <string name="error_500_msg">Oops! Our servers are experiencing some heavy lifting. We\'re working on fixing it as fast as we can.</string>
+    <string name="error_connection_msg">Oops! Your connection was lost. Please check your signal and try again to continue your journey.</string>
 
 
 </resources>

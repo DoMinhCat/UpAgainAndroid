@@ -34,4 +34,18 @@
     <string name="img_thumbnail_description">Image principale</string>
     <string name="btn_view">Voir</string>
     <string name="author_dynamic">par %1$s</string>
+    <string name="code">Code à 6 chiffres</string>
+    <string name="barcode">Code-barres</string>
+    <string name="barcode_upload_hint">Appuyez pour télécharger le code-barres</string>
+    <string name="container_desc">Saisissez le code de sécurité à 6 chiffres ou téléchargez le code-barres fourni pour ouvrir le conteneur.</string>
+    <string name="container_how_to">Vous trouverez le code sur la page de détails de la transaction.</string>
+    <string name="btn_open_container">Soumettre &amp; Ouvrir</string>
+    <string name="error_404_description">Page non trouvée</string>
+    <string name="error_500_description">Erreur interne du serveur</string>
+    <string name="error_connection_description">Aucune connexion internet</string>
+    <string name="error_404_msg">Oups ! Il semblerait que la nature ait repris ses droits sur ce chemin. Remettons-nous sur le bon chemin.</string>
+    <string name="btn_home">Retour à l\'accueil</string>
+    <string name="error_500_msg">Oups ! Nos serveurs sont actuellement très sollicités. Nous mettons tout en œuvre pour résoudre le problème au plus vite.</string>
+    <string name="btn_refresh">Actualiser la page</string>
+    <string name="error_connection_msg">Oups ! Votre connexion a été interrompue. Veuillez vérifier votre signal et réessayer pour poursuivre votre voyage.</string>
 </resources>
