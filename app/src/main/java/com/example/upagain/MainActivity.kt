@@ -46,7 +46,7 @@ class MainActivity : AppCompatActivity() {
                     true
                 }
                 R.id.nav_profile -> {
-                    replaceFragment(ShopFragment()) // TODO: change to home dashboard
+                    replaceFragment(ProfileFragment()) // TODO: change to home dashboard
                     true
                 }
                 else -> false
