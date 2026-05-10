@@ -38,7 +38,7 @@ class MainActivity : AppCompatActivity() {
                     true
                 }
                 R.id.nav_dashboard -> {
-                    replaceFragment(ContainerFragment())
+                    replaceFragment(DashboardFragment())
                     true
                 }
                 R.id.nav_community -> {
@@ -46,7 +46,7 @@ class MainActivity : AppCompatActivity() {
                     true
                 }
                 R.id.nav_profile -> {
-                    replaceFragment(ProfileFragment()) // TODO: change to home dashboard
+                    replaceFragment(ProfileFragment())
                     true
                 }
                 else -> false
