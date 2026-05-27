@@ -1,4 +1,4 @@
-package com.example.upagain
+package com.example.upagain.ui
 
 import android.os.Bundle
 import androidx.activity.enableEdgeToEdge
