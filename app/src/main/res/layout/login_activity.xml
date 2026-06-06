@@ -7,7 +7,7 @@
     android:layout_height="match_parent"
     android:background="@color/color_background"
     android:padding="@dimen/space_lg"
-    tools:context=".LoginActivity">
+    tools:context=".feat.auth.LoginActivity">
 
     <!-- Top Section: Logo and app name -->
     <LinearLayout

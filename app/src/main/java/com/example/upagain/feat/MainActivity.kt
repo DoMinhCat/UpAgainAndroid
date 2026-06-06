@@ -1,12 +1,17 @@
-package com.example.upagain
+package com.example.upagain.feat
 
 import android.os.Bundle
+import android.view.View
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.updatePadding
 import androidx.fragment.app.Fragment
+import com.example.upagain.R
+import com.example.upagain.feat.dashboard.DashboardFragment
+import com.example.upagain.feat.post.PostFragment
+import com.example.upagain.feat.shop.ShopFragment
 import com.google.android.material.bottomnavigation.BottomNavigationView
 
 class MainActivity : AppCompatActivity() {
@@ -17,7 +22,7 @@ class MainActivity : AppCompatActivity() {
         enableEdgeToEdge()
         setContentView(R.layout.main_activity)
 
-        val mainView = findViewById<android.view.View>(R.id.main)
+        val mainView = findViewById<View>(R.id.main)
         bottomNav = findViewById(R.id.bottom_nav)
         bottomNav?.itemIconTintList = null
 
