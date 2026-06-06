@@ -8,8 +8,6 @@
     <dimen name="space_xl">24dp</dimen> <!--Section space-->
     <dimen name="space_xxl">32dp</dimen>
 
-
-
     <!-- Touch targets -->
     <dimen name="min_touch">48dp</dimen>
 

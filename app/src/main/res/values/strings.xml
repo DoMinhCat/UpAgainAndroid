@@ -1,3 +1,49 @@
 <resources>
     <string name="app_name">UpAgain</string>
+
+    <!-- Nav bar -->
+    <string name="shop">Shop</string>
+    <string name="community">Community</string>
+    <string name="home">Home</string>
+    <string name="container">Container</string>
+    <string name="profile">Profile</string>
+
+    <!-- Login -->
+    <string name="email" translatable="false">Email</string>
+    <string name="password">Password</string>
+    <string name="login">Login</string>
+    <string name="forgot_password">Forgot password?</string>
+    <string name="signup">Sign up</string>
+    <string name="no_account">Don\'t have an account yet?</string>
+    <string name="invalid_email">Invalid email</string>
+    <string name="incorrect_password">Incorrect password</string>
+    <string name="login_footer">All rights reserved • UpAgain</string>
+
+    <!-- Placeholder -->
+    <string name="placeholder_search">Search</string>
+
+    <!-- Dashboard -->
+    <string name="dashboard">Dashboard</string>
+    <string name="inventory_summary">Inventory Summary</string>
+    <string name="financial_overview">Financial Overview</string>
+    <string name="stock">Stock</string>
+    <string name="sold">Sold</string>
+    <string name="total_spent">TOTAL SPENT</string>
+    <string name="items_bought">ITEMS BOUGHT</string>
+    <string name="event_fees">EVENT FEES</string>
+    <string name="total_projects">TOTAL PROJECTS</string>
+    <string name="spending_by_material">Spending by material</string>
+
+    <!-- Shop -->
+    <string name="my_transactions">My Transactions</string>
+    <string name="item_title" translatable="false">%1$s</string>
+    <string name="item_price" translatable="false">%1$f</string>
+    <string name="material_wood">Wood</string>
+    <string name="material_metal">Metal</string>
+    <string name="material_textile">Textile</string>
+    <string name="material_glass">Glass</string>
+    <string name="material_plastic">Plastic</string>
+    <string name="material_mixed">Mixed</string>
+    <string name="material_other">Other</string>
+
 </resources>

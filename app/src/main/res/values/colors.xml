@@ -10,6 +10,9 @@
     <color name="color_secondary">#44444E</color>
     <color name="color_on_secondary">#FFFFFF</color>
 
+    <color name="color_light_green">#bee2c7</color>
+    <color name="color_on_light_green">#2A2A28</color>
+
     <color name="color_background">#F9F7F2</color>
     <color name="color_on_background">#2A2A28</color>
 

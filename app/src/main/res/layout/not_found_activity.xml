@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/color_background"
+    android:padding="@dimen/space_xl">
+
+    <TextView
+        android:id="@+id/tv_error_code"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="120sp"
+        android:textStyle="bold"
+        android:textColor="@color/color_primary"
+        android:alpha="0.4"
+        app:layout_constraintBottom_toTopOf="@+id/tv_error_title"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:text="@string/error_404" />
+
+    <TextView
+        android:id="@+id/tv_error_title"
+        style="@style/TextAppearance.UpAgain.H1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="-24dp"
+        android:textColor="@color/color_on_background"
+        app:layout_constraintBottom_toTopOf="@+id/tv_error_message"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tv_error_code"
+        android:text="@string/error_404_description" />
+
+    <TextView
+        android:id="@+id/tv_error_message"
+        style="@style/TextAppearance.UpAgain.BodyLarge"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/space_md"
+        android:gravity="center"
+        android:textColor="@color/color_secondary"
+        app:layout_constraintBottom_toTopOf="@+id/btn_error_action"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tv_error_title"
+        android:text="@string/error_404_msg" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/btn_error_action"
+        style="@style/Widget.Material3.Button"
+        android:layout_width="wrap_content"
+        android:layout_height="@dimen/button_height"
+        android:layout_marginTop="@dimen/space_xl"
+        android:paddingHorizontal="@dimen/space_xl"
+        android:text="@string/btn_home"
+        app:backgroundTint="@color/color_primary"
+        app:cornerRadius="@dimen/button_radius"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tv_error_message" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

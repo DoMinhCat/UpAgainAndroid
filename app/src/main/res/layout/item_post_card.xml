@@ -1,0 +1,177 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.google.android.material.card.MaterialCardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginHorizontal="@dimen/space_md"
+    android:layout_marginVertical="@dimen/space_sm"
+    android:clickable="true"
+    android:focusable="true"
+    app:cardBackgroundColor="@color/color_surface"
+    app:cardCornerRadius="@dimen/card_radius"
+    app:cardElevation="1dp"
+    app:strokeWidth="0dp">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <ImageView
+            android:id="@+id/post_thumbnail"
+            android:layout_width="0dp"
+            android:layout_height="120dp"
+            android:scaleType="centerCrop"
+            android:background="@color/color_primary_variant"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:srcCompat="@tools:sample/backgrounds/scenic"
+            android:contentDescription="@string/img_thumbnail_description" />
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/content_container"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:padding="@dimen/card_padding"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/post_thumbnail">
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/post_category"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:backgroundTint="@color/color_accent"
+                android:minHeight="32dp"
+                app:cornerRadius="16dp"
+                android:paddingHorizontal="@dimen/space_md"
+                android:paddingVertical="0dp"
+                android:textColor="@color/color_on_surface"
+                android:text="@string/string_dynamic"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/post_title"
+                style="@style/TextAppearance.UpAgain.H3"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/space_md"
+                android:ellipsize="end"
+                android:maxLines="2"
+                android:textColor="@color/color_on_surface"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/post_category"
+                tools:text="@string/string_dynamic" />
+
+            <LinearLayout
+                android:id="@+id/author_date_row"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/space_sm"
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/post_title">
+
+                <TextView
+                    android:id="@+id/post_author"
+                    style="@style/TextAppearance.UpAgain.BodyMedium"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textStyle="bold"
+                    android:textColor="@color/color_on_surface"
+                    tools:text="@string/author_dynamic" />
+
+                <TextView
+                    android:id="@+id/post_date"
+                    style="@style/TextAppearance.UpAgain.BodySmall"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/space_xs"
+                    android:textColor="@color/color_secondary"
+                    tools:text="@string/date_dynamic" />
+            </LinearLayout>
+
+            <View
+                android:id="@+id/divider"
+                android:layout_width="0dp"
+                android:layout_height="1dp"
+                android:layout_marginTop="@dimen/space_md"
+                android:background="@color/color_outline"
+                android:alpha="0.2"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/author_date_row" />
+
+            <LinearLayout
+                android:id="@+id/meta_action_row"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/space_sm"
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/divider">
+
+                <ImageView
+                    android:layout_width="@dimen/icon_sm"
+                    android:layout_height="@dimen/icon_sm"
+                    android:src="@drawable/ic_view"
+                    app:tint="@color/color_secondary" />
+
+                <TextView
+                    android:id="@+id/post_views"
+                    style="@style/TextAppearance.UpAgain.BodySmall"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/space_xs"
+                    android:textColor="@color/color_secondary"
+                    tools:text="@string/count_dynamic" />
+
+                <View
+                    android:layout_width="@dimen/space_md"
+                    android:layout_height="1dp" />
+
+                <ImageView
+                    android:layout_width="@dimen/icon_sm"
+                    android:layout_height="@dimen/icon_sm"
+                    android:src="@drawable/ic_love"
+                    app:tint="@color/color_secondary" />
+
+                <TextView
+                    android:id="@+id/post_likes"
+                    style="@style/TextAppearance.UpAgain.BodySmall"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/space_xs"
+                    android:textColor="@color/color_secondary"
+                    tools:text="@string/count_dynamic" />
+
+                <View
+                    android:layout_width="0dp"
+                    android:layout_height="1dp"
+                    android:layout_weight="1" />
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btn_view"
+                    android:layout_width="wrap_content"
+                    android:backgroundTint="@color/color_primary"
+                    android:layout_height="@dimen/button_height"
+                    android:text="@string/btn_view"
+                    android:textColor="@color/color_on_primary"
+                    app:cornerRadius="@dimen/button_radius" />
+
+            </LinearLayout>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</com.google.android.material.card.MaterialCardView>

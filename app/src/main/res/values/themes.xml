@@ -1,35 +1,43 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <style name="Theme.UpAgain" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+    <style name="Theme.UpAgain" parent="Theme.Material3.DayNight.NoActionBar">
 
         <!-- Colors -->
         <item name="colorPrimary">@color/color_primary</item>
-        <item name="colorPrimaryVariant">@color/color_primary_variant</item>
         <item name="colorOnPrimary">@color/color_on_primary</item>
+        <item name="colorPrimaryContainer">@color/color_primary_variant</item>
+        <item name="colorOnPrimaryContainer">@color/color_on_primary</item>
 
         <item name="colorSecondary">@color/color_secondary</item>
         <item name="colorOnSecondary">@color/color_on_secondary</item>
+        <item name="colorSecondaryContainer">@color/color_secondary_variant</item>
+        <item name="colorOnSecondaryContainer">@color/color_on_secondary</item>
 
         <item name="android:colorBackground">@color/color_background</item>
         <item name="colorOnBackground">@color/color_on_background</item>
 
         <item name="colorSurface">@color/color_surface</item>
         <item name="colorOnSurface">@color/color_on_surface</item>
+        <item name="colorSurfaceVariant">@color/color_secondary_variant</item>
+        <item name="colorOnSurfaceVariant">@color/color_on_secondary</item>
 
         <item name="colorError">@color/color_error</item>
+        <item name="colorOnError">@color/white</item>
 
-        <!-- Typography -->
-        <item name="textAppearanceBody1">@style/TextAppearance.UpAgain.BodyLarge</item>
-        <item name="textAppearanceBody2">@style/TextAppearance.UpAgain.BodyMedium</item>
-        <item name="textAppearanceHeadline1">@style/TextAppearance.UpAgain.H1</item>
-        <item name="textAppearanceHeadline2">@style/TextAppearance.UpAgain.H2</item>
-        <item name="textAppearanceButton">@style/TextAppearance.UpAgain.Button</item>
+        <item name="colorOutline">@color/color_outline</item>
 
         <!-- UI tuning -->
         <item name="android:statusBarColor">@color/color_background</item>
         <item name="android:navigationBarColor">@color/color_background</item>
+    </style>
 
+    <style name="Widget.App.BottomNavigationView.ActiveIndicator"
+        parent="Widget.Material3.BottomNavigationView.ActiveIndicator">
+        <item name="android:color">@color/color_primary</item>
+        <item name="android:width">64dp</item>
+        <item name="android:height">40dp</item>
+        <item name="android:layout_marginTop">10dp</item>
     </style>
 
 </resources>
