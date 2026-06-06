@@ -1,3 +1,6 @@
+import java.io.FileInputStream
+import java.util.Properties
+
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.compose)
@@ -15,6 +18,17 @@ android {
         versionName = "1.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+
+        val properties = Properties().apply {
+            val propertiesFile = rootProject.file("local.properties")
+            if (propertiesFile.exists()) {
+                load(FileInputStream(propertiesFile))
+            }
+        }
+
+        // 2. Inject the variable into BuildConfig
+        buildConfigField("String", "API_BASE_URL", properties.getProperty("API_BASE_URL"))
+        buildConfigField("String", "MAP_API_KEY", properties.getProperty("MAP_API_KEY"))
     }
 
     buildTypes {
@@ -32,6 +46,7 @@ android {
     }
     buildFeatures {
         compose = true
+        buildConfig = true
     }
 }
 
