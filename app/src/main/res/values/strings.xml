@@ -17,6 +17,7 @@
     <string name="no_account">Don\'t have an account yet?</string>
     <string name="invalid_email">Invalid email</string>
     <string name="incorrect_password">Incorrect password</string>
+    <string name="login_success">Login successful</string>
     <string name="login_footer">All rights reserved • UpAgain</string>
 
     <!-- Placeholder -->
@@ -26,7 +27,7 @@
     <string name="dashboard">Dashboard</string>
     <string name="inventory_summary">Inventory Summary</string>
     <string name="financial_overview">Financial Overview</string>
-    <string name="stock">Stock</string>
+    <string name="stock" translatable="false">Stock</string>
     <string name="sold">Sold</string>
     <string name="total_spent">TOTAL SPENT</string>
     <string name="items_bought">ITEMS BOUGHT</string>
@@ -82,6 +83,7 @@
     <string name="error_500_msg">Oops! Our servers are currently very busy. We are doing everything we can to resolve the problem as quickly as possible.</string>
     <string name="btn_refresh">Refresh page</string>
     <string name="error_connection_msg">Oops! Your connection was interrupted. Please check your signal and try again to continue your journey.</string>
+    <string name="exception_message">An error occurred</string>
 
     <!-- Profile & Settings -->
     <string name="btn_save">Save</string>

@@ -6,11 +6,13 @@ import com.example.upagain.BuildConfig
 import com.example.upagain.feat.auth.LoginActivity
 import com.example.upagain.feat.error.InternalServerErrorActivity
 import com.example.upagain.feat.error.NotFoundActivity
-import com.example.upagain.model.AuthResponse
 import com.example.upagain.util.TokenManager
+import com.example.upagain.api.Endpoints
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import com.google.gson.Strictness
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 import okhttp3.FormBody
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
@@ -101,23 +103,18 @@ object ApiClient {
     }
 
     private fun refreshAccessToken(): String? {
-        return try {
+        try {
             val response = apiService.refresh().execute()
-            if (response.isSuccessful) {
-                val newToken = response.body()?.token
-                if (newToken != null) {
-                    TokenManager.getInstance(appContext).saveToken(newToken)
-                    newToken
-                } else {
-                    null
-                }
-            } else {
-                null
+            val newToken = response.body()?.token
+
+            if (response.isSuccessful && newToken != null) {
+                TokenManager.getInstance(appContext).saveToken(newToken)
+                return newToken
             }
         } catch (e: Exception) {
             e.printStackTrace()
-            null
         }
+        return null
     }
 
     private fun handleLogout() {
