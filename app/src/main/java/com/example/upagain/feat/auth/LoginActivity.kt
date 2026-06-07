@@ -48,6 +48,11 @@ class LoginActivity : AppCompatActivity() {
             insets
         }
 
+        val justLoggedOut = intent.getBooleanExtra("EXTRA_JUST_LOGGED_OUT", false)
+        if(justLoggedOut) {
+            binding.main.showTopSnackbar(R.string.logout_success, SnackbarLevel.INFO)
+        }
+
         // LOGIN BUTTON
         binding.btnLogin.setOnClickListener {
             val email = binding.tilEmail.editText?.text?.toString()?.lowercase()?.trim() ?: ""

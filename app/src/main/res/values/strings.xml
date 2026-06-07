@@ -18,6 +18,7 @@
     <string name="invalid_email">Invalid email</string>
     <string name="incorrect_password">Invalid password</string>
     <string name="login_success">Login successful</string>
+    <string name="logout_success">Logout successful</string>
     <string name="login_footer">All rights reserved • UpAgain</string>
     <string name="login_fail">Incorrect email or password</string>
 
