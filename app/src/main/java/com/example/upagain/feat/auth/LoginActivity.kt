@@ -21,8 +21,10 @@ import com.google.android.material.button.MaterialButton
 import kotlinx.coroutines.launch
 import androidx.core.net.toUri
 import com.example.upagain.feat.MainActivity
+import com.google.android.material.progressindicator.CircularProgressIndicator
 import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.textfield.TextInputLayout
+import kotlinx.coroutines.delay
 import retrofit2.HttpException
 
 class LoginActivity : AppCompatActivity() {
@@ -52,7 +54,7 @@ class LoginActivity : AppCompatActivity() {
         val passwordError = findViewById<TextView>(R.id.tv_password_error)
         val forgotPasswordButton = findViewById<TextView>(R.id.tv_forgot_password)
         val mainView = findViewById<View>(R.id.main)
-
+        val loader = findViewById<CircularProgressIndicator>(R.id.login_loader)
 
         // LOGIN BUTTON
         submitButton.setOnClickListener {
@@ -64,13 +66,12 @@ class LoginActivity : AppCompatActivity() {
 
             emailError.visibility = if (isEmailValid) View.GONE else View.VISIBLE
             passwordError.visibility = if (isPasswordValid) View.GONE else View.VISIBLE
-
             if (!isEmailValid && !isPasswordValid) {
                 return@setOnClickListener
             }
-            lifecycleScope.launch {
-                submitButton.showLoading(true)
 
+            toggleLoadingState(submitButton, loader, isLoading = true, getString(R.string.login))
+            lifecycleScope.launch {
                 val request = LoginRequest(email = email, password = password)
                 val result = repository.login(request)
 
@@ -94,9 +95,9 @@ class LoginActivity : AppCompatActivity() {
                         400 -> mainView.showTopSnackbar(R.string.invalid_request_body)
                         else -> mainView.showTopSnackbar(R.string.exception_message)
                     }
+                    toggleLoadingState(submitButton, loader, isLoading = false, getString(R.string.login))
                 }
             }
-            submitButton.stopLoading()
         }
 
         // FORGOT BUTTON
