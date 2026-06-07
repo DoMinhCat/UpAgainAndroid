@@ -1,10 +1,10 @@
 package com.example.upagain.api
 
+import com.example.upagain.model.AuthResponse
+import retrofit2.Call
 import retrofit2.http.POST
-import retrofit2.http.Body
-import retrofit2.Response
 
 interface ApiService {
-//    @POST("login")
-//    suspend fun login(@Body loginRequest: ): Response<null>
+    @POST(Endpoints.REFRESH)
+    fun refresh(): Call<TokenResponse>
 }
