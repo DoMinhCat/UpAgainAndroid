@@ -1,25 +1,18 @@
 package com.example.upagain.util
 
 import android.content.Context
-import androidx.security.crypto.EncryptedSharedPreferences
-import androidx.security.crypto.MasterKey
+import android.content.SharedPreferences
+import androidx.core.content.edit
 
 class TokenManager private constructor(context: Context) {
 
-    private val masterKey = MasterKey.Builder(context)
-        .setKeyScheme(MasterKey.KeyScheme.AES256_GCM)
-        .build()
-
-    private val sharedPreferences = EncryptedSharedPreferences.create(
-        context,
-        "secure_prefs",
-        masterKey,
-        EncryptedSharedPreferences.PrefKeyEncryptionScheme.AES256_SIV,
-        EncryptedSharedPreferences.PrefValueEncryptionScheme.AES256_GCM
+    private val sharedPreferences: SharedPreferences = context.getSharedPreferences(
+        "auth_prefs",
+        Context.MODE_PRIVATE
     )
 
     fun saveToken(token: String) {
-        sharedPreferences.edit().putString(KEY_TOKEN, token).apply()
+        sharedPreferences.edit { putString(KEY_TOKEN, token) }
     }
 
     fun getToken(): String? {
@@ -27,7 +20,7 @@ class TokenManager private constructor(context: Context) {
     }
 
     fun clearToken() {
-        sharedPreferences.edit().remove(KEY_TOKEN).apply()
+        sharedPreferences.edit { remove(KEY_TOKEN) }
     }
 
     companion object {

@@ -5,6 +5,7 @@ import android.view.View
 import android.widget.EditText
 import android.content.Intent
 import android.net.Uri
+import android.util.Log
 import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
@@ -24,6 +25,7 @@ import com.example.upagain.util.validator.NotEmptyRule
 import com.google.android.material.button.MaterialButton
 import kotlinx.coroutines.launch
 import androidx.core.net.toUri
+import com.google.android.material.textfield.TextInputLayout
 
 class LoginActivity : AppCompatActivity() {
     // Initialize layer dependencies
@@ -45,8 +47,8 @@ class LoginActivity : AppCompatActivity() {
         }
 
         // get buttons and input fields
-        val emailInput = findViewById<EditText>(R.id.til_email)
-        val passwordInput = findViewById<EditText>(R.id.til_password)
+        val emailInput = findViewById<TextInputLayout>(R.id.til_email)
+        val passwordInput = findViewById<TextInputLayout>(R.id.til_password)
         val submitButton = findViewById<MaterialButton>(R.id.btn_login)
         val emailError = findViewById<TextView>(R.id.tv_email_error)
         val passwordError = findViewById<TextView>(R.id.tv_password_error)
@@ -55,8 +57,8 @@ class LoginActivity : AppCompatActivity() {
 
         // LOGIN BUTTON
         submitButton.setOnClickListener {
-            val email = emailInput.text.toString().lowercase().trim()
-            val password = passwordInput.text.toString().trim()
+            val email = emailInput.editText?.text?.toString()?.lowercase()?.trim() ?: ""
+            val password = passwordInput.editText?.text?.toString()?.trim() ?: ""
 
             val isEmailValid = emailValidator.validate(email)
             val isPasswordValid = passwordValidator.validate(password)
@@ -80,7 +82,7 @@ class LoginActivity : AppCompatActivity() {
                         .show()
                     // TODO: redirect to dashboard
                 }.onFailure { exception ->
-                    // Login failed, show error message
+                    Log.e("LoginActivity", "Login failed", exception)
                     Toast.makeText(
                         this@LoginActivity,
                         R.string.exception_message,
