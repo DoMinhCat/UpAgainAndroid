@@ -95,7 +95,8 @@
             app:boxCornerRadiusTopEnd="@dimen/input_radius"
             app:boxCornerRadiusTopStart="@dimen/input_radius"
             android:layout_marginHorizontal="@dimen/space_md"
-            app:endIconMode="password_toggle">
+            app:endIconMode="password_toggle"
+            app:endIconTint="@color/color_on_background">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:layout_width="match_parent"

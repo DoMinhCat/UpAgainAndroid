@@ -11,7 +11,7 @@
     <string name="forgot_password">Mot de passe oublié ?</string>
     <string name="signup">Créer un compte</string>
     <string name="invalid_email">Email invalide</string>
-    <string name="incorrect_password">Mot de passe incorrect</string>
+    <string name="incorrect_password">Mot de passe invalide</string>
     <string name="login_success">Connexion réussie</string>
     <string name="login_footer">Tous droits réservés • UpAgain</string>
     <string name="no_account">Vous n\'avez pas encore un compte ?</string>

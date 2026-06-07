@@ -16,7 +16,7 @@
     <string name="signup">Sign up</string>
     <string name="no_account">Don\'t have an account yet?</string>
     <string name="invalid_email">Invalid email</string>
-    <string name="incorrect_password">Incorrect password</string>
+    <string name="incorrect_password">Invalid password</string>
     <string name="login_success">Login successful</string>
     <string name="login_footer">All rights reserved • UpAgain</string>
     <string name="login_fail">Incorrect email or password</string>

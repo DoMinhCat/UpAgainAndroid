@@ -79,7 +79,7 @@ class LoginActivity : AppCompatActivity() {
                     val tokenManager = TokenManager.getInstance(this@LoginActivity)
                     tokenManager.saveToken(tokenResponse.token)
 
-                    mainView.showTopSnackbar(R.string.login_success, Snackbar.LENGTH_SHORT)
+                    mainView.showTopSnackbar(R.string.login_success, SnackbarLevel.SUCCESS, Snackbar.LENGTH_SHORT)
 
                     // Redirect to MainActivity
                     startActivity(Intent(this@LoginActivity, MainActivity::class.java))
@@ -91,9 +91,9 @@ class LoginActivity : AppCompatActivity() {
                     // Extract the HTTP status code if the error came from the server
                     val statusCode = (exception as? HttpException)?.code()
                     when (statusCode) {
-                        401 -> mainView.showTopSnackbar(R.string.login_fail)
-                        400 -> mainView.showTopSnackbar(R.string.invalid_request_body)
-                        else -> mainView.showTopSnackbar(R.string.exception_message)
+                        401 -> mainView.showTopSnackbar(R.string.login_fail, SnackbarLevel.ERROR)
+                        400 -> mainView.showTopSnackbar(R.string.invalid_request_body, SnackbarLevel.ERROR)
+                        else -> mainView.showTopSnackbar(R.string.exception_message, SnackbarLevel.ERROR)
                     }
                     toggleLoadingState(submitButton, loader, isLoading = false, getString(R.string.login))
                 }
