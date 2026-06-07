@@ -24,7 +24,7 @@ class TokenManager private constructor(context: Context) {
     }
 
     companion object {
-        private const val KEY_TOKEN = "token"
+        const val KEY_TOKEN = "token"
 
         @Volatile
         private var instance: TokenManager? = null
