@@ -1,5 +1,6 @@
 package com.example.upagain.feat.auth
 
+import android.content.ActivityNotFoundException
 import android.os.Bundle
 import android.view.View
 import android.content.Intent
@@ -100,14 +101,29 @@ class LoginActivity : AppCompatActivity() {
             }
         }
 
-        // FORGOT BUTTON
+        // FORGOT LINK
         forgotPasswordButton.setOnClickListener {
             val url = "https://upcycleconnect.org/login"
             val intent = Intent(Intent.ACTION_VIEW, url.toUri())
 
-            // Verify an app can handle this intent to prevent crashes
-            if (intent.resolveActivity(packageManager) != null) {
+            try {
                 startActivity(intent)
+            } catch (e: ActivityNotFoundException) {
+                Log.e("LoginActivity", "Open forgot password link failed", e)
+                mainView.showTopSnackbar(R.string.no_browsere, SnackbarLevel.ERROR)
+            }
+        }
+
+        // SIGN UP LINK
+        forgotPasswordButton.setOnClickListener {
+            val url = "https://upcycleconnect.org/register"
+            val intent = Intent(Intent.ACTION_VIEW, url.toUri())
+
+            try {
+                startActivity(intent)
+            } catch (e: ActivityNotFoundException) {
+                Log.e("LoginActivity", "Open forgot password link failed", e)
+                mainView.showTopSnackbar(R.string.no_browsere, SnackbarLevel.ERROR)
             }
         }
     }

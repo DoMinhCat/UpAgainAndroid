@@ -59,6 +59,7 @@
 
     <string name="exception_message">Une erreur s\'est produite</string>
     <string name="invalid_request_body">Demande invalide</string>
+    <string name="no_browsere">Aucun navigateur trouvé</string>
     <string name="btn_save">Sauvegarder</string>
     <string name="settings">Paramètres</string>
     <string name="security">Sécurité</string>
