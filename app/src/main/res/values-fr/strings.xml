@@ -15,6 +15,7 @@
     <string name="login_success">Connexion réussie</string>
     <string name="login_footer">Tous droits réservés • UpAgain</string>
     <string name="no_account">Vous n\'avez pas encore un compte ?</string>
+    <string name="login_fail">Adresse email ou mot de passe incorrect</string>
     <string name="placeholder_search">Rechercher</string>
     <string name="spending_by_material">Dépenses par matière</string>
     <string name="my_transactions">Mes Transactions</string>
@@ -57,6 +58,7 @@
     <string name="error_connection_msg">Oups ! Votre connexion a été interrompue. Veuillez vérifier votre signal et réessayer pour poursuivre votre voyage.</string>
 
     <string name="exception_message">Une erreur s\'est produite</string>
+    <string name="invalid_request_body">Demande invalide</string>
     <string name="btn_save">Sauvegarder</string>
     <string name="settings">Paramètres</string>
     <string name="security">Sécurité</string>

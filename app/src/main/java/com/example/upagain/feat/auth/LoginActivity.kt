@@ -2,12 +2,9 @@ package com.example.upagain.feat.auth
 
 import android.os.Bundle
 import android.view.View
-import android.widget.EditText
 import android.content.Intent
-import android.net.Uri
 import android.util.Log
 import android.widget.TextView
-import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
@@ -17,15 +14,16 @@ import com.example.upagain.R
 import com.example.upagain.api.ApiClient
 import com.example.upagain.model.LoginRequest
 import com.example.upagain.repository.AuthRepository
-import com.example.upagain.util.ui.showLoading
-import com.example.upagain.util.validator.EmailRule
-import com.example.upagain.util.validator.FieldValidator
-import com.example.upagain.util.validator.MinLengthRule
-import com.example.upagain.util.validator.NotEmptyRule
+import com.example.upagain.util.validator.*
+import com.example.upagain.util.ui.*
+import com.example.upagain.util.TokenManager
 import com.google.android.material.button.MaterialButton
 import kotlinx.coroutines.launch
 import androidx.core.net.toUri
+import com.example.upagain.feat.MainActivity
+import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.textfield.TextInputLayout
+import retrofit2.HttpException
 
 class LoginActivity : AppCompatActivity() {
     // Initialize layer dependencies
@@ -53,6 +51,7 @@ class LoginActivity : AppCompatActivity() {
         val emailError = findViewById<TextView>(R.id.tv_email_error)
         val passwordError = findViewById<TextView>(R.id.tv_password_error)
         val forgotPasswordButton = findViewById<TextView>(R.id.tv_forgot_password)
+        val mainView = findViewById<View>(R.id.main)
 
 
         // LOGIN BUTTON
@@ -75,22 +74,29 @@ class LoginActivity : AppCompatActivity() {
                 val request = LoginRequest(email = email, password = password)
                 val result = repository.login(request)
 
-                // 3. Handle the Result object
                 result.onSuccess { tokenResponse ->
-                    // Login successful, handle token and navigate
-                    Toast.makeText(this@LoginActivity, R.string.login_success, Toast.LENGTH_SHORT)
-                        .show()
-                    // TODO: redirect to dashboard
-                }.onFailure { exception ->
-                    Log.e("LoginActivity", "Login failed", exception)
-                    Toast.makeText(
-                        this@LoginActivity,
-                        R.string.exception_message,
-                        Toast.LENGTH_LONG
-                    ).show()
+                    val tokenManager = TokenManager.getInstance(this@LoginActivity)
+                    tokenManager.saveToken(tokenResponse.token)
+
+                    mainView.showTopSnackbar(R.string.login_success, Snackbar.LENGTH_SHORT)
+
+                    // Redirect to MainActivity
+                    startActivity(Intent(this@LoginActivity, MainActivity::class.java))
+                    finish()
                 }
-                submitButton.isEnabled = true
+                result.onFailure { exception ->
+                    Log.e("LoginActivity", "Login failed", exception)
+
+                    // Extract the HTTP status code if the error came from the server
+                    val statusCode = (exception as? HttpException)?.code()
+                    when (statusCode) {
+                        401 -> mainView.showTopSnackbar(R.string.login_fail)
+                        400 -> mainView.showTopSnackbar(R.string.invalid_request_body)
+                        else -> mainView.showTopSnackbar(R.string.exception_message)
+                    }
+                }
             }
+            submitButton.stopLoading()
         }
 
         // FORGOT BUTTON
