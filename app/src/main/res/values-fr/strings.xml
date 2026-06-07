@@ -11,10 +11,13 @@
     <string name="forgot_password">Mot de passe oublié ?</string>
     <string name="signup">Créer un compte</string>
     <string name="invalid_email">Email invalide</string>
-    <string name="incorrect_password">Mot de passe incorrect</string>
+    <string name="incorrect_password">Mot de passe invalide</string>
+    <string name="login_success">Connexion réussie</string>
     <string name="login_footer">Tous droits réservés • UpAgain</string>
     <string name="no_account">Vous n\'avez pas encore un compte ?</string>
+    <string name="login_fail">Adresse email ou mot de passe incorrect</string>
     <string name="placeholder_search">Rechercher</string>
+    <string name="spending_by_material">Dépenses par matière</string>
     <string name="my_transactions">Mes Transactions</string>
     <string name="material_wood">Bois</string>
     <string name="material_metal">Métal</string>
@@ -29,17 +32,22 @@
     <string name="category_project">Projets</string>
     <string name="category_tips">Astuces</string>
     <string name="category_news">Nouvelles</string>
-    <string name="category_case_study">Étudesde cas</string>
+    <string name="category_case_study">Études de cas</string>
     <string name="category_other">Autres</string>
     <string name="img_thumbnail_description">Image principale</string>
     <string name="btn_view">Voir</string>
     <string name="author_dynamic">par %1$s</string>
+
     <string name="code">Code à 6 chiffres</string>
+    <string name="code_hint">000000</string>
     <string name="barcode">Code-barres</string>
     <string name="barcode_upload_hint">Appuyez pour télécharger le code-barres</string>
     <string name="container_desc">Saisissez le code de sécurité à 6 chiffres ou téléchargez le code-barres fourni pour ouvrir le conteneur.</string>
     <string name="container_how_to">Vous trouverez le code sur la page de détails de la transaction.</string>
     <string name="btn_open_container">Soumettre &amp; Ouvrir</string>
+
+    <string name="error_404">404</string>
+    <string name="error_500">500</string>
     <string name="error_404_description">Page non trouvée</string>
     <string name="error_500_description">Erreur interne du serveur</string>
     <string name="error_connection_description">Aucune connexion internet</string>
@@ -48,6 +56,9 @@
     <string name="error_500_msg">Oups ! Nos serveurs sont actuellement très sollicités. Nous mettons tout en œuvre pour résoudre le problème au plus vite.</string>
     <string name="btn_refresh">Actualiser la page</string>
     <string name="error_connection_msg">Oups ! Votre connexion a été interrompue. Veuillez vérifier votre signal et réessayer pour poursuivre votre voyage.</string>
+
+    <string name="exception_message">Une erreur s\'est produite</string>
+    <string name="invalid_request_body">Demande invalide</string>
     <string name="btn_save">Sauvegarder</string>
     <string name="settings">Paramètres</string>
     <string name="security">Sécurité</string>
@@ -55,7 +66,16 @@
     <string name="delete_account">Supprimer mon compte</string>
     <string name="member_since">Membre depuis</string>
     <string name="phone">Téléphone</string>
+    <string name="username">Nom d\'utilisateur</string>
     <string name="account_information">Informations du compte</string>
     <string name="current_plan">ABONNEMENT ACTUEL</string>
     <string name="expire_date">Expirer le: %1$s</string>
+    <string name="dashboard">Tableau de bord</string>
+    <string name="inventory_summary">Résumé de l\'inventaire</string>
+    <string name="financial_overview">Aperçu financier</string>
+    <string name="sold">Vendu</string>
+    <string name="total_spent">TOTAL DÉPENSÉ</string>
+    <string name="items_bought">ARTICLES ACHETÉS</string>
+    <string name="event_fees">FRAIS D\'ÉVÉNEMENT</string>
+    <string name="total_projects">PROJETS TOTAL</string>
 </resources>

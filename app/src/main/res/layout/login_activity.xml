@@ -7,7 +7,7 @@
     android:layout_height="match_parent"
     android:background="@color/color_background"
     android:padding="@dimen/space_lg"
-    tools:context=".LoginActivity">
+    tools:context=".feat.auth.LoginActivity">
 
     <!-- Top Section: Logo and app name -->
     <LinearLayout
@@ -56,6 +56,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="@string/email"
+            android:textColorHint="@color/color_on_background"
+            android:layout_marginHorizontal="@dimen/space_md"
             app:boxCornerRadiusBottomEnd="@dimen/input_radius"
             app:boxCornerRadiusBottomStart="@dimen/input_radius"
             app:boxCornerRadiusTopEnd="@dimen/input_radius"
@@ -85,13 +87,16 @@
             style="@style/Widget.Material3.TextInputLayout.OutlinedBox"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:textColorHint="@color/color_on_background"
             android:layout_marginTop="@dimen/space_md"
             android:hint="@string/password"
             app:boxCornerRadiusBottomEnd="@dimen/input_radius"
             app:boxCornerRadiusBottomStart="@dimen/input_radius"
             app:boxCornerRadiusTopEnd="@dimen/input_radius"
             app:boxCornerRadiusTopStart="@dimen/input_radius"
-            app:endIconMode="password_toggle">
+            android:layout_marginHorizontal="@dimen/space_md"
+            app:endIconMode="password_toggle"
+            app:endIconTint="@color/color_on_background">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:layout_width="match_parent"
@@ -112,16 +117,33 @@
             tools:visibility="visible" />
 
         <!-- Login button -->
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/btn_login"
+        <FrameLayout
             android:layout_width="match_parent"
-            android:layout_height="@dimen/button_height"
-            android:layout_marginTop="@dimen/space_xl"
-            android:text="@string/login"
-            android:textAllCaps="false"
-            android:textColor="@color/white"
-            style="@style/TextAppearance.AppCompat.Button"
-            app:cornerRadius="@dimen/button_radius" />
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/space_xl">
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btn_login"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/button_height"
+                android:layout_marginHorizontal="@dimen/space_md"
+                android:text="@string/login"
+                android:textAllCaps="false"
+                android:textColor="@color/white"
+                app:cornerRadius="@dimen/button_radius" />
+
+            <com.google.android.material.progressindicator.CircularProgressIndicator
+                android:id="@+id/login_loader"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/button_height"
+                app:indicatorSize="@dimen/icon_sm"
+                android:indeterminate="true"
+                android:layout_gravity="center"
+                android:paddingVertical="@dimen/space_sm"
+                app:indicatorColor="@color/white"
+                android:layout_marginHorizontal="@dimen/space_md"
+                android:visibility="gone" />
+        </FrameLayout>
 
         <!-- Forgot password link -->
         <TextView

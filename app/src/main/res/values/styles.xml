@@ -1,5 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <!-- Base Text Appearance -->
+    <style name="TextAppearance.UpAgain" parent="android:TextAppearance" />
+
+    <!-- H1 -->
     <style name="TextAppearance.UpAgain.H1">
         <item name="android:textSize">24sp</item>
         <item name="android:textStyle">bold</item>
