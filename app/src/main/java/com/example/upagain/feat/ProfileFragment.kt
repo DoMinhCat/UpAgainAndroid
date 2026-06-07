@@ -38,7 +38,6 @@ class ProfileFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-
         // SIGN OUT BUTTON listener
         binding.btnLogout.setOnClickListener {
             handleSignOut()
@@ -48,7 +47,7 @@ class ProfileFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         _binding = FragmentProfileBinding.inflate(inflater, container, false)
         return binding.root
     }
@@ -57,19 +56,6 @@ class ProfileFragment : Fragment() {
         super.onDestroyView()
         // clear reference to prevent memory leaks
         _binding = null
-    }
-
-    private fun handleSignOut() {
-        val tokenManager = TokenManager.getInstance(requireContext())
-        tokenManager.clearToken()
-        binding.main.showTopSnackbar(R.string.logout_success, SnackbarLevel.INFO)
-        val intent = Intent(requireContext(), LoginActivity::class.java).apply {
-            // Clear activity task stack history so back button cannot re-enter profile
-            flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
-            putExtra("EXTRA_JUST_LOGGED_OUT", true)
-        }
-        startActivity(intent)
-        activity?.finish()
     }
 
     companion object {
@@ -90,5 +76,18 @@ class ProfileFragment : Fragment() {
                     putString(ARG_PARAM2, param2)
                 }
             }
+    }
+
+    // PRIVATE ZONE
+    private fun handleSignOut() {
+        val tokenManager = TokenManager.getInstance(requireContext())
+        tokenManager.clearToken()
+        val intent = Intent(requireContext(), LoginActivity::class.java).apply {
+            // Clear activity task stack history so back button cannot re-enter profile
+            flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+            putExtra("EXTRA_JUST_LOGGED_OUT", true)
+        }
+        startActivity(intent)
+        activity?.finish()
     }
 }

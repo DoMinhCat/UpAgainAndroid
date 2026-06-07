@@ -21,8 +21,6 @@ import kotlinx.coroutines.launch
 import androidx.core.net.toUri
 import com.example.upagain.databinding.LoginActivityBinding
 import com.example.upagain.feat.MainActivity
-import com.google.android.material.progressindicator.CircularProgressIndicator
-import com.google.android.material.snackbar.Snackbar
 import retrofit2.HttpException
 
 class LoginActivity : AppCompatActivity() {
@@ -42,12 +40,13 @@ class LoginActivity : AppCompatActivity() {
         binding = LoginActivityBinding.inflate(layoutInflater)
         enableEdgeToEdge()
         setContentView(binding.root)
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
+        ViewCompat.setOnApplyWindowInsetsListener(binding.main) { v, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
         }
 
+        // GET INTENT TO SHOW NOTI
         val justLoggedOut = intent.getBooleanExtra("EXTRA_JUST_LOGGED_OUT", false)
         if(justLoggedOut) {
             binding.main.showTopSnackbar(R.string.logout_success, SnackbarLevel.INFO)
@@ -107,11 +106,15 @@ class LoginActivity : AppCompatActivity() {
                 val tokenManager = TokenManager.getInstance(this@LoginActivity)
                 tokenManager.saveToken(tokenResponse.token)
 
-                binding.main.showTopSnackbar(R.string.login_success, SnackbarLevel.SUCCESS, Snackbar.LENGTH_SHORT)
+                // Redirect to MainActivity to be redirected to Dashboard Fragment
+                val intent = Intent(this@LoginActivity, MainActivity::class.java).apply {
+                    flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+                    putExtra("EXTRA_JUST_LOGGED_IN", true)
+                }
+                // switch off loading state
                 toggleLoadingState(binding.btnLogin, binding.loginLoader, isLoading = false, getString(R.string.login))
-
-                // Redirect to MainActivity
-                startActivity(Intent(this@LoginActivity, MainActivity::class.java))
+                // redirect to main activity
+                startActivity(intent)
                 finish()
             }
             result.onFailure { exception ->
