@@ -35,21 +35,21 @@ class ProfileFragment : Fragment() {
         }
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-
-        // SIGN OUT BUTTON listener
-        binding.btnLogout.setOnClickListener {
-            handleSignOut()
-        }
-    }
-
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentProfileBinding.inflate(inflater, container, false)
         return binding.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        // SIGN OUT BUTTON listener
+        binding.btnLogout.setOnClickListener {
+            handleLogOut()
+        }
     }
 
     override fun onDestroyView() {
@@ -79,7 +79,7 @@ class ProfileFragment : Fragment() {
     }
 
     // PRIVATE ZONE
-    private fun handleSignOut() {
+    private fun handleLogOut() {
         val tokenManager = TokenManager.getInstance(requireContext())
         tokenManager.clearToken()
         val intent = Intent(requireContext(), LoginActivity::class.java).apply {

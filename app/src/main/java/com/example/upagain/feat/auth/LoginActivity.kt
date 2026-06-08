@@ -6,6 +6,7 @@ import android.view.View
 import android.content.Intent
 import android.util.Log
 import androidx.activity.enableEdgeToEdge
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
@@ -19,8 +20,14 @@ import com.example.upagain.util.ui.*
 import com.example.upagain.util.TokenManager
 import kotlinx.coroutines.launch
 import androidx.core.net.toUri
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.repeatOnLifecycle
+import com.example.upagain.BuildConfig
 import com.example.upagain.databinding.LoginActivityBinding
 import com.example.upagain.feat.MainActivity
+import com.example.upagain.viewmodel.AuthViewModel
+import com.example.upagain.viewmodel.UiState
+import com.example.upagain.viewmodel.ViewModelFactory
 import retrofit2.HttpException
 
 class LoginActivity : AppCompatActivity() {
@@ -34,6 +41,10 @@ class LoginActivity : AppCompatActivity() {
 
     // elements binding
     private lateinit var binding: LoginActivityBinding
+    // viewmodel
+    private val viewModel: AuthViewModel by viewModels {
+        ViewModelFactory { AuthViewModel(repository) }
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -52,7 +63,9 @@ class LoginActivity : AppCompatActivity() {
             binding.main.showTopSnackbar(R.string.logout_success, SnackbarLevel.INFO)
         }
 
-        // LOGIN BUTTON
+        setupListeners()
+        observeLoginState()
+
         binding.btnLogin.setOnClickListener {
             val email = binding.tilEmail.editText?.text?.toString()?.lowercase()?.trim() ?: ""
             val password = binding.tilPassword.editText?.text?.toString()?.trim() ?: ""
@@ -68,10 +81,21 @@ class LoginActivity : AppCompatActivity() {
 
             handleLogin(email, password)
         }
+    }
 
+    // PRIVATE ZONE
+    private fun setupListeners() {
+        // LOGIN BUTTON
+        binding.btnLogin.setOnClickListener {
+            val email = binding.tilEmail.editText?.text.toString()
+            val password = binding.tilPassword.editText?.text.toString()
+
+            val request = LoginRequest(email = email, password = password)
+            viewModel.login(request)
+        }
         // FORGOT LINK
         binding.tvForgotPassword.setOnClickListener {
-            val url = "https://upcycleconnect.org/login"
+            val url = BuildConfig.FRONTEND_BASE_URL + "login"
             val intent = Intent(Intent.ACTION_VIEW, url.toUri())
 
             try {
@@ -84,7 +108,7 @@ class LoginActivity : AppCompatActivity() {
 
         // SIGN UP LINK
         binding.tvSignUp.setOnClickListener {
-            val url = "https://upcycleconnect.org/register"
+            val url = BuildConfig.FRONTEND_BASE_URL + "register"
             val intent = Intent(Intent.ACTION_VIEW, url.toUri())
 
             try {
@@ -96,6 +120,30 @@ class LoginActivity : AppCompatActivity() {
         }
     }
 
+    private fun observeLoginState() {
+        lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                viewModel.loginState.collect { state ->
+                    when (state) {
+                        is UiState.Idle -> {
+                            toggleLoading(false)
+                        }
+                        is UiState.Loading -> {
+                            toggleLoading(true)
+                        }
+                        is UiState.Success -> {
+                            toggleLoading(false)
+                            handleLoginSuccess(state.data.token)
+                        }
+                        is UiState.Error -> {
+                            toggleLoading(false)
+                            handleLoginFailure(state.statusCode, state.exception)
+                        }
+                    }
+                }
+            }
+        }
+    }
     private fun handleLogin(email: String, password: String) {
         toggleLoadingState(binding.btnLogin, binding.loginLoader, isLoading = true, getString(R.string.login))
         lifecycleScope.launch {
@@ -130,5 +178,31 @@ class LoginActivity : AppCompatActivity() {
                 toggleLoadingState(binding.btnLogin, binding.loginLoader, isLoading = false, getString(R.string.login))
             }
         }
+    }
+
+    private fun toggleLoading(isLoading: Boolean) {
+        toggleLoadingState(binding.btnLogin, binding.loginLoader, isLoading, getString(R.string.login))
+    }
+
+    private fun handleLoginSuccess(token: String) {
+        TokenManager.getInstance(this).saveToken(token)
+
+        val intent = Intent(this, MainActivity::class.java).apply {
+            flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+            putExtra("EXTRA_JUST_LOGGED_IN", true)
+        }
+        startActivity(intent)
+        finish()
+    }
+
+    private fun handleLoginFailure(statusCode: Int?, exception: Throwable) {
+        Log.e("LoginActivity", "Login failed", exception)
+
+        when (statusCode) {
+            401 -> binding.main.showTopSnackbar(R.string.login_fail, SnackbarLevel.ERROR)
+            400 -> binding.main.showTopSnackbar(R.string.invalid_request_body, SnackbarLevel.ERROR)
+            else -> binding.main.showTopSnackbar(R.string.exception_message, SnackbarLevel.ERROR)
+        }
+        viewModel.resetState()
     }
 }
