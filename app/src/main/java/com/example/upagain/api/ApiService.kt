@@ -1,10 +1,13 @@
 package com.example.upagain.api
 
+import com.example.upagain.model.AccountDetailsResponse
 import com.example.upagain.model.TokenResponse
 import com.example.upagain.model.LoginRequest
 import retrofit2.Call
 import retrofit2.http.Body
+import retrofit2.http.GET
 import retrofit2.http.POST
+import retrofit2.http.Path
 
 interface ApiService {
     // AUTH
@@ -13,4 +16,8 @@ interface ApiService {
     
     @POST(Endpoints.REFRESH)
     fun refresh(): Call<TokenResponse>
+
+    // ACCOUNT
+    @GET(Endpoints.ACCOUNT_DETAILS)
+    fun getAccountDetails(@Path("id") id: Int): Call<AccountDetailsResponse>
 }

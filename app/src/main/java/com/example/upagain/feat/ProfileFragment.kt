@@ -46,7 +46,7 @@ class ProfileFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        // SIGN OUT BUTTON listener
+        setupListeners()
         binding.btnLogout.setOnClickListener {
             handleLogOut()
         }
@@ -79,6 +79,13 @@ class ProfileFragment : Fragment() {
     }
 
     // PRIVATE ZONE
+
+    fun setupListeners() {
+        // LOG OUT BUTTON
+        binding.btnLogout.setOnClickListener {
+            handleLogOut()
+        }
+    }
     private fun handleLogOut() {
         val tokenManager = TokenManager.getInstance(requireContext())
         tokenManager.clearToken()

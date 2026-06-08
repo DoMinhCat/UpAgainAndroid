@@ -29,8 +29,7 @@ android {
         // 2. Inject the variable into BuildConfig
         buildConfigField("String", "API_BASE_URL", properties.getProperty("API_BASE_URL"))
         buildConfigField("String", "MAP_API_KEY", properties.getProperty("MAP_API_KEY"))
-        val frontBaseUrl = properties.getProperty("FRONTEND_BASE_URL")
-        buildConfigField("String", "FRONTEND_BASE_URL", "\"$frontBaseUrl\"")
+        buildConfigField("String", "FRONTEND_BASE_URL", properties.getProperty("FRONTEND_BASE_URL"))
     }
 
     buildTypes {
