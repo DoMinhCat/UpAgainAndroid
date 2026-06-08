@@ -6,12 +6,15 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.example.upagain.R
+import androidx.fragment.app.viewModels
+import com.example.upagain.api.ApiClient
 import com.example.upagain.databinding.FragmentProfileBinding
 import com.example.upagain.feat.auth.LoginActivity
+import com.example.upagain.repository.AccountRepo
 import com.example.upagain.util.TokenManager
-import com.example.upagain.util.ui.SnackbarLevel
-import com.example.upagain.util.ui.showTopSnackbar
+import com.example.upagain.viewmodel.AccountViewModel
+import com.example.upagain.viewmodel.ViewModelFactory
+import kotlin.getValue
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -27,6 +30,11 @@ class ProfileFragment : Fragment() {
     // elements binding
     private var _binding: FragmentProfileBinding? = null
     private val binding get() = _binding!!
+    private val apiService by lazy { ApiClient.apiService }
+    private val repository by lazy { AccountRepo(apiService) }
+    private val viewModel: AccountViewModel by viewModels {
+        ViewModelFactory { AccountViewModel(repository) }
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -46,10 +54,17 @@ class ProfileFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        // TODO: API CALL via view model
+        // TODO: parse JWT for user id (see how I did in web react)
+        viewModel.getAccountDetails(999)
+        observeAccountState()
+        // TODO: observe state change
+
         setupListeners()
         binding.btnLogout.setOnClickListener {
             handleLogOut()
         }
+
     }
 
     override fun onDestroyView() {
@@ -96,5 +111,9 @@ class ProfileFragment : Fragment() {
         }
         startActivity(intent)
         activity?.finish()
+    }
+
+    private fun observeAccountState() {
+        // TODO
     }
 }
