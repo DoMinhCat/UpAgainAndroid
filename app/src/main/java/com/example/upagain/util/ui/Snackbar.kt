@@ -54,7 +54,7 @@ fun View.showTopSnackbar(
         SnackbarLevel.INFO -> Quadruple(
             ContextCompat.getColor(context, R.color.color_surface),
             ContextCompat.getColor(context, R.color.color_on_surface),
-            ContextCompat.getColor(context, R.color.color_primary),
+            ContextCompat.getColor(context, R.color.blue),
             R.drawable.ic_info_circle
         )
     }

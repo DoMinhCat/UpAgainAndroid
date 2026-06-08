@@ -65,34 +65,28 @@ class LoginActivity : AppCompatActivity() {
 
         setupListeners()
         observeLoginState()
-
-        binding.btnLogin.setOnClickListener {
-            val email = binding.tilEmail.editText?.text?.toString()?.lowercase()?.trim() ?: ""
-            val password = binding.tilPassword.editText?.text?.toString()?.trim() ?: ""
-
-            val isEmailValid = emailValidator.validate(email)
-            val isPasswordValid = passwordValidator.validate(password)
-
-            binding.tvEmailError.visibility = if (isEmailValid) View.GONE else View.VISIBLE
-            binding.tvPasswordError.visibility = if (isPasswordValid) View.GONE else View.VISIBLE
-            if (!isEmailValid && !isPasswordValid) {
-                return@setOnClickListener
-            }
-
-            handleLogin(email, password)
-        }
     }
 
     // PRIVATE ZONE
     private fun setupListeners() {
         // LOGIN BUTTON
-        binding.btnLogin.setOnClickListener {
+        binding.btnLogin.setOnClickListenerWithCooldown(cooldownMillis = 1200L) {
             val email = binding.tilEmail.editText?.text.toString()
             val password = binding.tilPassword.editText?.text.toString()
+
+            // Frontend validation
+            val isEmailValid = emailValidator.validate(email)
+            val isPasswordValid = passwordValidator.validate(password)
+            binding.tvEmailError.visibility = if (isEmailValid) View.GONE else View.VISIBLE
+            binding.tvPasswordError.visibility = if (isPasswordValid) View.GONE else View.VISIBLE
+            if (!isEmailValid || !isPasswordValid) {
+                return@setOnClickListenerWithCooldown
+            }
 
             val request = LoginRequest(email = email, password = password)
             viewModel.login(request)
         }
+
         // FORGOT LINK
         binding.tvForgotPassword.setOnClickListener {
             val url = BuildConfig.FRONTEND_BASE_URL + "login"
@@ -114,7 +108,7 @@ class LoginActivity : AppCompatActivity() {
             try {
                 startActivity(intent)
             } catch (e: ActivityNotFoundException) {
-                Log.e("LoginActivity", "Open forgot password link failed", e)
+                Log.e("LoginActivity", "Open sign up link failed", e)
                 binding.main.showTopSnackbar(R.string.no_browsere, SnackbarLevel.ERROR)
             }
         }
@@ -141,41 +135,6 @@ class LoginActivity : AppCompatActivity() {
                         }
                     }
                 }
-            }
-        }
-    }
-    private fun handleLogin(email: String, password: String) {
-        toggleLoadingState(binding.btnLogin, binding.loginLoader, isLoading = true, getString(R.string.login))
-        lifecycleScope.launch {
-            val request = LoginRequest(email = email, password = password)
-            val result = repository.login(request)
-
-            result.onSuccess { tokenResponse ->
-                val tokenManager = TokenManager.getInstance(this@LoginActivity)
-                tokenManager.saveToken(tokenResponse.token)
-
-                // Redirect to MainActivity to be redirected to Dashboard Fragment
-                val intent = Intent(this@LoginActivity, MainActivity::class.java).apply {
-                    flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
-                    putExtra("EXTRA_JUST_LOGGED_IN", true)
-                }
-                // switch off loading state
-                toggleLoadingState(binding.btnLogin, binding.loginLoader, isLoading = false, getString(R.string.login))
-                // redirect to main activity
-                startActivity(intent)
-                finish()
-            }
-            result.onFailure { exception ->
-                Log.e("LoginActivity", "Login failed", exception)
-
-                // Extract the HTTP status code if the error came from the server
-                val statusCode = (exception as? HttpException)?.code()
-                when (statusCode) {
-                    401 -> binding.main.showTopSnackbar(R.string.login_fail, SnackbarLevel.ERROR)
-                    400 -> binding.main.showTopSnackbar(R.string.invalid_request_body, SnackbarLevel.ERROR)
-                    else -> binding.main.showTopSnackbar(R.string.exception_message, SnackbarLevel.ERROR)
-                }
-                toggleLoadingState(binding.btnLogin, binding.loginLoader, isLoading = false, getString(R.string.login))
             }
         }
     }
