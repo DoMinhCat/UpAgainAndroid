@@ -6,18 +6,12 @@ import com.example.upagain.BuildConfig
 import com.example.upagain.feat.auth.LoginActivity
 import com.example.upagain.feat.error.InternalServerErrorActivity
 import com.example.upagain.feat.error.NotFoundActivity
-import com.example.upagain.util.TokenManager
-import com.example.upagain.api.Endpoints
+import com.example.upagain.util.auth.SessionManager
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import com.google.gson.Strictness
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.withContext
-import okhttp3.FormBody
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
-import okhttp3.Request
-import okhttp3.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
@@ -42,7 +36,7 @@ object ApiClient {
             .cookieJar(cookieJar)
             .addInterceptor(Interceptor { chain ->
                 val originalRequest = chain.request()
-                val token = TokenManager.getInstance(appContext).getToken()
+                val token = SessionManager.token
                 val newRequest = if (!token.isNullOrEmpty()) {
                     originalRequest.newBuilder()
                         .header("Authorization", "Bearer $token")
@@ -109,7 +103,7 @@ object ApiClient {
             val newToken = response.body()?.token
 
             if (response.isSuccessful && newToken != null) {
-                TokenManager.getInstance(appContext).saveToken(newToken)
+                SessionManager.saveUserSession(newToken)
                 return newToken
             }
         } catch (e: Exception) {
@@ -119,7 +113,7 @@ object ApiClient {
     }
 
     private fun handleLogout() {
-        TokenManager.getInstance(appContext).clearToken()
+        SessionManager.clearSession()
         cookieJar.clear()
         navigateToActivity(LoginActivity::class.java, clearStack = true)
     }

@@ -17,7 +17,6 @@ import com.example.upagain.model.LoginRequest
 import com.example.upagain.repository.AuthRepository
 import com.example.upagain.util.validator.*
 import com.example.upagain.util.ui.*
-import com.example.upagain.util.TokenManager
 import kotlinx.coroutines.launch
 import androidx.core.net.toUri
 import androidx.lifecycle.Lifecycle
@@ -25,10 +24,10 @@ import androidx.lifecycle.repeatOnLifecycle
 import com.example.upagain.BuildConfig
 import com.example.upagain.databinding.LoginActivityBinding
 import com.example.upagain.feat.MainActivity
+import com.example.upagain.util.auth.SessionManager
 import com.example.upagain.viewmodel.AuthViewModel
 import com.example.upagain.viewmodel.UiState
 import com.example.upagain.viewmodel.ViewModelFactory
-import retrofit2.HttpException
 
 class LoginActivity : AppCompatActivity() {
     // Initialize layer dependencies
@@ -144,7 +143,13 @@ class LoginActivity : AppCompatActivity() {
     }
 
     private fun handleLoginSuccess(token: String) {
-        TokenManager.getInstance(this).saveToken(token)
+        try {
+            SessionManager.saveUserSession(token)
+        } catch (e: Exception) {
+            Log.e("LoginActivity", "Failed to save user session", e)
+            SessionManager.clearSession()
+            binding.main.showTopSnackbar(R.string.exception_message, SnackbarLevel.ERROR)
+        }
 
         val intent = Intent(this, MainActivity::class.java).apply {
             flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK

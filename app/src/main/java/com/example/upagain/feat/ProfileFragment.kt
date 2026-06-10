@@ -10,13 +10,11 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
-import com.example.upagain.R
 import com.example.upagain.api.ApiClient
 import com.example.upagain.databinding.FragmentProfileBinding
 import com.example.upagain.feat.auth.LoginActivity
 import com.example.upagain.repository.AccountRepo
-import com.example.upagain.util.TokenManager
-import com.example.upagain.util.ui.toggleLoadingState
+import com.example.upagain.util.auth.SessionManager
 import com.example.upagain.viewmodel.AccountViewModel
 import com.example.upagain.viewmodel.UiState
 import com.example.upagain.viewmodel.ViewModelFactory
@@ -65,12 +63,7 @@ class ProfileFragment : Fragment() {
         setupListeners()
         observeAccountState()
 
-        // TODO: API CALL via view model
-        // TODO: parse JWT for user id (see how I did in web react)
-        viewModel.getAccountDetails(999)
-        // TODO: observe state change
-
-
+        viewModel.getAccountDetails(SessionManager.userId ?: 0)
     }
 
     override fun onDestroyView() {
@@ -108,8 +101,7 @@ class ProfileFragment : Fragment() {
         }
     }
     private fun handleLogOut() {
-        val tokenManager = TokenManager.getInstance(requireContext())
-        tokenManager.clearToken()
+        SessionManager.clearSession()
         val intent = Intent(requireContext(), LoginActivity::class.java).apply {
             // Clear activity task stack history so back button cannot re-enter profile
             flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK

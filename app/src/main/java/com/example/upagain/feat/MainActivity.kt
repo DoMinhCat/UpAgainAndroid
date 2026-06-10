@@ -2,7 +2,6 @@ package com.example.upagain.feat
 
 import android.content.Intent
 import android.os.Bundle
-import android.view.View
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
@@ -11,16 +10,12 @@ import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.updatePadding
 import androidx.fragment.app.Fragment
 import com.example.upagain.R
-import com.example.upagain.databinding.LoginActivityBinding
 import com.example.upagain.databinding.MainActivityBinding
 import com.example.upagain.feat.auth.LoginActivity
 import com.example.upagain.feat.dashboard.DashboardFragment
 import com.example.upagain.feat.post.PostFragment
 import com.example.upagain.feat.shop.ShopFragment
-import com.example.upagain.util.TokenManager.Companion.KEY_TOKEN
-import com.example.upagain.util.ui.SnackbarLevel
-import com.example.upagain.util.ui.showTopSnackbar
-import com.google.android.material.bottomnavigation.BottomNavigationView
+import com.example.upagain.util.auth.SessionManager
 
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: MainActivityBinding
@@ -32,7 +27,8 @@ class MainActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         // SESSION CHECK
-        if (!isUserLoggedIn()) {
+        SessionManager.init(this)
+        if (!SessionManager.isLoggedIn()) {
             startActivity(Intent(this, LoginActivity::class.java))
             finish()
             return
@@ -89,9 +85,9 @@ class MainActivity : AppCompatActivity() {
             .commit()
     }
 
-    private fun isUserLoggedIn(): Boolean {
-        val sharedPrefs = getSharedPreferences("auth_prefs", MODE_PRIVATE)
-        val token = sharedPrefs.getString(KEY_TOKEN, null)
-        return !token.isNullOrEmpty()
-    }
+//    private fun isUserLoggedIn(): Boolean {
+//        val sharedPrefs = getSharedPreferences("auth_prefs", MODE_PRIVATE)
+//        val token = sharedPrefs.getString(KEY_TOKEN, null)
+//        return !token.isNullOrEmpty()
+//    }
 }
