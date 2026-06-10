@@ -7,13 +7,20 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
+import com.example.upagain.R
 import com.example.upagain.api.ApiClient
 import com.example.upagain.databinding.FragmentProfileBinding
 import com.example.upagain.feat.auth.LoginActivity
 import com.example.upagain.repository.AccountRepo
 import com.example.upagain.util.TokenManager
+import com.example.upagain.util.ui.toggleLoadingState
 import com.example.upagain.viewmodel.AccountViewModel
+import com.example.upagain.viewmodel.UiState
 import com.example.upagain.viewmodel.ViewModelFactory
+import kotlinx.coroutines.launch
 import kotlin.getValue
 
 // TODO: Rename parameter arguments, choose names that match
@@ -54,16 +61,15 @@ class ProfileFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        // ! Always set up listeners and observers before API call
+        setupListeners()
+        observeAccountState()
+
         // TODO: API CALL via view model
         // TODO: parse JWT for user id (see how I did in web react)
         viewModel.getAccountDetails(999)
-        observeAccountState()
         // TODO: observe state change
 
-        setupListeners()
-        binding.btnLogout.setOnClickListener {
-            handleLogOut()
-        }
 
     }
 
@@ -114,6 +120,32 @@ class ProfileFragment : Fragment() {
     }
 
     private fun observeAccountState() {
-        // TODO
+        lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                viewModel.accountState.collect { state ->
+                    when (state) {
+                        is UiState.Idle -> {
+                            toggleLoading(false)
+                        }
+                        is UiState.Loading -> {
+                            toggleLoading(true)
+                        }
+                        is UiState.Success -> {
+                            toggleLoading(false)
+                            // TODO: update UI with account details
+                        }
+                        is UiState.Error -> {
+                            toggleLoading(false)
+                            // TODO: redirect to error page 500
+                        }
+                    }
+                }
+            }
+        }
     }
+
+    private fun toggleLoading(isLoading: Boolean) {
+        // TODO: full screen skeleton or loader
+    }
+
 }
