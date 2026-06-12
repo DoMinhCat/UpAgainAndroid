@@ -227,7 +227,7 @@
                 android:layout_marginHorizontal="@dimen/space_lg"
                 android:layout_marginTop="@dimen/space_xl"
                 android:layout_marginBottom="@dimen/space_sm"
-                android:text="Settings" />
+                android:text="@string/settings" />
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -344,7 +344,7 @@
                             android:inputType="none"
                             android:paddingEnd="0dp"
                             android:paddingStart="0dp"
-                            android:text="English"
+                            tools:text="English"
                             android:textColor="@color/color_secondary"
                             tools:ignore="LabelFor" />
                     </com.google.android.material.textfield.TextInputLayout>

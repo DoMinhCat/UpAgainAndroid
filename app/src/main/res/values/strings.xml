@@ -108,6 +108,13 @@
     <string name="account_information">Account information</string>
     <string name="current_plan">CURRENT PLAN</string>
     <string name="expire_date">Expires on: %1$s</string>
+    <string name="language">Language</string>
+    <string name="english" translatable="false">English</string>
+    <string name="francais" translatable="false">Français</string>
+    <string-array name="languages_array">
+        <item>@string/english</item>
+        <item>@string/francais</item>
+    </string-array>
 
     <!-- Security Settings -->
     <string name="security_description">Update Credentials</string>
@@ -116,6 +123,5 @@
 
     <!-- Notification Settings -->
     <string name="noti_description">Update Preferences</string>
-    <string name="language">Language</string>
 
 </resources>

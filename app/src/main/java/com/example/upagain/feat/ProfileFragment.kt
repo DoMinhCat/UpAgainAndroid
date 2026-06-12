@@ -7,10 +7,12 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ArrayAdapter
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
+import com.example.upagain.R
 import com.example.upagain.api.ApiClient
 import com.example.upagain.databinding.FragmentProfileBinding
 import com.example.upagain.feat.auth.LoginActivity
@@ -61,6 +63,10 @@ class ProfileFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        val languages = resources.getStringArray(R.array.languages_array)
+        val adapter =
+            ArrayAdapter(requireContext(), android.R.layout.simple_spinner_dropdown_item, languages)
+        binding.actvLanguageSelector.setAdapter(adapter)
 
         // ! Always set up listeners and observers before API call
         setupListeners()
@@ -71,7 +77,6 @@ class ProfileFragment : Fragment() {
 
     override fun onDestroyView() {
         super.onDestroyView()
-        // clear reference to prevent memory leaks
         _binding = null
     }
 
@@ -101,6 +106,15 @@ class ProfileFragment : Fragment() {
         // LOG OUT BUTTON
         binding.btnLogout.setOnClickListener {
             handleLogOut()
+        }
+        // LANGUAGE
+        binding.actvLanguageSelector.setOnItemClickListener { parent, _, position, _ ->
+            val selectedLanguage = parent.getItemAtPosition(position) as String
+            // TODO: Execute app language change logic here
+        }
+        // SECURITY
+        binding.btnSettingSecurity.setOnClickListener {
+
         }
     }
     private fun handleLogOut() {
