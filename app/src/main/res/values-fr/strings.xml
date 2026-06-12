@@ -84,4 +84,9 @@
     <string name="items_bought">ARTICLES ACHETÉS</string>
     <string name="event_fees">FRAIS D\'ÉVÉNEMENT</string>
     <string name="total_projects">PROJETS TOTAL</string>
+    <string name="confirm_password">Confirmer votre mot de passe</string>
+    <string name="security_description">Mettre à jour vos informations d\'identification</string>
+    <string name="new_password">Nouveau mot de passe</string>
+    <string name="noti_description">Mettre à jour vos préférences</string>
+    <string name="language">Langue</string>
 </resources>

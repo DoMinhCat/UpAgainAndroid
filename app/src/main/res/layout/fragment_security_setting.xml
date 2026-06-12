@@ -31,19 +31,129 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 app:tint="@color/color_primary" />
+
             <TextView
                 android:id="@+id/tv_shop_title"
                 style="@style/TextAppearance.Material3.HeadlineMedium"
-                android:layout_width="0dp" android:layout_height="wrap_content"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
                 android:text="@string/security"
                 android:textColor="@color/color_on_background"
                 android:textStyle="bold"
-                android:gravity="center" android:paddingHorizontal="@dimen/min_touch" app:layout_constraintBottom_toBottomOf="parent"
+                android:gravity="center"
+                android:paddingHorizontal="@dimen/min_touch"
+                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </com.google.android.material.appbar.AppBarLayout>
+
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="@dimen/space_lg"
+            android:paddingBottom="@dimen/space_xxl">
+
+            <TextView
+                style="@style/TextAppearance.UpAgain.H3"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/space_sm"
+                android:text="@string/security_description" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/input_round"
+                android:backgroundTint="@color/color_surface"
+                android:orientation="vertical"
+                android:padding="@dimen/space_md">
+
+                <TextView
+                    style="@style/TextAppearance.UpAgain.BodySmall"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/email"
+                    android:alpha="0.6" />
+
+                <EditText
+                    android:id="@+id/et_security_email"
+                    style="@style/TextAppearance.UpAgain.BodyMedium"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@null"
+                    android:inputType="textEmailAddress"
+                    android:paddingVertical="@dimen/space_xs"
+                    tools:text="sarah.j@example.com" />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_marginVertical="@dimen/space_sm"
+                    android:background="@color/color_background" />
+
+                <TextView
+                    style="@style/TextAppearance.UpAgain.BodySmall"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/new_password"
+                    android:alpha="0.6" />
+
+                <EditText
+                    android:id="@+id/et_security_password"
+                    style="@style/TextAppearance.UpAgain.BodyMedium"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@null"
+                    android:inputType="textPassword"
+                    android:paddingVertical="@dimen/space_xs"
+                    android:hint="••••••••" />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_marginVertical="@dimen/space_sm"
+                    android:background="@color/color_background" />
+
+                <TextView
+                    style="@style/TextAppearance.UpAgain.BodySmall"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/confirm_password"
+                    android:alpha="0.6" />
+
+                <EditText
+                    android:id="@+id/et_security_confirm_password"
+                    style="@style/TextAppearance.UpAgain.BodyMedium"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@null"
+                    android:inputType="textPassword"
+                    android:paddingVertical="@dimen/space_xs"
+                    android:hint="••••••••" />
+
+            </LinearLayout>
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btn_save_security"
+                style="@style/Widget.Material3.Button"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/button_height"
+                android:layout_marginTop="@dimen/space_xl"
+                android:text="@string/btn_save"
+                android:textColor="@color/white"
+                app:cornerRadius="@dimen/button_radius"
+                app:backgroundTint="@color/color_primary" />
+
+        </LinearLayout>
+    </androidx.core.widget.NestedScrollView>
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

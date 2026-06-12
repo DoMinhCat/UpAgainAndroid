@@ -306,6 +306,57 @@
                     android:background="@color/color_background" />
 
                 <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/layout_setting_language"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/min_touch"
+                    android:paddingHorizontal="@dimen/space_md">
+
+                    <TextView
+                        android:id="@+id/tv_label_language"
+                        style="@style/TextAppearance.UpAgain.BodyLarge"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/language"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        style="@style/Widget.Material3.TextInputLayout.FilledBox.ExposedDropdownMenu"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        app:boxBackgroundMode="none"
+                        app:hintEnabled="false"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toTopOf="parent">
+
+                        <AutoCompleteTextView
+                            android:id="@+id/actv_language_selector"
+                            style="@style/TextAppearance.UpAgain.BodyMedium"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:background="@null"
+                            android:clickable="true"
+                            android:cursorVisible="false"
+                            android:focusable="false"
+                            android:gravity="end|center_vertical"
+                            android:inputType="none"
+                            android:paddingEnd="0dp"
+                            android:paddingStart="0dp"
+                            android:text="English"
+                            android:textColor="@color/color_secondary"
+                            tools:ignore="LabelFor" />
+                    </com.google.android.material.textfield.TextInputLayout>
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_marginHorizontal="@dimen/space_md"
+                    android:background="@color/color_background" />
+
+                <androidx.constraintlayout.widget.ConstraintLayout
                     android:id="@+id/btn_setting_delete"
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/min_touch"
