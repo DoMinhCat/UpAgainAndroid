@@ -33,17 +33,16 @@ class LoginActivity : AppCompatActivity() {
     // Initialize layer dependencies
     private val apiService by lazy { ApiClient.apiService }
     private val repository by lazy { AuthRepository(apiService) }
-
-    // form validators
-    val emailValidator = FieldValidator(listOf(NotEmptyRule(), EmailRule()))
-    val passwordValidator = FieldValidator(listOf(NotEmptyRule(), MinLengthRule(4)))
-
-    // elements binding
-    private lateinit var binding: LoginActivityBinding
     // viewmodel
     private val viewModel: AuthViewModel by viewModels {
         ViewModelFactory { AuthViewModel(repository) }
     }
+
+    // form validators
+    val emailValidator = FieldValidator(listOf(NotEmptyRule(), EmailRule()))
+    val passwordValidator = FieldValidator(listOf(NotEmptyRule(), MinLengthRule(4)))
+    // elements binding
+    private lateinit var binding: LoginActivityBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -95,7 +94,7 @@ class LoginActivity : AppCompatActivity() {
                 startActivity(intent)
             } catch (e: ActivityNotFoundException) {
                 Log.e("LoginActivity", "Open forgot password link failed", e)
-                binding.main.showTopSnackbar(R.string.no_browsere, SnackbarLevel.ERROR)
+                binding.main.showTopSnackbar(R.string.no_browser, SnackbarLevel.ERROR)
             }
         }
 
@@ -108,7 +107,7 @@ class LoginActivity : AppCompatActivity() {
                 startActivity(intent)
             } catch (e: ActivityNotFoundException) {
                 Log.e("LoginActivity", "Open sign up link failed", e)
-                binding.main.showTopSnackbar(R.string.no_browsere, SnackbarLevel.ERROR)
+                binding.main.showTopSnackbar(R.string.no_browser, SnackbarLevel.ERROR)
             }
         }
     }
@@ -161,7 +160,7 @@ class LoginActivity : AppCompatActivity() {
 
     private fun handleLoginFailure(statusCode: Int?, exception: Throwable) {
         Log.e("LoginActivity", "Login failed", exception)
-
+        // no redirection here, just show snack bar noti
         when (statusCode) {
             401 -> binding.main.showTopSnackbar(R.string.login_fail, SnackbarLevel.ERROR)
             400 -> binding.main.showTopSnackbar(R.string.invalid_request_body, SnackbarLevel.ERROR)

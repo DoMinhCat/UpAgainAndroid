@@ -50,9 +50,12 @@
     <string name="error_404">404</string>
     <string name="error_500">500</string>
     <string name="error_404_description">Page non trouvée</string>
+    <string name="error_403_description">Interdit</string>
     <string name="error_500_description">Erreur interne du serveur</string>
     <string name="error_connection_description">Aucune connexion internet</string>
+    <string name="error_generic_title">Erreur inconnue</string>
     <string name="error_404_msg">Oups ! Il semblerait que la nature ait repris ses droits sur ce chemin. Remettons-nous sur le bon chemin.</string>
+    <string name="error_403_msg">Oups ! Vous vous aventurez dans la zone interdite de la forêt.</string>
     <string name="btn_home">Retour à l\'accueil</string>
     <string name="error_500_msg">Oups ! Nos serveurs sont actuellement très sollicités. Nous mettons tout en œuvre pour résoudre le problème au plus vite.</string>
     <string name="btn_refresh">Actualiser la page</string>
@@ -60,7 +63,7 @@
 
     <string name="exception_message">Une erreur s\'est produite</string>
     <string name="invalid_request_body">Demande invalide</string>
-    <string name="no_browsere">Aucun navigateur trouvé</string>
+    <string name="no_browser">Aucun navigateur trouvé</string>
     <string name="btn_save">Sauvegarder</string>
     <string name="settings">Paramètres</string>
     <string name="security">Sécurité</string>

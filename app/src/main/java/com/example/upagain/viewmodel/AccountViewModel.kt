@@ -10,25 +10,25 @@ import kotlinx.coroutines.launch
 import retrofit2.HttpException
 
 class AccountViewModel(private val repository: AccountRepo) : ViewModel() {
-    private val _accountState = MutableStateFlow<UiState<AccountDetailsResponse>>(UiState.Idle)
-    val accountState: StateFlow<UiState<AccountDetailsResponse>> = _accountState
+    private val _accountDetailsState = MutableStateFlow<UiState<AccountDetailsResponse>>(UiState.Loading)
+    val accountDetailsState: StateFlow<UiState<AccountDetailsResponse>> = _accountDetailsState
 
     fun getAccountDetails(idAccount: Int) {
         viewModelScope.launch {
-            _accountState.value = UiState.Loading
+            _accountDetailsState.value = UiState.Loading
 
             repository.getAccountDetails(idAccount)
                 .onSuccess { accountDetails ->
-                    _accountState.value = UiState.Success(accountDetails)
+                    _accountDetailsState.value = UiState.Success(accountDetails)
                 }
                 .onFailure { exception ->
                     val statusCode = (exception as? HttpException)?.code()
-                    _accountState.value = UiState.Error(statusCode, exception)
+                    _accountDetailsState.value = UiState.Error(statusCode, exception)
                 }
         }
     }
 
     fun resetState() {
-        _accountState.value = UiState.Idle
+        _accountDetailsState.value = UiState.Idle
     }
 }

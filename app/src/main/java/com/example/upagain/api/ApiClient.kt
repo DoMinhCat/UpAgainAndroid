@@ -4,8 +4,7 @@ import android.content.Context
 import android.content.Intent
 import com.example.upagain.BuildConfig
 import com.example.upagain.feat.auth.LoginActivity
-import com.example.upagain.feat.error.InternalServerErrorActivity
-import com.example.upagain.feat.error.NotFoundActivity
+import com.example.upagain.feat.error.ErrorActivity
 import com.example.upagain.util.auth.SessionManager
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
@@ -52,10 +51,10 @@ object ApiClient {
 
                 when (response.code) {
                     404 -> {
-                        navigateToActivity(NotFoundActivity::class.java)
+                        navigateToActivity(ErrorActivity::class.java, statusCode = 404)
                     }
                     500 -> {
-                        navigateToActivity(InternalServerErrorActivity::class.java)
+                        navigateToActivity(ErrorActivity::class.java, statusCode = 500)
                     }
                     401 -> {
                         val path = request.url.encodedPath
@@ -118,11 +117,14 @@ object ApiClient {
         navigateToActivity(LoginActivity::class.java, clearStack = true)
     }
 
-    private fun navigateToActivity(activityClass: Class<*>, clearStack: Boolean = false) {
+    private fun navigateToActivity(activityClass: Class<*>, clearStack: Boolean = false, statusCode: Int? = null) {
         val intent = Intent(appContext, activityClass).apply {
             flags = Intent.FLAG_ACTIVITY_NEW_TASK
             if (clearStack) {
                 addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK)
+            }
+            if (statusCode != null) {
+                putExtra("EXTRA_ERROR_CODE", statusCode)
             }
         }
         appContext.startActivity(intent)

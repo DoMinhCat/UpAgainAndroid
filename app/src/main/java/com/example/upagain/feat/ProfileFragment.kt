@@ -2,6 +2,7 @@ package com.example.upagain.feat
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -10,11 +11,15 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
+import com.example.upagain.R
 import com.example.upagain.api.ApiClient
 import com.example.upagain.databinding.FragmentProfileBinding
 import com.example.upagain.feat.auth.LoginActivity
+import com.example.upagain.feat.error.ErrorActivity
 import com.example.upagain.repository.AccountRepo
 import com.example.upagain.util.auth.SessionManager
+import com.example.upagain.util.ui.SnackbarLevel
+import com.example.upagain.util.ui.showTopSnackbar
 import com.example.upagain.viewmodel.AccountViewModel
 import com.example.upagain.viewmodel.UiState
 import com.example.upagain.viewmodel.ViewModelFactory
@@ -114,11 +119,9 @@ class ProfileFragment : Fragment() {
     private fun observeAccountState() {
         lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
-                viewModel.accountState.collect { state ->
+                viewModel.accountDetailsState.collect { state ->
                     when (state) {
-                        is UiState.Idle -> {
-                            toggleLoading(false)
-                        }
+                        is UiState.Idle -> {}
                         is UiState.Loading -> {
                             toggleLoading(true)
                         }
@@ -128,14 +131,14 @@ class ProfileFragment : Fragment() {
                         }
                         is UiState.Error -> {
                             toggleLoading(false)
-                            // TODO: redirect to error page 500
+                            Log.e("ProfileFragment", "Load account details failed", state.exception)
+                            ErrorActivity.start(requireContext(), state.statusCode ?: 0)
                         }
                     }
                 }
             }
         }
     }
-
     private fun toggleLoading(isLoading: Boolean) {
         // TODO: full screen skeleton or loader
     }

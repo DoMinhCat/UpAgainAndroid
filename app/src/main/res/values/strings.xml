@@ -77,17 +77,23 @@
     <!-- Errors -->
     <string name="error_404">404</string>
     <string name="error_500">500</string>
+
+    <string name="error_403_description">Forbidden</string>
     <string name="error_404_description">Page not found</string>
     <string name="error_500_description">Internal server error</string>
     <string name="error_connection_description">No internet connection</string>
+    <string name="error_generic_title">Unknown error</string>
+
     <string name="error_404_msg">Oops! It seems nature has reclaimed this path. Let\'s get back on track.</string>
-    <string name="btn_home">Back to home</string>
+    <string name="error_403_msg">Oops! You are wandering into the forbidden area of the forest.</string>
     <string name="error_500_msg">Oops! Our servers are currently very busy. We are doing everything we can to resolve the problem as quickly as possible.</string>
-    <string name="btn_refresh">Refresh page</string>
     <string name="error_connection_msg">Oops! Your connection was interrupted. Please check your signal and try again to continue your journey.</string>
     <string name="exception_message">An error occurred</string>
     <string name="invalid_request_body">Invalid request body</string>
-    <string name="no_browsere">No browser found</string>">
+    <string name="no_browser">No browser found</string>">
+
+    <string name="btn_home">Back to home</string>
+    <string name="btn_refresh">Refresh page</string>
 
     <!-- Profile & Settings -->
     <string name="btn_save">Save</string>

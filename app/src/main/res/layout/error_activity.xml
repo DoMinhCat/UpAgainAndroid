@@ -2,6 +2,7 @@
 <androidx.constraintlayout.widget.ConstraintLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/color_background"
@@ -19,7 +20,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        android:text="@string/error_500" />
+        tools:text="500" />
 
     <TextView
         android:id="@+id/tv_error_title"
@@ -32,7 +33,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tv_error_code"
-        android:text="@string/error_500_description" />
+        tools:text="Internal Server Error" />
 
     <TextView
         android:id="@+id/tv_error_message"
@@ -46,7 +47,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tv_error_title"
-        android:text="@string/error_500_msg" />
+        tools:text="Something went wrong on our end. Please try again later." />
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/btn_error_action"

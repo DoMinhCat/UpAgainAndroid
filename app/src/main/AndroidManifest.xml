@@ -19,10 +19,7 @@
             android:name=".feat.error.NoConnectionActivity"
             android:exported="false" />
         <activity
-            android:name=".feat.error.InternalServerErrorActivity"
-            android:exported="false" />
-        <activity
-            android:name=".feat.error.NotFoundActivity"
+            android:name=".feat.error.ErrorActivity"
             android:exported="false" />
         <activity
             android:name=".feat.auth.LoginActivity"
