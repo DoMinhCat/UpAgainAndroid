@@ -85,9 +85,11 @@
     <string name="event_fees">FRAIS D\'ÉVÉNEMENT</string>
     <string name="total_projects">PROJETS TOTAL</string>
     <string name="confirm_password">Confirmer votre mot de passe</string>
+    <string name="invalid_username">Nom d\'utilisateur invalide</string>
     <string name="security_description">Mettre à jour vos informations d\'identification</string>
     <string name="new_password">Nouveau mot de passe</string>
     <string name="password_not_match">Les mots de passe ne correspondent pas.</string>
     <string name="noti_description">Mettre à jour vos préférences</string>
     <string name="language">Langue</string>
+    <string name="invalid_phone">Numéro de téléphone invalide</string>
 </resources>

@@ -115,6 +115,8 @@
         <item>@string/english</item>
         <item>@string/francais</item>
     </string-array>
+    <string name="invalid_phone">Invalid phone number</string>
+    <string name="invalid_username">Invalid username</string>
 
     <!-- Security Settings -->
     <string name="security_description">Update Credentials</string>

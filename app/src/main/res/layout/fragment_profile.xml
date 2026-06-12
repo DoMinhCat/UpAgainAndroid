@@ -158,6 +158,17 @@
                     android:background="@null"
                     tools:text="Sarah Jenkins"
                     android:paddingVertical="@dimen/space_xs"/>
+                <TextView
+                    android:id="@+id/tv_username_error"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/space_md"
+                    android:layout_marginTop="@dimen/space_xs"
+                    android:text="@string/invalid_username"
+                    android:textColor="@color/color_error"
+                    style="@style/TextAppearance.UpAgain.BodySmall"
+                    android:visibility="gone"
+                    tools:visibility="visible" />
 
                 <View android:layout_width="match_parent"
                     android:layout_height="1dp"
@@ -191,6 +202,17 @@
                     android:background="@null"
                     tools:text="+1 234 567 890"
                     android:paddingVertical="@dimen/space_xs"/>
+                <TextView
+                    android:id="@+id/tv_phone_error"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/space_md"
+                    android:layout_marginTop="@dimen/space_xs"
+                    android:text="@string/invalid_phone"
+                    android:textColor="@color/color_error"
+                    style="@style/TextAppearance.UpAgain.BodySmall"
+                    android:visibility="gone"
+                    tools:visibility="visible" />
 
                 <View android:layout_width="match_parent" android:layout_height="1dp" android:background="@color/color_background" android:layout_marginVertical="@dimen/space_sm"/>
 

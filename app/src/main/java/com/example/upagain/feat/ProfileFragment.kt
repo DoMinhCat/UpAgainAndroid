@@ -21,17 +21,18 @@ import com.example.upagain.feat.error.ErrorActivity
 import com.example.upagain.repository.AccountRepo
 import com.example.upagain.util.auth.SessionManager
 import com.example.upagain.util.datetime.formatTimestamptz
+import com.example.upagain.util.ui.setOnClickListenerWithCooldown
+import com.example.upagain.util.validator.FieldValidator
+import com.example.upagain.util.validator.MaxLengthRule
+import com.example.upagain.util.validator.MinLengthRule
+import com.example.upagain.util.validator.NotEmptyRule
+import com.example.upagain.util.validator.PhoneRule
 import com.example.upagain.viewmodel.AccountViewModel
 import com.example.upagain.viewmodel.UiState
 import com.example.upagain.viewmodel.ViewModelFactory
 import kotlinx.coroutines.launch
 import kotlin.getValue
 
-/**
- * A simple [Fragment] subclass.
- * Use the [ProfileFragment.newInstance] factory method to
- * create an instance of this fragment.
- */
 class ProfileFragment : Fragment() {
     // elements binding
     private var _binding: FragmentProfileBinding? = null
@@ -41,6 +42,10 @@ class ProfileFragment : Fragment() {
     private val viewModel: AccountViewModel by viewModels {
         ViewModelFactory { AccountViewModel(repository) }
     }
+
+    // validators
+    val usernameValidator = FieldValidator(listOf(NotEmptyRule(), MinLengthRule(4), MaxLengthRule(20)))
+    val phoneValidator = FieldValidator(listOf(NotEmptyRule(), PhoneRule()))
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -106,6 +111,21 @@ class ProfileFragment : Fragment() {
                 .replace(R.id.fragment_container, securityFragment)
                 .addToBackStack(null)
                 .commit()
+        }
+        // SAVE CHANGES
+        binding.btnSaveProfile.setOnClickListenerWithCooldown {
+            val username = binding.etProfileName.text.toString()
+            val phone = binding.etProfilePhone.text.toString()
+            val isUsernameValid = usernameValidator.validate(username)
+            val isPhoneValid = phoneValidator.validate(phone)
+            binding.tvUsernameError.visibility = if (isUsernameValid) View.GONE else View.VISIBLE
+            binding.tvPhoneError.visibility = if (isPhoneValid) View.GONE else View.VISIBLE
+            if (!isUsernameValid || !isPhoneValid) {
+                return@setOnClickListenerWithCooldown
+            }
+            // TODO: call view model to update account details
+//            val currentId = SessionManager.userId ?: return@setOnClickListenerWithCooldown
+//            viewModel.updateAccountDetails(currentId, username, phone)
         }
     }
     private fun handleLogOut() {
