@@ -144,8 +144,8 @@ class ProfileFragment : Fragment() {
             }
         }
     }
-    private fun toggleLoading(isLoading: Boolean) {
-        // TODO: full screen skeleton or loader
+    fun toggleLoading(isLoading: Boolean) {
+        binding.loadingOverlay.root.visibility = if (isLoading) View.VISIBLE else View.GONE
     }
 
 }

@@ -47,6 +47,7 @@
     </com.google.android.material.appbar.AppBarLayout>
 
     <androidx.core.widget.NestedScrollView
+        android:id="@+id/scroll_container"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         app:layout_behavior="@string/appbar_scrolling_view_behavior">
@@ -57,7 +58,6 @@
             android:orientation="vertical"
             android:paddingBottom="@dimen/space_xxl">
 
-            <!-- HEADER SECTION: AVATAR & NAME -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -94,7 +94,6 @@
                     android:textColor="@color/color_primary" />
             </LinearLayout>
 
-            <!-- SUBSCRIPTION CARD -->
             <com.google.android.material.card.MaterialCardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -129,11 +128,9 @@
                         app:layout_constraintTop_toBottomOf="@+id/tv_plan_label"
                         app:layout_constraintStart_toStartOf="parent"
                         tools:text="Freemium"/>
-
                 </androidx.constraintlayout.widget.ConstraintLayout>
             </com.google.android.material.card.MaterialCardView>
 
-            <!-- ACCOUNT INFORMATION -->
             <TextView
                 style="@style/TextAppearance.UpAgain.H3"
                 android:layout_width="wrap_content"
@@ -151,7 +148,6 @@
                 android:orientation="vertical"
                 android:padding="@dimen/space_md">
 
-                <!-- Field: Username -->
                 <TextView
                     style="@style/TextAppearance.UpAgain.BodySmall"
                     android:text="@string/username" android:alpha="0.6" android:layout_width="wrap_content" android:layout_height="wrap_content"/>
@@ -168,7 +164,6 @@
                     android:background="@color/color_background"
                     android:layout_marginVertical="@dimen/space_sm"/>
 
-                <!-- Field: Email -->
                 <TextView
                     style="@style/TextAppearance.UpAgain.BodySmall"
                     android:text="@string/email"
@@ -182,7 +177,6 @@
                 <View android:layout_width="match_parent"
                     android:layout_height="1dp" android:background="@color/color_background" android:layout_marginVertical="@dimen/space_sm"/>
 
-                <!-- Field: Phone -->
                 <TextView
                     style="@style/TextAppearance.UpAgain.BodySmall"
                     android:text="@string/phone"
@@ -200,7 +194,6 @@
 
                 <View android:layout_width="match_parent" android:layout_height="1dp" android:background="@color/color_background" android:layout_marginVertical="@dimen/space_sm"/>
 
-                <!-- Field: Join Date (ReadOnly style) -->
                 <TextView
                     style="@style/TextAppearance.UpAgain.BodySmall"
                     android:text="@string/member_since"
@@ -227,7 +220,6 @@
                 android:text="@string/btn_save"
                 app:cornerRadius="@dimen/button_radius" />
 
-            <!-- SETTINGS SECTION -->
             <TextView
                 style="@style/TextAppearance.UpAgain.H3"
                 android:layout_width="wrap_content"
@@ -245,7 +237,6 @@
                 android:backgroundTint="@color/color_surface"
                 android:orientation="vertical">
 
-                <!-- Row: Security -->
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:id="@+id/btn_setting_security"
                     android:layout_width="match_parent"
@@ -280,7 +271,6 @@
                     android:layout_marginHorizontal="@dimen/space_md"
                     android:background="@color/color_background" />
 
-                <!-- Row: Security -->
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:id="@+id/btn_setting_noti"
                     android:layout_width="match_parent"
@@ -315,7 +305,6 @@
                     android:layout_marginHorizontal="@dimen/space_md"
                     android:background="@color/color_background" />
 
-                <!-- Row: Delete Account -->
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:id="@+id/btn_setting_delete"
                     android:layout_width="match_parent"
@@ -345,8 +334,11 @@
                         app:tint="@color/color_error" />
                 </androidx.constraintlayout.widget.ConstraintLayout>
             </LinearLayout>
-
         </LinearLayout>
     </androidx.core.widget.NestedScrollView>
+
+    <include
+        android:id="@+id/loading_overlay"
+        layout="@layout/layout_fullscreen_loading" />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
