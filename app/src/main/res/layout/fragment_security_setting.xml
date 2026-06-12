@@ -33,7 +33,7 @@
                 app:tint="@color/color_primary" />
 
             <TextView
-                android:id="@+id/tv_shop_title"
+                android:id="@+id/tv_security_title"
                 style="@style/TextAppearance.Material3.HeadlineMedium"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
@@ -94,6 +94,17 @@
                     android:paddingVertical="@dimen/space_xs"
                     tools:text="sarah.j@example.com" />
 
+                <TextView
+                    android:id="@+id/tv_error_email"
+                    style="@style/TextAppearance.UpAgain.BodySmall"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/color_error"
+                    android:paddingTop="2dp"
+                    android:visibility="gone"
+                    android:text="@string/invalid_email"
+                    tools:visibility="visible" />
+
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
@@ -117,6 +128,17 @@
                     android:paddingVertical="@dimen/space_xs"
                     android:hint="••••••••" />
 
+                <TextView
+                    android:id="@+id/tv_error_password"
+                    style="@style/TextAppearance.UpAgain.BodySmall"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/color_error"
+                    android:paddingTop="2dp"
+                    android:visibility="gone"
+                    android:text="@string/incorrect_password"
+                    tools:visibility="visible" />
+
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
@@ -139,6 +161,17 @@
                     android:inputType="textPassword"
                     android:paddingVertical="@dimen/space_xs"
                     android:hint="••••••••" />
+
+                <TextView
+                    android:id="@+id/tv_error_confirm_password"
+                    style="@style/TextAppearance.UpAgain.BodySmall"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/color_error"
+                    android:paddingTop="2dp"
+                    android:visibility="gone"
+                    android:text="@string/password_not_match"
+                    tools:visibility="visible" />
 
             </LinearLayout>
 
