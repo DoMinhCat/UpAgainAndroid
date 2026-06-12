@@ -29,12 +29,21 @@ object ApiClient {
         cookieJar = PersistentCookieJar(appContext)
     }
 
+    fun getHttpClient(): OkHttpClient = httpClient
+
     private val httpClient: OkHttpClient by lazy {
         // AUTO INJECT JWT IN SHAREDPREF INTO OUTGOING REQUESTS
         OkHttpClient.Builder()
             .cookieJar(cookieJar)
             .addInterceptor(Interceptor { chain ->
                 val originalRequest = chain.request()
+                val path = originalRequest.url.encodedPath
+
+                // Do not attach tokens to authentication lifecycle routes
+                if (path == Endpoints.REFRESH || path == Endpoints.LOGIN) {
+                    return@Interceptor chain.proceed(originalRequest)
+                }
+
                 val token = SessionManager.token
                 val newRequest = if (!token.isNullOrEmpty()) {
                     originalRequest.newBuilder()

@@ -27,8 +27,4 @@ class AccountViewModel(private val repository: AccountRepo) : ViewModel() {
                 }
         }
     }
-
-    fun resetState() {
-        _accountDetailsState.value = UiState.Idle
-    }
 }

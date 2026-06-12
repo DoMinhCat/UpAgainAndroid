@@ -12,9 +12,12 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
+import coil.load
+import com.example.upagain.BuildConfig
 import com.example.upagain.R
 import com.example.upagain.SecuritySettingFragment
 import com.example.upagain.api.ApiClient
+import com.example.upagain.api.Endpoints
 import com.example.upagain.databinding.FragmentProfileBinding
 import com.example.upagain.feat.auth.LoginActivity
 import com.example.upagain.feat.error.ErrorActivity
@@ -22,7 +25,9 @@ import com.example.upagain.repository.AccountRepo
 import com.example.upagain.util.auth.SessionManager
 import com.example.upagain.util.datetime.formatTimestamptz
 import com.example.upagain.util.ui.DialogUtils
+import com.example.upagain.util.ui.SnackbarLevel
 import com.example.upagain.util.ui.setOnClickListenerWithCooldown
+import com.example.upagain.util.ui.showTopSnackbar
 import com.example.upagain.util.ui.toggleBtnLoadingState
 import com.example.upagain.util.validator.FieldValidator
 import com.example.upagain.util.validator.MaxLengthRule
@@ -33,6 +38,7 @@ import com.example.upagain.viewmodel.AccountViewModel
 import com.example.upagain.viewmodel.UiState
 import com.example.upagain.viewmodel.ViewModelFactory
 import kotlinx.coroutines.launch
+import retrofit2.HttpException
 import kotlin.getValue
 
 class ProfileFragment : Fragment() {
@@ -138,8 +144,6 @@ class ProfileFragment : Fragment() {
                 val currentUserId = SessionManager.userId ?: return@showDestructiveConfirmationDialog
                 // TODO: call view model to delete account
                 // e.g., viewModel.deleteUserAccount()
-
-                // TODO: log out + redirect in observer
             }
         }
     }
@@ -174,6 +178,38 @@ class ProfileFragment : Fragment() {
                             binding.etProfileName.setText(account.username)
                             binding.tvProfileEmail.text = account.email
                             binding.etProfilePhone.setText(account.phone)
+
+                            // TODO: build url and let coil handle image serving for avatar
+                            val avatarUrl = "${BuildConfig.API_BASE_URL}${Endpoints.IMAGES}?path=${account.avatar}"
+                            binding.ivAvatar.load(avatarUrl) {
+                                crossfade(true)
+                                placeholder(R.drawable.ic_avatar_unknown)
+                                error(R.drawable.ic_avatar_unknown)
+
+                                listener(
+                                    onSuccess = { _, _ ->
+                                        // Image loaded successfully
+                                    },
+                                    onError = { _, result ->
+                                        val exception = result.throwable
+                                        val statusCode = (exception as? coil.network.HttpException)?.response?.code
+
+                                        Log.e("ProfileFragment", "Failed to serve user's avatar. Status Code: $statusCode", exception)
+
+                                        when (statusCode) {
+                                            404 -> {
+                                                binding.main.showTopSnackbar(R.string.error_media_msg, SnackbarLevel.ERROR)
+                                            }
+                                            else -> {
+                                                binding.main.showTopSnackbar(
+                                                    R.string.exception_message,
+                                                    SnackbarLevel.ERROR
+                                                )
+                                            }
+                                        }
+                                    }
+                                )
+                            }
                         }
                         is UiState.Error -> {
                             toggleFullScreenLoading(false)

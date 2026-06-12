@@ -90,6 +90,7 @@
     <string name="error_500_msg">Oops! Our servers are currently very busy. We are doing everything we can to resolve the problem as quickly as possible.</string>
     <string name="error_connection_msg">Oops! Your connection was interrupted. Please check your signal and try again to continue your journey.</string>
     <string name="exception_message">An error occurred</string>
+    <string name="error_media_msg">Failed to load media</string>
     <string name="invalid_request_body">Invalid request body</string>
     <string name="no_browser">No browser found</string>">
 

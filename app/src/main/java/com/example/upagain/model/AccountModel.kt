@@ -6,5 +6,6 @@ data class AccountDetailsResponse(
     val username: String,
     val email: String,
     val phone: String,
-    val isPremium: Boolean
+    val isPremium: Boolean,
+    val avatar: String
 )
