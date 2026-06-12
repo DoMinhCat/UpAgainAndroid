@@ -82,7 +82,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/space_md"
-                    android:text="Sarah Jenkins"
+                    tools:text="Sarah Jenkins"
                     android:textColor="@color/color_on_background" />
 
                 <TextView
@@ -125,19 +125,10 @@
                         style="@style/TextAppearance.UpAgain.H2"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:textColor="@color/color_accent"
-                        app:layout_constraintTop_toBottomOf="@+id/tv_plan_label"
-                        app:layout_constraintStart_toStartOf="parent" />
-
-                    <TextView
-                        android:id="@+id/tv_plan_expiry"
-                        style="@style/TextAppearance.UpAgain.BodySmall"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/expire_date"
                         android:textColor="@color/color_on_secondary"
-                        app:layout_constraintTop_toBottomOf="@+id/tv_plan_type"
-                        app:layout_constraintStart_toStartOf="parent" />
+                        app:layout_constraintTop_toBottomOf="@+id/tv_plan_label"
+                        app:layout_constraintStart_toStartOf="parent"
+                        tools:text="Freemium"/>
 
                 </androidx.constraintlayout.widget.ConstraintLayout>
             </com.google.android.material.card.MaterialCardView>
@@ -169,7 +160,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:background="@null"
-                    android:text="Sarah Jenkins"
+                    tools:text="Sarah Jenkins"
                     android:paddingVertical="@dimen/space_xs"/>
 
                 <View android:layout_width="match_parent"
@@ -198,21 +189,30 @@
                     android:alpha="0.6"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"/>
-                <EditText android:id="@+id/et_profile_phone" style="@style/TextAppearance.UpAgain.BodyMedium" android:layout_width="match_parent" android:layout_height="wrap_content" android:background="@null" android:text="+1 234 567 890" android:paddingVertical="@dimen/space_xs"/>
+                <EditText
+                    android:id="@+id/et_profile_phone"
+                    style="@style/TextAppearance.UpAgain.BodyMedium"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@null"
+                    tools:text="+1 234 567 890"
+                    android:paddingVertical="@dimen/space_xs"/>
 
                 <View android:layout_width="match_parent" android:layout_height="1dp" android:background="@color/color_background" android:layout_marginVertical="@dimen/space_sm"/>
 
                 <!-- Field: Join Date (ReadOnly style) -->
                 <TextView
                     style="@style/TextAppearance.UpAgain.BodySmall"
-                    android:text="@string/member_since" android:alpha="0.6"
+                    android:text="@string/member_since"
+                    android:alpha="0.6"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"/>
                 <TextView
+                    android:id="@+id/tv_member_since"
                     style="@style/TextAppearance.UpAgain.BodyMedium"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Jan 2024"
+                    tools:text="Jan 2024"
                     android:paddingVertical="@dimen/space_xs"/>
             </LinearLayout>
 

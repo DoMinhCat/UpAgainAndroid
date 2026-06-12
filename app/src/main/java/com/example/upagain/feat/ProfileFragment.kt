@@ -11,15 +11,13 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
-import com.example.upagain.R
 import com.example.upagain.api.ApiClient
 import com.example.upagain.databinding.FragmentProfileBinding
 import com.example.upagain.feat.auth.LoginActivity
 import com.example.upagain.feat.error.ErrorActivity
 import com.example.upagain.repository.AccountRepo
 import com.example.upagain.util.auth.SessionManager
-import com.example.upagain.util.ui.SnackbarLevel
-import com.example.upagain.util.ui.showTopSnackbar
+import com.example.upagain.util.datetime.formatTimestamptz
 import com.example.upagain.viewmodel.AccountViewModel
 import com.example.upagain.viewmodel.UiState
 import com.example.upagain.viewmodel.ViewModelFactory
@@ -127,7 +125,14 @@ class ProfileFragment : Fragment() {
                         }
                         is UiState.Success -> {
                             toggleLoading(false)
-                            // TODO: update UI with account details
+                            val account = state.data
+                            // update UI with account details
+                            binding.tvUsername.text = account.username
+                            binding.tvMemberSince.text = formatTimestamptz(account.createdAt)
+                            binding.tvPlanType.text = if (account.isPremium) "Premium" else "Freemium"
+                            binding.etProfileName.setText(account.username)
+                            binding.etProfileEmail.setText(account.email)
+                            binding.etProfilePhone.setText(account.phone)
                         }
                         is UiState.Error -> {
                             toggleLoading(false)
