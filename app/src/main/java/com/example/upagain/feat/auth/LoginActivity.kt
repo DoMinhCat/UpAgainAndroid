@@ -138,7 +138,7 @@ class LoginActivity : AppCompatActivity() {
     }
 
     private fun toggleLoading(isLoading: Boolean) {
-        toggleLoadingState(binding.btnLogin, binding.loginLoader, isLoading, getString(R.string.login))
+        toggleBtnLoadingState(binding.btnLogin, binding.loginLoader, isLoading, getString(R.string.login))
     }
 
     private fun handleLoginSuccess(token: String) {

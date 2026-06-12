@@ -8,6 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.annotation.RequiresApi
 import com.example.upagain.databinding.FragmentSecuritySettingBinding
+import com.example.upagain.util.ui.setOnBackClickListener
 
 class SecuritySettingFragment : Fragment() {
     private var _binding: FragmentSecuritySettingBinding? = null
@@ -34,9 +35,8 @@ class SecuritySettingFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         binding.etSecurityEmail.setText(userEmail)
 
-        binding.btnSaveSecurity.setOnClickListener {
-            // TODO: call viewmodel to update email + password
-        }
+        setupListeners()
+
     }
 
     override fun onDestroyView() {
@@ -54,5 +54,14 @@ class SecuritySettingFragment : Fragment() {
                     putString(ARG_USER_EMAIL, email)
                 }
             }
+    }
+
+    fun setupListeners() {
+        // SAVE CHANGES
+        binding.btnSaveSecurity.setOnClickListener {
+            // TODO: call viewmodel to update email + password
+        }
+        // BACK
+        binding.btnBack.setOnBackClickListener()
     }
 }
