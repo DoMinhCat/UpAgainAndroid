@@ -13,6 +13,7 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import com.example.upagain.R
+import com.example.upagain.SecuritySettingFragment
 import com.example.upagain.api.ApiClient
 import com.example.upagain.databinding.FragmentProfileBinding
 import com.example.upagain.feat.auth.LoginActivity
@@ -25,11 +26,6 @@ import com.example.upagain.viewmodel.UiState
 import com.example.upagain.viewmodel.ViewModelFactory
 import kotlinx.coroutines.launch
 import kotlin.getValue
-
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
 
 /**
  * A simple [Fragment] subclass.
@@ -44,13 +40,6 @@ class ProfileFragment : Fragment() {
     private val repository by lazy { AccountRepo(apiService) }
     private val viewModel: AccountViewModel by viewModels {
         ViewModelFactory { AccountViewModel(repository) }
-    }
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        arguments?.let {
-
-        }
     }
 
     override fun onCreateView(
@@ -72,7 +61,9 @@ class ProfileFragment : Fragment() {
         setupListeners()
         observeAccountState()
 
-        viewModel.getAccountDetails(SessionManager.userId ?: 0)
+        // API call
+        val currentId = SessionManager.userId ?: return
+        viewModel.getAccountDetails(currentId)
     }
 
     override fun onDestroyView() {
@@ -85,17 +76,12 @@ class ProfileFragment : Fragment() {
          * Use this factory method to create a new instance of
          * this fragment using the provided parameters.
          *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
          * @return A new instance of fragment ProfileFragment.
          */
-        // TODO: Rename and change types and number of parameters
         @JvmStatic
         fun newInstance(param1: String, param2: String) =
             ProfileFragment().apply {
                 arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-                    putString(ARG_PARAM2, param2)
                 }
             }
     }
@@ -114,7 +100,12 @@ class ProfileFragment : Fragment() {
         }
         // SECURITY
         binding.btnSettingSecurity.setOnClickListener {
-
+            val emailToPass = binding.tvProfileEmail.text.toString()
+            val securityFragment = SecuritySettingFragment.newInstance(emailToPass)
+            parentFragmentManager.beginTransaction()
+                .replace(R.id.fragment_container, securityFragment)
+                .addToBackStack(null)
+                .commit()
         }
     }
     private fun handleLogOut() {

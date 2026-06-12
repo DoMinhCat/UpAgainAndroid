@@ -8,35 +8,31 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.annotation.RequiresApi
 import com.example.upagain.databinding.FragmentSecuritySettingBinding
-import com.example.upagain.model.SecurityData
 
 class SecuritySettingFragment : Fragment() {
     private var _binding: FragmentSecuritySettingBinding? = null
     private val binding get() = _binding!!
-    private var securityData: SecurityData? = null
+    private var userEmail: String? = null
 
     @RequiresApi(Build.VERSION_CODES.TIRAMISU)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
-            securityData = it.getParcelable(ARG_SECURITY_DATA, SecurityData::class.java)
+            userEmail = it.getString(ARG_USER_EMAIL)
         }
     }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         _binding = FragmentSecuritySettingBinding.inflate(inflater, container, false)
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        securityData?.let { data ->
-            binding.etSecurityEmail.setText(data.email)
-            binding.etSecurityPassword.setText(data.password)
-        }
+        binding.etSecurityEmail.setText(userEmail)
 
         binding.btnSaveSecurity.setOnClickListener {
             // TODO: call viewmodel to update email + password
@@ -49,13 +45,13 @@ class SecuritySettingFragment : Fragment() {
     }
 
     companion object {
-        private const val ARG_SECURITY_DATA = "ARG_SECURITY_DATA"
+        private const val ARG_USER_EMAIL = "ARG_USER_EMAIL"
 
         @JvmStatic
-        fun newInstance(data: SecurityData) =
+        fun newInstance(email: String) =
             SecuritySettingFragment().apply {
                 arguments = Bundle().apply {
-                    putParcelable(ARG_SECURITY_DATA, data)
+                    putString(ARG_USER_EMAIL, email)
                 }
             }
     }
