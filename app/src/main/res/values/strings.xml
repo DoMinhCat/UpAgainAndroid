@@ -59,6 +59,7 @@
     <string name="category_case_study">Case studies</string>
     <string name="category_other">Others</string>
     <string name="img_thumbnail_description">Thumbnail image</string>
+    <string name="img_description">An image</string>
     <string name="btn_view">View</string>
     <string name="author_dynamic">by %1$s</string>
     <string name="string_dynamic" translatable="false">%1$s</string>
@@ -107,5 +108,7 @@
     <string name="account_information">Account information</string>
     <string name="current_plan">CURRENT PLAN</string>
     <string name="expire_date">Expires on: %1$s</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 
 </resources>

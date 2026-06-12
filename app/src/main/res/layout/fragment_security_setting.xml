@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.coordinatorlayout.widget.CoordinatorLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/color_background">
+
+    <com.google.android.material.appbar.AppBarLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/color_background"
+        app:elevation="0dp">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingHorizontal="@dimen/space_lg"
+            android:paddingTop="@dimen/space_lg"
+            android:paddingBottom="@dimen/space_md">
+
+            <ImageView
+                android:id="@+id/btn_back"
+                android:layout_width="@dimen/min_touch"
+                android:layout_height="@dimen/min_touch"
+                android:padding="@dimen/space_sm"
+                android:src="@drawable/ic_back"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:tint="@color/color_primary" />
+            <TextView
+                android:id="@+id/tv_shop_title"
+                style="@style/TextAppearance.Material3.HeadlineMedium"
+                android:layout_width="0dp" android:layout_height="wrap_content"
+                android:text="@string/security"
+                android:textColor="@color/color_on_background"
+                android:textStyle="bold"
+                android:gravity="center" android:paddingHorizontal="@dimen/min_touch" app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </com.google.android.material.appbar.AppBarLayout>
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

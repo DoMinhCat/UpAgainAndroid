@@ -131,7 +131,7 @@ class ProfileFragment : Fragment() {
                             binding.tvMemberSince.text = formatTimestamptz(account.createdAt)
                             binding.tvPlanType.text = if (account.isPremium) "Premium" else "Freemium"
                             binding.etProfileName.setText(account.username)
-                            binding.etProfileEmail.setText(account.email)
+                            binding.tvProfileEmail.text = account.email
                             binding.etProfilePhone.setText(account.phone)
                         }
                         is UiState.Error -> {

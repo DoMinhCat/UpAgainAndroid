@@ -169,8 +169,8 @@
                     android:text="@string/email"
                     android:alpha="0.6"
                     android:layout_width="wrap_content" android:layout_height="wrap_content"/>
-                <EditText
-                    android:id="@+id/et_profile_email"
+                <TextView
+                    android:id="@+id/tv_profile_email"
                     style="@style/TextAppearance.UpAgain.BodyMedium"
                     android:layout_width="match_parent" android:layout_height="wrap_content" android:background="@null" android:text="sarah.j@example.com" android:paddingVertical="@dimen/space_xs"/>
 
@@ -325,6 +325,7 @@
                         app:layout_constraintTop_toTopOf="parent" />
 
                     <ImageView
+                        android:contentDescription="@string/img_description"
                         android:layout_width="@dimen/icon_sm"
                         android:layout_height="@dimen/icon_sm"
                         android:src="@drawable/ic_trash"
