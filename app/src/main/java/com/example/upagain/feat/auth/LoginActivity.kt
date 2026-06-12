@@ -118,17 +118,17 @@ class LoginActivity : AppCompatActivity() {
                 viewModel.loginState.collect { state ->
                     when (state) {
                         is UiState.Idle -> {
-                            toggleLoading(false)
+                            toggleBtnLoading(false)
                         }
                         is UiState.Loading -> {
-                            toggleLoading(true)
+                            toggleBtnLoading(true)
                         }
                         is UiState.Success -> {
-                            toggleLoading(false)
+                            toggleBtnLoading(false)
                             handleLoginSuccess(state.data.token)
                         }
                         is UiState.Error -> {
-                            toggleLoading(false)
+                            toggleBtnLoading(false)
                             handleLoginFailure(state.statusCode, state.exception)
                         }
                     }
@@ -137,7 +137,7 @@ class LoginActivity : AppCompatActivity() {
         }
     }
 
-    private fun toggleLoading(isLoading: Boolean) {
+    private fun toggleBtnLoading(isLoading: Boolean) {
         toggleBtnLoadingState(binding.btnLogin, binding.loginLoader, isLoading, getString(R.string.login))
     }
 

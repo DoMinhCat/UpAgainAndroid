@@ -21,7 +21,9 @@ import com.example.upagain.feat.error.ErrorActivity
 import com.example.upagain.repository.AccountRepo
 import com.example.upagain.util.auth.SessionManager
 import com.example.upagain.util.datetime.formatTimestamptz
+import com.example.upagain.util.ui.DialogUtils
 import com.example.upagain.util.ui.setOnClickListenerWithCooldown
+import com.example.upagain.util.ui.toggleBtnLoadingState
 import com.example.upagain.util.validator.FieldValidator
 import com.example.upagain.util.validator.MaxLengthRule
 import com.example.upagain.util.validator.MinLengthRule
@@ -127,6 +129,19 @@ class ProfileFragment : Fragment() {
 //            val currentId = SessionManager.userId ?: return@setOnClickListenerWithCooldown
 //            viewModel.updateAccountDetails(currentId, username, phone)
         }
+        // DELETE ACCOUNT
+        binding.btnSettingDelete.setOnClickListener {
+            DialogUtils.showDestructiveConfirmationDialog(
+                context = requireContext(),
+                title = getString(R.string.confirm_del_account),
+            ) {
+                val currentUserId = SessionManager.userId ?: return@showDestructiveConfirmationDialog
+                // TODO: call view model to delete account
+                // e.g., viewModel.deleteUserAccount()
+
+                // TODO: log out + redirect in observer
+            }
+        }
     }
     private fun handleLogOut() {
         SessionManager.clearSession()
@@ -142,14 +157,15 @@ class ProfileFragment : Fragment() {
     private fun observeAccountState() {
         lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
+                // get account details
                 viewModel.accountDetailsState.collect { state ->
                     when (state) {
                         is UiState.Idle -> {}
                         is UiState.Loading -> {
-                            toggleLoading(true)
+                            toggleFullScreenLoading(true)
                         }
                         is UiState.Success -> {
-                            toggleLoading(false)
+                            toggleFullScreenLoading(false)
                             val account = state.data
                             // update UI with account details
                             binding.tvUsername.text = account.username
@@ -160,17 +176,45 @@ class ProfileFragment : Fragment() {
                             binding.etProfilePhone.setText(account.phone)
                         }
                         is UiState.Error -> {
-                            toggleLoading(false)
+                            toggleFullScreenLoading(false)
                             Log.e("ProfileFragment", "Load account details failed", state.exception)
                             ErrorActivity.start(requireContext(), state.statusCode ?: 0)
                         }
                     }
                 }
+                // del account
+                /*
+                viewModel.deleteAccountState.collect { state ->
+                    when (state) {
+                        is UiState.Loading -> toggleLoading(true)
+                        is UiState.Success -> {
+                            toggleLoading(false)
+                            SessionManager.clearSession()
+
+                            // 🗺️ Step 3: Execute explicit navigation routing
+                            val intent = Intent(requireContext(), LoginActivity::class.java).apply {
+                                flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+                                putExtra("EXTRA_ACCOUNT_DELETED", true)
+                            }
+                            startActivity(intent)
+                            activity?.finish()
+                        }
+                        is UiState.Error -> {
+                            toggleLoading(false)
+                            ErrorActivity.start(requireContext(), state.statusCode ?: 500)
+                        }
+                        is UiState.Idle -> { /* No-op */ }
+                    }
+                }
+                */
             }
         }
     }
-    fun toggleLoading(isLoading: Boolean) {
+    fun toggleFullScreenLoading(isLoading: Boolean) {
         binding.loadingOverlay.root.visibility = if (isLoading) View.VISIBLE else View.GONE
+    }
+    private fun toggleBtnLoading(isLoading: Boolean) {
+        toggleBtnLoadingState(binding.btnSaveProfile, binding.saveLoader, isLoading, getString(R.string.login))
     }
 
 }

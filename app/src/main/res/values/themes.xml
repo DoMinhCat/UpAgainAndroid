@@ -40,4 +40,19 @@
         <item name="android:layout_marginTop">10dp</item>
     </style>
 
+    <!-- Dialog -->
+    <style name="ThemeOverlay.UpAgain.MaterialAlertDialog" parent="ThemeOverlay.Material3.MaterialAlertDialog">
+        <item name="alertDialogStyle">@style/Style.UpAgain.AlertDialog</item>
+        <item name="buttonBarPositiveButtonStyle">@style/Widget.UpAgain.Button.TextButton.Destructive</item>
+    </style>
+
+    <style name="Style.UpAgain.AlertDialog" parent="MaterialAlertDialog.Material3">
+        <item name="cardBackgroundColor">@color/color_surface</item>
+        <item name="shapeAppearance">@style/ShapeAppearance.Material3.Corner.Medium</item>
+    </style>
+
+    <style name="Widget.UpAgain.Button.TextButton.Destructive" parent="Widget.Material3.Button.TextButton">
+        <item name="android:textColor">@color/color_error</item>
+    </style>
+
 </resources>

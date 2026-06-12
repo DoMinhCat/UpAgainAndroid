@@ -231,16 +231,31 @@
                     android:paddingVertical="@dimen/space_xs"/>
             </LinearLayout>
 
-            <com.google.android.material.button.MaterialButton
-                android:id="@+id/btn_save_profile"
-                style="@style/Widget.Material3.Button"
-                android:textColor="@color/white"
+            <FrameLayout
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/button_height"
-                android:layout_marginHorizontal="@dimen/space_lg"
-                android:layout_marginTop="@dimen/space_md"
-                android:text="@string/btn_save"
-                app:cornerRadius="@dimen/button_radius" />
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/space_md">
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btn_save_profile"
+                    style="@style/Widget.Material3.Button"
+                    android:textColor="@color/white"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/button_height"
+                    android:layout_marginHorizontal="@dimen/space_lg"
+                    android:text="@string/btn_save"
+                    app:cornerRadius="@dimen/button_radius" />
+                <com.google.android.material.progressindicator.CircularProgressIndicator
+                    android:id="@+id/save_loader"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/button_height"
+                    app:indicatorSize="@dimen/icon_sm"
+                    android:indeterminate="true"
+                    android:layout_gravity="center"
+                    android:paddingVertical="@dimen/space_sm"
+                    app:indicatorColor="@color/white"
+                    android:layout_marginHorizontal="@dimen/space_md"
+                    android:visibility="gone" />
+            </FrameLayout>
 
             <TextView
                 style="@style/TextAppearance.UpAgain.H3"

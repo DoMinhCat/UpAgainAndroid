@@ -127,4 +127,11 @@
     <!-- Notification Settings -->
     <string name="noti_description">Update Preferences</string>
 
+    <!-- Confirm Dialogs -->
+    <string name="confirm_del_account">Delete account permanently?</string>
+    <string name="confirm_message">This action is permanent and cannot be undone.</string>
+    <string name="btn_confirm">Confirm</string>
+    <string name="btn_cancel">Cancel</string>
+
+
 </resources>

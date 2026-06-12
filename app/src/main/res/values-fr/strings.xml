@@ -92,4 +92,8 @@
     <string name="noti_description">Mettre à jour vos préférences</string>
     <string name="language">Langue</string>
     <string name="invalid_phone">Numéro de téléphone invalide</string>
+    <string name="confirm_del_account">Supprimer définitivement le compte ?</string>
+    <string name="confirm_message">Cette action est irréversible.</string>
+    <string name="btn_confirm">Confirmer</string>
+    <string name="btn_cancel">Annuler</string>
 </resources>
