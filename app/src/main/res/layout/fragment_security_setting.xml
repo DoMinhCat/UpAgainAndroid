@@ -59,15 +59,35 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:padding="@dimen/space_lg"
+            android:paddingHorizontal="@dimen/space_lg"
+            android:paddingTop="@dimen/space_lg"
             android:paddingBottom="@dimen/space_xxl">
 
-            <TextView
-                style="@style/TextAppearance.UpAgain.H3"
-                android:layout_width="wrap_content"
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="@dimen/space_sm"
-                android:text="@string/security_description" />
+                android:layout_marginBottom="@dimen/space_sm">
+
+                <TextView
+                    style="@style/TextAppearance.UpAgain.H3"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/email"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btn_save_email"
+                    style="@style/Widget.Material3.Button.TextButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/btn_save"
+                    android:textColor="@color/color_primary"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -75,7 +95,8 @@
                 android:background="@drawable/input_round"
                 android:backgroundTint="@color/color_surface"
                 android:orientation="vertical"
-                android:padding="@dimen/space_md">
+                android:padding="@dimen/space_md"
+                android:layout_marginBottom="@dimen/space_xl">
 
                 <TextView
                     style="@style/TextAppearance.UpAgain.BodySmall"
@@ -104,12 +125,41 @@
                     android:visibility="gone"
                     android:text="@string/invalid_email"
                     tools:visibility="visible" />
+            </LinearLayout>
 
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="1dp"
-                    android:layout_marginVertical="@dimen/space_sm"
-                    android:background="@color/color_background" />
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/space_sm">
+
+                <TextView
+                    style="@style/TextAppearance.UpAgain.H3"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/password"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btn_save_password"
+                    style="@style/Widget.Material3.Button.TextButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/btn_save"
+                    android:textColor="@color/color_primary"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/input_round"
+                android:backgroundTint="@color/color_surface"
+                android:orientation="vertical"
+                android:padding="@dimen/space_md">
 
                 <TextView
                     style="@style/TextAppearance.UpAgain.BodySmall"
@@ -172,19 +222,7 @@
                     android:visibility="gone"
                     android:text="@string/password_not_match"
                     tools:visibility="visible" />
-
             </LinearLayout>
-
-            <com.google.android.material.button.MaterialButton
-                android:id="@+id/btn_save_security"
-                style="@style/Widget.Material3.Button"
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/button_height"
-                android:layout_marginTop="@dimen/space_xl"
-                android:text="@string/btn_save"
-                android:textColor="@color/white"
-                app:cornerRadius="@dimen/button_radius"
-                app:backgroundTint="@color/color_primary" />
 
         </LinearLayout>
     </androidx.core.widget.NestedScrollView>

@@ -91,19 +91,25 @@ class SecuritySettingFragment : Fragment() {
     }
 
     fun setupListeners() {
-        // SAVE CHANGES
-        binding.btnSaveSecurity.setOnClickListenerWithCooldown {
+        binding.btnSaveEmail.setOnClickListenerWithCooldown {
             val email = binding.etSecurityEmail.text.toString()
+
+            val isEmailValid = emailValidator.validate(email)
+            binding.tvErrorEmail.visibility = if (isEmailValid) View.GONE else View.VISIBLE
+            if (!isEmailValid) {
+                return@setOnClickListenerWithCooldown
+            }
+            // TODO: build request + call viewmodel to update changes
+        }
+        binding.btnSavePassword.setOnClickListenerWithCooldown {
             val password = binding.etSecurityPassword.text.toString()
             val confirmPassword = binding.etSecurityConfirmPassword.text.toString()
 
-            val isEmailValid = emailValidator.validate(email)
             val isPasswordValid = passwordValidator.validate(password)
             val isConfirmPasswordValid = confirmPasswordValidator.validate(confirmPassword)
-            binding.tvErrorEmail.visibility = if (isEmailValid) View.GONE else View.VISIBLE
             binding.tvErrorPassword.visibility = if (isPasswordValid) View.GONE else View.VISIBLE
             binding.tvErrorConfirmPassword.visibility = if (isConfirmPasswordValid) View.GONE else View.VISIBLE
-            if (!isEmailValid || !isPasswordValid || !isConfirmPasswordValid) {
+            if (!isPasswordValid || !isConfirmPasswordValid) {
                 return@setOnClickListenerWithCooldown
             }
             // TODO: build request + call viewmodel to update changes
