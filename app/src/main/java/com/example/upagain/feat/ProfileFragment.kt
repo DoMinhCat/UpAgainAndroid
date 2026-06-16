@@ -111,12 +111,12 @@ class ProfileFragment : Fragment() {
         }
         // SECURITY
         binding.btnSettingSecurity.setOnClickListener {
-            val emailToPass = binding.tvProfileEmail.text.toString()
-            val securityFragment = SecuritySettingFragment.newInstance(emailToPass)
-            parentFragmentManager.beginTransaction()
-                .replace(R.id.fragment_container, securityFragment)
-                .addToBackStack(null)
-                .commit()
+            loadSecurityFragment()
+        }
+        // EMAIL FIELD
+        binding.tvProfileEmail.setOnClickListener {
+            // navigate to security fragment to edit
+            loadSecurityFragment()
         }
         // SAVE CHANGES
         binding.btnSaveProfile.setOnClickListenerWithCooldown {
@@ -246,8 +246,14 @@ class ProfileFragment : Fragment() {
     fun toggleFullScreenLoading(isLoading: Boolean) {
         binding.loadingOverlay.root.visibility = if (isLoading) View.VISIBLE else View.GONE
     }
-    private fun toggleBtnLoading(isLoading: Boolean) {
-        toggleBtnLoadingState(binding.btnSaveProfile, binding.saveLoader, isLoading, getString(R.string.login))
+
+    private fun loadSecurityFragment() {
+        val emailToPass = binding.tvProfileEmail.text.toString()
+        val securityFragment = SecuritySettingFragment.newInstance(emailToPass)
+        parentFragmentManager.beginTransaction()
+            .replace(R.id.fragment_container, securityFragment)
+            .addToBackStack(null)
+            .commit()
     }
 
 }
