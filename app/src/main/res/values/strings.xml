@@ -138,7 +138,7 @@
 
     <!-- Snack bar messages -->
     <string name="snack_email_update_success">Email updated successfully</string>
-    <string name="snack_email_update_fail">Email update failed</string>
+    <string name="snack_email_update_fail">Email update failed: %1$s</string>
 
 
 </resources>

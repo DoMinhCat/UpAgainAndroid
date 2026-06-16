@@ -1,26 +1,24 @@
 package com.example.upagain
 
+import android.content.Context
 import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.inputmethod.InputMethodManager
 import androidx.annotation.RequiresApi
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
-import coil.load
 import com.example.upagain.api.ApiClient
 import com.example.upagain.databinding.FragmentSecuritySettingBinding
-import com.example.upagain.feat.error.ErrorActivity
 import com.example.upagain.model.AccountUpdateRequest
 import com.example.upagain.repository.AccountRepo
 import com.example.upagain.util.auth.SessionManager
-import com.example.upagain.util.datetime.formatTimestamptz
-import com.example.upagain.util.image.buildImageUrl
 import com.example.upagain.util.ui.SnackbarLevel
 import com.example.upagain.util.ui.setOnBackClickListener
 import com.example.upagain.util.ui.setOnClickListenerWithCooldown
@@ -36,6 +34,7 @@ import com.example.upagain.viewmodel.UiState
 import com.example.upagain.viewmodel.ViewModelFactory
 import kotlinx.coroutines.launch
 import kotlin.getValue
+import com.google.android.material.snackbar.Snackbar
 
 class SecuritySettingFragment : Fragment() {
     // layer dependencies
@@ -84,7 +83,7 @@ class SecuritySettingFragment : Fragment() {
         binding.etSecurityEmail.setText(userEmail)
 
         setupListeners()
-
+        observeAccountState()
     }
 
     override fun onDestroyView() {
@@ -150,13 +149,17 @@ class SecuritySettingFragment : Fragment() {
                         }
                         is UiState.Success -> {
                             toggleEmailBtnLoading(false)
+                            binding.etSecurityEmail.clearFocus()
+                            // hide keyboard
+                            val imm = requireContext().getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+                            imm.hideSoftInputFromWindow(binding.etSecurityEmail.windowToken, 0)
                             binding.main.showTopSnackbar(R.string.snack_email_update_success,
                                 SnackbarLevel.SUCCESS)
                         }
                         is UiState.Error -> {
                             toggleEmailBtnLoading(false)
                             Log.e("SecuritySettingFragment", "Update email failed", state.exception)
-                            binding.main.showTopSnackbar(R.string.snack_email_update_fail, SnackbarLevel.ERROR)
+                            binding.main.showTopSnackbar(getString(R.string.snack_email_update_fail, state.exception.message), SnackbarLevel.ERROR, Snackbar.LENGTH_LONG)
                         }
                     }
                 }
