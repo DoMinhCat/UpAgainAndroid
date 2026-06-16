@@ -137,8 +137,9 @@
     <string name="btn_cancel">Cancel</string>
 
     <!-- Snack bar messages -->
-    <string name="snack_email_update_success">Email updated successfully</string>
+    <string name="snack_email_update_success">Email updated</string>
     <string name="snack_email_update_fail">Email update failed: %1$s</string>
-
+    <string name="snack_account_details_update_success">Account details updated</string>
+    <string name="snack_account_details_update_fail">Account details update failed: %1$s</string>
 
 </resources>

@@ -20,6 +20,7 @@ import com.example.upagain.model.AccountUpdateRequest
 import com.example.upagain.repository.AccountRepo
 import com.example.upagain.util.auth.SessionManager
 import com.example.upagain.util.ui.SnackbarLevel
+import com.example.upagain.util.ui.hideKeyboard
 import com.example.upagain.util.ui.setOnBackClickListener
 import com.example.upagain.util.ui.setOnClickListenerWithCooldown
 import com.example.upagain.util.ui.showTopSnackbar
@@ -105,6 +106,7 @@ class SecuritySettingFragment : Fragment() {
 
     // PRIVATE ZONE
     private fun setupListeners() {
+        // SAVE EMAIL BTN
         binding.btnSaveEmail.setOnClickListenerWithCooldown {
             val email = binding.etSecurityEmail.text.toString()
 
@@ -138,28 +140,37 @@ class SecuritySettingFragment : Fragment() {
     private fun observeAccountState() {
         lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
-                // update account email
-                viewModel.accountUpdateState.collect { state ->
-                    when (state) {
-                        is UiState.Idle -> {
-                            toggleEmailBtnLoading(false)
-                        }
-                        is UiState.Loading -> {
-                            toggleEmailBtnLoading(true)
-                        }
-                        is UiState.Success -> {
-                            toggleEmailBtnLoading(false)
-                            binding.etSecurityEmail.clearFocus()
-                            // hide keyboard
-                            val imm = requireContext().getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-                            imm.hideSoftInputFromWindow(binding.etSecurityEmail.windowToken, 0)
-                            binding.main.showTopSnackbar(R.string.snack_email_update_success,
-                                SnackbarLevel.SUCCESS)
-                        }
-                        is UiState.Error -> {
-                            toggleEmailBtnLoading(false)
-                            Log.e("SecuritySettingFragment", "Update email failed", state.exception)
-                            binding.main.showTopSnackbar(getString(R.string.snack_email_update_fail, state.exception.message), SnackbarLevel.ERROR, Snackbar.LENGTH_LONG)
+                launch {
+                    // update account email
+                    viewModel.accountUpdateState.collect { state ->
+                        when (state) {
+                            is UiState.Idle -> {
+                                toggleEmailBtnLoading(false)
+                            }
+
+                            is UiState.Loading -> {
+                                toggleEmailBtnLoading(true)
+                            }
+
+                            is UiState.Success -> {
+                                toggleEmailBtnLoading(false)
+                                activity?.hideKeyboard()
+                                binding.main.showTopSnackbar(
+                                    R.string.snack_email_update_success,
+                                    SnackbarLevel.SUCCESS
+                                )
+                            }
+
+                            is UiState.Error -> {
+                                toggleEmailBtnLoading(false)
+                                Log.e("SecuritySettingFragment", "Update email failed", state.exception)
+                                binding.main.showTopSnackbar(
+                                    getString(
+                                        R.string.snack_email_update_fail,
+                                        state.exception.message
+                                    ), SnackbarLevel.ERROR, Snackbar.LENGTH_LONG
+                                )
+                            }
                         }
                     }
                 }

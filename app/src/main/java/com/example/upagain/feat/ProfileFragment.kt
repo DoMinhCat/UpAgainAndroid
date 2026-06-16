@@ -1,5 +1,6 @@
 package com.example.upagain.feat
 
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
@@ -7,6 +8,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.inputmethod.InputMethodManager
 import android.widget.ArrayAdapter
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
@@ -19,6 +21,7 @@ import com.example.upagain.api.ApiClient
 import com.example.upagain.databinding.FragmentProfileBinding
 import com.example.upagain.feat.auth.LoginActivity
 import com.example.upagain.feat.error.ErrorActivity
+import com.example.upagain.model.AccountUpdateRequest
 import com.example.upagain.repository.AccountRepo
 import com.example.upagain.util.auth.SessionManager
 import com.example.upagain.util.datetime.formatTimestamptz
@@ -38,6 +41,8 @@ import com.example.upagain.viewmodel.ViewModelFactory
 import kotlinx.coroutines.launch
 import kotlin.getValue
 import com.example.upagain.util.image.buildImageUrl
+import com.example.upagain.util.ui.hideKeyboard
+import com.google.android.material.snackbar.Snackbar
 
 class ProfileFragment : Fragment() {
     // elements binding
@@ -120,6 +125,7 @@ class ProfileFragment : Fragment() {
         }
         // SAVE CHANGES
         binding.btnSaveProfile.setOnClickListenerWithCooldown {
+            val email = binding.tvProfileEmail.text.toString()
             val username = binding.etProfileName.text.toString()
             val phone = binding.etProfilePhone.text.toString()
             val isUsernameValid = usernameValidator.validate(username)
@@ -130,8 +136,10 @@ class ProfileFragment : Fragment() {
                 return@setOnClickListenerWithCooldown
             }
             // TODO: call view model to update account details
-//            val currentId = SessionManager.userId ?: return@setOnClickListenerWithCooldown
-//            viewModel.updateAccountDetails(currentId, username, phone)
+            val request = AccountUpdateRequest(username, email, phone)
+            val currentId = SessionManager.accountId ?: return@setOnClickListenerWithCooldown
+            viewModel.updateAccount(currentId, request)
+            // TODO: observe state for this and add loading spinner for button
         }
         // DELETE ACCOUNT
         binding.btnSettingDelete.setOnClickListener {
@@ -159,59 +167,107 @@ class ProfileFragment : Fragment() {
     private fun observeAccountState() {
         lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
-                // get account details
-                viewModel.accountDetailsState.collect { state ->
-                    when (state) {
-                        is UiState.Idle -> {}
-                        is UiState.Loading -> {
-                            toggleFullScreenLoading(true)
-                        }
-                        is UiState.Success -> {
-                            toggleFullScreenLoading(false)
+                launch {
+                    // get account details
+                    viewModel.accountDetailsState.collect { state ->
+                        when (state) {
+                            is UiState.Idle -> {}
+                            is UiState.Loading -> {
+                                toggleFullScreenLoading(true)
+                            }
 
-                            val account = state.data
-                            // update UI with account details
-                            binding.tvUsername.text = account.username
-                            binding.tvMemberSince.text = formatTimestamptz(account.createdAt)
-                            binding.tvPlanType.text = if (account.isPremium) "Premium" else "Freemium"
-                            binding.etProfileName.setText(account.username)
-                            binding.tvProfileEmail.text = account.email
-                            binding.etProfilePhone.setText(account.phone)
+                            is UiState.Success -> {
+                                toggleFullScreenLoading(false)
 
-                            // build url and let coil handle image serving for avatar
-                            binding.ivAvatar.load(buildImageUrl(account.avatar)) {
-                                crossfade(true)
-                                placeholder(R.drawable.ic_avatar_unknown)
-                                error(R.drawable.ic_avatar_unknown)
+                                val account = state.data
+                                // update UI with account details
+                                binding.tvUsername.text = account.username
+                                binding.tvMemberSince.text = formatTimestamptz(account.createdAt)
+                                binding.tvPlanType.text =
+                                    if (account.isPremium) "Premium" else "Freemium"
+                                binding.etProfileName.setText(account.username)
+                                binding.tvProfileEmail.text = account.email
+                                binding.etProfilePhone.setText(account.phone)
 
-                                listener(
-                                    onSuccess = { _, _ ->
-                                        // Image loaded successfully
-                                    },
-                                    onError = { _, result ->
-                                        val exception = result.throwable
-                                        val statusCode = (exception as? coil.network.HttpException)?.response?.code
+                                // build url and let coil handle image serving for avatar
+                                binding.ivAvatar.load(buildImageUrl(account.avatar)) {
+                                    crossfade(true)
+                                    placeholder(R.drawable.ic_avatar_unknown)
+                                    error(R.drawable.ic_avatar_unknown)
 
-                                        Log.e("ProfileFragment", "Failed to serve user's avatar. Status Code: $statusCode", exception)
-                                        when (statusCode) {
-                                            404 -> {
-                                                binding.main.showTopSnackbar(R.string.error_media_msg, SnackbarLevel.ERROR)
-                                            }
-                                            else -> {
-                                                binding.main.showTopSnackbar(
-                                                    R.string.error_media_msg,
-                                                    SnackbarLevel.ERROR
-                                                )
+                                    listener(
+                                        onSuccess = { _, _ ->
+                                            // Image loaded successfully
+                                        },
+                                        onError = { _, result ->
+                                            val exception = result.throwable
+                                            val statusCode =
+                                                (exception as? coil.network.HttpException)?.response?.code
+
+                                            Log.e(
+                                                "ProfileFragment",
+                                                "Failed to serve user's avatar. Status Code: $statusCode",
+                                                exception
+                                            )
+                                            when (statusCode) {
+                                                404 -> {
+                                                    binding.main.showTopSnackbar(
+                                                        R.string.error_media_msg,
+                                                        SnackbarLevel.ERROR
+                                                    )
+                                                }
+
+                                                else -> {
+                                                    binding.main.showTopSnackbar(
+                                                        R.string.error_media_msg,
+                                                        SnackbarLevel.ERROR
+                                                    )
+                                                }
                                             }
                                         }
-                                    }
-                                )
+                                    )
+                                }
+                            }
+
+                            is UiState.Error -> {
+                                toggleFullScreenLoading(false)
+                                Log.e("ProfileFragment", "Load account details failed", state.exception)
+                                ErrorActivity.start(requireContext(), state.statusCode ?: 0)
                             }
                         }
-                        is UiState.Error -> {
-                            toggleFullScreenLoading(false)
-                            Log.e("ProfileFragment", "Load account details failed", state.exception)
-                            ErrorActivity.start(requireContext(), state.statusCode ?: 0)
+                    }
+                }
+                launch {
+                    // update
+                    viewModel.accountUpdateState.collect { state ->
+                        when (state) {
+                            is UiState.Idle -> {
+                                toggleBtnLoadingState(binding.btnSaveProfile, binding.saveLoader, false, getString(R.string.btn_save))
+                            }
+
+                            is UiState.Loading -> {
+                                toggleBtnLoadingState(binding.btnSaveProfile, binding.saveLoader, true, getString(R.string.btn_save))
+                            }
+
+                            is UiState.Success -> {
+                                toggleBtnLoadingState(binding.btnSaveProfile, binding.saveLoader, false, getString(R.string.btn_save))
+                                activity?.hideKeyboard()
+                                binding.main.showTopSnackbar(
+                                    R.string.snack_account_details_update_success,
+                                    SnackbarLevel.SUCCESS
+                                )
+                            }
+
+                            is UiState.Error -> {
+                                toggleBtnLoadingState(binding.btnSaveProfile, binding.saveLoader, false, getString(R.string.btn_save))
+                                Log.e("ProfileFragment", "Update account details failed", state.exception)
+                                binding.main.showTopSnackbar(
+                                    getString(
+                                        R.string.snack_account_details_update_fail,
+                                        state.exception.message
+                                    ), SnackbarLevel.ERROR, Snackbar.LENGTH_LONG
+                                )
+                            }
                         }
                     }
                 }
