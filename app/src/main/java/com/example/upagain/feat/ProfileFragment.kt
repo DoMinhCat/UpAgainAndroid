@@ -168,6 +168,7 @@ class ProfileFragment : Fragment() {
                         }
                         is UiState.Success -> {
                             toggleFullScreenLoading(false)
+
                             val account = state.data
                             // update UI with account details
                             binding.tvUsername.text = account.username

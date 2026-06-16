@@ -8,12 +8,11 @@ import com.example.upagain.api.Endpoints
 
 fun buildImageUrl(imagePath: String): String {
     val sanitizedBase = BuildConfig.API_BASE_URL.removeSuffix("/")
-    val imageUrl = Uri.parse(sanitizedBase)
+    val imageUrl = sanitizedBase.toUri()
         .buildUpon()
         .path(Endpoints.IMAGES)
         .appendQueryParameter("path", imagePath)
         .build()
         .toString()
-    Log.d("buildImageUrl", "Image URL: $imageUrl")
     return imageUrl
 }

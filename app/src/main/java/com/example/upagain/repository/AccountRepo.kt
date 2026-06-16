@@ -17,8 +17,7 @@ class AccountRepo(private val apiService: ApiService) {
             if (response.isSuccessful && body != null) {
                 Result.success(body)
             } else {
-                val errMessage = parseErrorMessage(response.errorBody()?.string())
-                Result.failure(Exception(errMessage))
+                Result.failure(HttpException(response))
             }
         } catch (e: Exception) {
             Result.failure(e)
