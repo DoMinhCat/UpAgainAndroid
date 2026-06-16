@@ -1,11 +1,19 @@
 package com.example.upagain.model
 
+import com.google.gson.annotations.SerializedName
+
 data class AccountDetailsResponse(
     val id: Int,
-    val created_at: String,
+    @SerializedName("created_at") val createdAt: String,
     val username: String,
     val email: String,
     val phone: String,
-    val isPremium: Boolean,
+    @SerializedName("is_premium") val isPremium: Boolean,
     val avatar: String
+)
+
+data class AccountUpdateRequest(
+    val username: String,
+    val email: String,
+    val phone: String
 )

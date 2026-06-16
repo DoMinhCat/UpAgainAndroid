@@ -1,7 +1,6 @@
 package com.example.upagain.feat
 
 import android.content.Intent
-import android.net.Uri
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
@@ -14,11 +13,9 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import coil.load
-import com.example.upagain.BuildConfig
 import com.example.upagain.R
 import com.example.upagain.SecuritySettingFragment
 import com.example.upagain.api.ApiClient
-import com.example.upagain.api.Endpoints
 import com.example.upagain.databinding.FragmentProfileBinding
 import com.example.upagain.feat.auth.LoginActivity
 import com.example.upagain.feat.error.ErrorActivity
@@ -39,10 +36,7 @@ import com.example.upagain.viewmodel.AccountViewModel
 import com.example.upagain.viewmodel.UiState
 import com.example.upagain.viewmodel.ViewModelFactory
 import kotlinx.coroutines.launch
-import java.net.URLEncoder
-import java.nio.charset.StandardCharsets
 import kotlin.getValue
-import androidx.core.net.toUri
 import com.example.upagain.util.image.buildImageUrl
 
 class ProfileFragment : Fragment() {
@@ -79,7 +73,7 @@ class ProfileFragment : Fragment() {
         observeAccountState()
 
         // API call
-        val currentId = SessionManager.userId ?: return
+        val currentId = SessionManager.accountId ?: return
         viewModel.getAccountDetails(currentId)
     }
 
@@ -145,7 +139,7 @@ class ProfileFragment : Fragment() {
                 context = requireContext(),
                 title = getString(R.string.confirm_del_account),
             ) {
-                val currentUserId = SessionManager.userId ?: return@showDestructiveConfirmationDialog
+                val currentUserId = SessionManager.accountId ?: return@showDestructiveConfirmationDialog
                 // TODO: call view model to delete account
                 // e.g., viewModel.deleteUserAccount()
             }
@@ -177,7 +171,7 @@ class ProfileFragment : Fragment() {
                             val account = state.data
                             // update UI with account details
                             binding.tvUsername.text = account.username
-                            binding.tvMemberSince.text = formatTimestamptz(account.created_at)
+                            binding.tvMemberSince.text = formatTimestamptz(account.createdAt)
                             binding.tvPlanType.text = if (account.isPremium) "Premium" else "Freemium"
                             binding.etProfileName.setText(account.username)
                             binding.tvProfileEmail.text = account.email

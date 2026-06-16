@@ -98,4 +98,6 @@
     <string name="confirm_message">Cette action est irréversible.</string>
     <string name="btn_confirm">Confirmer</string>
     <string name="btn_cancel">Annuler</string>
+    <string name="snack_email_update_success">Email mis à jour avec succès</string>
+    <string name="snack_email_update_fail">Échec de la mise à jour par email</string>
 </resources>

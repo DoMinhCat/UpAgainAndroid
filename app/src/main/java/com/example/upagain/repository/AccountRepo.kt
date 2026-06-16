@@ -2,6 +2,7 @@ package com.example.upagain.repository
 
 import com.example.upagain.api.ApiService
 import com.example.upagain.model.AccountDetailsResponse
+import com.example.upagain.model.AccountUpdateRequest
 import retrofit2.HttpException
 import retrofit2.awaitResponse
 
@@ -14,6 +15,20 @@ class AccountRepo(private val apiService: ApiService) {
 
             if (response.isSuccessful && body != null) {
                 Result.success(body)
+            } else {
+                Result.failure(HttpException(response))
+            }
+        } catch (e: Exception) {
+            Result.failure(e)
+        }
+    }
+
+    suspend fun updateAccount(idAccount: Int, request: AccountUpdateRequest): Result<Unit> {
+        return try {
+            val response = apiService.updateAccount(idAccount, request).awaitResponse()
+
+            if (response.isSuccessful) {
+                Result.success(Unit)
             } else {
                 Result.failure(HttpException(response))
             }

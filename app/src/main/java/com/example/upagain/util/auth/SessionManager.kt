@@ -18,7 +18,7 @@ object SessionManager {
     // Fast-access memory cache
     var token: String? = null
         private set
-    var userId: Int? = null
+    var accountId: Int? = null
         private set
     var username: String? = null
         private set
@@ -31,7 +31,7 @@ object SessionManager {
 
             // Hydrate token and data layers from disk cache
             token = prefs.getString(KEY_TOKEN, null)
-            userId = prefs.getInt(KEY_USER_ID, -1).takeIf { it != -1 }
+            accountId = prefs.getInt(KEY_USER_ID, -1).takeIf { it != -1 }
             username = prefs.getString(KEY_USERNAME, null)
             email = prefs.getString(KEY_EMAIL, null)
         }
@@ -45,13 +45,13 @@ object SessionManager {
         }
 
         token = jwtToken
-        userId = parseResult.id_account
+        accountId = parseResult.id_account
         username = parseResult.username
         email = parseResult.email
 
         prefs.edit().apply {
             putString(KEY_TOKEN, jwtToken)
-            putInt(KEY_USER_ID, userId ?: 0)
+            putInt(KEY_USER_ID, accountId ?: 0)
             putString(KEY_USERNAME, username)
             putString(KEY_EMAIL, email)
             apply()
@@ -60,7 +60,7 @@ object SessionManager {
 
     fun clearSession() {
         token = null
-        userId = null
+        accountId = null
         username = null
         email = null
         prefs.edit { clear() }
