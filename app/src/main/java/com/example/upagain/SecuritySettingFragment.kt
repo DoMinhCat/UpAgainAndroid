@@ -37,8 +37,12 @@ class SecuritySettingFragment : Fragment() {
     // form validators
     val emailValidator = FieldValidator(listOf(NotEmptyRule(), EmailRule()))
     val passwordValidator = FieldValidator(listOf(NotEmptyRule(), PasswordRule()))
-    val confirmPasswordValidator = FieldValidator(listOf(NotEmptyRule(), SameAsRule(binding.etSecurityPassword.text.toString())))
-
+    val confirmPasswordValidator = FieldValidator(
+        listOf(
+            NotEmptyRule(),
+            SameAsRule { binding.etSecurityPassword.text.toString() }
+        )
+    )
     // binding
     private var _binding: FragmentSecuritySettingBinding? = null
     private val binding get() = _binding!!

@@ -12,6 +12,8 @@ class MaxLengthRule(private val maxLength: Int) : ValidationRule<String> {
     override fun validate(value: String): Boolean = value.length <= maxLength
 }
 
-class SameAsRule(private val otherString: String) : ValidationRule<String> {
-    override fun validate(value: String): Boolean = value == otherString
+class SameAsRule(private val targetTextProvider: () -> String) : ValidationRule<String> {
+    override fun validate(value: String): Boolean {
+        return value == targetTextProvider()
+    }
 }
