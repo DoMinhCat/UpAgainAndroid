@@ -17,6 +17,7 @@
     <string name="login_footer">Tous droits réservés • UpAgain</string>
     <string name="no_account">Vous n\'avez pas encore un compte ?</string>
     <string name="login_fail">Adresse email ou mot de passe incorrect</string>
+    <string name="error_not_pro">Aucun compte professionnel trouvé avec les identifiants fournis</string>
     <string name="placeholder_search">Rechercher</string>
     <string name="spending_by_material">Dépenses par matière</string>
     <string name="my_transactions">Mes Transactions</string>

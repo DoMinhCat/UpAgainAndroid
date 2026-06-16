@@ -4,6 +4,8 @@ import android.content.Context
 import android.content.SharedPreferences
 import androidx.core.content.edit
 
+class RoleAccessDeniedException(message: String) : Exception(message)
+
 object SessionManager {
     private const val PREF_NAME = "user_session_prefs"
     private const val KEY_TOKEN = "key_token"
@@ -37,8 +39,13 @@ object SessionManager {
 
     fun saveUserSession(jwtToken: String) {
         val parseResult = parseJwt(jwtToken)
+
+        if (parseResult.role != "pro") {
+            throw RoleAccessDeniedException("No professional account found with these credentials")
+        }
+
         token = jwtToken
-        userId = parseResult.id
+        userId = parseResult.id_account
         username = parseResult.username
         email = parseResult.email
 

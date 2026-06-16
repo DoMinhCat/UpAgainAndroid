@@ -21,6 +21,7 @@
     <string name="logout_success">Logout successful</string>
     <string name="login_footer">All rights reserved • UpAgain</string>
     <string name="login_fail">Incorrect email or password</string>
+    <string name="error_not_pro">No professional account found with given credentials</string>
 
     <!-- Placeholder -->
     <string name="placeholder_search">Search</string>
@@ -65,6 +66,7 @@
     <string name="string_dynamic" translatable="false">%1$s</string>
     <string name="date_dynamic" translatable="false">%1$s</string>
     <string name="count_dynamic" translatable="false">%1$d</string>
+    <string name="float_dynamic" translatable="false">%1$.2f</string>
 
     <!-- Container -->
     <string name="code">6-digit code</string>
@@ -92,7 +94,7 @@
     <string name="exception_message">An error occurred</string>
     <string name="error_media_msg">Failed to load media</string>
     <string name="invalid_request_body">Invalid request body</string>
-    <string name="no_browser">No browser found</string>">
+    <string name="no_browser">No browser found</string>
 
     <string name="btn_home">Back to home</string>
     <string name="btn_refresh">Refresh page</string>

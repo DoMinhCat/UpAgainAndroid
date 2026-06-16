@@ -362,31 +362,26 @@
                         style="@style/Widget.Material3.TextInputLayout.FilledBox.ExposedDropdownMenu"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        app:boxBackgroundMode="none"
+                        app:boxBackgroundColor="@android:color/transparent"
+                        app:boxStrokeWidth="0dp"
+                        app:boxStrokeWidthFocused="0dp"
                         app:hintEnabled="false"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintTop_toTopOf="parent">
 
-                        <AutoCompleteTextView
+                        <com.google.android.material.textfield.MaterialAutoCompleteTextView
                             android:id="@+id/actv_language_selector"
                             style="@style/TextAppearance.UpAgain.BodyMedium"
-                            android:layout_width="wrap_content"
+                            android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:background="@null"
-                            android:clickable="true"
-                            android:cursorVisible="false"
-                            android:focusable="false"
-                            android:gravity="end|center_vertical"
                             android:inputType="none"
-                            android:paddingEnd="0dp"
-                            android:paddingStart="0dp"
+                            android:gravity="end|center_vertical"
                             tools:text="English"
                             android:textColor="@color/color_secondary"
                             tools:ignore="LabelFor" />
                     </com.google.android.material.textfield.TextInputLayout>
                 </androidx.constraintlayout.widget.ConstraintLayout>
-
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="1dp"

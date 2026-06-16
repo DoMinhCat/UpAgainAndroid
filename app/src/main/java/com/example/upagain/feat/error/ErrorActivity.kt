@@ -9,6 +9,7 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import com.example.upagain.R
 import com.example.upagain.databinding.ErrorActivityBinding
+import com.example.upagain.feat.MainActivity
 
 class ErrorActivity : AppCompatActivity() {
     private lateinit var binding: ErrorActivityBinding
@@ -18,7 +19,7 @@ class ErrorActivity : AppCompatActivity() {
         enableEdgeToEdge()
         binding = ErrorActivityBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
+        ViewCompat.setOnApplyWindowInsetsListener(binding.root) { v, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
@@ -28,6 +29,8 @@ class ErrorActivity : AppCompatActivity() {
         hydrateErrorScreen(errorCode)
 
         binding.btnErrorAction.setOnClickListener {
+            val intent = Intent(this, MainActivity::class.java)
+            startActivity(intent)
             finish()
         }
 

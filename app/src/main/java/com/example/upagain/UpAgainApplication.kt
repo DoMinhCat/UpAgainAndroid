@@ -13,7 +13,7 @@ class UpAgainApplication : Application(), ImageLoaderFactory {
 
     override fun newImageLoader(): ImageLoader {
         return ImageLoader.Builder(this)
-            .okHttpClient(ApiClient.getHttpClient())
+            .okHttpClient(ApiClient.httpClient)
             .build()
     }
 }

@@ -29,9 +29,7 @@ object ApiClient {
         cookieJar = PersistentCookieJar(appContext)
     }
 
-    fun getHttpClient(): OkHttpClient = httpClient
-
-    private val httpClient: OkHttpClient by lazy {
+    val httpClient: OkHttpClient by lazy {
         // AUTO INJECT JWT IN SHAREDPREF INTO OUTGOING REQUESTS
         OkHttpClient.Builder()
             .cookieJar(cookieJar)

@@ -1,6 +1,7 @@
 package com.example.upagain.feat
 
 import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
@@ -38,8 +39,11 @@ import com.example.upagain.viewmodel.AccountViewModel
 import com.example.upagain.viewmodel.UiState
 import com.example.upagain.viewmodel.ViewModelFactory
 import kotlinx.coroutines.launch
-import retrofit2.HttpException
+import java.net.URLEncoder
+import java.nio.charset.StandardCharsets
 import kotlin.getValue
+import androidx.core.net.toUri
+import com.example.upagain.util.image.buildImageUrl
 
 class ProfileFragment : Fragment() {
     // elements binding
@@ -173,15 +177,14 @@ class ProfileFragment : Fragment() {
                             val account = state.data
                             // update UI with account details
                             binding.tvUsername.text = account.username
-                            binding.tvMemberSince.text = formatTimestamptz(account.createdAt)
+                            binding.tvMemberSince.text = formatTimestamptz(account.created_at)
                             binding.tvPlanType.text = if (account.isPremium) "Premium" else "Freemium"
                             binding.etProfileName.setText(account.username)
                             binding.tvProfileEmail.text = account.email
                             binding.etProfilePhone.setText(account.phone)
 
-                            // TODO: build url and let coil handle image serving for avatar
-                            val avatarUrl = "${BuildConfig.API_BASE_URL}${Endpoints.IMAGES}?path=${account.avatar}"
-                            binding.ivAvatar.load(avatarUrl) {
+                            // build url and let coil handle image serving for avatar
+                            binding.ivAvatar.load(buildImageUrl(account.avatar)) {
                                 crossfade(true)
                                 placeholder(R.drawable.ic_avatar_unknown)
                                 error(R.drawable.ic_avatar_unknown)
@@ -195,14 +198,13 @@ class ProfileFragment : Fragment() {
                                         val statusCode = (exception as? coil.network.HttpException)?.response?.code
 
                                         Log.e("ProfileFragment", "Failed to serve user's avatar. Status Code: $statusCode", exception)
-
                                         when (statusCode) {
                                             404 -> {
                                                 binding.main.showTopSnackbar(R.string.error_media_msg, SnackbarLevel.ERROR)
                                             }
                                             else -> {
                                                 binding.main.showTopSnackbar(
-                                                    R.string.exception_message,
+                                                    R.string.error_media_msg,
                                                     SnackbarLevel.ERROR
                                                 )
                                             }

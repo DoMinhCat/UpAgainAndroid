@@ -9,7 +9,6 @@ import retrofit2.http.DELETE
 import retrofit2.http.GET
 import retrofit2.http.POST
 import retrofit2.http.Path
-import retrofit2.http.Query
 
 interface ApiService {
     // AUTH
@@ -23,5 +22,4 @@ interface ApiService {
     fun getAccountDetails(@Path("id") id: Int): Call<AccountDetailsResponse>
     @DELETE(Endpoints.ACCOUNT_DETAILS)
     fun deleteAccount(@Path("id") id: Int): Call<Nothing>
-
 }

@@ -24,6 +24,7 @@ import androidx.lifecycle.repeatOnLifecycle
 import com.example.upagain.BuildConfig
 import com.example.upagain.databinding.LoginActivityBinding
 import com.example.upagain.feat.MainActivity
+import com.example.upagain.util.auth.RoleAccessDeniedException
 import com.example.upagain.util.auth.SessionManager
 import com.example.upagain.viewmodel.AuthViewModel
 import com.example.upagain.viewmodel.UiState
@@ -144,18 +145,24 @@ class LoginActivity : AppCompatActivity() {
     private fun handleLoginSuccess(token: String) {
         try {
             SessionManager.saveUserSession(token)
+
+            val intent = Intent(this, MainActivity::class.java).apply {
+                flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+                putExtra("EXTRA_JUST_LOGGED_IN", true)
+            }
+            startActivity(intent)
+            finish()
+        } catch (e: RoleAccessDeniedException) {
+            Log.e("LoginActivity", "Access denied: ${e.message}")
+            SessionManager.clearSession()
+            binding.main.showTopSnackbar(R.string.error_not_pro, SnackbarLevel.ERROR)
+            viewModel.resetState()
         } catch (e: Exception) {
             Log.e("LoginActivity", "Failed to save user session", e)
             SessionManager.clearSession()
             binding.main.showTopSnackbar(R.string.exception_message, SnackbarLevel.ERROR)
+            viewModel.resetState()
         }
-
-        val intent = Intent(this, MainActivity::class.java).apply {
-            flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
-            putExtra("EXTRA_JUST_LOGGED_IN", true)
-        }
-        startActivity(intent)
-        finish()
     }
 
     private fun handleLoginFailure(statusCode: Int?, exception: Throwable) {
