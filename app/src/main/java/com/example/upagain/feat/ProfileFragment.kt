@@ -8,6 +8,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
+import androidx.activity.result.PickVisualMediaRequest
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
@@ -42,16 +44,29 @@ import com.example.upagain.util.image.buildImageUrl
 import com.example.upagain.util.locale.LocaleManager
 import com.example.upagain.util.ui.hideKeyboard
 import com.example.upagain.util.ui.toggleFullScreenLoading
+import com.example.upagain.util.ui.toggleIconLoadingState
 import com.google.android.material.snackbar.Snackbar
+
 // TODO: notification settings fragment
 class ProfileFragment : Fragment() {
     // elements binding
     private var _binding: FragmentProfileBinding? = null
     private val binding get() = _binding!!
     private val apiService by lazy { ApiClient.apiService }
-    private val repository by lazy { AccountRepo(apiService) }
+    private val repository by lazy { AccountRepo(apiService, requireContext()) }
     private val viewModel: AccountViewModel by viewModels {
         ViewModelFactory { AccountViewModel(repository) }
+    }
+
+    // Registers the system photo picker launcher
+    private val pickImageLauncher = registerForActivityResult(
+        ActivityResultContracts.PickVisualMedia()
+    ) { uri ->
+        if (uri != null) {
+            // Image selected successfully, send to viewmodel for processing
+            val accountId = SessionManager.accountId ?: return@registerForActivityResult
+            viewModel.uploadAvatar(accountId, uri)
+        }
     }
 
     // validators
@@ -118,6 +133,7 @@ class ProfileFragment : Fragment() {
         binding.actvLanguageSelector.setOnItemClickListener { parent, _, position, _ ->
             val selectedLanguage = parent.getItemAtPosition(position) as String
             LocaleManager.setLocaleByDisplayName(selectedLanguage)
+            binding.actvLanguageSelector.setText(selectedLanguage, false)
         }
         // SECURITY
         binding.btnSettingSecurity.setOnClickListener {
@@ -150,9 +166,16 @@ class ProfileFragment : Fragment() {
                 context = requireContext(),
                 title = getString(R.string.confirm_del_account),
             ) {
-                val currentUserId = SessionManager.accountId ?: return@showDestructiveConfirmationDialog
+                val currentUserId =
+                    SessionManager.accountId ?: return@showDestructiveConfirmationDialog
                 viewModel.deleteAccount(currentUserId)
             }
+        }
+        // UPDATE AVATAR
+        binding.ivAvatar.setOnClickListener {
+            pickImageLauncher.launch(
+                PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly)
+            )
         }
     }
 
@@ -188,10 +211,14 @@ class ProfileFragment : Fragment() {
                                     error(R.drawable.ic_avatar_unknown)
 
                                     listener(
+                                        onStart = { _ ->
+                                            binding.avatarLoader.visibility = View.VISIBLE
+                                        },
                                         onSuccess = { _, _ ->
-                                            // Image loaded successfully
+                                            binding.avatarLoader.visibility = View.GONE
                                         },
                                         onError = { _, result ->
+                                            binding.avatarLoader.visibility = View.GONE
                                             val exception = result.throwable
                                             val statusCode =
                                                 (exception as? coil.network.HttpException)?.response?.code
@@ -331,6 +358,41 @@ class ProfileFragment : Fragment() {
                         }
                     }
                 }
+                // UPDATE AVATAR
+                launch {
+                    viewModel.accountAvatarUploadState.collect { state ->
+                        when (state) {
+                            is UiState.Loading -> toggleAvatarLoading(true)
+                            is UiState.Success -> {
+                                toggleAvatarLoading(false)
+                                binding.main.showTopSnackbar(
+                                    R.string.snack_avatar_update_success,
+                                    SnackbarLevel.SUCCESS
+                                )
+                                // Re-fetch user profile data to load the new avatar
+                                val accountId = SessionManager.accountId ?: return@collect
+                                viewModel.getAccountDetails(accountId)
+                            }
+
+                            is UiState.Error -> {
+                                toggleAvatarLoading(false)
+                                Log.e(
+                                    "ProfileFragment",
+                                    "Avatar upload failed",
+                                    state.exception
+                                )
+                                binding.main.showTopSnackbar(
+                                    getString(R.string.snack_avatar_update_fail, state.exception.message),
+                                    SnackbarLevel.ERROR
+                                )
+                            }
+
+                            is UiState.Idle -> {
+//                                toggleAvatarLoading(false)
+                            }
+                        }
+                    }
+                }
             }
         }
     }
@@ -356,11 +418,19 @@ class ProfileFragment : Fragment() {
     }
 
     private fun toggleDeleteAccountLoading(isLoading: Boolean) {
-        binding.btnSettingDelete.isClickable = !isLoading
-        binding.btnSettingDelete.isFocusable = !isLoading
-
-        // Swap icon visibility state structures
-        binding.ivDeleteIcon.visibility = if (isLoading) View.INVISIBLE else View.VISIBLE
-        binding.deleteAccountLoader.visibility = if (isLoading) View.VISIBLE else View.GONE
+        binding.btnSettingDelete.toggleIconLoadingState(
+            componentZone = binding.btnSettingDelete,
+            staticIcon = binding.ivDeleteIcon,
+            loader = binding.deleteAccountLoader,
+            isLoading = isLoading
+        )
+    }
+    private fun toggleAvatarLoading(isLoading: Boolean) {
+        binding.ivAvatar.toggleIconLoadingState(
+            componentZone = binding.ivAvatar,
+            staticIcon = binding.ivAvatar,
+            loader = binding.avatarLoader,
+            isLoading = isLoading
+        )
     }
 }

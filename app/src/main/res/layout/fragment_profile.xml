@@ -65,16 +65,35 @@
                 android:orientation="vertical"
                 android:paddingVertical="@dimen/space_xl">
 
-                <com.google.android.material.imageview.ShapeableImageView
-                    android:id="@+id/iv_avatar"
+                <FrameLayout
                     android:layout_width="100dp"
                     android:layout_height="100dp"
-                    android:padding="2dp"
-                    android:scaleType="centerCrop"
-                    tools:src="@tools:sample/avatars"
-                    app:shapeAppearanceOverlay="@style/ShapeAppearance.Material3.Corner.Full"
-                    app:strokeColor="@color/color_primary"
-                    app:strokeWidth="3dp" />
+                    android:layout_gravity="center">
+
+                    <com.google.android.material.imageview.ShapeableImageView
+                        android:id="@+id/iv_avatar"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:padding="2dp"
+                        android:scaleType="centerCrop"
+                        tools:src="@tools:sample/avatars"
+                        app:shapeAppearanceOverlay="@style/ShapeAppearance.Material3.Corner.Full"
+                        app:strokeColor="@color/color_primary"
+                        app:strokeWidth="3dp" />
+
+                    <com.google.android.material.progressindicator.CircularProgressIndicator
+                        android:id="@+id/avatar_loader"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:indeterminate="true"
+                        app:indicatorSize="@dimen/icon_lg"
+                        app:trackThickness="3dp"
+                        app:indicatorColor="@color/color_primary"
+                        android:visibility="gone"
+                        tools:visibility="visible" />
+
+                </FrameLayout>
 
                 <TextView
                     android:id="@+id/tv_username"

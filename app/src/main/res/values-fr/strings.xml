@@ -106,4 +106,6 @@
     <string name="snack_account_delete_fail">Échec de la suppression du compte : %1$s</string>
     <string name="snack_password_update_success">Mot de passe mis à jour</string>
     <string name="snack_password_update_fail">Échec de la mise à jour du mot de passe : %1$s</string>
+    <string name="snack_avatar_update_success">Avatar mis à jour</string>
+    <string name="snack_avatar_update_fail">Échec de la mise à jour de l\'avatar : %1$s</string>
 </resources>

@@ -145,5 +145,7 @@
     <string name="snack_account_delete_fail">Account deletion failed: %1$s</string>
     <string name="snack_password_update_success">Password updated</string>
     <string name="snack_password_update_fail">Password update failed: %1$s</string>
+    <string name="snack_avatar_update_success">Avatar updated</string>
+    <string name="snack_avatar_update_fail">Avatar update failed: %1$s</string>
 
 </resources>

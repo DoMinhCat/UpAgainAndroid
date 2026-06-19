@@ -41,7 +41,7 @@ import com.google.android.material.snackbar.Snackbar
 class SecuritySettingFragment : Fragment() {
     // layer dependencies
     private val apiService by lazy { ApiClient.apiService }
-    private val repository by lazy { AccountRepo(apiService) }
+    private val repository by lazy { AccountRepo(apiService, requireContext()) }
     // viewmodel
     private val viewModel: AccountViewModel by viewModels {
         ViewModelFactory { AccountViewModel(repository) }

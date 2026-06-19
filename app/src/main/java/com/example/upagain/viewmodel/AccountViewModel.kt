@@ -22,7 +22,8 @@ class AccountViewModel(private val repository: AccountRepo) : ViewModel() {
     val accountDeleteState: StateFlow<UiState<Unit>> = _accountDeleteState
     private val _accountPasswordUpdateState = MutableStateFlow<UiState<Unit>>(UiState.Idle)
     val accountPasswordUpdateState: StateFlow<UiState<Unit>> = _accountPasswordUpdateState
-
+    private val _accountAvatarUploadState = MutableStateFlow<UiState<Unit>>(UiState.Idle)
+    val accountAvatarUploadState: StateFlow<UiState<Unit>> = _accountAvatarUploadState
 
 
     fun getAccountDetails(idAccount: Int) {
@@ -81,6 +82,19 @@ class AccountViewModel(private val repository: AccountRepo) : ViewModel() {
                 .onFailure { exception ->
                     val statusCode = (exception as? HttpException)?.code()
                     _accountPasswordUpdateState.value = UiState.Error(statusCode, exception)
+                }
+        }
+    }
+
+    fun uploadAvatar(idAccount: Int, fileUri: android.net.Uri) {
+        viewModelScope.launch {
+            _accountAvatarUploadState.value = UiState.Loading
+            repository.updateAvatar(idAccount, fileUri)
+                .onSuccess {
+                    _accountAvatarUploadState.value = UiState.Success(Unit)
+                }
+                .onFailure { exception ->
+                    _accountAvatarUploadState.value = UiState.Error(null, exception)
                 }
         }
     }

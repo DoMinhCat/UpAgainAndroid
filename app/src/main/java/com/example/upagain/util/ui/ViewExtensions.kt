@@ -33,6 +33,29 @@ fun toggleBtnLoadingState(
     }
 }
 
+/**
+ * Reusable toggle to swap an icon or image with a loading spinner.
+ * Safely maintains parent container dimensions using View.INVISIBLE.
+ *
+ * @param componentZone The parent interactive container layout (e.g., Row or Button).
+ * @param staticIcon The image or icon view that should vanish during loading.
+ * @param loader The progress indicator view that spins.
+ * @param isLoading Triggers the operational toggle state.
+ */
+fun View.toggleIconLoadingState(
+    componentZone: View,
+    staticIcon: View,
+    loader: View,
+    isLoading: Boolean
+) {
+    // 1. Disable or enable container interactions to prevent double-clicks
+    componentZone.isClickable = !isLoading
+    componentZone.isFocusable = !isLoading
+
+    staticIcon.visibility = if (isLoading) View.INVISIBLE else View.VISIBLE
+    loader.visibility = if (isLoading) View.VISIBLE else View.GONE
+}
+
 fun View.setOnClickListenerWithCooldown(cooldownMillis: Long = 1000L, action: () -> Unit) {
     this.setOnClickListener(object : View.OnClickListener {
         private var lastClickTime: Long = 0
