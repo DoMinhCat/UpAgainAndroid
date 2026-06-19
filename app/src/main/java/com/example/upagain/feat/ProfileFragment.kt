@@ -85,13 +85,21 @@ class ProfileFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         val languages = resources.getStringArray(R.array.languages_array)
-        val adapter =
-            ArrayAdapter(requireContext(), android.R.layout.simple_spinner_dropdown_item, languages)
-        binding.actvLanguageSelector.setAdapter(adapter)
-
-        // Pre-fill language selector with defined map
-        val activeLanguage = LocaleManager.getCurrentLanguageDisplayName()
-        binding.actvLanguageSelector.setText(activeLanguage, false)
+        // Use a no-filter adapter so selection doesn't collapse the list
+        val languageAdapter = object : ArrayAdapter<String>(
+            requireContext(),
+            R.layout.item_dropdown, // your custom item layout
+            languages
+        ) {
+            override fun getFilter() = object : android.widget.Filter() {
+                override fun performFiltering(c: CharSequence?) =
+                    FilterResults().apply { values = languages; count = languages.size }
+                override fun publishResults(c: CharSequence?, r: FilterResults?) {
+                    notifyDataSetChanged()
+                }
+            }
+        }
+        binding.actvLanguageSelector.setAdapter(languageAdapter)
 
         // ! Always set up listeners and observers before API call
         setupListeners()
@@ -115,7 +123,7 @@ class ProfileFragment : Fragment() {
          * @return A new instance of fragment ProfileFragment.
          */
         @JvmStatic
-        fun newInstance(param1: String, param2: String) =
+        fun newInstance() =
             ProfileFragment().apply {
                 arguments = Bundle().apply {
                 }
@@ -133,6 +141,7 @@ class ProfileFragment : Fragment() {
         binding.actvLanguageSelector.setOnItemClickListener { parent, _, position, _ ->
             val selectedLanguage = parent.getItemAtPosition(position) as String
             LocaleManager.setLocaleByDisplayName(selectedLanguage)
+            // setText(..., false) prevents filtering the adapter to a single item
             binding.actvLanguageSelector.setText(selectedLanguage, false)
         }
         // SECURITY

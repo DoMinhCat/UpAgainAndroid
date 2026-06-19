@@ -170,11 +170,12 @@ class LoginActivity : AppCompatActivity() {
     }
 
     private fun handleLoginFailure(statusCode: Int?, exception: Throwable) {
-        Log.e("LoginActivity", "Login failed", exception)
+        Log.e("LoginActivity", "Login failed with status code $statusCode", exception)
         // no redirection here, just show snack bar noti
         when (statusCode) {
             401 -> binding.main.showTopSnackbar(R.string.login_fail, SnackbarLevel.ERROR)
             400 -> binding.main.showTopSnackbar(R.string.invalid_request_body, SnackbarLevel.ERROR)
+            404 -> binding.main.showTopSnackbar(R.string.login_fail, SnackbarLevel.ERROR)
             else -> binding.main.showTopSnackbar(R.string.exception_message, SnackbarLevel.ERROR)
         }
         viewModel.resetState()

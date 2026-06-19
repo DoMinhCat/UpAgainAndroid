@@ -375,7 +375,7 @@
                         app:layout_constraintTop_toTopOf="parent" />
 
                     <com.google.android.material.textfield.TextInputLayout
-                        style="@style/Widget.Material3.TextInputLayout.FilledBox.ExposedDropdownMenu"
+                        style="@style/Widget.UpAgain.TextInputLayout.Dropdown"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         app:boxBackgroundColor="@android:color/transparent"

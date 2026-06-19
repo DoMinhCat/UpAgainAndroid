@@ -26,6 +26,7 @@
         <item name="colorOnError">@color/white</item>
 
         <item name="colorOutline">@color/color_outline</item>
+        <item name="autoCompleteTextViewStyle">@style/Widget.UpAgain.AutoCompleteTextView</item>
 
         <!-- UI tuning -->
         <item name="android:statusBarColor">@color/color_background</item>
@@ -55,4 +56,25 @@
         <item name="android:textColor">@color/color_error</item>
     </style>
 
+    <!-- Dropdown -->
+    <style name="Widget.UpAgain.TextInputLayout.Dropdown"
+        parent="Widget.Material3.TextInputLayout.FilledBox.ExposedDropdownMenu">
+        <item name="materialThemeOverlay">@style/ThemeOverlay.UpAgain.Dropdown</item>
+    </style>
+
+    <style name="ThemeOverlay.UpAgain.Dropdown" parent="">
+        <item name="android:popupBackground">@color/color_surface</item>
+        <item name="autoCompleteTextViewStyle">@style/Widget.UpAgain.AutoCompleteTextView</item>
+    </style>
+
+    <style name="Widget.UpAgain.AutoCompleteTextView"
+        parent="Widget.Material3.AutoCompleteTextView.FilledBox">
+        <item name="android:popupBackground">@color/color_surface</item>
+        <item name="dropDownListViewStyle">@style/Widget.UpAgain.DropDownListView</item>
+    </style>
+
+    <style name="Widget.UpAgain.DropDownListView" parent="Widget.AppCompat.ListView.DropDown">
+        <item name="android:divider">@null</item>
+        <item name="android:listSelector">?attr/selectableItemBackground</item>
+    </style>
 </resources>
