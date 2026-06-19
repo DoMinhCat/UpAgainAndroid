@@ -41,6 +41,7 @@ import com.example.upagain.viewmodel.ViewModelFactory
 import kotlinx.coroutines.launch
 import kotlin.getValue
 import com.example.upagain.util.image.buildImageUrl
+import com.example.upagain.util.locale.LocaleManager
 import com.example.upagain.util.ui.hideKeyboard
 import com.example.upagain.util.ui.toggleFullScreenLoading
 import com.google.android.material.snackbar.Snackbar
@@ -74,6 +75,10 @@ class ProfileFragment : Fragment() {
         val adapter =
             ArrayAdapter(requireContext(), android.R.layout.simple_spinner_dropdown_item, languages)
         binding.actvLanguageSelector.setAdapter(adapter)
+
+        // Pre-fill language selector with defined map
+        val activeLanguage = LocaleManager.getCurrentLanguageDisplayName()
+        binding.actvLanguageSelector.setText(activeLanguage, false)
 
         // ! Always set up listeners and observers before API call
         setupListeners()
@@ -114,7 +119,7 @@ class ProfileFragment : Fragment() {
         // LANGUAGE
         binding.actvLanguageSelector.setOnItemClickListener { parent, _, position, _ ->
             val selectedLanguage = parent.getItemAtPosition(position) as String
-            // TODO: Execute app language change logic here
+            LocaleManager.setLocaleByDisplayName(selectedLanguage)
         }
         // SECURITY
         binding.btnSettingSecurity.setOnClickListener {
@@ -140,7 +145,6 @@ class ProfileFragment : Fragment() {
             val request = AccountUpdateRequest(username, email, phone)
             val currentId = SessionManager.accountId ?: return@setOnClickListenerWithCooldown
             viewModel.updateAccount(currentId, request)
-            // TODO: observe state for this and add loading spinner for button
         }
         // DELETE ACCOUNT
         binding.btnSettingDelete.setOnClickListenerWithCooldown {
@@ -148,30 +152,17 @@ class ProfileFragment : Fragment() {
                 context = requireContext(),
                 title = getString(R.string.confirm_del_account),
             ) {
-                val currentUserId =
-                    SessionManager.accountId ?: return@showDestructiveConfirmationDialog
-                // TODO: call view model to delete account
+                val currentUserId = SessionManager.accountId ?: return@showDestructiveConfirmationDialog
                 viewModel.deleteAccount(currentUserId)
             }
         }
     }
 
-    private fun handleLogOut() {
-        SessionManager.clearSession()
-        val intent = Intent(requireContext(), LoginActivity::class.java).apply {
-            // Clear activity task stack history so back button cannot re-enter profile
-            flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
-            putExtra("EXTRA_JUST_LOGGED_OUT", true)
-        }
-        startActivity(intent)
-        activity?.finish()
-    }
-
     private fun observeAccountState() {
         lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
+                // GET ACCOUNT DETAILS
                 launch {
-                    // GET ACCOUNT DETAILS
                     viewModel.accountDetailsState.collect { state ->
                         when (state) {
                             is UiState.Idle -> {}
@@ -244,8 +235,8 @@ class ProfileFragment : Fragment() {
                         }
                     }
                 }
+                // UPDATE ACCOUNT
                 launch {
-                    // UPDATE ACCOUNT
                     viewModel.accountUpdateState.collect { state ->
                         when (state) {
                             is UiState.Idle -> {
@@ -302,8 +293,8 @@ class ProfileFragment : Fragment() {
                         }
                     }
                 }
+                // DELETE ACCOUNT
                 launch {
-                    // DELETE ACCOUNT
                     viewModel.accountDeleteState.collect { state ->
                         when (state) {
                             is UiState.Loading -> toggleDeleteAccountLoading(true)
@@ -344,6 +335,17 @@ class ProfileFragment : Fragment() {
                 }
             }
         }
+    }
+
+    private fun handleLogOut() {
+        SessionManager.clearSession()
+        val intent = Intent(requireContext(), LoginActivity::class.java).apply {
+            // Clear activity task stack history so back button cannot re-enter profile
+            flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+            putExtra("EXTRA_JUST_LOGGED_OUT", true)
+        }
+        startActivity(intent)
+        activity?.finish()
     }
 
     private fun loadSecurityFragment() {
