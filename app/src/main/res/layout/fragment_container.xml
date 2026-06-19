@@ -34,8 +34,8 @@
 
             <ImageView
                 android:id="@+id/iv_deco"
-                android:layout_width="64dp"
-                android:layout_height="64dp"
+                android:layout_width="@dimen/icon_lg"
+                android:layout_height="@dimen/icon_lg"
                 android:src="@drawable/ic_container"
                 app:layout_constraintBottom_toBottomOf="@+id/tv_title"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -80,15 +80,13 @@
                 app:boxCornerRadiusBottomEnd="@dimen/input_radius"
                 app:boxCornerRadiusBottomStart="@dimen/input_radius"
                 app:boxCornerRadiusTopEnd="@dimen/input_radius"
-                app:boxCornerRadiusTopStart="@dimen/input_radius"
-                app:helperText="Exactly 6 digits">
+                app:boxCornerRadiusTopStart="@dimen/input_radius">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/et_code"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:gravity="center"
-                    android:hint="@string/code_hint"
                     android:textColorHint="@color/color_on_background"
                     android:inputType="text"
                     android:letterSpacing="0.5"
@@ -162,17 +160,34 @@
                     android:textColor="@color/color_secondary" />
             </LinearLayout>
 
-            <com.google.android.material.button.MaterialButton
-                android:id="@+id/btn_submit"
-                style="@style/Widget.Material3.Button"
+            <FrameLayout
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/min_touch"
+                android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/space_xl"
-                android:layout_marginBottom="@dimen/space_lg"
-                android:text="@string/btn_open_container"
-                android:textAllCaps="true"
-                app:cornerRadius="@dimen/button_radius"
-                app:backgroundTint="@color/color_primary" />
+                android:layout_marginBottom="@dimen/space_lg">
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btn_submit"
+                    style="@style/Widget.Material3.Button"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/min_touch"
+                    android:text="@string/btn_open_container"
+                    android:textAllCaps="true"
+                    app:cornerRadius="@dimen/button_radius"
+                    app:backgroundTint="@color/color_primary" />
+
+                <com.google.android.material.progressindicator.CircularProgressIndicator
+                    android:id="@+id/submit_loader"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:indeterminate="true"
+                    app:indicatorSize="@dimen/icon_md"
+                    app:indicatorColor="@color/color_on_primary"
+                    android:visibility="gone"
+                    tools:visibility="visible" />
+
+            </FrameLayout>
 
         </LinearLayout>
     </androidx.core.widget.NestedScrollView>
