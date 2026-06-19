@@ -38,4 +38,19 @@ class AccountRepo(private val apiService: ApiService) {
             Result.failure(e)
         }
     }
+
+    suspend fun deleteAccount(idAccount: Int): Result<Unit> {
+        return try {
+            val response = apiService.deleteAccount(idAccount).awaitResponse()
+
+            if (response.isSuccessful) {
+                Result.success(Unit)
+            } else {
+                val errMessage = parseErrorMessage(response.errorBody()?.string())
+                Result.failure(Exception(errMessage))
+            }
+        } catch (e: Exception) {
+            Result.failure(e)
+        }
+    }
 }

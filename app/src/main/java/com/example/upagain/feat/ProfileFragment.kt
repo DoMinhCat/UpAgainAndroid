@@ -42,6 +42,7 @@ import kotlinx.coroutines.launch
 import kotlin.getValue
 import com.example.upagain.util.image.buildImageUrl
 import com.example.upagain.util.ui.hideKeyboard
+import com.example.upagain.util.ui.toggleFullScreenLoading
 import com.google.android.material.snackbar.Snackbar
 
 class ProfileFragment : Fragment() {
@@ -55,7 +56,8 @@ class ProfileFragment : Fragment() {
     }
 
     // validators
-    val usernameValidator = FieldValidator(listOf(NotEmptyRule(), MinLengthRule(4), MaxLengthRule(20)))
+    val usernameValidator =
+        FieldValidator(listOf(NotEmptyRule(), MinLengthRule(4), MaxLengthRule(20)))
     val phoneValidator = FieldValidator(listOf(NotEmptyRule(), PhoneRule()))
 
     override fun onCreateView(
@@ -135,24 +137,25 @@ class ProfileFragment : Fragment() {
             if (!isUsernameValid || !isPhoneValid) {
                 return@setOnClickListenerWithCooldown
             }
-            // TODO: call view model to update account details
             val request = AccountUpdateRequest(username, email, phone)
             val currentId = SessionManager.accountId ?: return@setOnClickListenerWithCooldown
             viewModel.updateAccount(currentId, request)
             // TODO: observe state for this and add loading spinner for button
         }
         // DELETE ACCOUNT
-        binding.btnSettingDelete.setOnClickListener {
+        binding.btnSettingDelete.setOnClickListenerWithCooldown {
             DialogUtils.showDestructiveConfirmationDialog(
                 context = requireContext(),
                 title = getString(R.string.confirm_del_account),
             ) {
-                val currentUserId = SessionManager.accountId ?: return@showDestructiveConfirmationDialog
+                val currentUserId =
+                    SessionManager.accountId ?: return@showDestructiveConfirmationDialog
                 // TODO: call view model to delete account
-                // e.g., viewModel.deleteUserAccount()
+                viewModel.deleteAccount(currentUserId)
             }
         }
     }
+
     private fun handleLogOut() {
         SessionManager.clearSession()
         val intent = Intent(requireContext(), LoginActivity::class.java).apply {
@@ -168,16 +171,16 @@ class ProfileFragment : Fragment() {
         lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
                 launch {
-                    // get account details
+                    // GET ACCOUNT DETAILS
                     viewModel.accountDetailsState.collect { state ->
                         when (state) {
                             is UiState.Idle -> {}
                             is UiState.Loading -> {
-                                toggleFullScreenLoading(true)
+                                binding.loadingOverlay.root.toggleFullScreenLoading(true)
                             }
 
                             is UiState.Success -> {
-                                toggleFullScreenLoading(false)
+                                binding.loadingOverlay.root.toggleFullScreenLoading(false)
 
                                 val account = state.data
                                 // update UI with account details
@@ -230,27 +233,46 @@ class ProfileFragment : Fragment() {
                             }
 
                             is UiState.Error -> {
-                                toggleFullScreenLoading(false)
-                                Log.e("ProfileFragment", "Load account details failed", state.exception)
+                                binding.loadingOverlay.root.toggleFullScreenLoading(false)
+                                Log.e(
+                                    "ProfileFragment",
+                                    "Load account details failed",
+                                    state.exception
+                                )
                                 ErrorActivity.start(requireContext(), state.statusCode ?: 0)
                             }
                         }
                     }
                 }
                 launch {
-                    // update
+                    // UPDATE ACCOUNT
                     viewModel.accountUpdateState.collect { state ->
                         when (state) {
                             is UiState.Idle -> {
-                                toggleBtnLoadingState(binding.btnSaveProfile, binding.saveLoader, false, getString(R.string.btn_save))
+                                toggleBtnLoadingState(
+                                    binding.btnSaveProfile,
+                                    binding.saveLoader,
+                                    false,
+                                    getString(R.string.btn_save)
+                                )
                             }
 
                             is UiState.Loading -> {
-                                toggleBtnLoadingState(binding.btnSaveProfile, binding.saveLoader, true, getString(R.string.btn_save))
+                                toggleBtnLoadingState(
+                                    binding.btnSaveProfile,
+                                    binding.saveLoader,
+                                    true,
+                                    getString(R.string.btn_save)
+                                )
                             }
 
                             is UiState.Success -> {
-                                toggleBtnLoadingState(binding.btnSaveProfile, binding.saveLoader, false, getString(R.string.btn_save))
+                                toggleBtnLoadingState(
+                                    binding.btnSaveProfile,
+                                    binding.saveLoader,
+                                    false,
+                                    getString(R.string.btn_save)
+                                )
                                 activity?.hideKeyboard()
                                 binding.main.showTopSnackbar(
                                     R.string.snack_account_details_update_success,
@@ -259,8 +281,17 @@ class ProfileFragment : Fragment() {
                             }
 
                             is UiState.Error -> {
-                                toggleBtnLoadingState(binding.btnSaveProfile, binding.saveLoader, false, getString(R.string.btn_save))
-                                Log.e("ProfileFragment", "Update account details failed", state.exception)
+                                toggleBtnLoadingState(
+                                    binding.btnSaveProfile,
+                                    binding.saveLoader,
+                                    false,
+                                    getString(R.string.btn_save)
+                                )
+                                Log.e(
+                                    "ProfileFragment",
+                                    "Update account details failed",
+                                    state.exception
+                                )
                                 binding.main.showTopSnackbar(
                                     getString(
                                         R.string.snack_account_details_update_fail,
@@ -271,36 +302,48 @@ class ProfileFragment : Fragment() {
                         }
                     }
                 }
-                // del account
-                /*
-                viewModel.deleteAccountState.collect { state ->
-                    when (state) {
-                        is UiState.Loading -> toggleLoading(true)
-                        is UiState.Success -> {
-                            toggleLoading(false)
-                            SessionManager.clearSession()
+                launch {
+                    // DELETE ACCOUNT
+                    viewModel.accountDeleteState.collect { state ->
+                        when (state) {
+                            is UiState.Loading -> toggleDeleteAccountLoading(true)
+                            is UiState.Success -> {
+                                toggleDeleteAccountLoading(false)
+                                SessionManager.clearSession()
 
-                            // 🗺️ Step 3: Execute explicit navigation routing
-                            val intent = Intent(requireContext(), LoginActivity::class.java).apply {
-                                flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
-                                putExtra("EXTRA_ACCOUNT_DELETED", true)
+                                val intent =
+                                    Intent(requireContext(), LoginActivity::class.java).apply {
+                                        flags =
+                                            Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+                                        putExtra("EXTRA_ACCOUNT_DELETED", true)
+                                    }
+                                startActivity(intent)
+                                activity?.finish()
                             }
-                            startActivity(intent)
-                            activity?.finish()
+
+                            is UiState.Error -> {
+                                toggleDeleteAccountLoading(false)
+                                Log.e(
+                                    "ProfileFragment",
+                                    "Delete account failed",
+                                    state.exception
+                                )
+                                binding.main.showTopSnackbar(
+                                    getString(
+                                        R.string.snack_account_delete_fail,
+                                        state.exception.message
+                                    ), SnackbarLevel.ERROR
+                                )
+                            }
+
+                            is UiState.Idle -> {
+                                toggleDeleteAccountLoading(false)
+                            }
                         }
-                        is UiState.Error -> {
-                            toggleLoading(false)
-                            ErrorActivity.start(requireContext(), state.statusCode ?: 500)
-                        }
-                        is UiState.Idle -> { /* No-op */ }
                     }
                 }
-                */
             }
         }
-    }
-    fun toggleFullScreenLoading(isLoading: Boolean) {
-        binding.loadingOverlay.root.visibility = if (isLoading) View.VISIBLE else View.GONE
     }
 
     private fun loadSecurityFragment() {
@@ -312,4 +355,12 @@ class ProfileFragment : Fragment() {
             .commit()
     }
 
+    private fun toggleDeleteAccountLoading(isLoading: Boolean) {
+        binding.btnSettingDelete.isClickable = !isLoading
+        binding.btnSettingDelete.isFocusable = !isLoading
+
+        // Swap icon visibility state structures
+        binding.ivDeleteIcon.visibility = if (isLoading) View.INVISIBLE else View.VISIBLE
+        binding.deleteAccountLoader.visibility = if (isLoading) View.VISIBLE else View.GONE
+    }
 }

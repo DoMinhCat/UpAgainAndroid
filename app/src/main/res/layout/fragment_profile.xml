@@ -389,7 +389,8 @@
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:id="@+id/btn_setting_delete"
                     android:layout_width="match_parent"
-                    android:layout_height="64dp" android:paddingHorizontal="@dimen/space_md"
+                    android:layout_height="64dp"
+                    android:paddingHorizontal="@dimen/space_md"
                     android:clickable="true"
                     android:focusable="true"
                     android:background="?attr/selectableItemBackground">
@@ -405,7 +406,7 @@
                         app:layout_constraintTop_toTopOf="parent" />
 
                     <ImageView
-                        android:contentDescription="@string/img_description"
+                        android:id="@+id/iv_delete_icon" android:contentDescription="@string/img_description"
                         android:layout_width="@dimen/icon_sm"
                         android:layout_height="@dimen/icon_sm"
                         android:src="@drawable/ic_trash"
@@ -413,6 +414,20 @@
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintTop_toTopOf="parent"
                         app:tint="@color/color_error" />
+
+                    <com.google.android.material.progressindicator.CircularProgressIndicator
+                        android:id="@+id/delete_account_loader"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:indeterminate="true"
+                        app:indicatorSize="@dimen/icon_sm"
+                        app:indicatorColor="@color/color_error"
+                        android:visibility="gone"
+                        tools:visibility="visible"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
                 </androidx.constraintlayout.widget.ConstraintLayout>
             </LinearLayout>
         </LinearLayout>

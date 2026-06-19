@@ -58,8 +58,12 @@ class LoginActivity : AppCompatActivity() {
 
         // GET INTENT TO SHOW NOTI
         val justLoggedOut = intent.getBooleanExtra("EXTRA_JUST_LOGGED_OUT", false)
+        val justDeleted = intent.getBooleanExtra("EXTRA_ACCOUNT_DELETED", false)
         if(justLoggedOut) {
             binding.main.showTopSnackbar(R.string.logout_success, SnackbarLevel.INFO)
+        }
+        if(justDeleted) {
+            binding.main.showTopSnackbar(R.string.snack_account_delete_success, SnackbarLevel.SUCCESS)
         }
 
         setupListeners()

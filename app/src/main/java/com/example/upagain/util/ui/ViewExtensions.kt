@@ -61,3 +61,11 @@ fun View.setOnBackClickListener() {
         findViewTreeOnBackPressedDispatcherOwner()?.onBackPressedDispatcher?.onBackPressed()
     }
 }
+
+/**
+ * Universally toggles full-screen loading visibility.
+ * Can be called using any included layout's root view.
+ */
+fun View.toggleFullScreenLoading(isLoading: Boolean) {
+    this.visibility = if (isLoading) View.VISIBLE else View.GONE
+}
