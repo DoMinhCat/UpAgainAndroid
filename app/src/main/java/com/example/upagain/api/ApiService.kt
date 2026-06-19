@@ -4,6 +4,7 @@ import com.example.upagain.model.AccountDetailsResponse
 import com.example.upagain.model.AccountUpdateRequest
 import com.example.upagain.model.TokenResponse
 import com.example.upagain.model.LoginRequest
+import com.example.upagain.model.PasswordUpdateRequest
 import retrofit2.Call
 import retrofit2.http.Body
 import retrofit2.http.DELETE
@@ -24,6 +25,8 @@ interface ApiService {
     fun getAccountDetails(@Path("id") id: Int): Call<AccountDetailsResponse>
     @PATCH(Endpoints.ACCOUNT_UPDATE)
     fun updateAccount(@Path("id") id: Int, @Body request: AccountUpdateRequest): Call<Unit>
+    @PATCH(Endpoints.PASSWORD_UPDATE)
+    fun updatePassword(@Path("id") id: Int, @Body request: PasswordUpdateRequest): Call<Unit>
     @DELETE(Endpoints.ACCOUNT_DETAILS)
     fun deleteAccount(@Path("id") id: Int): Call<Unit>
 }

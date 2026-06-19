@@ -17,3 +17,7 @@ data class AccountUpdateRequest(
     val email: String,
     val phone: String
 )
+
+data class PasswordUpdateRequest(
+    val password: String
+)

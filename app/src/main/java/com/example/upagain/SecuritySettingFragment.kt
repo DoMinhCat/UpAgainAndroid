@@ -17,6 +17,7 @@ import androidx.lifecycle.repeatOnLifecycle
 import com.example.upagain.api.ApiClient
 import com.example.upagain.databinding.FragmentSecuritySettingBinding
 import com.example.upagain.model.AccountUpdateRequest
+import com.example.upagain.model.PasswordUpdateRequest
 import com.example.upagain.repository.AccountRepo
 import com.example.upagain.util.auth.SessionManager
 import com.example.upagain.util.ui.SnackbarLevel
@@ -40,8 +41,6 @@ import com.google.android.material.snackbar.Snackbar
 class SecuritySettingFragment : Fragment() {
     // layer dependencies
     private val apiService by lazy { ApiClient.apiService }
-
-    // TODO:
     private val repository by lazy { AccountRepo(apiService) }
     // viewmodel
     private val viewModel: AccountViewModel by viewModels {
@@ -132,6 +131,9 @@ class SecuritySettingFragment : Fragment() {
                 return@setOnClickListenerWithCooldown
             }
             // TODO: build request + call viewmodel to update changes
+            val currentId = SessionManager.accountId ?: return@setOnClickListenerWithCooldown
+            val request = PasswordUpdateRequest(password)
+            viewModel.updatePassword(currentId, request)
         }
         // BACK BTN
         binding.btnBack.setOnBackClickListener()
@@ -140,8 +142,8 @@ class SecuritySettingFragment : Fragment() {
     private fun observeAccountState() {
         lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
+                // UPDATE EMAIL
                 launch {
-                    // update account email
                     viewModel.accountUpdateState.collect { state ->
                         when (state) {
                             is UiState.Idle -> {
@@ -167,6 +169,40 @@ class SecuritySettingFragment : Fragment() {
                                 binding.main.showTopSnackbar(
                                     getString(
                                         R.string.snack_email_update_fail,
+                                        state.exception.message
+                                    ), SnackbarLevel.ERROR, Snackbar.LENGTH_LONG
+                                )
+                            }
+                        }
+                    }
+                }
+                // UPDATE PASSWORD
+                launch {
+                    viewModel.accountPasswordUpdateState.collect { state ->
+                        when (state) {
+                            is UiState.Idle -> {
+                                togglePasswordBtnLoading(false)
+                            }
+
+                            is UiState.Loading -> {
+                                togglePasswordBtnLoading(true)
+                            }
+
+                            is UiState.Success -> {
+                                togglePasswordBtnLoading(false)
+                                activity?.hideKeyboard()
+                                binding.main.showTopSnackbar(
+                                    R.string.snack_password_update_success,
+                                    SnackbarLevel.SUCCESS
+                                )
+                            }
+
+                            is UiState.Error -> {
+                                togglePasswordBtnLoading(false)
+                                Log.e("SecuritySettingFragment", "Update password failed", state.exception)
+                                binding.main.showTopSnackbar(
+                                    getString(
+                                        R.string.snack_password_update_fail,
                                         state.exception.message
                                     ), SnackbarLevel.ERROR, Snackbar.LENGTH_LONG
                                 )

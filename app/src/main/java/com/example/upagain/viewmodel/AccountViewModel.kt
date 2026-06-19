@@ -5,6 +5,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.upagain.model.AccountDetailsResponse
 import com.example.upagain.model.AccountUpdateRequest
+import com.example.upagain.model.PasswordUpdateRequest
 import com.example.upagain.repository.AccountRepo
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -19,6 +20,9 @@ class AccountViewModel(private val repository: AccountRepo) : ViewModel() {
     val accountUpdateState: StateFlow<UiState<Unit>> = _accountUpdateState
     private val _accountDeleteState = MutableStateFlow<UiState<Unit>>(UiState.Idle)
     val accountDeleteState: StateFlow<UiState<Unit>> = _accountDeleteState
+    private val _accountPasswordUpdateState = MutableStateFlow<UiState<Unit>>(UiState.Idle)
+    val accountPasswordUpdateState: StateFlow<UiState<Unit>> = _accountPasswordUpdateState
+
 
 
     fun getAccountDetails(idAccount: Int) {
@@ -62,6 +66,21 @@ class AccountViewModel(private val repository: AccountRepo) : ViewModel() {
                 .onFailure { exception ->
                     val statusCode = (exception as? HttpException)?.code()
                     _accountDeleteState.value = UiState.Error(statusCode, exception)
+                }
+        }
+    }
+
+    fun updatePassword(idAccount: Int, request: PasswordUpdateRequest) {
+        viewModelScope.launch {
+            _accountPasswordUpdateState.value = UiState.Loading
+
+            repository.updatePassword(idAccount, request)
+                .onSuccess {
+                    _accountPasswordUpdateState.value = UiState.Success(Unit)
+                }
+                .onFailure { exception ->
+                    val statusCode = (exception as? HttpException)?.code()
+                    _accountPasswordUpdateState.value = UiState.Error(statusCode, exception)
                 }
         }
     }

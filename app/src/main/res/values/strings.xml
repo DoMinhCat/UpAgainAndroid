@@ -143,5 +143,7 @@
     <string name="snack_account_details_update_fail">Account details update failed: %1$s</string>
     <string name="snack_account_delete_success">Account deleted</string>
     <string name="snack_account_delete_fail">Account deletion failed: %1$s</string>
+    <string name="snack_password_update_success">Password updated</string>
+    <string name="snack_password_update_fail">Password update failed: %1$s</string>
 
 </resources>
