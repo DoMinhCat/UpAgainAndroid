@@ -4,6 +4,7 @@ import java.util.Properties
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.compose)
+    id("kotlin-parcelize")
 }
 
 android {
@@ -29,6 +30,7 @@ android {
         // 2. Inject the variable into BuildConfig
         buildConfigField("String", "API_BASE_URL", properties.getProperty("API_BASE_URL"))
         buildConfigField("String", "MAP_API_KEY", properties.getProperty("MAP_API_KEY"))
+        buildConfigField("String", "FRONTEND_BASE_URL", properties.getProperty("FRONTEND_BASE_URL"))
     }
 
     buildTypes {
@@ -47,6 +49,7 @@ android {
     buildFeatures {
         compose = true
         buildConfig = true
+        viewBinding = true
     }
 }
 
@@ -60,6 +63,8 @@ dependencies {
     implementation(libs.androidx.compose.ui.graphics)
     implementation(libs.androidx.compose.ui.tooling.preview)
     implementation(libs.androidx.compose.material3)
+    implementation("androidx.fragment:fragment-ktx:1.8.9")
+    implementation("com.auth0.android:jwtdecode:2.0.2")
     implementation(libs.material)
     implementation(libs.androidx.activity)
     implementation(libs.androidx.constraintlayout)

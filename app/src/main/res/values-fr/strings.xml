@@ -13,9 +13,11 @@
     <string name="invalid_email">Email invalide</string>
     <string name="incorrect_password">Mot de passe invalide</string>
     <string name="login_success">Connexion réussie</string>
+    <string name="logout_success">Déconnexion réussie</string>
     <string name="login_footer">Tous droits réservés • UpAgain</string>
     <string name="no_account">Vous n\'avez pas encore un compte ?</string>
     <string name="login_fail">Adresse email ou mot de passe incorrect</string>
+    <string name="error_not_pro">Aucun compte professionnel trouvé avec les identifiants fournis</string>
     <string name="placeholder_search">Rechercher</string>
     <string name="spending_by_material">Dépenses par matière</string>
     <string name="my_transactions">Mes Transactions</string>
@@ -35,6 +37,7 @@
     <string name="category_case_study">Études de cas</string>
     <string name="category_other">Autres</string>
     <string name="img_thumbnail_description">Image principale</string>
+    <string name="img_description">Une image</string>
     <string name="btn_view">Voir</string>
     <string name="author_dynamic">par %1$s</string>
 
@@ -49,16 +52,21 @@
     <string name="error_404">404</string>
     <string name="error_500">500</string>
     <string name="error_404_description">Page non trouvée</string>
+    <string name="error_403_description">Interdit</string>
     <string name="error_500_description">Erreur interne du serveur</string>
     <string name="error_connection_description">Aucune connexion internet</string>
+    <string name="error_generic_title">Erreur inconnue</string>
     <string name="error_404_msg">Oups ! Il semblerait que la nature ait repris ses droits sur ce chemin. Remettons-nous sur le bon chemin.</string>
+    <string name="error_403_msg">Oups ! Vous vous aventurez dans la zone interdite de la forêt.</string>
     <string name="btn_home">Retour à l\'accueil</string>
     <string name="error_500_msg">Oups ! Nos serveurs sont actuellement très sollicités. Nous mettons tout en œuvre pour résoudre le problème au plus vite.</string>
     <string name="btn_refresh">Actualiser la page</string>
     <string name="error_connection_msg">Oups ! Votre connexion a été interrompue. Veuillez vérifier votre signal et réessayer pour poursuivre votre voyage.</string>
 
     <string name="exception_message">Une erreur s\'est produite</string>
+    <string name="error_media_msg">Impossible de charger l\'image</string>
     <string name="invalid_request_body">Demande invalide</string>
+    <string name="no_browser">Aucun navigateur trouvé</string>
     <string name="btn_save">Sauvegarder</string>
     <string name="settings">Paramètres</string>
     <string name="security">Sécurité</string>
@@ -78,4 +86,26 @@
     <string name="items_bought">ARTICLES ACHETÉS</string>
     <string name="event_fees">FRAIS D\'ÉVÉNEMENT</string>
     <string name="total_projects">PROJETS TOTAL</string>
+    <string name="confirm_password">Confirmer votre mot de passe</string>
+    <string name="invalid_username">Nom d\'utilisateur invalide</string>
+    <string name="security_description">Mettre à jour vos informations d\'identification</string>
+    <string name="new_password">Nouveau mot de passe</string>
+    <string name="password_not_match">Les mots de passe ne correspondent pas.</string>
+    <string name="noti_description">Mettre à jour vos préférences</string>
+    <string name="language">Langue</string>
+    <string name="invalid_phone">Numéro de téléphone invalide</string>
+    <string name="confirm_del_account">Supprimer définitivement le compte ?</string>
+    <string name="confirm_message">Cette action est irréversible.</string>
+    <string name="btn_confirm">Confirmer</string>
+    <string name="btn_cancel">Annuler</string>
+    <string name="snack_email_update_success">Email mis à jour</string>
+    <string name="snack_email_update_fail">Échec de la mise à jour par email: %1$s</string>
+    <string name="snack_account_details_update_success">Les détails du compte mis à jour</string>
+    <string name="snack_account_details_update_fail">Échec de la mise à jour des détails du compte : %1$s</string>
+    <string name="snack_account_delete_success">Compte supprimé</string>
+    <string name="snack_account_delete_fail">Échec de la suppression du compte : %1$s</string>
+    <string name="snack_password_update_success">Mot de passe mis à jour</string>
+    <string name="snack_password_update_fail">Échec de la mise à jour du mot de passe : %1$s</string>
+    <string name="snack_avatar_update_success">Avatar mis à jour</string>
+    <string name="snack_avatar_update_fail">Échec de la mise à jour de l\'avatar : %1$s</string>
 </resources>

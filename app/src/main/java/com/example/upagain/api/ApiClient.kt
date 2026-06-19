@@ -4,20 +4,13 @@ import android.content.Context
 import android.content.Intent
 import com.example.upagain.BuildConfig
 import com.example.upagain.feat.auth.LoginActivity
-import com.example.upagain.feat.error.InternalServerErrorActivity
-import com.example.upagain.feat.error.NotFoundActivity
-import com.example.upagain.util.TokenManager
-import com.example.upagain.api.Endpoints
+import com.example.upagain.feat.error.ErrorActivity
+import com.example.upagain.util.auth.SessionManager
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import com.google.gson.Strictness
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.withContext
-import okhttp3.FormBody
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
-import okhttp3.Request
-import okhttp3.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
@@ -36,12 +29,20 @@ object ApiClient {
         cookieJar = PersistentCookieJar(appContext)
     }
 
-    private val httpClient: OkHttpClient by lazy {
+    val httpClient: OkHttpClient by lazy {
+        // AUTO INJECT JWT IN SHAREDPREF INTO OUTGOING REQUESTS
         OkHttpClient.Builder()
             .cookieJar(cookieJar)
             .addInterceptor(Interceptor { chain ->
                 val originalRequest = chain.request()
-                val token = TokenManager.getInstance(appContext).getToken()
+                val path = originalRequest.url.encodedPath
+
+                // Do not attach tokens to authentication lifecycle routes
+                if (path == Endpoints.REFRESH || path == Endpoints.LOGIN) {
+                    return@Interceptor chain.proceed(originalRequest)
+                }
+
+                val token = SessionManager.token
                 val newRequest = if (!token.isNullOrEmpty()) {
                     originalRequest.newBuilder()
                         .header("Authorization", "Bearer $token")
@@ -57,10 +58,10 @@ object ApiClient {
 
                 when (response.code) {
                     404 -> {
-                        navigateToActivity(NotFoundActivity::class.java)
+                        navigateToActivity(ErrorActivity::class.java, statusCode = 404)
                     }
                     500 -> {
-                        navigateToActivity(InternalServerErrorActivity::class.java)
+                        navigateToActivity(ErrorActivity::class.java, statusCode = 500)
                     }
                     401 -> {
                         val path = request.url.encodedPath
@@ -108,7 +109,7 @@ object ApiClient {
             val newToken = response.body()?.token
 
             if (response.isSuccessful && newToken != null) {
-                TokenManager.getInstance(appContext).saveToken(newToken)
+                SessionManager.saveUserSession(newToken)
                 return newToken
             }
         } catch (e: Exception) {
@@ -118,16 +119,19 @@ object ApiClient {
     }
 
     private fun handleLogout() {
-        TokenManager.getInstance(appContext).clearToken()
+        SessionManager.clearSession()
         cookieJar.clear()
         navigateToActivity(LoginActivity::class.java, clearStack = true)
     }
 
-    private fun navigateToActivity(activityClass: Class<*>, clearStack: Boolean = false) {
+    private fun navigateToActivity(activityClass: Class<*>, clearStack: Boolean = false, statusCode: Int? = null) {
         val intent = Intent(appContext, activityClass).apply {
             flags = Intent.FLAG_ACTIVITY_NEW_TASK
             if (clearStack) {
                 addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK)
+            }
+            if (statusCode != null) {
+                putExtra("EXTRA_ERROR_CODE", statusCode)
             }
         }
         appContext.startActivity(intent)

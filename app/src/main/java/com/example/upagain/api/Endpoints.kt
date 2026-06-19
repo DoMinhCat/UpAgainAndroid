@@ -2,8 +2,16 @@ package com.example.upagain.api
 
 
 object Endpoints {
+    // Img Endpoints
+    const val IMAGES = "images"
+
     // Auth Endpoints
-    const val LOGIN = "/login"
-    const val REGISTER = "/register"
-    const val REFRESH = "/refresh"
+    const val LOGIN = "login"
+    const val REFRESH = "refresh"
+
+    // Account Endpoints
+    const val ACCOUNT_DETAILS = "accounts/{id}"
+    const val ACCOUNT_UPDATE = "accounts/{id}/update"
+    const val PASSWORD_UPDATE = "accounts/{id}/password"
+    const val AVATAR_UPDATE = "accounts/{id}/avatar"
 }

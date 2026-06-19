@@ -15,14 +15,14 @@
         android:roundIcon="@drawable/upagain_logo"
         android:supportsRtl="true"
         android:theme="@style/Theme.UpAgain">
+        <meta-data
+            android:name="androidx.appcompat.app.AppCompatDelegate. some_attribute"
+            android:value="true" />
         <activity
             android:name=".feat.error.NoConnectionActivity"
             android:exported="false" />
         <activity
-            android:name=".feat.error.InternalServerErrorActivity"
-            android:exported="false" />
-        <activity
-            android:name=".feat.error.NotFoundActivity"
+            android:name=".feat.error.ErrorActivity"
             android:exported="false" />
         <activity
             android:name=".feat.auth.LoginActivity"

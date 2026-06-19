@@ -18,8 +18,10 @@
     <string name="invalid_email">Invalid email</string>
     <string name="incorrect_password">Invalid password</string>
     <string name="login_success">Login successful</string>
+    <string name="logout_success">Logout successful</string>
     <string name="login_footer">All rights reserved • UpAgain</string>
     <string name="login_fail">Incorrect email or password</string>
+    <string name="error_not_pro">No professional account found with given credentials</string>
 
     <!-- Placeholder -->
     <string name="placeholder_search">Search</string>
@@ -58,11 +60,13 @@
     <string name="category_case_study">Case studies</string>
     <string name="category_other">Others</string>
     <string name="img_thumbnail_description">Thumbnail image</string>
+    <string name="img_description">An image</string>
     <string name="btn_view">View</string>
     <string name="author_dynamic">by %1$s</string>
     <string name="string_dynamic" translatable="false">%1$s</string>
     <string name="date_dynamic" translatable="false">%1$s</string>
     <string name="count_dynamic" translatable="false">%1$d</string>
+    <string name="float_dynamic" translatable="false">%1$.2f</string>
 
     <!-- Container -->
     <string name="code">6-digit code</string>
@@ -76,16 +80,24 @@
     <!-- Errors -->
     <string name="error_404">404</string>
     <string name="error_500">500</string>
+
+    <string name="error_403_description">Forbidden</string>
     <string name="error_404_description">Page not found</string>
     <string name="error_500_description">Internal server error</string>
     <string name="error_connection_description">No internet connection</string>
+    <string name="error_generic_title">Unknown error</string>
+
     <string name="error_404_msg">Oops! It seems nature has reclaimed this path. Let\'s get back on track.</string>
-    <string name="btn_home">Back to home</string>
+    <string name="error_403_msg">Oops! You are wandering into the forbidden area of the forest.</string>
     <string name="error_500_msg">Oops! Our servers are currently very busy. We are doing everything we can to resolve the problem as quickly as possible.</string>
-    <string name="btn_refresh">Refresh page</string>
     <string name="error_connection_msg">Oops! Your connection was interrupted. Please check your signal and try again to continue your journey.</string>
     <string name="exception_message">An error occurred</string>
+    <string name="error_media_msg">Failed to load media</string>
     <string name="invalid_request_body">Invalid request body</string>
+    <string name="no_browser">No browser found</string>
+
+    <string name="btn_home">Back to home</string>
+    <string name="btn_refresh">Refresh page</string>
 
     <!-- Profile & Settings -->
     <string name="btn_save">Save</string>
@@ -99,5 +111,41 @@
     <string name="account_information">Account information</string>
     <string name="current_plan">CURRENT PLAN</string>
     <string name="expire_date">Expires on: %1$s</string>
+    <string name="language">Language</string>
+    <string name="english" translatable="false">English</string>
+    <string name="francais" translatable="false">Français</string>
+    <string-array name="languages_array">
+        <item>@string/english</item>
+        <item>@string/francais</item>
+    </string-array>
+    <string name="invalid_phone">Invalid phone number</string>
+    <string name="invalid_username">Invalid username</string>
+
+    <!-- Security Settings -->
+    <string name="security_description">Update Credentials</string>
+    <string name="new_password">New password</string>
+    <string name="confirm_password">Confirm password</string>
+    <string name="password_not_match">Passwords do not match</string>
+
+    <!-- Notification Settings -->
+    <string name="noti_description">Update Preferences</string>
+
+    <!-- Confirm Dialogs -->
+    <string name="confirm_del_account">Delete account permanently?</string>
+    <string name="confirm_message">This action is permanent and cannot be undone.</string>
+    <string name="btn_confirm">Confirm</string>
+    <string name="btn_cancel">Cancel</string>
+
+    <!-- Snack bar messages -->
+    <string name="snack_email_update_success">Email updated</string>
+    <string name="snack_email_update_fail">Email update failed: %1$s</string>
+    <string name="snack_account_details_update_success">Account details updated</string>
+    <string name="snack_account_details_update_fail">Account details update failed: %1$s</string>
+    <string name="snack_account_delete_success">Account deleted</string>
+    <string name="snack_account_delete_fail">Account deletion failed: %1$s</string>
+    <string name="snack_password_update_success">Password updated</string>
+    <string name="snack_password_update_fail">Password update failed: %1$s</string>
+    <string name="snack_avatar_update_success">Avatar updated</string>
+    <string name="snack_avatar_update_fail">Avatar update failed: %1$s</string>
 
 </resources>

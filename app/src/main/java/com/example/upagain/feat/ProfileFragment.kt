@@ -1,41 +1,118 @@
 package com.example.upagain.feat
 
+import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ArrayAdapter
+import androidx.activity.result.PickVisualMediaRequest
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.fragment.app.viewModels
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
+import coil.load
 import com.example.upagain.R
+import com.example.upagain.SecuritySettingFragment
+import com.example.upagain.api.ApiClient
+import com.example.upagain.databinding.FragmentProfileBinding
+import com.example.upagain.feat.auth.LoginActivity
+import com.example.upagain.feat.error.ErrorActivity
+import com.example.upagain.model.AccountUpdateRequest
+import com.example.upagain.repository.AccountRepo
+import com.example.upagain.util.auth.SessionManager
+import com.example.upagain.util.datetime.formatTimestamptz
+import com.example.upagain.util.ui.DialogUtils
+import com.example.upagain.util.ui.SnackbarLevel
+import com.example.upagain.util.ui.setOnClickListenerWithCooldown
+import com.example.upagain.util.ui.showTopSnackbar
+import com.example.upagain.util.ui.toggleBtnLoadingState
+import com.example.upagain.util.validator.FieldValidator
+import com.example.upagain.util.validator.MaxLengthRule
+import com.example.upagain.util.validator.MinLengthRule
+import com.example.upagain.util.validator.NotEmptyRule
+import com.example.upagain.util.validator.PhoneRule
+import com.example.upagain.viewmodel.AccountViewModel
+import com.example.upagain.viewmodel.UiState
+import com.example.upagain.viewmodel.ViewModelFactory
+import kotlinx.coroutines.launch
+import kotlin.getValue
+import com.example.upagain.util.image.buildImageUrl
+import com.example.upagain.util.locale.LocaleManager
+import com.example.upagain.util.ui.hideKeyboard
+import com.example.upagain.util.ui.toggleFullScreenLoading
+import com.example.upagain.util.ui.toggleIconLoadingState
+import com.google.android.material.snackbar.Snackbar
 
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
-
-/**
- * A simple [Fragment] subclass.
- * Use the [ProfileFragment.newInstance] factory method to
- * create an instance of this fragment.
- */
+// TODO: notification settings fragment
 class ProfileFragment : Fragment() {
-    // TODO: Rename and change types of parameters
-    private var param1: String? = null
-    private var param2: String? = null
+    // elements binding
+    private var _binding: FragmentProfileBinding? = null
+    private val binding get() = _binding!!
+    private val apiService by lazy { ApiClient.apiService }
+    private val repository by lazy { AccountRepo(apiService, requireContext()) }
+    private val viewModel: AccountViewModel by viewModels {
+        ViewModelFactory { AccountViewModel(repository) }
+    }
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
+    // Registers the system photo picker launcher
+    private val pickImageLauncher = registerForActivityResult(
+        ActivityResultContracts.PickVisualMedia()
+    ) { uri ->
+        if (uri != null) {
+            // Image selected successfully, send to viewmodel for processing
+            val accountId = SessionManager.accountId ?: return@registerForActivityResult
+            viewModel.uploadAvatar(accountId, uri)
         }
     }
+
+    // validators
+    val usernameValidator =
+        FieldValidator(listOf(NotEmptyRule(), MinLengthRule(4), MaxLengthRule(20)))
+    val phoneValidator = FieldValidator(listOf(NotEmptyRule(), PhoneRule()))
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_profile, container, false)
+    ): View {
+        _binding = FragmentProfileBinding.inflate(inflater, container, false)
+        return binding.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        val languages = resources.getStringArray(R.array.languages_array)
+        // Use a no-filter adapter so selection doesn't collapse the list
+        val languageAdapter = object : ArrayAdapter<String>(
+            requireContext(),
+            R.layout.item_dropdown, // your custom item layout
+            languages
+        ) {
+            override fun getFilter() = object : android.widget.Filter() {
+                override fun performFiltering(c: CharSequence?) =
+                    FilterResults().apply { values = languages; count = languages.size }
+                override fun publishResults(c: CharSequence?, r: FilterResults?) {
+                    notifyDataSetChanged()
+                }
+            }
+        }
+        binding.actvLanguageSelector.setAdapter(languageAdapter)
+
+        // ! Always set up listeners and observers before API call
+        setupListeners()
+        observeAccountState()
+
+        // API call
+        val currentId = SessionManager.accountId ?: return
+        viewModel.getAccountDetails(currentId)
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 
     companion object {
@@ -43,18 +120,326 @@ class ProfileFragment : Fragment() {
          * Use this factory method to create a new instance of
          * this fragment using the provided parameters.
          *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
          * @return A new instance of fragment ProfileFragment.
          */
-        // TODO: Rename and change types and number of parameters
         @JvmStatic
-        fun newInstance(param1: String, param2: String) =
+        fun newInstance() =
             ProfileFragment().apply {
                 arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-                    putString(ARG_PARAM2, param2)
                 }
             }
+    }
+
+    // PRIVATE ZONE
+
+    fun setupListeners() {
+        // LOG OUT BUTTON
+        binding.btnLogout.setOnClickListener {
+            handleLogOut()
+        }
+        // LANGUAGE
+        binding.actvLanguageSelector.setOnItemClickListener { parent, _, position, _ ->
+            val selectedLanguage = parent.getItemAtPosition(position) as String
+            LocaleManager.setLocaleByDisplayName(selectedLanguage)
+            // setText(..., false) prevents filtering the adapter to a single item
+            binding.actvLanguageSelector.setText(selectedLanguage, false)
+        }
+        // SECURITY
+        binding.btnSettingSecurity.setOnClickListener {
+            loadSecurityFragment()
+        }
+        // EMAIL FIELD
+        binding.tvProfileEmail.setOnClickListener {
+            // navigate to security fragment to edit
+            loadSecurityFragment()
+        }
+        // SAVE CHANGES
+        binding.btnSaveProfile.setOnClickListenerWithCooldown {
+            val email = binding.tvProfileEmail.text.toString()
+            val username = binding.etProfileName.text.toString()
+            val phone = binding.etProfilePhone.text.toString()
+            val isUsernameValid = usernameValidator.validate(username)
+            val isPhoneValid = phoneValidator.validate(phone)
+            binding.tvUsernameError.visibility = if (isUsernameValid) View.GONE else View.VISIBLE
+            binding.tvPhoneError.visibility = if (isPhoneValid) View.GONE else View.VISIBLE
+            if (!isUsernameValid || !isPhoneValid) {
+                return@setOnClickListenerWithCooldown
+            }
+            val request = AccountUpdateRequest(username, email, phone)
+            val currentId = SessionManager.accountId ?: return@setOnClickListenerWithCooldown
+            viewModel.updateAccount(currentId, request)
+        }
+        // DELETE ACCOUNT
+        binding.btnSettingDelete.setOnClickListenerWithCooldown {
+            DialogUtils.showDestructiveConfirmationDialog(
+                context = requireContext(),
+                title = getString(R.string.confirm_del_account),
+            ) {
+                val currentUserId =
+                    SessionManager.accountId ?: return@showDestructiveConfirmationDialog
+                viewModel.deleteAccount(currentUserId)
+            }
+        }
+        // UPDATE AVATAR
+        binding.ivAvatar.setOnClickListener {
+            pickImageLauncher.launch(
+                PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly)
+            )
+        }
+    }
+
+    private fun observeAccountState() {
+        lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                // GET ACCOUNT DETAILS
+                launch {
+                    viewModel.accountDetailsState.collect { state ->
+                        when (state) {
+                            is UiState.Idle -> {}
+                            is UiState.Loading -> {
+                                binding.loadingOverlay.root.toggleFullScreenLoading(true)
+                            }
+
+                            is UiState.Success -> {
+                                binding.loadingOverlay.root.toggleFullScreenLoading(false)
+
+                                val account = state.data
+                                // update UI with account details
+                                binding.tvUsername.text = account.username
+                                binding.tvMemberSince.text = formatTimestamptz(account.createdAt)
+                                binding.tvPlanType.text =
+                                    if (account.isPremium) "Premium" else "Freemium"
+                                binding.etProfileName.setText(account.username)
+                                binding.tvProfileEmail.text = account.email
+                                binding.etProfilePhone.setText(account.phone)
+
+                                // build url and let coil handle image serving for avatar
+                                binding.ivAvatar.load(buildImageUrl(account.avatar)) {
+                                    crossfade(true)
+                                    placeholder(R.drawable.ic_avatar_unknown)
+                                    error(R.drawable.ic_avatar_unknown)
+
+                                    listener(
+                                        onStart = { _ ->
+                                            binding.avatarLoader.visibility = View.VISIBLE
+                                        },
+                                        onSuccess = { _, _ ->
+                                            binding.avatarLoader.visibility = View.GONE
+                                        },
+                                        onError = { _, result ->
+                                            binding.avatarLoader.visibility = View.GONE
+                                            val exception = result.throwable
+                                            val statusCode =
+                                                (exception as? coil.network.HttpException)?.response?.code
+
+                                            Log.e(
+                                                "ProfileFragment",
+                                                "Failed to serve user's avatar. Status Code: $statusCode",
+                                                exception
+                                            )
+                                            when (statusCode) {
+                                                404 -> {
+                                                    binding.main.showTopSnackbar(
+                                                        R.string.error_media_msg,
+                                                        SnackbarLevel.ERROR
+                                                    )
+                                                }
+
+                                                else -> {
+                                                    binding.main.showTopSnackbar(
+                                                        R.string.error_media_msg,
+                                                        SnackbarLevel.ERROR
+                                                    )
+                                                }
+                                            }
+                                        }
+                                    )
+                                }
+                            }
+
+                            is UiState.Error -> {
+                                binding.loadingOverlay.root.toggleFullScreenLoading(false)
+                                Log.e(
+                                    "ProfileFragment",
+                                    "Load account details failed",
+                                    state.exception
+                                )
+                                ErrorActivity.start(requireContext(), state.statusCode ?: 0)
+                            }
+                        }
+                    }
+                }
+                // UPDATE ACCOUNT
+                launch {
+                    viewModel.accountUpdateState.collect { state ->
+                        when (state) {
+                            is UiState.Idle -> {
+                                toggleBtnLoadingState(
+                                    binding.btnSaveProfile,
+                                    binding.saveLoader,
+                                    false,
+                                    getString(R.string.btn_save)
+                                )
+                            }
+
+                            is UiState.Loading -> {
+                                toggleBtnLoadingState(
+                                    binding.btnSaveProfile,
+                                    binding.saveLoader,
+                                    true,
+                                    getString(R.string.btn_save)
+                                )
+                            }
+
+                            is UiState.Success -> {
+                                toggleBtnLoadingState(
+                                    binding.btnSaveProfile,
+                                    binding.saveLoader,
+                                    false,
+                                    getString(R.string.btn_save)
+                                )
+                                activity?.hideKeyboard()
+                                binding.main.showTopSnackbar(
+                                    R.string.snack_account_details_update_success,
+                                    SnackbarLevel.SUCCESS
+                                )
+                            }
+
+                            is UiState.Error -> {
+                                toggleBtnLoadingState(
+                                    binding.btnSaveProfile,
+                                    binding.saveLoader,
+                                    false,
+                                    getString(R.string.btn_save)
+                                )
+                                Log.e(
+                                    "ProfileFragment",
+                                    "Update account details failed",
+                                    state.exception
+                                )
+                                binding.main.showTopSnackbar(
+                                    getString(
+                                        R.string.snack_account_details_update_fail,
+                                        state.exception.message
+                                    ), SnackbarLevel.ERROR, Snackbar.LENGTH_LONG
+                                )
+                            }
+                        }
+                    }
+                }
+                // DELETE ACCOUNT
+                launch {
+                    viewModel.accountDeleteState.collect { state ->
+                        when (state) {
+                            is UiState.Loading -> toggleDeleteAccountLoading(true)
+                            is UiState.Success -> {
+                                toggleDeleteAccountLoading(false)
+                                SessionManager.clearSession()
+
+                                val intent =
+                                    Intent(requireContext(), LoginActivity::class.java).apply {
+                                        flags =
+                                            Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+                                        putExtra("EXTRA_ACCOUNT_DELETED", true)
+                                    }
+                                startActivity(intent)
+                                activity?.finish()
+                            }
+
+                            is UiState.Error -> {
+                                toggleDeleteAccountLoading(false)
+                                Log.e(
+                                    "ProfileFragment",
+                                    "Delete account failed",
+                                    state.exception
+                                )
+                                binding.main.showTopSnackbar(
+                                    getString(
+                                        R.string.snack_account_delete_fail,
+                                        state.exception.message
+                                    ), SnackbarLevel.ERROR
+                                )
+                            }
+
+                            is UiState.Idle -> {
+                                toggleDeleteAccountLoading(false)
+                            }
+                        }
+                    }
+                }
+                // UPDATE AVATAR
+                launch {
+                    viewModel.accountAvatarUploadState.collect { state ->
+                        when (state) {
+                            is UiState.Loading -> toggleAvatarLoading(true)
+                            is UiState.Success -> {
+                                toggleAvatarLoading(false)
+                                binding.main.showTopSnackbar(
+                                    R.string.snack_avatar_update_success,
+                                    SnackbarLevel.SUCCESS
+                                )
+                                // Re-fetch user profile data to load the new avatar
+                                val accountId = SessionManager.accountId ?: return@collect
+                                viewModel.getAccountDetails(accountId)
+                            }
+
+                            is UiState.Error -> {
+                                toggleAvatarLoading(false)
+                                Log.e(
+                                    "ProfileFragment",
+                                    "Avatar upload failed",
+                                    state.exception
+                                )
+                                binding.main.showTopSnackbar(
+                                    getString(R.string.snack_avatar_update_fail, state.exception.message),
+                                    SnackbarLevel.ERROR
+                                )
+                            }
+
+                            is UiState.Idle -> {
+//                                toggleAvatarLoading(false)
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    private fun handleLogOut() {
+        SessionManager.clearSession()
+        val intent = Intent(requireContext(), LoginActivity::class.java).apply {
+            // Clear activity task stack history so back button cannot re-enter profile
+            flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+            putExtra("EXTRA_JUST_LOGGED_OUT", true)
+        }
+        startActivity(intent)
+        activity?.finish()
+    }
+
+    private fun loadSecurityFragment() {
+        val emailToPass = binding.tvProfileEmail.text.toString()
+        val securityFragment = SecuritySettingFragment.newInstance(emailToPass)
+        parentFragmentManager.beginTransaction()
+            .replace(R.id.fragment_container, securityFragment)
+            .addToBackStack(null)
+            .commit()
+    }
+
+    private fun toggleDeleteAccountLoading(isLoading: Boolean) {
+        binding.btnSettingDelete.toggleIconLoadingState(
+            componentZone = binding.btnSettingDelete,
+            staticIcon = binding.ivDeleteIcon,
+            loader = binding.deleteAccountLoader,
+            isLoading = isLoading
+        )
+    }
+    private fun toggleAvatarLoading(isLoading: Boolean) {
+        binding.ivAvatar.toggleIconLoadingState(
+            componentZone = binding.ivAvatar,
+            staticIcon = binding.ivAvatar,
+            loader = binding.avatarLoader,
+            isLoading = isLoading
+        )
     }
 }

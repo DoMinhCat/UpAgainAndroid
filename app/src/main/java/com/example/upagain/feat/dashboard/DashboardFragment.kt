@@ -1,16 +1,20 @@
 package com.example.upagain.feat.dashboard
 
+import android.database.sqlite.SQLiteBindOrColumnIndexOutOfRangeException
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.example.upagain.R
+import com.example.upagain.databinding.FragmentDashboardBinding
+import com.example.upagain.databinding.FragmentProfileBinding
+import com.example.upagain.util.ui.SnackbarLevel
+import com.example.upagain.util.ui.showTopSnackbar
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
+private const val ARG_JUST_LOGGED_IN = "param1"
 
 /**
  * A simple [Fragment] subclass.
@@ -18,42 +22,52 @@ private const val ARG_PARAM2 = "param2"
  * create an instance of this fragment.
  */
 class DashboardFragment : Fragment() {
-    // TODO: Rename and change types of parameters
-    private var param1: String? = null
-    private var param2: String? = null
+    private var _binding: FragmentDashboardBinding? = null
+    private val binding get() = _binding!!
+    private var justLoggedIn: Boolean = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
+            justLoggedIn = it.getBoolean(ARG_JUST_LOGGED_IN)
         }
     }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_dashboard, container, false)
+    ): View {
+        _binding = FragmentDashboardBinding.inflate(inflater, container, false)
+        return binding.root
     }
 
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        if (justLoggedIn) {
+            binding.main.showTopSnackbar(R.string.login_success, SnackbarLevel.SUCCESS)
+        }
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        // clear reference to prevent memory leaks
+        _binding = null
+    }
     companion object {
         /**
          * Use this factory method to create a new instance of
          * this fragment using the provided parameters.
          *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
+         * @param ARG_JUST_LOGGED_IN Parameter 1.
          * @return A new instance of fragment DashboardFragment.
          */
-        // TODO: Rename and change types and number of parameters
+        private const val ARG_JUST_LOGGED_IN = "key_just_logged_in"
         @JvmStatic
-        fun newInstance(param1: String, param2: String) =
+        fun newInstance(justLoggedIn: Boolean) =
             DashboardFragment().apply {
                 arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-                    putString(ARG_PARAM2, param2)
+                    putBoolean(ARG_JUST_LOGGED_IN, justLoggedIn)
                 }
             }
     }
