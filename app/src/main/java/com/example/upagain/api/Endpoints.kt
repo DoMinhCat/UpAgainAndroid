@@ -18,13 +18,6 @@ object Endpoints {
     // Container Endpoints
     const val CONTAINER_OPEN = "containers/{id}/open"
 
-    // Event Endpoints
-    const val EVENT_ALL = "events"
-    const val EVENT_ME = "events/me"
-    const val EVENT_DETAILS = "events/{id}"
-    const val EVENT_REGISTER = "events/{id}/register"
-    const val EVENT_CANCEL = "events/{id}/cancel"
-
     // Post Endpoints
     const val POST_ALL = "posts"
     const val POST_ME = "posts/me"
