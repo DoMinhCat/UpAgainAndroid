@@ -1,10 +1,10 @@
 package com.example.upagain.api
 
-import com.example.upagain.model.AccountDetailsResponse
-import com.example.upagain.model.AccountUpdateRequest
+import com.example.upagain.model.account.AccountDetailsResponse
+import com.example.upagain.model.account.AccountUpdateRequest
 import com.example.upagain.model.TokenResponse
 import com.example.upagain.model.LoginRequest
-import com.example.upagain.model.PasswordUpdateRequest
+import com.example.upagain.model.account.PasswordUpdateRequest
 import com.example.upagain.model.post.PostPaginationResponse
 import okhttp3.MultipartBody
 import retrofit2.Call

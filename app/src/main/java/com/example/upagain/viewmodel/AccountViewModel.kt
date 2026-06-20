@@ -1,11 +1,10 @@
 package com.example.upagain.viewmodel
 
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.upagain.model.AccountDetailsResponse
-import com.example.upagain.model.AccountUpdateRequest
-import com.example.upagain.model.PasswordUpdateRequest
+import com.example.upagain.model.account.AccountDetailsResponse
+import com.example.upagain.model.account.AccountUpdateRequest
+import com.example.upagain.model.account.PasswordUpdateRequest
 import com.example.upagain.repository.AccountRepo
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow

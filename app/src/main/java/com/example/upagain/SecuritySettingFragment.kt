@@ -1,13 +1,11 @@
 package com.example.upagain
 
-import android.content.Context
 import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.inputmethod.InputMethodManager
 import androidx.annotation.RequiresApi
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -16,8 +14,8 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import com.example.upagain.api.ApiClient
 import com.example.upagain.databinding.FragmentSecuritySettingBinding
-import com.example.upagain.model.AccountUpdateRequest
-import com.example.upagain.model.PasswordUpdateRequest
+import com.example.upagain.model.account.AccountUpdateRequest
+import com.example.upagain.model.account.PasswordUpdateRequest
 import com.example.upagain.repository.AccountRepo
 import com.example.upagain.util.auth.SessionManager
 import com.example.upagain.util.ui.SnackbarLevel
