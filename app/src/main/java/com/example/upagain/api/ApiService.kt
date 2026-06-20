@@ -5,6 +5,7 @@ import com.example.upagain.model.AccountUpdateRequest
 import com.example.upagain.model.TokenResponse
 import com.example.upagain.model.LoginRequest
 import com.example.upagain.model.PasswordUpdateRequest
+import com.example.upagain.model.post.PostPaginationResponse
 import okhttp3.MultipartBody
 import retrofit2.Call
 import retrofit2.http.Body
@@ -15,6 +16,7 @@ import retrofit2.http.PATCH
 import retrofit2.http.POST
 import retrofit2.http.Part
 import retrofit2.http.Path
+import retrofit2.http.QueryMap
 
 interface ApiService {
     // AUTH
@@ -43,4 +45,8 @@ interface ApiService {
 
     @DELETE(Endpoints.ACCOUNT_DETAILS)
     fun deleteAccount(@Path("id") id: Int): Call<Unit>
+
+    // POST aka COMMUNITY
+    @GET(Endpoints.POST_ALL)
+    fun getAllPosts(@QueryMap options: Map<String, String>): Call<PostPaginationResponse>
 }
