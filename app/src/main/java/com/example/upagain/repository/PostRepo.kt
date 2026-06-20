@@ -2,6 +2,7 @@ package com.example.upagain.repository
 
 import android.content.Context
 import com.example.upagain.api.ApiService
+import com.example.upagain.model.post.PostDetailsResponse
 import com.example.upagain.model.post.PostRequest
 import com.example.upagain.model.post.PostPaginationResponse
 import retrofit2.HttpException
@@ -27,6 +28,36 @@ class PostRepo(private val apiService: ApiService, private val context: Context)
     suspend fun getMyPosts(filters: PostRequest): Result<PostPaginationResponse> {
         return try {
             val response = apiService.getAllPosts(filters.toQueryMap()).awaitResponse()
+            val body = response.body()
+
+            if (response.isSuccessful && body != null) {
+                Result.success(body)
+            } else {
+                Result.failure(HttpException(response))
+            }
+        } catch (e: Exception) {
+            Result.failure(e)
+        }
+    }
+
+    suspend fun getSavedPosts(filters: PostRequest): Result<PostPaginationResponse> {
+        return try {
+            val response = apiService.getSavedPosts(filters.toQueryMap()).awaitResponse()
+            val body = response.body()
+
+            if (response.isSuccessful && body != null) {
+                Result.success(body)
+            } else {
+                Result.failure(HttpException(response))
+            }
+        } catch (e: Exception) {
+            Result.failure(e)
+        }
+    }
+
+    suspend fun getPostDetails(id: Int): Result<PostDetailsResponse> {
+        return try {
+            val response = apiService.getPostDetails(id).awaitResponse()
             val body = response.body()
 
             if (response.isSuccessful && body != null) {

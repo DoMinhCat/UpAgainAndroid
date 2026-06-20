@@ -5,6 +5,7 @@ import com.example.upagain.model.account.AccountUpdateRequest
 import com.example.upagain.model.TokenResponse
 import com.example.upagain.model.LoginRequest
 import com.example.upagain.model.account.PasswordUpdateRequest
+import com.example.upagain.model.post.PostDetailsResponse
 import com.example.upagain.model.post.PostPaginationResponse
 import okhttp3.MultipartBody
 import retrofit2.Call
@@ -51,4 +52,8 @@ interface ApiService {
     fun getAllPosts(@QueryMap options: Map<String, String>): Call<PostPaginationResponse>
     @GET(Endpoints.POST_ME)
     fun getMyPosts(@QueryMap options: Map<String, String>): Call<PostPaginationResponse>
+    @GET(Endpoints.POST_SAVED)
+    fun getSavedPosts(@QueryMap options: Map<String, String>): Call<PostPaginationResponse>
+    @GET(Endpoints.POST_DETAILS)
+    fun getPostDetails(@Path("id") id: Int): Call<PostDetailsResponse>
 }
