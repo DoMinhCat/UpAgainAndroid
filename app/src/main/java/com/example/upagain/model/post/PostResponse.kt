@@ -32,3 +32,15 @@ data class PostPaginationResponse (
     @SerializedName("limit") val limit: Int,
     @SerializedName("total_records") val totalRecords: Int
 )
+
+data class LikePostResponse (
+    @SerializedName("is_liked") val isLiked: Boolean,
+)
+
+data class ViewPostResponse (
+    @SerializedName("counted") val counted: Boolean,
+)
+
+data class SavePostResponse (
+    @SerializedName("is_saved") val isSaved: Boolean,
+)
