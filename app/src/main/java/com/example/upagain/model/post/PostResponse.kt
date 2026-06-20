@@ -2,21 +2,6 @@ package com.example.upagain.model.post
 
 import com.google.gson.annotations.SerializedName
 
-enum class PostCategory(val value: String) {
-    @SerializedName("tutorial") TUTORIAL("tutorial"),
-    @SerializedName("project") PROJECT("project"),
-    @SerializedName("tips") TIPS("tips"),
-    @SerializedName("news") NEWS("news"),
-    @SerializedName("case_study") CASE_STUDY("case_study"),
-    @SerializedName("other") OTHER("other");
-
-    companion object {
-        fun fromString(value: String?): PostCategory {
-            return entries.find { it.value.equals(value, ignoreCase = true) } ?: OTHER
-        }
-    }
-}
-
 data class PostDetailsResponse(
     // TODO: remove unused fields
     @SerializedName("id") val id: Int,

@@ -23,24 +23,17 @@ enum class PostSortOption(val value: String) {
     }
 }
 
-data class PostFilter (
-    @SerializedName("search") val search: String = "",
-    @SerializedName("sort") val sort: PostSortOption? = null,
-    @SerializedName("category") val category: PostCategory? = null
-) {
-    fun toQueryMap(): Map<String, String> {
-        return buildMap {
-            if (search.isNotEmpty()) put("search", search)
-            sort?.let {
-                if (it != PostSortOption.MOST_RECENT_CREATION) {
-                    put("sort", it.value)
-                }
-            }
-            category?.let {
-                if (it != PostCategory.OTHER) {
-                    put("category", it.value)
-                }
-            }
+enum class PostCategory(val value: String) {
+    @SerializedName("tutorial") TUTORIAL("tutorial"),
+    @SerializedName("project") PROJECT("project"),
+    @SerializedName("tips") TIPS("tips"),
+    @SerializedName("news") NEWS("news"),
+    @SerializedName("case_study") CASE_STUDY("case_study"),
+    @SerializedName("other") OTHER("other");
+
+    companion object {
+        fun fromString(value: String?): PostCategory {
+            return entries.find { it.value.equals(value, ignoreCase = true) } ?: OTHER
         }
     }
 }

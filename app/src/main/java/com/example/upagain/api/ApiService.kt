@@ -49,4 +49,6 @@ interface ApiService {
     // POST aka COMMUNITY
     @GET(Endpoints.POST_ALL)
     fun getAllPosts(@QueryMap options: Map<String, String>): Call<PostPaginationResponse>
+    @GET(Endpoints.POST_ME)
+    fun getMyPosts(@QueryMap options: Map<String, String>): Call<PostPaginationResponse>
 }
