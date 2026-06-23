@@ -20,6 +20,7 @@ object Endpoints {
 
     // Post Endpoints
     const val POST_ALL = "posts"
+    const val POST_CREATE = "posts"
     const val POST_ME = "posts/me"
     const val POST_SAVED = "posts/saved"
     const val POST_DETAILS = "posts/{id}"

@@ -2,9 +2,9 @@ package com.example.upagain.model.post
 
 import com.google.gson.annotations.SerializedName
 
-data class PostRequest (
+data class PostPaginationRequest (
     @SerializedName("page") val page: Int? = 1,
-    @SerializedName("limit") val limit: Int? = 4, // TODO: redefine default limit based on UI space
+    @SerializedName("limit") val limit: Int? = 8, // TODO: redefine default limit based on UI space
     @SerializedName("search") val search: String = "",
     @SerializedName("sort") val sort: PostSortOption? = null,
     @SerializedName("category") val category: PostCategory? = null
@@ -25,3 +25,10 @@ data class PostRequest (
         }
     }
 }
+
+data class PostCreateRequest (
+    @SerializedName("title") val title: String,
+    @SerializedName("content") val content: String,
+    @SerializedName("category") val category: PostCategory
+//    TODO: @SerializedName("images") val images: List<String>,
+)
