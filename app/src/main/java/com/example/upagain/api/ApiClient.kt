@@ -11,6 +11,7 @@ import com.google.gson.GsonBuilder
 import com.google.gson.Strictness
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
+import okhttp3.ResponseBody.Companion.toResponseBody
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
@@ -29,15 +30,32 @@ object ApiClient {
         cookieJar = PersistentCookieJar(appContext)
     }
 
+    // Bare client — only used for /refresh and /login, no interceptors
+    private val authHttpClient: OkHttpClient by lazy {
+        OkHttpClient.Builder()
+            .cookieJar(cookieJar)
+            .build()
+    }
+
+    private val authRetrofit: Retrofit by lazy {
+        Retrofit.Builder()
+            .baseUrl(BASE_URL)
+            .client(authHttpClient)
+            .addConverterFactory(GsonConverterFactory.create(gson))
+            .build()
+    }
+
+    private val authApiService: ApiService by lazy {
+        authRetrofit.create(ApiService::class.java)
+    }
+
     val httpClient: OkHttpClient by lazy {
-        // AUTO INJECT JWT IN SHAREDPREF INTO OUTGOING REQUESTS
         OkHttpClient.Builder()
             .cookieJar(cookieJar)
             .addInterceptor(Interceptor { chain ->
                 val originalRequest = chain.request()
                 val path = originalRequest.url.encodedPath
 
-                // Do not attach tokens to authentication lifecycle routes
                 if (path == Endpoints.REFRESH || path == Endpoints.LOGIN) {
                     return@Interceptor chain.proceed(originalRequest)
                 }
@@ -57,18 +75,11 @@ object ApiClient {
                 var response = chain.proceed(request)
 
                 when (response.code) {
-                    404 -> {
-                        navigateToActivity(ErrorActivity::class.java, statusCode = 404)
-                    }
-                    500 -> {
-                        navigateToActivity(ErrorActivity::class.java, statusCode = 500)
-                    }
+                    404 -> navigateToActivity(ErrorActivity::class.java, statusCode = 404)
+                    500 -> navigateToActivity(ErrorActivity::class.java, statusCode = 500)
                     401 -> {
                         val path = request.url.encodedPath
-                        val isRefresh = path == Endpoints.REFRESH
-                        val isLogin = path == Endpoints.LOGIN
-
-                        if (!isRefresh && !isLogin) {
+                        if (path != Endpoints.REFRESH && path != Endpoints.LOGIN) {
                             val alreadyRetried = request.header("X-Retry") != null
                             if (!alreadyRetried) {
                                 response.close()
@@ -81,6 +92,15 @@ object ApiClient {
                                     response = chain.proceed(retryRequest)
                                 } else {
                                     handleLogout()
+                                    // Return a synthetic 401 — the original body is closed,
+                                    // Retrofit must never see it again
+                                    return@Interceptor okhttp3.Response.Builder()
+                                        .request(request)
+                                        .protocol(okhttp3.Protocol.HTTP_1_1)
+                                        .code(401)
+                                        .message("Unauthorized")
+                                        .body("".toResponseBody(null))
+                                        .build()
                                 }
                             }
                         }
@@ -103,19 +123,19 @@ object ApiClient {
         retrofit.create(ApiService::class.java)
     }
 
+    // Now uses authApiService — completely separate from the httpClient init chain
     private fun refreshAccessToken(): String? {
-        try {
-            val response = apiService.refresh().execute()
+        return try {
+            val response = authApiService.refresh().execute()
             val newToken = response.body()?.token
-
             if (response.isSuccessful && newToken != null) {
                 SessionManager.saveUserSession(newToken)
-                return newToken
-            }
+                newToken
+            } else null
         } catch (e: Exception) {
             e.printStackTrace()
+            null
         }
-        return null
     }
 
     private fun handleLogout() {
@@ -127,12 +147,8 @@ object ApiClient {
     private fun navigateToActivity(activityClass: Class<*>, clearStack: Boolean = false, statusCode: Int? = null) {
         val intent = Intent(appContext, activityClass).apply {
             flags = Intent.FLAG_ACTIVITY_NEW_TASK
-            if (clearStack) {
-                addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK)
-            }
-            if (statusCode != null) {
-                putExtra("EXTRA_ERROR_CODE", statusCode)
-            }
+            if (clearStack) addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK)
+            if (statusCode != null) putExtra("EXTRA_ERROR_CODE", statusCode)
         }
         appContext.startActivity(intent)
     }
