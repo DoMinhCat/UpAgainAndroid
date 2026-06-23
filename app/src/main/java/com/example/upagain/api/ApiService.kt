@@ -1,10 +1,16 @@
 package com.example.upagain.api
 
-import com.example.upagain.model.AccountDetailsResponse
-import com.example.upagain.model.AccountUpdateRequest
+import com.example.upagain.model.account.AccountDetailsResponse
+import com.example.upagain.model.account.AccountUpdateRequest
 import com.example.upagain.model.TokenResponse
 import com.example.upagain.model.LoginRequest
-import com.example.upagain.model.PasswordUpdateRequest
+import com.example.upagain.model.account.PasswordUpdateRequest
+import com.example.upagain.model.post.LikePostResponse
+import com.example.upagain.model.post.PostCreateRequest
+import com.example.upagain.model.post.PostDetailsResponse
+import com.example.upagain.model.post.PostPaginationResponse
+import com.example.upagain.model.post.SavePostResponse
+import com.example.upagain.model.post.ViewPostResponse
 import okhttp3.MultipartBody
 import retrofit2.Call
 import retrofit2.http.Body
@@ -15,6 +21,7 @@ import retrofit2.http.PATCH
 import retrofit2.http.POST
 import retrofit2.http.Part
 import retrofit2.http.Path
+import retrofit2.http.QueryMap
 
 interface ApiService {
     // AUTH
@@ -43,4 +50,26 @@ interface ApiService {
 
     @DELETE(Endpoints.ACCOUNT_DETAILS)
     fun deleteAccount(@Path("id") id: Int): Call<Unit>
+
+    // POST aka COMMUNITY
+    @POST(Endpoints.POST_CREATE)
+    fun createPost(@Body request: PostCreateRequest): Call<Unit>
+    @POST(Endpoints.POST_LIKE)
+    fun likePost(@Path("id") id: Int): Call<LikePostResponse>
+    @POST(Endpoints.POST_VIEW)
+    fun viewPost(@Path("id") id: Int): Call<ViewPostResponse>
+    @POST(Endpoints.POST_SAVE)
+    fun savePost(@Path("id") id: Int): Call<SavePostResponse>
+
+    @GET(Endpoints.POST_ALL)
+    fun getAllPosts(@QueryMap options: Map<String, String>): Call<PostPaginationResponse>
+    @GET(Endpoints.POST_ME)
+    fun getMyPosts(@QueryMap options: Map<String, String>): Call<PostPaginationResponse>
+    @GET(Endpoints.POST_SAVED)
+    fun getSavedPosts(@QueryMap options: Map<String, String>): Call<PostPaginationResponse>
+    @GET(Endpoints.POST_DETAILS)
+    fun getPostDetails(@Path("id") id: Int): Call<PostDetailsResponse>
+
+    @DELETE(Endpoints.POST_DELETE)
+    fun deletePost(@Path("id") id: Int): Call<Unit>
 }
