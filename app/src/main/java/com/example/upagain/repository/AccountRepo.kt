@@ -3,9 +3,9 @@ package com.example.upagain.repository
 import android.content.Context
 import android.net.Uri
 import com.example.upagain.api.ApiService
-import com.example.upagain.model.AccountDetailsResponse
-import com.example.upagain.model.AccountUpdateRequest
-import com.example.upagain.model.PasswordUpdateRequest
+import com.example.upagain.model.account.AccountDetailsResponse
+import com.example.upagain.model.account.AccountUpdateRequest
+import com.example.upagain.model.account.PasswordUpdateRequest
 import com.example.upagain.util.json.parseErrorMessage
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext

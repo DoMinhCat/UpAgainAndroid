@@ -21,7 +21,7 @@ import com.example.upagain.api.ApiClient
 import com.example.upagain.databinding.FragmentProfileBinding
 import com.example.upagain.feat.auth.LoginActivity
 import com.example.upagain.feat.error.ErrorActivity
-import com.example.upagain.model.AccountUpdateRequest
+import com.example.upagain.model.account.AccountUpdateRequest
 import com.example.upagain.repository.AccountRepo
 import com.example.upagain.util.auth.SessionManager
 import com.example.upagain.util.datetime.formatTimestamptz
