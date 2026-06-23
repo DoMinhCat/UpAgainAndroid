@@ -35,6 +35,7 @@ class ContainerFragment : Fragment() {
 //    }
 
     private var selectedImageUri: Uri? = null
+
     // Registers the system photo picker launcher for uploading barcode png
     private val pickImageLauncher = registerForActivityResult(
         ActivityResultContracts.PickVisualMedia()
@@ -52,7 +53,8 @@ class ContainerFragment : Fragment() {
         }
     }
 
-    val digitCodeValidator = FieldValidator(listOf(NotEmptyRule(), MinLengthRule(6), MaxLengthRule(6)))
+    val digitCodeValidator =
+        FieldValidator(listOf(NotEmptyRule(), MinLengthRule(6), MaxLengthRule(6)))
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -108,37 +110,44 @@ class ContainerFragment : Fragment() {
             if (!hasFocus) {
                 val code = binding.etCode.text.toString().trim()
                 val isCodeValid = digitCodeValidator.validate(code)
-
-                // Check validation regardless of whether it's empty or wrong
-                if (code.isEmpty() || !isCodeValid) {
-                    binding.tilCode.error = getString(R.string.invalid_digit_code)
+                if (!isCodeValid) {
+                    toggleTilCodeErrorState(true)
                 } else {
-                    binding.tilCode.error = null
+                    toggleTilCodeErrorState(false)
                 }
             } else {
-                // FIX: Clear the error on the TextInputLayout container, NOT the EditText
-                binding.tilCode.error = null
+                toggleTilCodeErrorState(false)
             }
         }
-
         // UPLOAD BARCODE ZONE
         binding.layoutUploadContainer.setOnClickListener {
             pickImageLauncher.launch(
                 PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly)
             )
         }
-
         // SUBMIT BTN
         binding.btnSubmit.setOnClickListenerWithCooldown {
             // TODO: user can only submit 1, check if both digit code and barcode is there => return error
             val code = binding.etCode.text.toString().trim()
             val isCodeValid = digitCodeValidator.validate(code)
             if (!isCodeValid) {
-                binding.tilCode.error = getString(R.string.invalid_digit_code)
+                toggleTilCodeErrorState(true)
                 return@setOnClickListenerWithCooldown
             } else {
-                binding.tilCode.error = null
+                toggleTilCodeErrorState(false)
             }
+        }
+    }
+
+    private fun toggleTilCodeErrorState(isError: Boolean) {
+        binding.tilCode.isErrorEnabled = isError
+        if (isError) {
+            binding.tilCode.isErrorEnabled = true
+            binding.tilCode.error = getString(R.string.invalid_digit_code)
+            return
+        } else {
+            binding.tilCode.error = null
+            binding.tilCode.isErrorEnabled = false
         }
     }
 }

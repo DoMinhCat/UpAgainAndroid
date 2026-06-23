@@ -83,7 +83,7 @@
                 app:boxCornerRadiusBottomStart="@dimen/input_radius"
                 app:boxCornerRadiusTopEnd="@dimen/input_radius"
                 app:boxCornerRadiusTopStart="@dimen/input_radius"
-                app:errorEnabled="true"
+                app:errorEnabled="false"
                 app:errorTextAppearance="@style/TextAppearance.Material3.BodySmall"
                 app:errorTextColor="@color/color_error"
                 app:errorIconTint="@color/color_error">
