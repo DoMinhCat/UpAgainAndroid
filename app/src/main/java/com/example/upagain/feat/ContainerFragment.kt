@@ -5,7 +5,15 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.viewModels
 import com.example.upagain.R
+import com.example.upagain.api.ApiClient
+import com.example.upagain.databinding.FragmentContainerBinding
+import com.example.upagain.databinding.FragmentProfileBinding
+import com.example.upagain.repository.AccountRepo
+import com.example.upagain.viewmodel.AccountViewModel
+import com.example.upagain.viewmodel.ViewModelFactory
+import kotlin.getValue
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -18,24 +26,33 @@ private const val ARG_PARAM2 = "param2"
  * create an instance of this fragment.
  */
 class ContainerFragment : Fragment() {
-    // TODO: Rename and change types of parameters
-    private var param1: String? = null
-    private var param2: String? = null
+    // elements binding
+    private var _binding: FragmentContainerBinding? = null
+    private val binding get() = _binding!!
+    private val apiService by lazy { ApiClient.apiService }
+//    private val repository by lazy { ContainerRepo(apiService, requireContext()) }
+//    private val viewModel: ContainerViewModel by viewModels {
+//        ViewModelFactory { Container(repository) }
+//    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
+
         }
     }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_container, container, false)
+    ): View {
+        _binding = FragmentContainerBinding.inflate(inflater, container, false)
+        return binding.root
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 
     companion object {

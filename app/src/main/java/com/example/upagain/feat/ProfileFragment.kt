@@ -132,7 +132,7 @@ class ProfileFragment : Fragment() {
 
     // PRIVATE ZONE
 
-    fun setupListeners() {
+    private fun setupListeners() {
         // LOG OUT BUTTON
         binding.btnLogout.setOnClickListener {
             handleLogOut()
