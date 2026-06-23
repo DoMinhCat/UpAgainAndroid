@@ -1,30 +1,23 @@
 package com.example.upagain.feat
 
+import android.net.Uri
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.fragment.app.viewModels
+import androidx.activity.result.PickVisualMediaRequest
+import androidx.activity.result.contract.ActivityResultContracts
+import coil.load
 import com.example.upagain.R
 import com.example.upagain.api.ApiClient
 import com.example.upagain.databinding.FragmentContainerBinding
-import com.example.upagain.databinding.FragmentProfileBinding
-import com.example.upagain.repository.AccountRepo
 import com.example.upagain.util.ui.setOnClickListenerWithCooldown
 import com.example.upagain.util.validator.FieldValidator
 import com.example.upagain.util.validator.MaxLengthRule
 import com.example.upagain.util.validator.MinLengthRule
 import com.example.upagain.util.validator.NotEmptyRule
-import com.example.upagain.util.validator.PhoneRule
-import com.example.upagain.viewmodel.AccountViewModel
-import com.example.upagain.viewmodel.ViewModelFactory
 import kotlin.getValue
-
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
 
 /**
  * A simple [Fragment] subclass.
@@ -40,6 +33,24 @@ class ContainerFragment : Fragment() {
 //    private val viewModel: ContainerViewModel by viewModels {
 //        ViewModelFactory { Container(repository) }
 //    }
+
+    private var selectedImageUri: Uri? = null
+    // Registers the system photo picker launcher for uploading barcode png
+    private val pickImageLauncher = registerForActivityResult(
+        ActivityResultContracts.PickVisualMedia()
+    ) { uri ->
+        if (uri != null) {
+            selectedImageUri = uri
+            binding.layoutUploadPrompt.visibility = View.GONE
+            binding.ivUploadThumbnail.visibility = View.VISIBLE
+
+            // Render the cached file path or network URI smoothly using Coil
+            binding.ivUploadThumbnail.load(selectedImageUri) {
+                crossfade(true)
+                placeholder(R.color.color_surface)
+            }
+        }
+    }
 
     val digitCodeValidator = FieldValidator(listOf(NotEmptyRule(), MinLengthRule(6), MaxLengthRule(6)))
 
@@ -63,13 +74,22 @@ class ContainerFragment : Fragment() {
         _binding = null
     }
 
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        // ! Always set up listeners and observers before API call
+        setupListeners()
+//        observeAccountState()
+
+        // API call
+//        val currentId = SessionManager.accountId ?: return
+//        viewModel.getAccountDetails(currentId)
+    }
+
     companion object {
         /**
          * Use this factory method to create a new instance of
          * this fragment using the provided parameters.
          *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
          * @return A new instance of fragment ContainerFragment.
          */
         // TODO: Rename and change types and number of parameters
@@ -77,32 +97,41 @@ class ContainerFragment : Fragment() {
         fun newInstance(param1: String, param2: String) =
             ContainerFragment().apply {
                 arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-                    putString(ARG_PARAM2, param2)
                 }
             }
     }
 
     // PRIVATE ZONE
-    private fun setUpListeners() {
-        val code = binding.etCode.text.toString()
-
+    private fun setupListeners() {
         // DIGIT CODE FIELD
         binding.etCode.setOnFocusChangeListener { _, hasFocus ->
             if (!hasFocus) {
+                val code = binding.etCode.text.toString().trim()
                 val isCodeValid = digitCodeValidator.validate(code)
-                if (!isCodeValid) {
+
+                // Check validation regardless of whether it's empty or wrong
+                if (code.isEmpty() || !isCodeValid) {
                     binding.tilCode.error = getString(R.string.invalid_digit_code)
+                } else {
+                    binding.tilCode.error = null
                 }
             } else {
-                // Field Refocused: Clear previous validation errors immediately for fluid UX
-                binding.etCode.error = null
+                // FIX: Clear the error on the TextInputLayout container, NOT the EditText
+                binding.tilCode.error = null
             }
         }
+
+        // UPLOAD BARCODE ZONE
+        binding.layoutUploadContainer.setOnClickListener {
+            pickImageLauncher.launch(
+                PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly)
+            )
+        }
+
         // SUBMIT BTN
         binding.btnSubmit.setOnClickListenerWithCooldown {
             // TODO: user can only submit 1, check if both digit code and barcode is there => return error
-
+            val code = binding.etCode.text.toString().trim()
             val isCodeValid = digitCodeValidator.validate(code)
             if (!isCodeValid) {
                 binding.tilCode.error = getString(R.string.invalid_digit_code)

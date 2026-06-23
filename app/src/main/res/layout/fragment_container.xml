@@ -83,8 +83,10 @@
                 app:boxCornerRadiusBottomStart="@dimen/input_radius"
                 app:boxCornerRadiusTopEnd="@dimen/input_radius"
                 app:boxCornerRadiusTopStart="@dimen/input_radius"
-                app:errorEnabled="true" app:errorIconTint="@color/color_error"
-                app:errorTextColor="@color/color_error">
+                app:errorEnabled="true"
+                app:errorTextAppearance="@style/TextAppearance.Material3.BodySmall"
+                app:errorTextColor="@color/color_error"
+                app:errorIconTint="@color/color_error">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/et_code"
@@ -116,26 +118,62 @@
                 app:strokeColor="@color/color_outline"
                 app:strokeWidth="1dp">
 
-                <LinearLayout
+                <FrameLayout
+                    android:id="@+id/layout_upload_container"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:gravity="center"
-                    android:orientation="vertical">
+                    android:background="@drawable/input_round"
+                    android:backgroundTint="@color/color_surface"
+                    android:clickable="true"
+                    android:focusable="true">
 
-                    <ImageView
-                        android:layout_width="@dimen/icon_lg"
-                        android:layout_height="@dimen/icon_lg"
-                        android:src="@drawable/ic_upload"
-                        app:tint="@color/color_primary" />
+                    <com.google.android.material.imageview.ShapeableImageView
+                        android:id="@+id/iv_upload_thumbnail"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:scaleType="centerCrop"
+                        android:visibility="gone"
+                        app:shapeAppearanceOverlay="@style/ShapeAppearance.Material3.Corner.Medium"
+                        tools:visibility="visible" />
 
-                    <TextView
-                        style="@style/TextAppearance.UpAgain.BodyMedium"
+                    <LinearLayout
+                        android:id="@+id/layout_upload_prompt"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:gravity="center"
+                        android:orientation="vertical"
+                        android:padding="@dimen/space_md"
+                        tools:visibility="gone">
+
+                        <ImageView
+                            android:layout_width="@dimen/icon_lg"
+                            android:layout_height="@dimen/icon_lg"
+                            android:src="@drawable/ic_upload"
+                            app:tint="@color/color_primary" />
+
+                        <TextView
+                            style="@style/TextAppearance.UpAgain.BodyMedium"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/space_sm"
+                            android:text="@string/barcode_upload_hint"
+                            android:textColor="@color/color_on_background"
+                            android:gravity="center" />
+                    </LinearLayout>
+
+                    <com.google.android.material.progressindicator.CircularProgressIndicator
+                        android:id="@+id/upload_zone_loader"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/space_sm"
-                        android:text="@string/barcode_upload_hint"
-                        android:textColor="@color/color_on_background" />
-                </LinearLayout>
+                        android:layout_gravity="center"
+                        android:indeterminate="true"
+                        app:indicatorSize="32dp"
+                        app:trackThickness="3dp"
+                        app:indicatorColor="@color/color_primary"
+                        android:visibility="gone"
+                        tools:visibility="visible" />
+
+                </FrameLayout>
             </com.google.android.material.card.MaterialCardView>
 
             <LinearLayout
