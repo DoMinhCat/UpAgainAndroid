@@ -49,6 +49,7 @@
     <string name="container_how_to">Vous trouverez le code sur la page de détails de la transaction.</string>
     <string name="btn_open_container">Soumettre &amp; Ouvrir</string>
 
+    <string name="invalid_digit_code">Code invalide</string>
     <string name="error_404">404</string>
     <string name="error_500">500</string>
     <string name="error_404_description">Page non trouvée</string>

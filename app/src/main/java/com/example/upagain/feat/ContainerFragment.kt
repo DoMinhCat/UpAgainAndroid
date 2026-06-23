@@ -11,6 +11,12 @@ import com.example.upagain.api.ApiClient
 import com.example.upagain.databinding.FragmentContainerBinding
 import com.example.upagain.databinding.FragmentProfileBinding
 import com.example.upagain.repository.AccountRepo
+import com.example.upagain.util.ui.setOnClickListenerWithCooldown
+import com.example.upagain.util.validator.FieldValidator
+import com.example.upagain.util.validator.MaxLengthRule
+import com.example.upagain.util.validator.MinLengthRule
+import com.example.upagain.util.validator.NotEmptyRule
+import com.example.upagain.util.validator.PhoneRule
 import com.example.upagain.viewmodel.AccountViewModel
 import com.example.upagain.viewmodel.ViewModelFactory
 import kotlin.getValue
@@ -34,6 +40,8 @@ class ContainerFragment : Fragment() {
 //    private val viewModel: ContainerViewModel by viewModels {
 //        ViewModelFactory { Container(repository) }
 //    }
+
+    val digitCodeValidator = FieldValidator(listOf(NotEmptyRule(), MinLengthRule(6), MaxLengthRule(6)))
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -73,5 +81,35 @@ class ContainerFragment : Fragment() {
                     putString(ARG_PARAM2, param2)
                 }
             }
+    }
+
+    // PRIVATE ZONE
+    private fun setUpListeners() {
+        val code = binding.etCode.text.toString()
+
+        // DIGIT CODE FIELD
+        binding.etCode.setOnFocusChangeListener { _, hasFocus ->
+            if (!hasFocus) {
+                val isCodeValid = digitCodeValidator.validate(code)
+                if (!isCodeValid) {
+                    binding.tilCode.error = getString(R.string.invalid_digit_code)
+                }
+            } else {
+                // Field Refocused: Clear previous validation errors immediately for fluid UX
+                binding.etCode.error = null
+            }
+        }
+        // SUBMIT BTN
+        binding.btnSubmit.setOnClickListenerWithCooldown {
+            // TODO: user can only submit 1, check if both digit code and barcode is there => return error
+
+            val isCodeValid = digitCodeValidator.validate(code)
+            if (!isCodeValid) {
+                binding.tilCode.error = getString(R.string.invalid_digit_code)
+                return@setOnClickListenerWithCooldown
+            } else {
+                binding.tilCode.error = null
+            }
+        }
     }
 }

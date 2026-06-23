@@ -17,3 +17,9 @@ class SameAsRule(private val targetTextProvider: () -> String) : ValidationRule<
         return value == targetTextProvider()
     }
 }
+
+class OnlyNumberRule : ValidationRule<String> {
+    override fun validate(value: String): Boolean {
+        return value.all { it.isDigit() }
+    }
+}

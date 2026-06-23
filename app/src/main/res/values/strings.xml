@@ -76,6 +76,7 @@
     <string name="container_desc">Enter the 6-digit security code or upload the provided barcode to open the container.</string>
     <string name="container_how_to">You can find the code on the transaction details page.</string>
     <string name="btn_open_container">Submit &amp; Open</string>
+    <string name="invalid_digit_code">Invalid code</string>
 
     <!-- Errors -->
     <string name="error_404">404</string>
