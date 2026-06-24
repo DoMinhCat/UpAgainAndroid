@@ -90,6 +90,9 @@ class AccountViewModel(private val repository: AccountRepo) : ViewModel() {
                 }
         }
     }
+    fun resetAccountPasswordUpdateState() {
+        _accountPasswordUpdateState.value = UiState.Idle
+    }
 
     fun uploadAvatar(idAccount: Int, fileUri: android.net.Uri) {
         viewModelScope.launch {
@@ -102,5 +105,8 @@ class AccountViewModel(private val repository: AccountRepo) : ViewModel() {
                     _accountAvatarUploadState.value = UiState.Error(null, exception)
                 }
         }
+    }
+    fun resetAccountAvatarUploadState() {
+        _accountAvatarUploadState.value = UiState.Idle
     }
 }

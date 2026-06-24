@@ -347,6 +347,7 @@ class ProfileFragment : Fragment() {
                                         state.exception.message
                                     ), SnackbarLevel.ERROR, Snackbar.LENGTH_LONG
                                 )
+                                viewModel.resetAccountUpdateState()
                             }
                         }
                     }
@@ -384,6 +385,7 @@ class ProfileFragment : Fragment() {
                                         state.exception.message
                                     ), SnackbarLevel.ERROR
                                 )
+                                viewModel.resetAccountDeleteState()
                             }
 
                             is UiState.Idle -> {
@@ -399,6 +401,7 @@ class ProfileFragment : Fragment() {
                             is UiState.Loading -> toggleAvatarLoading(true)
                             is UiState.Success -> {
                                 toggleAvatarLoading(false)
+                                viewModel.resetAccountAvatarUploadState()
                                 binding.main.showTopSnackbar(
                                     R.string.snack_avatar_update_success,
                                     SnackbarLevel.SUCCESS
@@ -409,6 +412,7 @@ class ProfileFragment : Fragment() {
                             }
 
                             is UiState.Error -> {
+                                viewModel.resetAccountAvatarUploadState()
                                 toggleAvatarLoading(false)
                                 Log.e(
                                     "ProfileFragment",

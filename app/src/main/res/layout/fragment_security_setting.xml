@@ -121,26 +121,33 @@
                     android:text="@string/email"
                     android:alpha="0.6" />
 
-                <EditText
-                    android:id="@+id/et_security_email"
-                    style="@style/TextAppearance.UpAgain.BodyMedium"
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/til_security_email"
+                    style="@style/Widget.Material3.TextInputLayout.OutlinedBox"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:background="@null"
-                    android:inputType="textEmailAddress"
-                    android:paddingVertical="@dimen/space_xs"
-                    tools:text="sarah.j@example.com" />
+                    app:hintEnabled="false"
+                    app:errorEnabled="false"
+                    app:errorTextColor="@color/color_error"
+                    app:boxBackgroundColor="@android:color/transparent"
+                    app:boxStrokeWidth="0dp"
+                    app:boxStrokeWidthFocused="0dp"
+                    app:boxCornerRadiusBottomEnd="@dimen/input_radius"
+                    app:boxCornerRadiusBottomStart="@dimen/input_radius"
+                    app:boxCornerRadiusTopEnd="@dimen/input_radius"
+                    app:boxCornerRadiusTopStart="@dimen/input_radius">
 
-                <TextView
-                    android:id="@+id/tv_error_email"
-                    style="@style/TextAppearance.UpAgain.BodySmall"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:textColor="@color/color_error"
-                    android:paddingTop="2dp"
-                    android:visibility="gone"
-                    android:text="@string/invalid_email"
-                    tools:visibility="visible" />
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/et_security_email"
+                        style="@style/TextAppearance.UpAgain.BodyMedium"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@null"
+                        android:inputType="textEmailAddress"
+                        android:paddingVertical="@dimen/space_xs"
+                        android:paddingHorizontal="@dimen/space_xs"
+                        tools:text="sarah.j@example.com" />
+                </com.google.android.material.textfield.TextInputLayout>
             </LinearLayout>
 
             <androidx.constraintlayout.widget.ConstraintLayout
@@ -200,26 +207,35 @@
                     android:text="@string/new_password"
                     android:alpha="0.6" />
 
-                <EditText
-                    android:id="@+id/et_security_password"
-                    style="@style/TextAppearance.UpAgain.BodyMedium"
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/til_security_password"
+                    style="@style/Widget.Material3.TextInputLayout.OutlinedBox"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:background="@null"
-                    android:inputType="textPassword"
-                    android:paddingVertical="@dimen/space_xs"
-                    android:hint="••••••••" />
+                    app:hintEnabled="false"
+                    app:errorEnabled="false"
+                    app:errorTextColor="@color/color_error"
+                    app:endIconMode="password_toggle"
+                    app:endIconTint="@color/color_secondary"
+                    app:boxBackgroundColor="@android:color/transparent"
+                    app:boxStrokeWidth="0dp"
+                    app:boxStrokeWidthFocused="0dp"
+                    app:boxCornerRadiusBottomEnd="@dimen/input_radius"
+                    app:boxCornerRadiusBottomStart="@dimen/input_radius"
+                    app:boxCornerRadiusTopEnd="@dimen/input_radius"
+                    app:boxCornerRadiusTopStart="@dimen/input_radius">
 
-                <TextView
-                    android:id="@+id/tv_error_password"
-                    style="@style/TextAppearance.UpAgain.BodySmall"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:textColor="@color/color_error"
-                    android:paddingTop="2dp"
-                    android:visibility="gone"
-                    android:text="@string/incorrect_password"
-                    tools:visibility="visible" />
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/et_security_password"
+                        style="@style/TextAppearance.UpAgain.BodyMedium"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@null"
+                        android:inputType="textPassword"
+                        android:paddingVertical="@dimen/space_xs"
+                        android:paddingHorizontal="@dimen/space_xs"
+                        android:hint="••••••••" />
+                </com.google.android.material.textfield.TextInputLayout>
 
                 <View
                     android:layout_width="match_parent"
@@ -234,26 +250,35 @@
                     android:text="@string/confirm_password"
                     android:alpha="0.6" />
 
-                <EditText
-                    android:id="@+id/et_security_confirm_password"
-                    style="@style/TextAppearance.UpAgain.BodyMedium"
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/til_security_confirm_password"
+                    style="@style/Widget.Material3.TextInputLayout.OutlinedBox"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:background="@null"
-                    android:inputType="textPassword"
-                    android:paddingVertical="@dimen/space_xs"
-                    android:hint="••••••••" />
+                    app:hintEnabled="false"
+                    app:errorEnabled="false"
+                    app:errorTextColor="@color/color_error"
+                    app:endIconMode="password_toggle"
+                    app:endIconTint="@color/color_secondary"
+                    app:boxBackgroundColor="@android:color/transparent"
+                    app:boxStrokeWidth="0dp"
+                    app:boxStrokeWidthFocused="0dp"
+                    app:boxCornerRadiusBottomEnd="@dimen/input_radius"
+                    app:boxCornerRadiusBottomStart="@dimen/input_radius"
+                    app:boxCornerRadiusTopEnd="@dimen/input_radius"
+                    app:boxCornerRadiusTopStart="@dimen/input_radius">
 
-                <TextView
-                    android:id="@+id/tv_error_confirm_password"
-                    style="@style/TextAppearance.UpAgain.BodySmall"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:textColor="@color/color_error"
-                    android:paddingTop="2dp"
-                    android:visibility="gone"
-                    android:text="@string/password_not_match"
-                    tools:visibility="visible" />
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/et_security_confirm_password"
+                        style="@style/TextAppearance.UpAgain.BodyMedium"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@null"
+                        android:inputType="textPassword"
+                        android:paddingVertical="@dimen/space_xs"
+                        android:paddingHorizontal="@dimen/space_xs"
+                        android:hint="••••••••" />
+                </com.google.android.material.textfield.TextInputLayout>
             </LinearLayout>
 
         </LinearLayout>
