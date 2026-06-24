@@ -54,6 +54,9 @@ class AccountViewModel(private val repository: AccountRepo) : ViewModel() {
                 }
         }
     }
+    fun resetAccountUpdateState() {
+        _accountUpdateState.value = UiState.Idle
+    }
 
     fun deleteAccount(idAccount: Int) {
         viewModelScope.launch {
@@ -68,6 +71,9 @@ class AccountViewModel(private val repository: AccountRepo) : ViewModel() {
                     _accountDeleteState.value = UiState.Error(statusCode, exception)
                 }
         }
+    }
+    fun resetAccountDeleteState() {
+        _accountDeleteState.value = UiState.Idle
     }
 
     fun updatePassword(idAccount: Int, request: PasswordUpdateRequest) {

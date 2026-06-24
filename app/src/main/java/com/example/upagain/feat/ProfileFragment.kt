@@ -42,10 +42,12 @@ import kotlinx.coroutines.launch
 import kotlin.getValue
 import com.example.upagain.util.image.buildImageUrl
 import com.example.upagain.util.locale.LocaleManager
+import com.example.upagain.util.ui.dpToPx
 import com.example.upagain.util.ui.hideKeyboard
 import com.example.upagain.util.ui.toggleFullScreenLoading
 import com.example.upagain.util.ui.toggleIconLoadingState
 import com.google.android.material.snackbar.Snackbar
+import kotlin.text.toInt
 
 // TODO: notification settings fragment
 class ProfileFragment : Fragment() {
@@ -153,6 +155,27 @@ class ProfileFragment : Fragment() {
             // navigate to security fragment to edit
             loadSecurityFragment()
         }
+        // USERNAME FIELD
+        binding.etProfileName.setOnFocusChangeListener { _, hasFocus ->
+            if (!hasFocus) {
+                val username = binding.etProfileName.text.toString()
+                val isUsernameValid = usernameValidator.validate(username)
+                toggleErrorState(binding.tilProfileName, !isUsernameValid)
+            } else {
+                toggleErrorState(binding.tilProfileName, false)
+            }
+        }
+        // PHONE FIELD
+        binding.etProfilePhone.setOnFocusChangeListener { _, hasFocus ->
+            if (!hasFocus) {
+                val phone = binding.etProfilePhone.text.toString()
+                val isPhoneValid = phoneValidator.validate(phone)
+                toggleErrorState(binding.tilProfilePhone, !isPhoneValid)
+            } else {
+                toggleErrorState(binding.tilProfilePhone, false)
+            }
+        }
+
         // SAVE CHANGES
         binding.btnSaveProfile.setOnClickListenerWithCooldown {
             val email = binding.tvProfileEmail.text.toString()
@@ -160,8 +183,8 @@ class ProfileFragment : Fragment() {
             val phone = binding.etProfilePhone.text.toString()
             val isUsernameValid = usernameValidator.validate(username)
             val isPhoneValid = phoneValidator.validate(phone)
-            binding.tvUsernameError.visibility = if (isUsernameValid) View.GONE else View.VISIBLE
-            binding.tvPhoneError.visibility = if (isPhoneValid) View.GONE else View.VISIBLE
+            toggleErrorState(binding.tilProfileName, !isUsernameValid)
+            toggleErrorState(binding.tilProfilePhone, !isPhoneValid)
             if (!isUsernameValid || !isPhoneValid) {
                 return@setOnClickListenerWithCooldown
             }
@@ -303,6 +326,7 @@ class ProfileFragment : Fragment() {
                                     R.string.snack_account_details_update_success,
                                     SnackbarLevel.SUCCESS
                                 )
+                                viewModel.resetAccountUpdateState()
                             }
 
                             is UiState.Error -> {
@@ -334,6 +358,7 @@ class ProfileFragment : Fragment() {
                             is UiState.Loading -> toggleDeleteAccountLoading(true)
                             is UiState.Success -> {
                                 toggleDeleteAccountLoading(false)
+                                viewModel.resetAccountDeleteState()
                                 SessionManager.clearSession()
 
                                 val intent =
@@ -397,7 +422,7 @@ class ProfileFragment : Fragment() {
                             }
 
                             is UiState.Idle -> {
-//                                toggleAvatarLoading(false)
+                                toggleAvatarLoading(false)
                             }
                         }
                     }
@@ -418,6 +443,8 @@ class ProfileFragment : Fragment() {
     }
 
     private fun loadSecurityFragment() {
+        toggleErrorState(binding.tilProfilePhone, false)
+        toggleErrorState(binding.tilProfileName, false)
         val emailToPass = binding.tvProfileEmail.text.toString()
         val securityFragment = SecuritySettingFragment.newInstance(emailToPass)
         parentFragmentManager.beginTransaction()
@@ -441,5 +468,20 @@ class ProfileFragment : Fragment() {
             loader = binding.avatarLoader,
             isLoading = isLoading
         )
+    }
+
+    private fun toggleErrorState(til: com.google.android.material.textfield.TextInputLayout, isError: Boolean) {
+        val errorString = if (til == binding.tilProfileName) getString(R.string.invalid_username) else getString(R.string.invalid_phone)
+        if (isError) {
+            til.boxStrokeWidth = dpToPx(1.5f, resources)
+            til.boxStrokeWidthFocused = dpToPx(1.5f, resources)
+            til.isErrorEnabled = true
+            til.error = errorString
+        } else {
+            til.error = null
+            til.isErrorEnabled = false
+            til.boxStrokeWidth = 0
+            til.boxStrokeWidthFocused = 0
+        }
     }
 }
