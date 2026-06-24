@@ -86,11 +86,11 @@
 
                     <com.google.android.material.button.MaterialButton
                         android:id="@+id/btn_save_email"
-                        style="@style/Widget.Material3.Button.TextButton"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/btn_save"
-                        android:textColor="@color/color_primary" />
+                        style="@style/Widget.Material3.Button"
+                        android:textColor="@color/white"
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/button_height"
+                        android:text="@string/btn_save"/>
 
                     <com.google.android.material.progressindicator.CircularProgressIndicator
                         android:id="@+id/email_save_loader"
@@ -172,11 +172,11 @@
                     app:layout_constraintTop_toTopOf="parent">
                     <com.google.android.material.button.MaterialButton
                         android:id="@+id/btn_save_password"
-                        style="@style/Widget.Material3.Button.TextButton"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
+                        style="@style/Widget.Material3.Button"
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/button_height"
                         android:text="@string/btn_save"
-                        android:textColor="@color/color_primary" />
+                        android:textColor="@color/white" />
 
                     <com.google.android.material.progressindicator.CircularProgressIndicator
                         android:id="@+id/password_save_loader"
