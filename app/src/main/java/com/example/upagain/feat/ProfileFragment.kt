@@ -96,6 +96,7 @@ class ProfileFragment : Fragment() {
             override fun getFilter() = object : android.widget.Filter() {
                 override fun performFiltering(c: CharSequence?) =
                     FilterResults().apply { values = languages; count = languages.size }
+
                 override fun publishResults(c: CharSequence?, r: FilterResults?) {
                     notifyDataSetChanged()
                 }
@@ -114,6 +115,8 @@ class ProfileFragment : Fragment() {
 
     override fun onDestroyView() {
         super.onDestroyView()
+        toggleErrorState(binding.tilProfilePhone, false)
+        toggleErrorState(binding.tilProfileName, false)
         _binding = null
     }
 
@@ -420,7 +423,10 @@ class ProfileFragment : Fragment() {
                                     state.exception
                                 )
                                 binding.main.showTopSnackbar(
-                                    getString(R.string.snack_avatar_update_fail, state.exception.message),
+                                    getString(
+                                        R.string.snack_avatar_update_fail,
+                                        state.exception.message
+                                    ),
                                     SnackbarLevel.ERROR
                                 )
                             }
@@ -465,6 +471,7 @@ class ProfileFragment : Fragment() {
             isLoading = isLoading
         )
     }
+
     private fun toggleAvatarLoading(isLoading: Boolean) {
         binding.ivAvatar.toggleIconLoadingState(
             componentZone = binding.ivAvatar,
@@ -474,8 +481,12 @@ class ProfileFragment : Fragment() {
         )
     }
 
-    private fun toggleErrorState(til: com.google.android.material.textfield.TextInputLayout, isError: Boolean) {
-        val errorString = if (til == binding.tilProfileName) getString(R.string.invalid_username) else getString(R.string.invalid_phone)
+    private fun toggleErrorState(
+        til: com.google.android.material.textfield.TextInputLayout,
+        isError: Boolean
+    ) {
+        val errorString =
+            if (til == binding.tilProfileName) getString(R.string.invalid_username) else getString(R.string.invalid_phone)
         if (isError) {
             til.boxStrokeWidth = dpToPx(1.5f, resources)
             til.boxStrokeWidthFocused = dpToPx(1.5f, resources)

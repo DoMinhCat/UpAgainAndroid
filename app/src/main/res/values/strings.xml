@@ -152,5 +152,7 @@
     <string name="snack_password_update_fail">Password update failed: %1$s</string>
     <string name="snack_avatar_update_success">Avatar updated</string>
     <string name="snack_avatar_update_fail">Avatar update failed: %1$s</string>
+    <string name="snack_container_open_success">Container unlocked</string>
+    <string name="snack_container_open_fail">Failed to open container: %1$s</string>
 
 </resources>

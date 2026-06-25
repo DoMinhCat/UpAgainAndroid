@@ -2,23 +2,27 @@ package com.example.upagain.feat
 
 import android.net.Uri
 import android.os.Bundle
-import androidx.fragment.app.Fragment
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.AndroidViewModel
-import androidx.lifecycle.ViewModel
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import coil.load
 import com.example.upagain.R
 import com.example.upagain.api.ApiClient
 import com.example.upagain.databinding.FragmentContainerBinding
 import com.example.upagain.repository.ContainerRepo
 import com.example.upagain.util.ui.SnackbarLevel
+import com.example.upagain.util.ui.hideKeyboard
 import com.example.upagain.util.ui.setOnClickListenerWithCooldown
 import com.example.upagain.util.ui.showTopSnackbar
+import com.example.upagain.util.ui.toggleBtnLoadingState
 import com.example.upagain.util.validator.FieldValidator
 import com.example.upagain.util.validator.MaxLengthRule
 import com.example.upagain.util.validator.MinLengthRule
@@ -26,15 +30,11 @@ import com.example.upagain.util.validator.NotEmptyRule
 import com.example.upagain.util.validator.NumberRangeRule
 import com.example.upagain.util.validator.OnlyNumberRule
 import com.example.upagain.viewmodel.ContainerViewModel
+import com.example.upagain.viewmodel.UiState
 import com.example.upagain.viewmodel.ViewModelFactory
 import com.google.android.material.snackbar.Snackbar
-import kotlin.getValue
+import kotlinx.coroutines.launch
 
-/**
- * A simple [Fragment] subclass.
- * Use the [ContainerFragment.newInstance] factory method to
- * create an instance of this fragment.
- */
 class ContainerFragment : Fragment() {
     // elements binding
     private var _binding: FragmentContainerBinding? = null
@@ -96,11 +96,9 @@ class ContainerFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         // ! Always set up listeners and observers before API call
         setupListeners()
-//        observeAccountState()
+        observeState()
 
         // API call
-//        val currentId = SessionManager.accountId ?: return
-//        viewModel.getAccountDetails(currentId)
     }
 
     // PRIVATE ZONE
@@ -153,12 +151,58 @@ class ContainerFragment : Fragment() {
         }
     }
 
+    private fun observeState() {
+        lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                launch {
+                    viewModel.openContainerState.collect { state ->
+                        when (state) {
+                            is UiState.Idle -> {
+                                toggleSubmitBtnLoadingState(false)
+                            }
+
+                            is UiState.Loading -> {
+                                toggleSubmitBtnLoadingState(true)
+                            }
+
+                            is UiState.Success -> {
+                                toggleSubmitBtnLoadingState(false)
+                                activity?.hideKeyboard()
+                                binding.main.showTopSnackbar(
+                                    R.string.snack_container_open_success,
+                                    SnackbarLevel.SUCCESS
+                                )
+                                viewModel.resetOpenContainerState()
+                            }
+
+                            is UiState.Error -> {
+                                toggleSubmitBtnLoadingState(false)
+                                Log.e(
+                                    "ContainerFragment",
+                                    "Open container failed",
+                                    state.exception
+                                )
+                                binding.main.showTopSnackbar(
+                                    getString(
+                                        R.string.snack_container_open_fail,
+                                        state.exception.message
+                                    ), SnackbarLevel.ERROR, Snackbar.LENGTH_LONG
+                                )
+                                viewModel.resetOpenContainerState()
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+
     private fun isValidToSubmit(idContainer: String, code: String?, barcodeUri: Uri?): Boolean {
         var isValidToSubmit = true
         // check ID
         val isIdValid = idValidator.validate(idContainer)
         if (!isIdValid) {
-            toggleTilIdErrorState(true)
+            (true)
             isValidToSubmit = false
         } else {
             toggleTilIdErrorState(false)
@@ -167,12 +211,20 @@ class ContainerFragment : Fragment() {
         val hasDigitCode = code != null
         // only 1 method can be selected at a time
         if (hasDigitCode && hasBarcode) {
-            binding.main.showTopSnackbar(R.string.only_one_method, SnackbarLevel.ERROR, Snackbar.LENGTH_LONG)
+            binding.main.showTopSnackbar(
+                R.string.only_one_method,
+                SnackbarLevel.ERROR,
+                Snackbar.LENGTH_LONG
+            )
             isValidToSubmit = false
         }
         // at least 1 method chosen
         if (!hasDigitCode && !hasBarcode) {
-            binding.main.showTopSnackbar(R.string.no_method_chosen, SnackbarLevel.ERROR, Snackbar.LENGTH_LONG)
+            binding.main.showTopSnackbar(
+                R.string.no_method_chosen,
+                SnackbarLevel.ERROR,
+                Snackbar.LENGTH_LONG
+            )
             isValidToSubmit = false
         }
         // validate digit code
@@ -199,6 +251,7 @@ class ContainerFragment : Fragment() {
             binding.tilCode.isErrorEnabled = false
         }
     }
+
     private fun toggleTilIdErrorState(isError: Boolean) {
         binding.tilContainerId.isErrorEnabled = isError
         if (isError) {
@@ -209,5 +262,14 @@ class ContainerFragment : Fragment() {
             binding.tilContainerId.error = null
             binding.tilContainerId.isErrorEnabled = false
         }
+    }
+
+    private fun toggleSubmitBtnLoadingState(isLoading: Boolean) {
+        toggleBtnLoadingState(
+            binding.btnSubmit,
+            binding.submitLoader,
+            isLoading,
+            getString(R.string.btn_open_container)
+        )
     }
 }
