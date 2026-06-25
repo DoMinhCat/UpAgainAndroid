@@ -29,7 +29,6 @@ fun streamUriToTempFile(context: Context, uri: Uri, tempFile: File): Boolean {
         }
         true
     } catch (e: Exception) {
-        Log.e("streamUriToTempFile", "Failed to stream URI data", e)
         false
     }
 }

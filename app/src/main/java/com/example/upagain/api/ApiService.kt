@@ -12,6 +12,7 @@ import com.example.upagain.model.post.PostPaginationResponse
 import com.example.upagain.model.post.SavePostResponse
 import com.example.upagain.model.post.ViewPostResponse
 import okhttp3.MultipartBody
+import okhttp3.RequestBody
 import retrofit2.Call
 import retrofit2.http.Body
 import retrofit2.http.DELETE
@@ -54,22 +55,37 @@ interface ApiService {
     // POST aka COMMUNITY
     @POST(Endpoints.POST_CREATE)
     fun createPost(@Body request: PostCreateRequest): Call<Unit>
+
     @POST(Endpoints.POST_LIKE)
     fun likePost(@Path("id") id: Int): Call<LikePostResponse>
+
     @POST(Endpoints.POST_VIEW)
     fun viewPost(@Path("id") id: Int): Call<ViewPostResponse>
+
     @POST(Endpoints.POST_SAVE)
     fun savePost(@Path("id") id: Int): Call<SavePostResponse>
 
     @GET(Endpoints.POST_ALL)
     fun getAllPosts(@QueryMap options: Map<String, String>): Call<PostPaginationResponse>
+
     @GET(Endpoints.POST_ME)
     fun getMyPosts(@QueryMap options: Map<String, String>): Call<PostPaginationResponse>
+
     @GET(Endpoints.POST_SAVED)
     fun getSavedPosts(@QueryMap options: Map<String, String>): Call<PostPaginationResponse>
+
     @GET(Endpoints.POST_DETAILS)
     fun getPostDetails(@Path("id") id: Int): Call<PostDetailsResponse>
 
     @DELETE(Endpoints.POST_DELETE)
     fun deletePost(@Path("id") id: Int): Call<Unit>
+
+    // CONTAINER
+    @Multipart
+    @POST(Endpoints.CONTAINER_OPEN)
+    fun openContainer(
+        @Path("id") id: Int,
+        @Part barcode: MultipartBody.Part?,
+        @Part("code6digit") digitCode: RequestBody?
+    ): Call<Unit>
 }
