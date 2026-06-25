@@ -1,7 +1,5 @@
-package com.example.upagain.util.image
+package com.example.upagain.util.bin
 
-import android.net.Uri
-import android.util.Log
 import androidx.core.net.toUri
 import com.example.upagain.BuildConfig
 import com.example.upagain.api.Endpoints

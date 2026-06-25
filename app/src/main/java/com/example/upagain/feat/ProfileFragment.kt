@@ -40,14 +40,13 @@ import com.example.upagain.viewmodel.UiState
 import com.example.upagain.viewmodel.ViewModelFactory
 import kotlinx.coroutines.launch
 import kotlin.getValue
-import com.example.upagain.util.image.buildImageUrl
+import com.example.upagain.util.bin.buildImageUrl
 import com.example.upagain.util.locale.LocaleManager
 import com.example.upagain.util.ui.dpToPx
 import com.example.upagain.util.ui.hideKeyboard
 import com.example.upagain.util.ui.toggleFullScreenLoading
 import com.example.upagain.util.ui.toggleIconLoadingState
 import com.google.android.material.snackbar.Snackbar
-import kotlin.text.toInt
 
 // TODO: notification settings fragment
 class ProfileFragment : Fragment() {

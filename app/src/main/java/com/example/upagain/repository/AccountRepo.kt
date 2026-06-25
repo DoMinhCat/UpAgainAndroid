@@ -1,23 +1,24 @@
 package com.example.upagain.repository
 
+import android.R.attr.mimeType
 import android.content.Context
 import android.net.Uri
 import com.example.upagain.api.ApiService
 import com.example.upagain.model.account.AccountDetailsResponse
 import com.example.upagain.model.account.AccountUpdateRequest
 import com.example.upagain.model.account.PasswordUpdateRequest
+import com.example.upagain.util.bin.getFileExtensionAndMime
+import com.example.upagain.util.bin.streamUriToTempFile
 import com.example.upagain.util.json.parseErrorMessage
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.withContext
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
 import okhttp3.RequestBody.Companion.asRequestBody
 import retrofit2.HttpException
 import retrofit2.awaitResponse
 import java.io.File
-import java.io.FileOutputStream
+import java.util.UUID
 
-class AccountRepo(private val apiService: ApiService, private val context: Context) {
+class AccountRepo(private val apiService: ApiService) {
 
     suspend fun getAccountDetails(idAccount: Int): Result<AccountDetailsResponse> {
         return try {
@@ -79,24 +80,19 @@ class AccountRepo(private val apiService: ApiService, private val context: Conte
         }
     }
 
-    suspend fun updateAvatar(idAccount: Int, fileUri: Uri): Result<Unit> = withContext(Dispatchers.IO) {
-        try {
-            // 1. Create a temporary local file copy from the gallery Uri
-            val tempFile = File(context.cacheDir, "upload_avatar.jpg")
-            context.contentResolver.openInputStream(fileUri)?.use { inputStream ->
-                FileOutputStream(tempFile).use { outputStream ->
-                    inputStream.copyTo(outputStream)
-                }
-            }
+    suspend fun updateAvatar(context: Context, idAccount: Int, fileUri: Uri): Result<Unit> {
+        val (mimeType, extension) = getFileExtensionAndMime(context, fileUri)
+        val tempFile = File(context.cacheDir, "upload_${UUID.randomUUID()}.$extension")
 
-            // 2. Convert the local file into an OkHttp MultipartBody payload
-            val requestFile = tempFile.asRequestBody("image/jpeg".toMediaTypeOrNull())
-            val multipartBody = MultipartBody.Part.createFormData("avatar", tempFile.name, requestFile)
+        return try {
+            val streamSuccess = streamUriToTempFile(context, fileUri, tempFile)
+            if (!streamSuccess) return Result.failure(Exception("Failed to stream URI data"))
+
+            val requestFile = tempFile.asRequestBody(mimeType.toMediaTypeOrNull())
+            val multipartBody =
+                MultipartBody.Part.createFormData("avatar", tempFile.name, requestFile)
 
             val response = apiService.uploadAvatar(idAccount, multipartBody).awaitResponse()
-            // Delete temp file after streaming the file to server
-            tempFile.delete()
-
             if (response.isSuccessful) {
                 Result.success(Unit)
             } else {
@@ -105,6 +101,10 @@ class AccountRepo(private val apiService: ApiService, private val context: Conte
             }
         } catch (e: Exception) {
             Result.failure(e)
+        } finally {
+            if (tempFile.exists()) {
+                tempFile.delete()
+            }
         }
     }
 }
