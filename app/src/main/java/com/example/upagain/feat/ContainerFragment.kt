@@ -12,11 +12,14 @@ import coil.load
 import com.example.upagain.R
 import com.example.upagain.api.ApiClient
 import com.example.upagain.databinding.FragmentContainerBinding
+import com.example.upagain.util.ui.SnackbarLevel
 import com.example.upagain.util.ui.setOnClickListenerWithCooldown
+import com.example.upagain.util.ui.showTopSnackbar
 import com.example.upagain.util.validator.FieldValidator
 import com.example.upagain.util.validator.MaxLengthRule
 import com.example.upagain.util.validator.MinLengthRule
 import com.example.upagain.util.validator.NotEmptyRule
+import com.google.android.material.snackbar.Snackbar
 import kotlin.getValue
 
 /**
@@ -127,16 +130,39 @@ class ContainerFragment : Fragment() {
         }
         // SUBMIT BTN
         binding.btnSubmit.setOnClickListenerWithCooldown {
-            // TODO: user can only submit 1, check if both digit code and barcode is there => return error
             val code = binding.etCode.text.toString().trim()
+            if (!isValidToSubmit(code, selectedImageUri)) {
+                return@setOnClickListenerWithCooldown
+            }
+
+            // validation passed
+//            call viewmodel here
+        }
+    }
+
+    private fun isValidToSubmit(code: String, barcodeUri: Uri?): Boolean {
+        val hasBarcode = barcodeUri != null
+        // only 1 method can be selected at a time
+        if (code.isNotEmpty() && hasBarcode) {
+            binding.main.showTopSnackbar(R.string.only_one_method, SnackbarLevel.ERROR, Snackbar.LENGTH_LONG)
+            return false
+        }
+        // at least 1 method chosen
+        if (code.isEmpty() && !hasBarcode) {
+            binding.main.showTopSnackbar(R.string.no_method_chosen, SnackbarLevel.ERROR, Snackbar.LENGTH_LONG)
+            return false
+        }
+        // validate digit code
+        if (code.isNotEmpty()) {
             val isCodeValid = digitCodeValidator.validate(code)
             if (!isCodeValid) {
                 toggleTilCodeErrorState(true)
-                return@setOnClickListenerWithCooldown
+                return false
             } else {
                 toggleTilCodeErrorState(false)
             }
         }
+        return true
     }
 
     private fun toggleTilCodeErrorState(isError: Boolean) {

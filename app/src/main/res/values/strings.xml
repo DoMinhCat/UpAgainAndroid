@@ -77,6 +77,8 @@
     <string name="container_how_to">You can find the code on the transaction details page.</string>
     <string name="btn_open_container">Submit &amp; Open</string>
     <string name="invalid_digit_code">Invalid code</string>
+    <string name="only_one_method">Please choose only one method (Enter code OR upload barcode)</string>
+    <string name="no_method_chosen">Please enter a 6-digit code or upload a barcode image</string>
 
     <!-- Errors -->
     <string name="error_404">404</string>

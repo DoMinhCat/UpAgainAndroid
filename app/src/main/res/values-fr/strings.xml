@@ -50,6 +50,8 @@
     <string name="btn_open_container">Soumettre &amp; Ouvrir</string>
 
     <string name="invalid_digit_code">Code invalide</string>
+    <string name="only_one_method">Veuillez choisir une seule méthode (saisir le code OU télécharger le code-barres).</string>
+    <string name="no_method_chosen">Veuillez saisir un code à 6 chiffres ou télécharger une image de code-barres.</string>
     <string name="error_404">404</string>
     <string name="error_500">500</string>
     <string name="error_404_description">Page non trouvée</string>
