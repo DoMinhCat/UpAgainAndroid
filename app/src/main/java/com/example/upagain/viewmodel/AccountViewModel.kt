@@ -1,5 +1,8 @@
 package com.example.upagain.viewmodel
 
+import android.app.Application
+import android.content.Context
+import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.upagain.model.account.AccountDetailsResponse
@@ -11,7 +14,8 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import retrofit2.HttpException
 
-class AccountViewModel(private val repository: AccountRepo) : ViewModel() {
+class AccountViewModel(private val repository: AccountRepo, application: Application) : AndroidViewModel(application) {
+    private val context get() = getApplication<Application>().applicationContext
     private val _accountDetailsState =
         MutableStateFlow<UiState<AccountDetailsResponse>>(UiState.Loading)
     val accountDetailsState: StateFlow<UiState<AccountDetailsResponse>> = _accountDetailsState
@@ -97,7 +101,7 @@ class AccountViewModel(private val repository: AccountRepo) : ViewModel() {
     fun uploadAvatar(idAccount: Int, fileUri: android.net.Uri) {
         viewModelScope.launch {
             _accountAvatarUploadState.value = UiState.Loading
-            repository.updateAvatar(idAccount, fileUri)
+            repository.updateAvatar(context, idAccount, fileUri)
                 .onSuccess {
                     _accountAvatarUploadState.value = UiState.Success(Unit)
                 }

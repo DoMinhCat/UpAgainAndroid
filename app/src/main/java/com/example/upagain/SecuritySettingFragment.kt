@@ -40,10 +40,12 @@ import com.google.android.material.snackbar.Snackbar
 class SecuritySettingFragment : Fragment() {
     // layer dependencies
     private val apiService by lazy { ApiClient.apiService }
-    private val repository by lazy { AccountRepo(apiService, requireContext()) }
+    private val repository by lazy { AccountRepo(apiService) }
+
     // viewmodel
+    val appInstance = requireActivity().application
     private val viewModel: AccountViewModel by viewModels {
-        ViewModelFactory { AccountViewModel(repository) }
+        ViewModelFactory { AccountViewModel(repository, appInstance) }
     }
 
     // form validators

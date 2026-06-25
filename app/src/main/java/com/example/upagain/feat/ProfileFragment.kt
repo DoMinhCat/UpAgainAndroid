@@ -54,9 +54,10 @@ class ProfileFragment : Fragment() {
     private var _binding: FragmentProfileBinding? = null
     private val binding get() = _binding!!
     private val apiService by lazy { ApiClient.apiService }
-    private val repository by lazy { AccountRepo(apiService, requireContext()) }
+    private val repository by lazy { AccountRepo(apiService) }
+    val appInstance = requireActivity().application
     private val viewModel: AccountViewModel by viewModels {
-        ViewModelFactory { AccountViewModel(repository) }
+        ViewModelFactory { AccountViewModel(repository, appInstance) }
     }
 
     // Registers the system photo picker launcher
