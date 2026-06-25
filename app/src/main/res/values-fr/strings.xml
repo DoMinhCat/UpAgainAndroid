@@ -44,12 +44,14 @@
     <string name="code">Code à 6 chiffres</string>
     <string name="code_hint">000000</string>
     <string name="barcode">Code-barres</string>
+    <string name="container_id">ID du conteneur</string>
     <string name="barcode_upload_hint">Appuyez pour télécharger le code-barres</string>
     <string name="container_desc">Saisissez le code de sécurité à 6 chiffres ou téléchargez le code-barres fourni pour ouvrir le conteneur.</string>
-    <string name="container_how_to">Vous trouverez le code sur la page de détails de la transaction.</string>
+    <string name="container_how_to">Vous trouverez le code et l'ID sur la page de détails de la transaction.</string>
     <string name="btn_open_container">Soumettre &amp; Ouvrir</string>
 
     <string name="invalid_digit_code">Code invalide</string>
+    <string name="invalid_container_id">ID du conteneur invalide</string>
     <string name="only_one_method">Veuillez choisir une seule méthode (saisir le code OU télécharger le code-barres).</string>
     <string name="no_method_chosen">Veuillez saisir un code à 6 chiffres ou télécharger une image de code-barres.</string>
     <string name="error_404">404</string>

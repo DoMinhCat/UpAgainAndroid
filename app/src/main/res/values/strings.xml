@@ -72,11 +72,13 @@
     <string name="code">6-digit code</string>
     <string name="code_hint">000000</string>
     <string name="barcode">Barcode</string>
+    <string name="container_id">Container ID</string>
     <string name="barcode_upload_hint">Tap to upload barcode</string>
     <string name="container_desc">Enter the 6-digit security code or upload the provided barcode to open the container.</string>
-    <string name="container_how_to">You can find the code on the transaction details page.</string>
+    <string name="container_how_to">You can find the code and ID on the transaction details page.</string>
     <string name="btn_open_container">Submit &amp; Open</string>
     <string name="invalid_digit_code">Invalid code</string>
+    <string name="invalid_container_id">Invalid container ID</string>
     <string name="only_one_method">Please choose only one method (Enter code OR upload barcode)</string>
     <string name="no_method_chosen">Please enter a 6-digit code or upload a barcode image</string>
 

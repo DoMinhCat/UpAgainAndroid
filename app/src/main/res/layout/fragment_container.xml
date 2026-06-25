@@ -72,6 +72,38 @@
                 style="@style/TextAppearance.UpAgain.H3"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:text="@string/container_id" />
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/til_container_id"
+                style="@style/Widget.Material3.TextInputLayout.OutlinedBox"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/space_sm"
+                app:boxCornerRadiusBottomEnd="@dimen/input_radius"
+                app:boxCornerRadiusBottomStart="@dimen/input_radius"
+                app:boxCornerRadiusTopEnd="@dimen/input_radius"
+                app:boxCornerRadiusTopStart="@dimen/input_radius"
+                app:errorEnabled="false"
+                app:errorTextAppearance="@style/TextAppearance.Material3.BodySmall"
+                app:errorTextColor="@color/color_error"
+                app:errorIconTint="@color/color_error">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/et_container_id"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:inputType="number"
+                    android:letterSpacing="0.5"
+                    style="@style/TextAppearance.UpAgain.H2" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <TextView
+                style="@style/TextAppearance.UpAgain.H3"
+                android:layout_marginTop="@dimen/space_xl"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:text="@string/code" />
 
             <com.google.android.material.textfield.TextInputLayout
