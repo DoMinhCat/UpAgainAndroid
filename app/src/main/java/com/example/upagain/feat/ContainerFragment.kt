@@ -41,7 +41,7 @@ class ContainerFragment : Fragment() {
     private val binding get() = _binding!!
     private val apiService by lazy { ApiClient.apiService }
     private val repository by lazy { ContainerRepo(apiService) }
-    val appInstance = requireActivity().application
+    private val appInstance by lazy { requireActivity().application }
     private val viewModel: ContainerViewModel by viewModels {
         ViewModelFactory { ContainerViewModel(repository, appInstance) }
     }

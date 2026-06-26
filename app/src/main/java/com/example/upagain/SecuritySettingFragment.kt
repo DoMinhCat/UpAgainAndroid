@@ -43,7 +43,7 @@ class SecuritySettingFragment : Fragment() {
     private val repository by lazy { AccountRepo(apiService) }
 
     // viewmodel
-    val appInstance = requireActivity().application
+    private val appInstance by lazy { requireActivity().application }
     private val viewModel: AccountViewModel by viewModels {
         ViewModelFactory { AccountViewModel(repository, appInstance) }
     }
