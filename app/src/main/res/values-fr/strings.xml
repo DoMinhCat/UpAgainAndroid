@@ -47,7 +47,7 @@
     <string name="container_id">ID du conteneur</string>
     <string name="barcode_upload_hint">Appuyez pour télécharger le code-barres</string>
     <string name="container_desc">Saisissez le code de sécurité à 6 chiffres ou téléchargez le code-barres fourni pour ouvrir le conteneur.</string>
-    <string name="container_how_to">Vous trouverez le code et l'ID sur la page de détails de la transaction.</string>
+    <string name="container_how_to">Vous trouverez le code et l\'ID sur la page de détails de la transaction.</string>
     <string name="btn_open_container">Soumettre &amp; Ouvrir</string>
 
     <string name="invalid_digit_code">Code invalide</string>
