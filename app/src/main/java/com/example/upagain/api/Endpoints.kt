@@ -3,7 +3,7 @@ package com.example.upagain.api
 
 object Endpoints {
     // Img Endpoints
-    const val IMAGES = "images"
+    const val IMAGES = "mobile/images"
 
     // Auth Endpoints
     const val LOGIN = "login"

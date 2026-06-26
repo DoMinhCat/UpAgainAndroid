@@ -74,8 +74,11 @@ object ApiClient {
                 val request = chain.request()
                 var response = chain.proceed(request)
 
+                // exception not to redirect for certain endpoints
+                val isImageRequest = request.url.encodedPath.contains(Endpoints.IMAGES, ignoreCase = true)
+
                 when (response.code) {
-                    404 -> navigateToActivity(ErrorActivity::class.java, statusCode = 404)
+                    404 -> if (!isImageRequest) navigateToActivity(ErrorActivity::class.java, statusCode = 404)
                     500 -> navigateToActivity(ErrorActivity::class.java, statusCode = 500)
                     401 -> {
                         val path = request.url.encodedPath
