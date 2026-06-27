@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.coordinatorlayout.widget.CoordinatorLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -37,25 +36,26 @@
                 android:id="@+id/ic_my_posts"
                 android:layout_width="@dimen/min_touch"
                 android:layout_height="@dimen/min_touch"
+                android:contentDescription="@string/my_transactions"
                 android:padding="@dimen/space_sm"
                 android:scaleType="centerInside"
                 android:src="@drawable/ic_my_posts"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toStartOf="@+id/ic_saved_posts"
                 app:layout_constraintTop_toTopOf="parent"
-                android:contentDescription="@string/my_transactions"
                 app:tint="@color/color_secondary" />
+
             <ImageView
                 android:id="@+id/ic_saved_posts"
                 android:layout_width="@dimen/min_touch"
                 android:layout_height="@dimen/min_touch"
+                android:contentDescription="@string/my_transactions"
                 android:padding="@dimen/space_sm"
                 android:scaleType="centerInside"
                 android:src="@drawable/ic_bookmark_outline"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                android:contentDescription="@string/my_transactions"
                 app:tint="@color/color_secondary" />
         </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -72,8 +72,8 @@
             <ImageView
                 android:layout_width="@dimen/icon_md"
                 android:layout_height="@dimen/icon_md"
-                android:src="@drawable/ic_search"
                 android:contentDescription="@string/placeholder_search"
+                android:src="@drawable/ic_search"
                 app:tint="@color/color_secondary" />
 
             <EditText
@@ -112,72 +112,72 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/filter_most_like"
+                    android:textColor="@color/color_on_background"
                     app:chipBackgroundColor="@color/color_surface"
-                    app:chipStrokeWidth="0dp"
-                    android:textColor="@color/color_on_background" />
+                    app:chipStrokeWidth="0dp" />
 
                 <com.google.android.material.chip.Chip
                     style="@style/Widget.Material3.Chip.Filter"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/filter_most_view"
+                    android:textColor="@color/color_on_background"
                     app:chipBackgroundColor="@color/color_surface"
-                    app:chipStrokeWidth="0dp"
-                    android:textColor="@color/color_on_background" />
+                    app:chipStrokeWidth="0dp" />
 
                 <com.google.android.material.chip.Chip
                     style="@style/Widget.Material3.Chip.Filter"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/category_tutorial"
+                    android:textColor="@color/color_on_background"
                     app:chipBackgroundColor="@color/color_surface"
-                    app:chipStrokeWidth="0dp"
-                    android:textColor="@color/color_on_background" />
+                    app:chipStrokeWidth="0dp" />
 
                 <com.google.android.material.chip.Chip
                     style="@style/Widget.Material3.Chip.Filter"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/category_project"
+                    android:textColor="@color/color_on_background"
                     app:chipBackgroundColor="@color/color_surface"
-                    app:chipStrokeWidth="0dp"
-                    android:textColor="@color/color_on_background" />
+                    app:chipStrokeWidth="0dp" />
 
                 <com.google.android.material.chip.Chip
                     style="@style/Widget.Material3.Chip.Filter"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/category_tips"
+                    android:textColor="@color/color_on_background"
                     app:chipBackgroundColor="@color/color_surface"
-                    app:chipStrokeWidth="0dp"
-                    android:textColor="@color/color_on_background" />
+                    app:chipStrokeWidth="0dp" />
 
                 <com.google.android.material.chip.Chip
                     style="@style/Widget.Material3.Chip.Filter"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/category_news"
+                    android:textColor="@color/color_on_background"
                     app:chipBackgroundColor="@color/color_surface"
-                    app:chipStrokeWidth="0dp"
-                    android:textColor="@color/color_on_background" />
+                    app:chipStrokeWidth="0dp" />
 
                 <com.google.android.material.chip.Chip
                     style="@style/Widget.Material3.Chip.Filter"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/category_case_study"
+                    android:textColor="@color/color_on_background"
                     app:chipBackgroundColor="@color/color_surface"
-                    app:chipStrokeWidth="0dp"
-                    android:textColor="@color/color_on_background" />
+                    app:chipStrokeWidth="0dp" />
 
                 <com.google.android.material.chip.Chip
                     style="@style/Widget.Material3.Chip.Filter"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/category_other"
+                    android:textColor="@color/color_on_background"
                     app:chipBackgroundColor="@color/color_surface"
-                    app:chipStrokeWidth="0dp"
-                    android:textColor="@color/color_on_background" />
+                    app:chipStrokeWidth="0dp" />
             </com.google.android.material.chip.ChipGroup>
         </HorizontalScrollView>
 
@@ -187,12 +187,15 @@
         android:id="@+id/rv_posts"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:paddingHorizontal="@dimen/space_md"
         android:clipToPadding="false"
+        android:paddingHorizontal="@dimen/space_md"
         android:paddingBottom="@dimen/space_xxl"
         app:layout_behavior="@string/appbar_scrolling_view_behavior"
-        tools:listitem="@layout/item_post_card"
         tools:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
-        tools:spanCount="1"/>
+        tools:listitem="@layout/item_post_card"
+        tools:spanCount="1" />
 
+    <include
+        android:id="@+id/loading_overlay"
+        layout="@layout/layout_fullscreen_loading" />
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

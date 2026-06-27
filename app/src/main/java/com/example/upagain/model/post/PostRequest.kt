@@ -4,7 +4,7 @@ import com.google.gson.annotations.SerializedName
 
 data class PostPaginationRequest (
     @SerializedName("page") val page: Int? = 1,
-    @SerializedName("limit") val limit: Int? = 8, // TODO: redefine default limit based on UI space
+    @SerializedName("limit") val limit: Int? = 10,
     @SerializedName("search") val search: String = "",
     @SerializedName("sort") val sort: PostSortOption? = null,
     @SerializedName("category") val category: PostCategory? = null

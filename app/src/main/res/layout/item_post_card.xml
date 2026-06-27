@@ -143,7 +143,7 @@
                     android:layout_width="@dimen/icon_sm"
                     android:layout_height="@dimen/icon_sm"
                     android:src="@drawable/ic_love_filled"
-                    app:tint="@color/color_secondary" />
+                    app:tint="@color/red" />
 
                 <TextView
                     android:id="@+id/post_likes"

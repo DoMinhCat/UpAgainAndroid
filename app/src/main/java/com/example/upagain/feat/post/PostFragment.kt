@@ -1,28 +1,28 @@
 package com.example.upagain.feat.post
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import com.example.upagain.R
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.upagain.api.ApiClient
 import com.example.upagain.databinding.FragmentPostBinding
-import com.example.upagain.databinding.FragmentProfileBinding
-import com.example.upagain.repository.AccountRepo
+import com.example.upagain.feat.error.ErrorActivity
+import com.example.upagain.model.post.PostDetailsResponse
+import com.example.upagain.model.post.PostPaginationRequest
 import com.example.upagain.repository.PostRepo
-import com.example.upagain.viewmodel.AccountViewModel
+import com.example.upagain.util.ui.toggleFullScreenLoading
 import com.example.upagain.viewmodel.PostViewModel
+import com.example.upagain.viewmodel.UiState
 import com.example.upagain.viewmodel.ViewModelFactory
-import kotlin.getValue
+import kotlinx.coroutines.launch
 
-
-/**
- * A simple [Fragment] subclass.
- * Use the [PostFragment.newInstance] factory method to
- * create an instance of this fragment.
- */
 class PostFragment : Fragment() {
     // elements binding
     private var _binding: FragmentPostBinding? = null
@@ -33,6 +33,11 @@ class PostFragment : Fragment() {
     private val viewModel: PostViewModel by viewModels {
         ViewModelFactory { PostViewModel(repository, appInstance) }
     }
+
+    // Get all posts pagination
+    private var currentPage = 1
+    private var loadedPosts = mutableListOf<PostDetailsResponse>()
+    private lateinit var postAdapter: PostRecyclerViewAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -53,5 +58,87 @@ class PostFragment : Fragment() {
         _binding = null
     }
 
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        // ! Always set up listeners and observers before API call
+        setupRecyclerView()
+        setupListeners()
+        observePostState()
+
+        // API call
+        loadPage(1)
+    }
+
     // PRIVATE ZONE
+    private fun setupRecyclerView() {
+        // Tell Recycler View to arrange items horizontally
+        binding.rvPosts.layoutManager = LinearLayoutManager(requireContext())
+        // Attach the adapter
+        postAdapter = PostRecyclerViewAdapter(
+            loadedPosts,
+            false,
+            object : PostRecyclerViewAdapter.OnClickListener {
+                override fun onPostClick(position: Int, post: PostDetailsResponse) {
+                    // TODO: navigate to Post Detail frag
+                }
+
+                override fun onLoadMoreClick() {
+                    loadPage(currentPage + 1)
+                }
+            })
+        binding.rvPosts.adapter = postAdapter
+    }
+
+    private fun setupListeners() {
+
+    }
+
+    private fun observePostState() {
+        lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                // GET ALL POSTS
+                launch {
+                    viewModel.allPostsState.collect { state ->
+                        when (state) {
+                            is UiState.Idle -> {}
+                            is UiState.Loading -> {
+                                binding.loadingOverlay.root.toggleFullScreenLoading(true)
+                            }
+
+                            is UiState.Success -> {
+                                binding.loadingOverlay.root.toggleFullScreenLoading(false)
+
+                                val allPostsResponse = state.data
+                                currentPage = allPostsResponse.currentPage
+
+                                if (currentPage == 1) {
+                                    // if it is the default page then clear all first then load
+                                    loadedPosts.clear()
+                                }
+                                loadedPosts.addAll(allPostsResponse.posts)
+
+                                val hasMore =
+                                    allPostsResponse.currentPage < allPostsResponse.lastPage
+                                postAdapter.updateData(loadedPosts, hasMore)
+                            }
+
+                            is UiState.Error -> {
+                                binding.loadingOverlay.root.toggleFullScreenLoading(false)
+                                Log.e(
+                                    "PostFragment",
+                                    "Load all posts failed. Status code: ${state.statusCode}",
+                                    state.exception
+                                )
+                                ErrorActivity.start(requireContext(), state.statusCode ?: 0)
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    private fun loadPage(pageNumber: Int) {
+        viewModel.getAllPosts(PostPaginationRequest(page = pageNumber))
+    }
 }

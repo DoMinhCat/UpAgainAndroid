@@ -271,7 +271,7 @@ class ProfileFragment : Fragment() {
                                 binding.loadingOverlay.root.toggleFullScreenLoading(false)
                                 Log.e(
                                     "ProfileFragment",
-                                    "Load account details failed",
+                                    "Load account details failed. Status code: ${state.statusCode}",
                                     state.exception
                                 )
                                 ErrorActivity.start(requireContext(), state.statusCode ?: 0)
