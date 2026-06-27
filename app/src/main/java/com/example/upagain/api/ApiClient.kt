@@ -25,6 +25,11 @@ object ApiClient {
         GsonBuilder().setStrictness(Strictness.LENIENT).create()
     }
 
+    private val EXCLUDED_ENDPOINTS = setOf(
+        Endpoints.IMAGES,
+        Endpoints.CONTAINER_OPEN
+    )
+
     fun initialize(context: Context) {
         appContext = context.applicationContext
         cookieJar = PersistentCookieJar(appContext)
@@ -52,11 +57,16 @@ object ApiClient {
     val httpClient: OkHttpClient by lazy {
         OkHttpClient.Builder()
             .cookieJar(cookieJar)
+            // INTERCEPTOR 1: Monolithic Authorization Header Injection
             .addInterceptor(Interceptor { chain ->
                 val originalRequest = chain.request()
                 val path = originalRequest.url.encodedPath
 
                 if (path == Endpoints.REFRESH || path == Endpoints.LOGIN) {
+                    return@Interceptor chain.proceed(originalRequest)
+                }
+
+                if (originalRequest.header("X-Retry") != null) {
                     return@Interceptor chain.proceed(originalRequest)
                 }
 
@@ -70,24 +80,53 @@ object ApiClient {
                 }
                 chain.proceed(newRequest)
             })
+            // INTERCEPTOR 2: Global Business Error & Redirection Monitor
             .addInterceptor(Interceptor { chain ->
                 val request = chain.request()
                 var response = chain.proceed(request)
+                val path = request.url.encodedPath
 
-                // exception not to redirect for certain endpoints
-                val isImageRequest = request.url.encodedPath.contains(Endpoints.IMAGES, ignoreCase = true)
+                val cleanPath = path.trim('/', ' ')
+                val isExcluded = EXCLUDED_ENDPOINTS.any { excludedPath ->
+                    val cleanExcluded = excludedPath.trim('/', ' ')
+                    var matchResult = false
+
+                    if (cleanExcluded.contains("{id}")) {
+                        val segments = cleanExcluded.split("{id}")
+                        val prefix = segments.getOrNull(0)?.trim('/') ?: ""
+                        val suffix = segments.getOrNull(1)?.trim('/') ?: ""
+
+                        val containsPrefix = cleanPath.contains(prefix, ignoreCase = true)
+                        val endsWithSuffix = cleanPath.endsWith(suffix, ignoreCase = true)
+                        matchResult = containsPrefix && endsWithSuffix
+                    } else {
+                        // Static path handling
+                        matchResult = cleanPath.contains(cleanExcluded, ignoreCase = true)
+                    }
+                    matchResult
+                }
 
                 when (response.code) {
-                    404 -> if (!isImageRequest) navigateToActivity(ErrorActivity::class.java, statusCode = 404)
-                    500 -> navigateToActivity(ErrorActivity::class.java, statusCode = 500)
+                    404 -> {
+                        if (!isExcluded) {
+                            response.close()
+                            navigateToActivity(ErrorActivity::class.java, statusCode = 404)
+                        }
+                    }
+                    500 -> {
+                        response.close()
+                        navigateToActivity(ErrorActivity::class.java, statusCode = 500)
+                    }
                     401 -> {
-                        val path = request.url.encodedPath
                         if (path != Endpoints.REFRESH && path != Endpoints.LOGIN) {
                             val alreadyRetried = request.header("X-Retry") != null
                             if (!alreadyRetried) {
                                 response.close()
+
                                 val newToken = refreshAccessToken()
                                 if (newToken != null) {
+                                    SessionManager.token = newToken
+
                                     val retryRequest = request.newBuilder()
                                         .header("Authorization", "Bearer $newToken")
                                         .header("X-Retry", "true")
@@ -95,8 +134,6 @@ object ApiClient {
                                     response = chain.proceed(retryRequest)
                                 } else {
                                     handleLogout()
-                                    // Return a synthetic 401 — the original body is closed,
-                                    // Retrofit must never see it again
                                     return@Interceptor okhttp3.Response.Builder()
                                         .request(request)
                                         .protocol(okhttp3.Protocol.HTTP_1_1)
@@ -126,7 +163,6 @@ object ApiClient {
         retrofit.create(ApiService::class.java)
     }
 
-    // Now uses authApiService — completely separate from the httpClient init chain
     private fun refreshAccessToken(): String? {
         return try {
             val response = authApiService.refresh().execute()
@@ -147,7 +183,11 @@ object ApiClient {
         navigateToActivity(LoginActivity::class.java, clearStack = true)
     }
 
-    private fun navigateToActivity(activityClass: Class<*>, clearStack: Boolean = false, statusCode: Int? = null) {
+    private fun navigateToActivity(
+        activityClass: Class<*>,
+        clearStack: Boolean = false,
+        statusCode: Int? = null
+    ) {
         val intent = Intent(appContext, activityClass).apply {
             flags = Intent.FLAG_ACTIVITY_NEW_TASK
             if (clearStack) addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK)

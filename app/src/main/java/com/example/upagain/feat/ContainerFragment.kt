@@ -57,7 +57,7 @@ class ContainerFragment : Fragment() {
             binding.layoutUploadPrompt.visibility = View.GONE
             binding.ivUploadThumbnail.visibility = View.VISIBLE
 
-            // Render the cached file path or network URI smoothly using Coil
+            // Render the chosen image using Coil
             binding.ivUploadThumbnail.load(barcodeUri) {
                 crossfade(true)
                 placeholder(R.color.color_surface)
@@ -97,8 +97,6 @@ class ContainerFragment : Fragment() {
         // ! Always set up listeners and observers before API call
         setupListeners()
         observeState()
-
-        // API call
     }
 
     // PRIVATE ZONE
@@ -107,8 +105,8 @@ class ContainerFragment : Fragment() {
         binding.etContainerId.setOnFocusChangeListener { _, hasFocus ->
             if (!hasFocus) {
                 val id = binding.etContainerId.text.toString().trim()
-                val idIdValid = idValidator.validate(id)
-                if (!idIdValid) {
+                val isIdValid = idValidator.validate(id)
+                if (!isIdValid) {
                     toggleTilIdErrorState(true)
                 } else {
                     toggleTilIdErrorState(false)
@@ -179,7 +177,7 @@ class ContainerFragment : Fragment() {
                                 toggleSubmitBtnLoadingState(false)
                                 Log.e(
                                     "ContainerFragment",
-                                    "Open container failed",
+                                    "Open container failed. Status Code: ${state.statusCode}",
                                     state.exception
                                 )
                                 binding.main.showTopSnackbar(
@@ -202,8 +200,8 @@ class ContainerFragment : Fragment() {
         // check ID
         val isIdValid = idValidator.validate(idContainer)
         if (!isIdValid) {
-            (true)
             isValidToSubmit = false
+            toggleTilIdErrorState(true)
         } else {
             toggleTilIdErrorState(false)
         }
