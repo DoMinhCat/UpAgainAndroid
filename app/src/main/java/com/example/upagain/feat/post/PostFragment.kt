@@ -13,6 +13,7 @@ import com.example.upagain.databinding.FragmentProfileBinding
 import com.example.upagain.repository.AccountRepo
 import com.example.upagain.repository.PostRepo
 import com.example.upagain.viewmodel.AccountViewModel
+import com.example.upagain.viewmodel.PostViewModel
 import com.example.upagain.viewmodel.ViewModelFactory
 import kotlin.getValue
 
@@ -29,10 +30,9 @@ class PostFragment : Fragment() {
     private val apiService by lazy { ApiClient.apiService }
     private val repository by lazy { PostRepo(apiService) }
     private val appInstance by lazy { requireActivity().application }
-    // TODO
-//    private val viewModel: PostViewModel by viewModels {
-//        ViewModelFactory { PostViewModel(repository, appInstance) }
-//    }
+    private val viewModel: PostViewModel by viewModels {
+        ViewModelFactory { PostViewModel(repository, appInstance) }
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
