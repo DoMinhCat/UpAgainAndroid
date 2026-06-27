@@ -66,7 +66,7 @@ class PostFragment : Fragment() {
         observePostState()
 
         // API call
-        loadPage(1)
+        viewModel.loadPageOfAllPosts(1)
     }
 
     // PRIVATE ZONE
@@ -83,7 +83,7 @@ class PostFragment : Fragment() {
                 }
 
                 override fun onLoadMoreClick() {
-                    loadPage(currentPage + 1)
+                    viewModel.loadPageOfAllPosts(currentPage + 1)
                 }
             })
         binding.rvPosts.adapter = postAdapter
@@ -136,9 +136,5 @@ class PostFragment : Fragment() {
                 }
             }
         }
-    }
-
-    private fun loadPage(pageNumber: Int) {
-        viewModel.getAllPosts(PostPaginationRequest(page = pageNumber))
     }
 }

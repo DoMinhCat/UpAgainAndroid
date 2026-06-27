@@ -11,16 +11,20 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import retrofit2.HttpException
 
-class PostViewModel(private val repository: PostRepo, application: Application) : AndroidViewModel(application) {
+class PostViewModel(private val repository: PostRepo, application: Application) :
+    AndroidViewModel(application) {
     private val context get() = getApplication<Application>().applicationContext
 
     private val _allPostsState = MutableStateFlow<UiState<PostPaginationResponse>>(UiState.Loading)
     val allPostsState: StateFlow<UiState<PostPaginationResponse>> = _allPostsState
 
-    fun getAllPosts(requestBody: PostPaginationRequest) {
+    private var currentFilters = PostPaginationRequest(page = 1, limit = 2)
+    fun getAllPosts(requestBody: PostPaginationRequest, isFirstPage: Boolean) {
         viewModelScope.launch {
-            _allPostsState.value = UiState.Loading
-
+            // only show full screen load if loading the first page
+            if (!isFirstPage) {
+                _allPostsState.value = UiState.Loading
+            }
             repository.getAllPosts(requestBody)
                 .onSuccess { allPostsData ->
                     _allPostsState.value = UiState.Success(allPostsData)
@@ -30,5 +34,10 @@ class PostViewModel(private val repository: PostRepo, application: Application) 
                     _allPostsState.value = UiState.Error(statusCode, exception)
                 }
         }
+    }
+
+    fun loadPageOfAllPosts(pageNumber: Int) {
+        currentFilters = currentFilters.copy(page = pageNumber)
+        getAllPosts(currentFilters, pageNumber == 1)
     }
 }
