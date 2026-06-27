@@ -175,8 +175,7 @@
                         android:layout_height="match_parent"
                         android:gravity="center"
                         android:orientation="vertical"
-                        android:padding="@dimen/space_md"
-                        tools:visibility="gone">
+                        android:padding="@dimen/space_md">
 
                         <ImageView
                             android:layout_width="@dimen/icon_lg"
@@ -194,6 +193,25 @@
                             android:gravity="center" />
                     </LinearLayout>
 
+                    <com.google.android.material.imageview.ShapeableImageView
+                        android:id="@+id/btn_clear_upload"
+                        android:layout_width="@dimen/icon_lg"
+                        android:layout_height="@dimen/icon_lg"
+                        android:layout_gravity="top|end"
+                        android:layout_margin="@dimen/space_sm"
+                        android:padding="@dimen/space_xs"
+                        android:src="@drawable/ic_trash"
+                        android:background="@color/color_surface"
+                        android:elevation="@dimen/space_xs"
+                        android:clickable="true"
+                        android:focusable="true"
+                        android:backgroundTint="@color/color_surface"
+                        android:foreground="?attr/selectableItemBackground"
+                        app:shapeAppearanceOverlay="@style/ShapeAppearance.Material3.Corner.Full"
+                        app:tint="@color/color_error"
+                        android:visibility="gone"
+                        tools:visibility="visible" />
+
                     <com.google.android.material.progressindicator.CircularProgressIndicator
                         android:id="@+id/upload_zone_loader"
                         android:layout_width="wrap_content"
@@ -203,8 +221,7 @@
                         app:indicatorSize="32dp"
                         app:trackThickness="3dp"
                         app:indicatorColor="@color/color_primary"
-                        android:visibility="gone"
-                        tools:visibility="visible" />
+                        android:visibility="gone" />
 
                 </FrameLayout>
             </com.google.android.material.card.MaterialCardView>

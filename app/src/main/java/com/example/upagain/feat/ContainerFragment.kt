@@ -56,6 +56,7 @@ class ContainerFragment : Fragment() {
             barcodeUri = uri
             binding.layoutUploadPrompt.visibility = View.GONE
             binding.ivUploadThumbnail.visibility = View.VISIBLE
+            binding.btnClearUpload.visibility = View.VISIBLE
 
             // Render the chosen image using Coil
             binding.ivUploadThumbnail.load(barcodeUri) {
@@ -146,6 +147,10 @@ class ContainerFragment : Fragment() {
             // validation passed
             val idContainer = idContainerStr.toIntOrNull() ?: 0
             viewModel.openContainer(idContainer, code, barcodeUri)
+        }
+        // CLEAR UPLOAD
+        binding.btnClearUpload.setOnClickListener {
+            removeBarcode()
         }
     }
 
@@ -269,5 +274,13 @@ class ContainerFragment : Fragment() {
             isLoading,
             getString(R.string.btn_open_container)
         )
+    }
+
+    private fun removeBarcode() {
+        barcodeUri = null
+        binding.ivUploadThumbnail.load(null) // Clears the image reference inside Coil
+        binding.ivUploadThumbnail.visibility = View.GONE
+        binding.layoutUploadPrompt.visibility = View.VISIBLE
+        binding.btnClearUpload.visibility = View.GONE
     }
 }
