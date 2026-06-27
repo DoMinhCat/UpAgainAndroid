@@ -19,6 +19,7 @@ import com.example.upagain.model.account.PasswordUpdateRequest
 import com.example.upagain.repository.AccountRepo
 import com.example.upagain.util.auth.SessionManager
 import com.example.upagain.util.ui.SnackbarLevel
+import com.example.upagain.util.ui.dpToPx
 import com.example.upagain.util.ui.hideKeyboard
 import com.example.upagain.util.ui.setOnBackClickListener
 import com.example.upagain.util.ui.setOnClickListenerWithCooldown
@@ -39,10 +40,12 @@ import com.google.android.material.snackbar.Snackbar
 class SecuritySettingFragment : Fragment() {
     // layer dependencies
     private val apiService by lazy { ApiClient.apiService }
-    private val repository by lazy { AccountRepo(apiService, requireContext()) }
+    private val repository by lazy { AccountRepo(apiService) }
+
     // viewmodel
+    private val appInstance by lazy { requireActivity().application }
     private val viewModel: AccountViewModel by viewModels {
-        ViewModelFactory { AccountViewModel(repository) }
+        ViewModelFactory { AccountViewModel(repository, appInstance) }
     }
 
     // form validators
@@ -103,12 +106,42 @@ class SecuritySettingFragment : Fragment() {
 
     // PRIVATE ZONE
     private fun setupListeners() {
+        // EMAIL FIELD
+        binding.etSecurityEmail.setOnFocusChangeListener { _, hasFocus ->
+            if (!hasFocus) {
+                val email = binding.etSecurityEmail.text.toString()
+                val isEmailValid = emailValidator.validate(email)
+                toggleEmailErrorState(!isEmailValid)
+            } else {
+                toggleEmailErrorState(false)
+            }
+        }
+        // PASSWORD FIELD
+        binding.etSecurityPassword.setOnFocusChangeListener { _, hasFocus ->
+            if (!hasFocus) {
+                val password = binding.etSecurityPassword.text.toString()
+                val isPasswordValid = passwordValidator.validate(password)
+                togglePasswordErrorState(!isPasswordValid)
+            } else {
+                togglePasswordErrorState(false)
+            }
+        }
+        // PASSWORD CONFIRM FIELD
+        binding.etSecurityConfirmPassword.setOnFocusChangeListener { _, hasFocus ->
+            if (!hasFocus) {
+                val password = binding.etSecurityConfirmPassword.text.toString()
+                val isPasswordValid = confirmPasswordValidator.validate(password)
+                togglePasswordConfirmErrorState(!isPasswordValid)
+            } else {
+                togglePasswordConfirmErrorState(false)
+            }
+        }
         // SAVE EMAIL BTN
         binding.btnSaveEmail.setOnClickListenerWithCooldown {
             val email = binding.etSecurityEmail.text.toString()
 
             val isEmailValid = emailValidator.validate(email)
-            binding.tvErrorEmail.visibility = if (isEmailValid) View.GONE else View.VISIBLE
+            toggleEmailErrorState(!isEmailValid)
             if (!isEmailValid) {
                 return@setOnClickListenerWithCooldown
             }
@@ -123,12 +156,12 @@ class SecuritySettingFragment : Fragment() {
 
             val isPasswordValid = passwordValidator.validate(password)
             val isConfirmPasswordValid = confirmPasswordValidator.validate(confirmPassword)
-            binding.tvErrorPassword.visibility = if (isPasswordValid) View.GONE else View.VISIBLE
-            binding.tvErrorConfirmPassword.visibility = if (isConfirmPasswordValid) View.GONE else View.VISIBLE
+            togglePasswordErrorState(!isPasswordValid)
+            togglePasswordConfirmErrorState(!isConfirmPasswordValid)
             if (!isPasswordValid || !isConfirmPasswordValid) {
                 return@setOnClickListenerWithCooldown
             }
-            // TODO: build request + call viewmodel to update changes
+
             val currentId = SessionManager.accountId ?: return@setOnClickListenerWithCooldown
             val request = PasswordUpdateRequest(password)
             viewModel.updatePassword(currentId, request)
@@ -154,6 +187,7 @@ class SecuritySettingFragment : Fragment() {
 
                             is UiState.Success -> {
                                 toggleEmailBtnLoading(false)
+                                viewModel.resetAccountUpdateState()
                                 activity?.hideKeyboard()
                                 binding.main.showTopSnackbar(
                                     R.string.snack_email_update_success,
@@ -162,6 +196,7 @@ class SecuritySettingFragment : Fragment() {
                             }
 
                             is UiState.Error -> {
+                                viewModel.resetAccountUpdateState()
                                 toggleEmailBtnLoading(false)
                                 Log.e("SecuritySettingFragment", "Update email failed", state.exception)
                                 binding.main.showTopSnackbar(
@@ -188,6 +223,7 @@ class SecuritySettingFragment : Fragment() {
 
                             is UiState.Success -> {
                                 togglePasswordBtnLoading(false)
+                                viewModel.resetAccountPasswordUpdateState()
                                 activity?.hideKeyboard()
                                 binding.main.showTopSnackbar(
                                     R.string.snack_password_update_success,
@@ -196,6 +232,7 @@ class SecuritySettingFragment : Fragment() {
                             }
 
                             is UiState.Error -> {
+                                viewModel.resetAccountPasswordUpdateState()
                                 togglePasswordBtnLoading(false)
                                 Log.e("SecuritySettingFragment", "Update password failed", state.exception)
                                 binding.main.showTopSnackbar(
@@ -217,5 +254,47 @@ class SecuritySettingFragment : Fragment() {
     }
     private fun togglePasswordBtnLoading(isLoading: Boolean) {
         toggleBtnLoadingState(binding.btnSavePassword, binding.passwordSaveLoader, isLoading, getString(R.string.btn_save))
+    }
+
+    private fun toggleEmailErrorState(isError: Boolean) {
+        if (isError) {
+            binding.tilSecurityEmail.boxStrokeWidth = dpToPx(1.5f, resources)
+            binding.tilSecurityEmail.boxStrokeWidthFocused = dpToPx(1.5f, resources)
+            binding.tilSecurityEmail.isErrorEnabled = true
+            binding.tilSecurityEmail.error = getString(R.string.invalid_email)
+        } else {
+            binding.tilSecurityEmail.error = null
+            binding.tilSecurityEmail.isErrorEnabled = false
+            binding.tilSecurityEmail.boxStrokeWidth = 0
+            binding.tilSecurityEmail.boxStrokeWidthFocused = 0
+        }
+    }
+
+    private fun togglePasswordErrorState(isError: Boolean) {
+        if (isError) {
+            binding.tilSecurityPassword.boxStrokeWidth = dpToPx(1.5f, resources)
+            binding.tilSecurityPassword.boxStrokeWidthFocused = dpToPx(1.5f, resources)
+            binding.tilSecurityPassword.isErrorEnabled = true
+            binding.tilSecurityPassword.error = getString(R.string.incorrect_password)
+        } else {
+            binding.tilSecurityPassword.error = null
+            binding.tilSecurityPassword.isErrorEnabled = false
+            binding.tilSecurityPassword.boxStrokeWidth = 0
+            binding.tilSecurityPassword.boxStrokeWidthFocused = 0
+        }
+    }
+
+    private fun togglePasswordConfirmErrorState(isError: Boolean) {
+        if (isError) {
+            binding.tilSecurityConfirmPassword.boxStrokeWidth = dpToPx(1.5f, resources)
+            binding.tilSecurityConfirmPassword.boxStrokeWidthFocused = dpToPx(1.5f, resources)
+            binding.tilSecurityConfirmPassword.isErrorEnabled = true
+            binding.tilSecurityConfirmPassword.error = getString(R.string.password_not_match)
+        } else {
+            binding.tilSecurityConfirmPassword.error = null
+            binding.tilSecurityConfirmPassword.isErrorEnabled = false
+            binding.tilSecurityConfirmPassword.boxStrokeWidth = 0
+            binding.tilSecurityConfirmPassword.boxStrokeWidthFocused = 0
+        }
     }
 }

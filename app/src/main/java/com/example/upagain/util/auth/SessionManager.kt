@@ -17,7 +17,6 @@ object SessionManager {
 
     // Fast-access memory cache
     var token: String? = null
-        private set
     var accountId: Int? = null
         private set
     var username: String? = null

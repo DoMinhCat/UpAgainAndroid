@@ -1,11 +1,15 @@
 package com.example.upagain.feat
 
 import android.content.Intent
+import android.graphics.Rect
 import android.os.Bundle
+import android.view.MotionEvent
+import android.widget.EditText
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.core.view.ViewCompat
+import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.updatePadding
 import androidx.fragment.app.Fragment
@@ -84,6 +88,27 @@ class MainActivity : AppCompatActivity() {
             .replace(R.id.fragment_container, fragment)
             .addToBackStack(null)
             .commit()
+    }
+
+    override fun dispatchTouchEvent(event: MotionEvent): Boolean {
+        if (event.action == MotionEvent.ACTION_DOWN) {
+            val v = currentFocus
+            if (v is EditText) {
+                val outRect = Rect()
+                v.getGlobalVisibleRect(outRect)
+
+                // If the user tapped outside the bounding box of the active EditText
+                if (!outRect.contains(event.rawX.toInt(), event.rawY.toInt())) {
+                    v.clearFocus()
+
+                    // Hide the soft keyboard safely
+                    WindowCompat.getInsetsController(window, v).hide(
+                        WindowInsetsCompat.Type.ime()
+                    )
+                }
+            }
+        }
+        return super.dispatchTouchEvent(event)
     }
 
 //    private fun isUserLoggedIn(): Boolean {

@@ -165,89 +165,129 @@
                 android:background="@drawable/input_round"
                 android:backgroundTint="@color/color_surface"
                 android:orientation="vertical"
-                android:padding="@dimen/space_md">
+                android:padding="@dimen/space_md"
+                android:focusable="true"
+                android:focusableInTouchMode="true">
 
                 <TextView
                     style="@style/TextAppearance.UpAgain.BodySmall"
-                    android:text="@string/username" android:alpha="0.6" android:layout_width="wrap_content" android:layout_height="wrap_content"/>
-                <EditText android:id="@+id/et_profile_name"
-                    style="@style/TextAppearance.UpAgain.BodyMedium"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:background="@null"
-                    tools:text="Sarah Jenkins"
-                    android:paddingVertical="@dimen/space_xs"/>
-                <TextView
-                    android:id="@+id/tv_username_error"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="@dimen/space_md"
-                    android:layout_marginTop="@dimen/space_xs"
-                    android:text="@string/invalid_username"
-                    android:textColor="@color/color_error"
-                    style="@style/TextAppearance.UpAgain.BodySmall"
-                    android:visibility="gone"
-                    tools:visibility="visible" />
+                    android:text="@string/username"
+                    android:alpha="0.6" />
 
-                <View android:layout_width="match_parent"
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/til_profile_name"
+                    style="@style/Widget.Material3.TextInputLayout.OutlinedBox"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:boxBackgroundColor="@android:color/transparent"
+                    app:boxStrokeWidth="0dp"
+                    app:boxStrokeWidthFocused="0dp"
+                    app:hintEnabled="false"
+                    app:boxCornerRadiusBottomEnd="@dimen/input_radius"
+                    app:boxCornerRadiusBottomStart="@dimen/input_radius"
+                    app:boxCornerRadiusTopEnd="@dimen/input_radius"
+                    app:boxCornerRadiusTopStart="@dimen/input_radius"
+                    app:errorEnabled="false"
+                    app:errorTextColor="@color/color_error">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/et_profile_name"
+                        style="@style/TextAppearance.UpAgain.BodyMedium"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@null"
+                        android:inputType="textPersonName"
+                        android:paddingVertical="@dimen/space_xs"
+                        android:paddingHorizontal="0dp"
+                        tools:text="Sarah Jenkins" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <View
+                    android:layout_width="match_parent"
                     android:layout_height="1dp"
                     android:background="@color/color_background"
                     android:layout_marginVertical="@dimen/space_sm"/>
 
                 <TextView
                     style="@style/TextAppearance.UpAgain.BodySmall"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
                     android:text="@string/email"
-                    android:alpha="0.6"
-                    android:layout_width="wrap_content" android:layout_height="wrap_content"/>
+                    android:alpha="0.6" />
+
                 <TextView
                     android:id="@+id/tv_profile_email"
-                    style="@style/TextAppearance.UpAgain.BodyMedium"
-                    android:layout_width="match_parent" android:layout_height="wrap_content" android:background="@null" android:text="sarah.j@example.com" android:paddingVertical="@dimen/space_xs"/>
-
-                <View android:layout_width="match_parent"
-                    android:layout_height="1dp" android:background="@color/color_background" android:layout_marginVertical="@dimen/space_sm"/>
-
-                <TextView
-                    style="@style/TextAppearance.UpAgain.BodySmall"
-                    android:text="@string/phone"
-                    android:alpha="0.6"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"/>
-                <EditText
-                    android:id="@+id/et_profile_phone"
                     style="@style/TextAppearance.UpAgain.BodyMedium"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:background="@null"
-                    tools:text="+1 234 567 890"
-                    android:paddingVertical="@dimen/space_xs"/>
+                    android:text="sarah.j@example.com"
+                    android:paddingVertical="@dimen/space_sm" />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="@color/color_background"
+                    android:layout_marginVertical="@dimen/space_sm"/>
+
                 <TextView
-                    android:id="@+id/tv_phone_error"
+                    style="@style/TextAppearance.UpAgain.BodySmall"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="@dimen/space_md"
-                    android:layout_marginTop="@dimen/space_xs"
-                    android:text="@string/invalid_phone"
-                    android:textColor="@color/color_error"
-                    style="@style/TextAppearance.UpAgain.BodySmall"
-                    android:visibility="gone"
-                    tools:visibility="visible" />
+                    android:text="@string/phone"
+                    android:alpha="0.6" />
 
-                <View android:layout_width="match_parent" android:layout_height="1dp" android:background="@color/color_background" android:layout_marginVertical="@dimen/space_sm"/>
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/til_profile_phone"
+                    style="@style/Widget.Material3.TextInputLayout.OutlinedBox"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:boxBackgroundColor="@android:color/transparent"
+                    app:boxStrokeWidth="0dp"
+                    app:boxStrokeWidthFocused="0dp"
+                    app:hintEnabled="false"
+                    app:boxCornerRadiusBottomEnd="@dimen/input_radius"
+                    app:boxCornerRadiusBottomStart="@dimen/input_radius"
+                    app:boxCornerRadiusTopEnd="@dimen/input_radius"
+                    app:boxCornerRadiusTopStart="@dimen/input_radius"
+                    app:errorEnabled="false"
+                    app:errorTextColor="@color/color_error">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/et_profile_phone"
+                        style="@style/TextAppearance.UpAgain.BodyMedium"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@null"
+                        android:inputType="phone"
+                        android:paddingVertical="@dimen/space_xs"
+                        android:paddingHorizontal="0dp"
+                        tools:text="+1 234 567 890" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="@color/color_background"
+                    android:layout_marginVertical="@dimen/space_sm"/>
 
                 <TextView
                     style="@style/TextAppearance.UpAgain.BodySmall"
-                    android:text="@string/member_since"
-                    android:alpha="0.6"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"/>
+                    android:layout_height="wrap_content"
+                    android:text="@string/member_since"
+                    android:alpha="0.6" />
+
                 <TextView
                     android:id="@+id/tv_member_since"
                     style="@style/TextAppearance.UpAgain.BodyMedium"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    tools:text="Jan 2024"
-                    android:paddingVertical="@dimen/space_xs"/>
+                    android:paddingVertical="@dimen/space_sm"
+                    tools:text="Jan 2024" />
+
             </LinearLayout>
 
             <FrameLayout
