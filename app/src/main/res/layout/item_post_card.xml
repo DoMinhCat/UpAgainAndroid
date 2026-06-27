@@ -142,7 +142,7 @@
                 <ImageView
                     android:layout_width="@dimen/icon_sm"
                     android:layout_height="@dimen/icon_sm"
-                    android:src="@drawable/ic_love"
+                    android:src="@drawable/ic_love_filled"
                     app:tint="@color/color_secondary" />
 
                 <TextView
@@ -159,14 +159,37 @@
                     android:layout_height="1dp"
                     android:layout_weight="1" />
 
-                <com.google.android.material.button.MaterialButton
-                    android:id="@+id/btn_view"
+                <LinearLayout
                     android:layout_width="wrap_content"
-                    android:backgroundTint="@color/color_primary"
-                    android:layout_height="@dimen/button_height"
-                    android:text="@string/btn_view"
-                    android:textColor="@color/color_on_primary"
-                    app:cornerRadius="@dimen/button_radius" />
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical">
+
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/btn_like"
+                        style="@style/Widget.Material3.Button.IconButton"
+                        android:layout_width="@dimen/min_touch"
+                        android:layout_height="@dimen/button_height"
+                        android:layout_marginEnd="@dimen/space_xs"
+                        app:icon="@drawable/ic_love_outline"
+                        app:iconSize="@dimen/icon_md"
+                        app:iconTint="@color/red"
+                        app:backgroundTint="@color/color_surface"
+                        app:cornerRadius="@dimen/button_radius" />
+
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/btn_save"
+                        style="@style/Widget.Material3.Button.IconButton"
+                        android:layout_width="@dimen/min_touch"
+                        android:layout_height="@dimen/button_height"
+                        android:contentDescription="@string/btn_save"
+                        app:icon="@drawable/ic_bookmark_outline"
+                        app:iconSize="@dimen/icon_md"
+                        app:iconTint="@color/color_primary"
+                        app:backgroundTint="@color/color_surface"
+                        app:cornerRadius="@dimen/button_radius" />
+
+                </LinearLayout>
 
             </LinearLayout>
 

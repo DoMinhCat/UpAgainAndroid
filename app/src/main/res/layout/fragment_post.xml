@@ -51,7 +51,7 @@
                 android:layout_height="@dimen/min_touch"
                 android:padding="@dimen/space_sm"
                 android:scaleType="centerInside"
-                android:src="@drawable/ic_saved_posts"
+                android:src="@drawable/ic_bookmark_outline"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
