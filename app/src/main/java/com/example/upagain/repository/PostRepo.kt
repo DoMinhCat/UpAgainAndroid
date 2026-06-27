@@ -1,6 +1,5 @@
 package com.example.upagain.repository
 
-import android.content.Context
 import com.example.upagain.api.ApiService
 import com.example.upagain.model.post.LikePostResponse
 import com.example.upagain.model.post.PostCreateRequest
@@ -12,7 +11,7 @@ import com.example.upagain.model.post.ViewPostResponse
 import retrofit2.HttpException
 import retrofit2.awaitResponse
 
-class PostRepo(private val apiService: ApiService, private val context: Context) {
+class PostRepo(private val apiService: ApiService) {
 
     suspend fun getAllPosts(filters: PostPaginationRequest): Result<PostPaginationResponse> {
         return try {

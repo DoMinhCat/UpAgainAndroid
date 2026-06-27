@@ -120,23 +120,7 @@ class ProfileFragment : Fragment() {
         _binding = null
     }
 
-    companion object {
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
-         * @return A new instance of fragment ProfileFragment.
-         */
-        @JvmStatic
-        fun newInstance() =
-            ProfileFragment().apply {
-                arguments = Bundle().apply {
-                }
-            }
-    }
-
     // PRIVATE ZONE
-
     private fun setupListeners() {
         // LOG OUT BUTTON
         binding.btnLogout.setOnClickListener {
