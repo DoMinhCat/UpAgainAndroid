@@ -41,6 +41,10 @@ class ErrorActivity : AppCompatActivity() {
         binding.tvErrorCode.text = code.toString()
 
         when (code) {
+            401 -> {
+                binding.tvErrorTitle.text = getString(R.string.error_401_description)
+                binding.tvErrorMessage.text = getString(R.string.error_401_msg)
+            }
             403 -> {
                 binding.tvErrorTitle.text = getString(R.string.error_403_description)
                 binding.tvErrorMessage.text = getString(R.string.error_403_msg)
