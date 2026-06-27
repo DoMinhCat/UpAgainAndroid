@@ -10,6 +10,7 @@
         style="@style/Widget.Material3.Button"
         android:layout_width="180dp"
         android:layout_height="@dimen/button_height"
+        android:layout_gravity="center"
         android:text="@string/btn_load_more"
         android:textColor="@color/color_on_primary"
         app:backgroundTint="@color/color_primary"
