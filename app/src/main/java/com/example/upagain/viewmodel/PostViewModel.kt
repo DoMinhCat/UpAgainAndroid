@@ -18,7 +18,7 @@ class PostViewModel(private val repository: PostRepo, application: Application) 
     private val _allPostsState = MutableStateFlow<UiState<PostPaginationResponse>>(UiState.Loading)
     val allPostsState: StateFlow<UiState<PostPaginationResponse>> = _allPostsState
 
-    private var currentFilters = PostPaginationRequest(page = 1, limit = 2)
+    private var currentFilters = PostPaginationRequest(page = 1)
     fun getAllPosts(requestBody: PostPaginationRequest, isFirstPage: Boolean) {
         viewModelScope.launch {
             // only show full screen load if loading the first page
