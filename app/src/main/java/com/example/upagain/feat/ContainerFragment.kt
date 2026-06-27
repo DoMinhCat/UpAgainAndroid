@@ -57,6 +57,7 @@ class ContainerFragment : Fragment() {
             binding.layoutUploadPrompt.visibility = View.GONE
             binding.ivUploadThumbnail.visibility = View.VISIBLE
             binding.btnClearUpload.visibility = View.VISIBLE
+            toggleTilCodeErrorState(false)
 
             // Render the chosen image using Coil
             binding.ivUploadThumbnail.load(barcodeUri) {
@@ -140,6 +141,7 @@ class ContainerFragment : Fragment() {
         binding.btnSubmit.setOnClickListenerWithCooldown {
             val code = binding.etCode.text.toString().trim()
             val idContainerStr = binding.etContainerId.text.toString().trim()
+            Log.d("ContainerFragment", "code: '$code'")
             if (!isValidToSubmit(idContainerStr, code, barcodeUri)) {
                 return@setOnClickListenerWithCooldown
             }
@@ -205,13 +207,14 @@ class ContainerFragment : Fragment() {
         // check ID
         val isIdValid = idValidator.validate(idContainer)
         if (!isIdValid) {
-            isValidToSubmit = false
+            // return immediately if missing id
             toggleTilIdErrorState(true)
+            return false
         } else {
             toggleTilIdErrorState(false)
         }
         val hasBarcode = barcodeUri != null
-        val hasDigitCode = code != null
+        val hasDigitCode = !code.isNullOrEmpty()
         // only 1 method can be selected at a time
         if (hasDigitCode && hasBarcode) {
             binding.main.showTopSnackbar(
