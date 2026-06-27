@@ -5,6 +5,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.compose.runtime.currentRecomposeScope
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
@@ -17,6 +18,7 @@ import com.example.upagain.feat.error.ErrorActivity
 import com.example.upagain.model.post.PostDetailsResponse
 import com.example.upagain.model.post.PostPaginationRequest
 import com.example.upagain.repository.PostRepo
+import com.example.upagain.util.ui.toggleBtnLoadingState
 import com.example.upagain.util.ui.toggleFullScreenLoading
 import com.example.upagain.viewmodel.PostViewModel
 import com.example.upagain.viewmodel.UiState
@@ -102,18 +104,17 @@ class PostFragment : Fragment() {
                         when (state) {
                             is UiState.Idle -> {}
                             is UiState.Loading -> {
-                                binding.loadingOverlay.root.toggleFullScreenLoading(true)
+                                toggleAllPostLoading(true, state.isFirstPage)
                             }
 
                             is UiState.Success -> {
-                                binding.loadingOverlay.root.toggleFullScreenLoading(false)
-
                                 val allPostsResponse = state.data
-                                currentPage = allPostsResponse.currentPage
 
+                                currentPage = allPostsResponse.currentPage
                                 if (currentPage == 1) {
                                     // if it is the default page then clear all first then load
                                     loadedPosts.clear()
+                                    toggleAllPostLoading(false, isFirstPage = true)
                                 }
                                 loadedPosts.addAll(allPostsResponse.posts)
 
@@ -123,7 +124,7 @@ class PostFragment : Fragment() {
                             }
 
                             is UiState.Error -> {
-                                binding.loadingOverlay.root.toggleFullScreenLoading(false)
+                                toggleAllPostLoading(false, isFirstPage = (currentPage == 1))
                                 Log.e(
                                     "PostFragment",
                                     "Load all posts failed. Status code: ${state.statusCode}",
@@ -135,6 +136,14 @@ class PostFragment : Fragment() {
                     }
                 }
             }
+        }
+    }
+
+    private fun toggleAllPostLoading(isLoading: Boolean, isFirstPage: Boolean) {
+        if(isFirstPage){
+            binding.loadingOverlay.root.toggleFullScreenLoading(isLoading)
+        } else{
+            postAdapter.toggleLoadMoreBtnLoadingState(isLoading)
         }
     }
 }

@@ -17,7 +17,7 @@ import retrofit2.HttpException
 class AccountViewModel(private val repository: AccountRepo, application: Application) : AndroidViewModel(application) {
     private val context get() = getApplication<Application>().applicationContext
     private val _accountDetailsState =
-        MutableStateFlow<UiState<AccountDetailsResponse>>(UiState.Loading)
+        MutableStateFlow<UiState<AccountDetailsResponse>>(UiState.Loading())
     val accountDetailsState: StateFlow<UiState<AccountDetailsResponse>> = _accountDetailsState
     private val _accountUpdateState = MutableStateFlow<UiState<Unit>>(UiState.Idle)
     val accountUpdateState: StateFlow<UiState<Unit>> = _accountUpdateState
@@ -31,7 +31,7 @@ class AccountViewModel(private val repository: AccountRepo, application: Applica
 
     fun getAccountDetails(idAccount: Int) {
         viewModelScope.launch {
-            _accountDetailsState.value = UiState.Loading
+            _accountDetailsState.value = UiState.Loading()
 
             repository.getAccountDetails(idAccount)
                 .onSuccess { accountDetails ->
@@ -46,7 +46,7 @@ class AccountViewModel(private val repository: AccountRepo, application: Applica
 
     fun updateAccount(idAccount: Int, request: AccountUpdateRequest) {
         viewModelScope.launch {
-            _accountUpdateState.value = UiState.Loading
+            _accountUpdateState.value = UiState.Loading()
 
             repository.updateAccount(idAccount, request)
                 .onSuccess {
@@ -64,7 +64,7 @@ class AccountViewModel(private val repository: AccountRepo, application: Applica
 
     fun deleteAccount(idAccount: Int) {
         viewModelScope.launch {
-            _accountDeleteState.value = UiState.Loading
+            _accountDeleteState.value = UiState.Loading()
 
             repository.deleteAccount(idAccount)
                 .onSuccess {
@@ -82,7 +82,7 @@ class AccountViewModel(private val repository: AccountRepo, application: Applica
 
     fun updatePassword(idAccount: Int, request: PasswordUpdateRequest) {
         viewModelScope.launch {
-            _accountPasswordUpdateState.value = UiState.Loading
+            _accountPasswordUpdateState.value = UiState.Loading()
 
             repository.updatePassword(idAccount, request)
                 .onSuccess {
@@ -100,7 +100,7 @@ class AccountViewModel(private val repository: AccountRepo, application: Applica
 
     fun uploadAvatar(idAccount: Int, fileUri: android.net.Uri) {
         viewModelScope.launch {
-            _accountAvatarUploadState.value = UiState.Loading
+            _accountAvatarUploadState.value = UiState.Loading()
             repository.updateAvatar(context, idAccount, fileUri)
                 .onSuccess {
                     _accountAvatarUploadState.value = UiState.Success(Unit)

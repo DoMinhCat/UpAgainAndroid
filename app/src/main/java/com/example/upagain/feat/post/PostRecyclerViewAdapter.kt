@@ -6,10 +6,14 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.core.graphics.drawable.toDrawable
 import androidx.recyclerview.widget.RecyclerView
 import com.example.upagain.R
 import com.example.upagain.model.post.PostDetailsResponse
 import com.example.upagain.util.datetime.formatTimestamptz
+import com.example.upagain.util.ui.toggleBtnLoadingState
+import com.google.android.material.button.MaterialButton
+import com.google.android.material.progressindicator.CircularProgressIndicator
 
 /**
  * RecyclerViewAdapter pour afficher en liste (dans un RecyclerView) des prénoms
@@ -26,6 +30,8 @@ class PostRecyclerViewAdapter(
         private const val TYPE_LOAD_MORE = 1
     }
 
+    private var isLoadMoreBtnLoading: Boolean = false
+
     interface OnClickListener {
         fun onPostClick(position: Int, post: PostDetailsResponse)
         fun onLoadMoreClick()
@@ -35,6 +41,7 @@ class PostRecyclerViewAdapter(
     fun updateData(newPosts: List<PostDetailsResponse>, nextPagesAvailable: Boolean) {
         this.postsData = newPosts.toMutableList()
         this.hasMorePages = nextPagesAvailable
+        this.isLoadMoreBtnLoading = false
         notifyDataSetChanged()
     }
 
@@ -65,8 +72,28 @@ class PostRecyclerViewAdapter(
                 onClickListener.onPostClick(position, post)
             }
         } else if (holder is LoadMoreViewHolder) {
-            holder.btnLoadMore.setOnClickListener {
-                onClickListener.onLoadMoreClick()
+            val context = holder.btnLoadMore.context
+            val defaultText = context.getString(R.string.btn_load_more)
+            val defaultIcon = context.getDrawable(R.drawable.ic_chevron_double_down)
+            if (isLoadMoreBtnLoading) {
+                toggleBtnLoadingState(
+                    holder.btnLoadMore,
+                    holder.spinnerIndicator,
+                    true,
+                    defaultText,
+                    defaultIcon
+                )
+            } else {
+                toggleBtnLoadingState(
+                    holder.btnLoadMore,
+                    holder.spinnerIndicator,
+                    false,
+                    defaultText,
+                    defaultIcon
+                )
+                holder.btnLoadMore.setOnClickListener {
+                    onClickListener.onLoadMoreClick()
+                }
             }
         }
     }
@@ -90,11 +117,20 @@ class PostRecyclerViewAdapter(
     }
 
     class LoadMoreViewHolder(view: View) : RecyclerView.ViewHolder(view) {
-        val btnLoadMore: Button = view.findViewById(R.id.btn_load_more)
+        val btnLoadMore: MaterialButton = view.findViewById(R.id.btn_load_more)
+        val spinnerIndicator: CircularProgressIndicator = view.findViewById(R.id.load_more_loader)
     }
 
     // to know if the last row is a load more or a post
     override fun getItemViewType(position: Int): Int {
         return if (position < postsData.size) TYPE_POST else TYPE_LOAD_MORE
+    }
+
+    fun toggleLoadMoreBtnLoadingState(isLoading: Boolean) {
+        this.isLoadMoreBtnLoading = isLoading
+        // If the load more footer is visible, notify the adapter to refresh ONLY that row
+        if (hasMorePages) {
+            notifyItemChanged(postsData.size)
+        }
     }
 }

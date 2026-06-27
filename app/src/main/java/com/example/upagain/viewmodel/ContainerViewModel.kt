@@ -17,7 +17,7 @@ class ContainerViewModel(private val repository: ContainerRepo, application: App
 
     fun openContainer(idContainer: Int, digitCode: String?, barcodeUri: Uri?) {
         viewModelScope.launch {
-            _openContainerState.value = UiState.Loading
+            _openContainerState.value = UiState.Loading()
             repository.openContainer(context, idContainer, digitCode, barcodeUri)
                 .onSuccess {
                     _openContainerState.value = UiState.Success(Unit)

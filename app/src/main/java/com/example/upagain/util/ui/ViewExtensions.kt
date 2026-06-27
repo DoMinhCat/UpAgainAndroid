@@ -1,5 +1,6 @@
 package com.example.upagain.util.ui
 
+import android.graphics.drawable.Drawable
 import android.os.SystemClock
 import android.view.View
 import com.google.android.material.button.MaterialButton
@@ -20,16 +21,20 @@ fun toggleBtnLoadingState(
     button: MaterialButton,
     loader: CircularProgressIndicator,
     isLoading: Boolean,
-    defaultText: String
+    defaultText: String,
+    defaultIcon: Drawable? = null
 ) {
     if (isLoading) {
         button.text = "" // Hides the text completely
         button.isEnabled = false
         loader.visibility = View.VISIBLE
+        button.icon = null
     } else {
         button.text = defaultText // Restores the button text
         button.isEnabled = true
         loader.visibility = View.GONE
+        button.icon = defaultIcon
+
     }
 }
 

@@ -17,7 +17,7 @@ class AuthViewModel(private val repository: AuthRepository) : ViewModel() {
 
     fun login(request: LoginRequest) {
         viewModelScope.launch {
-            _loginState.value = UiState.Loading
+            _loginState.value = UiState.Loading()
 
             repository.login(request)
                 .onSuccess { tokenResponse ->

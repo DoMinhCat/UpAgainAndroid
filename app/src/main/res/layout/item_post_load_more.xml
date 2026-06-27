@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:padding="@dimen/space_md">
@@ -15,11 +16,21 @@
         android:textColor="@color/color_on_primary"
         app:backgroundTint="@color/color_primary"
         app:cornerRadius="@dimen/button_radius"
-
         app:icon="@drawable/ic_chevron_double_down"
         app:iconTint="@color/color_on_primary"
         app:iconSize="@dimen/icon_sm"
-
         app:iconGravity="textEnd"
         app:iconPadding="@dimen/space_sm" />
+
+    <com.google.android.material.progressindicator.CircularProgressIndicator
+        android:id="@+id/load_more_loader"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:indeterminate="true"
+        app:indicatorSize="@dimen/icon_md"
+        app:indicatorColor="@color/color_on_primary"
+        android:visibility="gone"
+        tools:visibility="visible" />
+
 </FrameLayout>
