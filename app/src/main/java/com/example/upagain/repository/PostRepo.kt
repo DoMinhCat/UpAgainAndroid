@@ -13,9 +13,9 @@ import retrofit2.awaitResponse
 
 class PostRepo(private val apiService: ApiService) {
 
-    suspend fun getAllPosts(filters: PostPaginationRequest): Result<PostPaginationResponse> {
+    suspend fun getAllPosts(requestBody: PostPaginationRequest): Result<PostPaginationResponse> {
         return try {
-            val response = apiService.getAllPosts(filters.toQueryMap()).awaitResponse()
+            val response = apiService.getAllPosts(requestBody.toQueryMap()).awaitResponse()
             val body = response.body()
 
             if (response.isSuccessful && body != null) {
