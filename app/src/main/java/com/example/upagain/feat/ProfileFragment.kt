@@ -419,7 +419,7 @@ class ProfileFragment : Fragment() {
                                 toggleAvatarLoading(false)
                                 Log.e(
                                     "ProfileFragment",
-                                    "Avatar upload failed",
+                                    "Avatar upload failed. Status Code: ${state.statusCode}",
                                     state.exception
                                 )
                                 binding.main.showTopSnackbar(
