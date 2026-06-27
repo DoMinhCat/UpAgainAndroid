@@ -38,6 +38,7 @@
     <string name="category_other">Autres</string>
     <string name="img_thumbnail_description">Image principale</string>
     <string name="img_description">Une image</string>
+    <string name="btn_load_more">Voir plus</string>
     <string name="btn_view">Voir</string>
     <string name="author_dynamic">par %1$s</string>
 

@@ -61,6 +61,7 @@
     <string name="category_other">Others</string>
     <string name="img_thumbnail_description">Thumbnail image</string>
     <string name="img_description">An image</string>
+    <string name="btn_load_more">Load more</string>
     <string name="btn_view">View</string>
     <string name="author_dynamic">by %1$s</string>
     <string name="string_dynamic" translatable="false">%1$s</string>

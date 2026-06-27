@@ -13,6 +13,10 @@
 
     <!-- Buttons -->
     <dimen name="button_height">48dp</dimen>
+    <dimen name="button_width_md">60dp</dimen>
+    <dimen name="button_width_lg">72dp</dimen>
+    <dimen name="button_width_xl">84dp</dimen>
+    <dimen name="button_width_sm">48dp</dimen>
     <dimen name="button_radius">12dp</dimen>
 
     <!-- Cards -->
