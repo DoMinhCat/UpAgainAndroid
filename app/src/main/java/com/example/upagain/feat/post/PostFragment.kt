@@ -19,6 +19,7 @@ import com.example.upagain.event.LikePostEvent
 import com.example.upagain.event.SavePostEvent
 import com.example.upagain.feat.error.ErrorActivity
 import com.example.upagain.model.post.PostDetailsResponse
+import com.example.upagain.model.post.PostPaginationRequest
 import com.example.upagain.repository.PostRepo
 import com.example.upagain.util.ui.SnackbarLevel
 import com.example.upagain.util.ui.showTopSnackbar
@@ -120,6 +121,35 @@ class PostFragment : Fragment() {
     }
 
     private fun setupListeners() {
+        binding.chipGroupSort.setOnCheckedStateChangeListener { group, checkedChips ->
+            val selectedChip = checkedChips.firstOrNull() ?: return@setOnCheckedStateChangeListener
+
+            when (selectedChip) {
+                R.id.most_liked_chip -> {
+                    // TODO
+                    // Update sorting property selection state ...
+                }
+                R.id.most_viewed_chip -> {
+                    // Update sorting property selection state ...
+                }
+            }
+            // Trigger page 1 reload filter update
+//            triggerFilterRefresh()
+        }
+        binding.chipGroupCategories.setOnCheckedStateChangeListener { group, checkedIds ->
+            val selectedId = checkedIds.firstOrNull() ?: return@setOnCheckedStateChangeListener
+
+            when (selectedId) {
+                R.id.tutorial_chip -> { /* Map filter */ }
+                R.id.project_chip -> { /* Map filter */ }
+                R.id.tip_chip -> { /* Map filter */ }
+                R.id.news_chip -> { /* Map filter */ }
+                R.id.case_study_chip -> { /* Map filter */ }
+                R.id.other_chip -> { /* Map filter */ }
+            }
+            // Trigger page 1 reload filter update
+//            viewModel.getAllPosts(PostPaginationRequest(), true)
+        }
 
     }
 
