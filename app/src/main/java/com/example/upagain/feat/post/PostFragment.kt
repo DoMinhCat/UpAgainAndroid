@@ -123,32 +123,56 @@ class PostFragment : Fragment() {
 
     private fun setupListeners() {
         binding.chipGroupSort.setOnCheckedStateChangeListener { _, checkedChips ->
-            val selectedChip = checkedChips.firstOrNull() ?: return@setOnCheckedStateChangeListener
+            val selectedChip = checkedChips.firstOrNull()
 
-            when (selectedChip) {
-                R.id.most_liked_chip -> {
-                    viewModel.updateFilter(PostPaginationRequest(sort = PostSortOption.MOST_LIKE))
-                }
-                R.id.most_viewed_chip -> {
-                    viewModel.updateFilter(PostPaginationRequest(sort = PostSortOption.MOST_VIEW))
+            if (selectedChip == null) {
+                viewModel.updateFilter(PostPaginationRequest(sort = null))
+            } else {
+                when (selectedChip) {
+                    R.id.most_liked_chip -> {
+                        viewModel.updateFilter(PostPaginationRequest(sort = PostSortOption.MOST_LIKE))
+                    }
+
+                    R.id.most_viewed_chip -> {
+                        viewModel.updateFilter(PostPaginationRequest(sort = PostSortOption.MOST_VIEW))
+                    }
                 }
             }
             viewModel.loadPageOfAllPosts(1)
         }
-        binding.chipGroupCategories.setOnCheckedStateChangeListener { _, checkedIds ->
-            val selectedId = checkedIds.firstOrNull() ?: return@setOnCheckedStateChangeListener
+        binding.chipGroupCategories.setOnCheckedStateChangeListener { _, checkedChips ->
+            val selectedChip = checkedChips.firstOrNull()
+            if (selectedChip == null) {
+                viewModel.updateFilter(PostPaginationRequest(sort = null))
+            } else {
+                when (selectedChip) {
+                    R.id.tutorial_chip -> {
+                        viewModel.updateFilter(PostPaginationRequest(category = PostCategory.TUTORIAL))
+                    }
 
-            when (selectedId) {
-                R.id.tutorial_chip -> { viewModel.updateFilter(PostPaginationRequest(category = PostCategory.TUTORIAL)) }
-                R.id.project_chip -> { viewModel.updateFilter(PostPaginationRequest(category = PostCategory.PROJECT)) }
-                R.id.tip_chip -> { viewModel.updateFilter(PostPaginationRequest(category = PostCategory.TIPS)) }
-                R.id.news_chip -> { viewModel.updateFilter(PostPaginationRequest(category = PostCategory.NEWS)) }
-                R.id.case_study_chip -> { viewModel.updateFilter(PostPaginationRequest(category = PostCategory.CASE_STUDY)) }
-                R.id.other_chip -> { viewModel.updateFilter(PostPaginationRequest(category = PostCategory.OTHER)) }
+                    R.id.project_chip -> {
+                        viewModel.updateFilter(PostPaginationRequest(category = PostCategory.PROJECT))
+                    }
+
+                    R.id.tip_chip -> {
+                        viewModel.updateFilter(PostPaginationRequest(category = PostCategory.TIPS))
+                    }
+
+                    R.id.news_chip -> {
+                        viewModel.updateFilter(PostPaginationRequest(category = PostCategory.NEWS))
+                    }
+
+                    R.id.case_study_chip -> {
+                        viewModel.updateFilter(PostPaginationRequest(category = PostCategory.CASE_STUDY))
+                    }
+
+                    R.id.other_chip -> {
+                        viewModel.updateFilter(PostPaginationRequest(category = PostCategory.OTHER))
+                    }
+                }
             }
             viewModel.loadPageOfAllPosts(1)
         }
-
     }
 
     private fun observePostState() {

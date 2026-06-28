@@ -54,16 +54,32 @@
             <TextView
                 android:id="@+id/post_title"
                 style="@style/TextAppearance.UpAgain.H3"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
+                android:layout_width="0dp" android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/space_md"
-                android:ellipsize="end"
+                android:layout_marginEnd="@dimen/space_sm" android:ellipsize="end"
                 android:maxLines="2"
                 android:textColor="@color/color_on_surface"
-                app:layout_constraintEnd_toEndOf="parent"
+                tools:text="This is a long title string example that will wrap cleanly"
+
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/post_category"
-                tools:text="@string/string_dynamic" />
+                app:layout_constraintEnd_toStartOf="@id/tv_sponsored"
+                app:layout_constraintTop_toBottomOf="@+id/post_category" />
+
+            <TextView
+                android:id="@+id/tv_sponsored"
+                style="@style/TextAppearance.UpAgain.BodySmall"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/sponsored"
+                android:textColor="@color/color_secondary"
+                android:textStyle="bold"
+                android:visibility="invisible"
+                tools:visibility="visible"
+
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="@id/post_title"
+                app:layout_constraintBottom_toBottomOf="@id/post_title" />
+
 
             <LinearLayout
                 android:id="@+id/author_date_row"
@@ -94,16 +110,7 @@
                     android:textColor="@color/color_secondary"
                     tools:text="@string/date_dynamic" />
 
-                <TextView
-                    android:id="@+id/tv_sponsored"
-                    style="@style/TextAppearance.UpAgain.BodySmall"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="@dimen/space_sm"
-                    android:text="@string/sponsored"
-                    android:visibility="invisible"
-                    tools:visibility="visible"
-                    android:textColor="@color/color_secondary" />
+
             </LinearLayout>
 
             <View
