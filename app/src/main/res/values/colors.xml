@@ -36,4 +36,12 @@
     <color name="color_error">#D32F2F</color>
     <color name="color_success">#2E7D32</color>
 
+    <!-- Post categories -->
+    <color name="category_tutorial">#45A575</color>
+    <color name="category_project">#7A5C3E</color>
+    <color name="category_tips">#4F86C6</color>
+    <color name="category_news">#E3B23C</color>
+    <color name="category_case_study">#8B5FBF</color>
+    <color name="category_other">#7A7A7A</color>
+
 </resources>
