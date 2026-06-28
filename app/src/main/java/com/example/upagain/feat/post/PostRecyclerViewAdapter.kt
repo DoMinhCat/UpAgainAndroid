@@ -1,7 +1,6 @@
 package com.example.upagain.feat.post
 
 import android.content.res.ColorStateList
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -14,14 +13,12 @@ import coil.load
 import com.example.upagain.R
 import com.example.upagain.model.post.PostDetailsResponse
 import com.example.upagain.util.bin.FALL_BACK_IMAGE_URL
-import com.example.upagain.util.datetime.compareTimestamps
 import com.example.upagain.util.datetime.formatTimestamptz
 import com.example.upagain.util.ui.getPostCategoryColor
 import com.example.upagain.util.ui.setOnClickListenerWithCooldown
 import com.example.upagain.util.ui.toggleBtnLoadingState
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.progressindicator.CircularProgressIndicator
-import kotlin.time.Clock
 
 /**
  * RecyclerViewAdapter pour afficher en liste (dans un RecyclerView) des prénoms
@@ -89,7 +86,7 @@ class PostRecyclerViewAdapter(
         if (holder is PostViewHolder) {
             val post = postsData[position]
             val categoryColorResId = getPostCategoryColor(post.category.toString())
-            val categoryColor =  ContextCompat.getColor(holder.itemView.context, categoryColorResId)
+            val categoryColor = ContextCompat.getColor(holder.itemView.context, categoryColorResId)
 
             holder.title.text = post.title
             holder.author.text = post.creator
@@ -98,12 +95,7 @@ class PostRecyclerViewAdapter(
             holder.likes.text = post.likeCount.toString()
             holder.category.text = post.category.toString().replace('_', ' ')
             holder.category.backgroundTintList = ColorStateList.valueOf(categoryColor)
-            if (post.adsId != null && post.adsFrom != null && post.adsTo != null && compareTimestamps(
-                    Clock.System.now(),
-                    post.adsFrom
-                ) > 0 && compareTimestamps(Clock.System.now(), post.adsTo) < 0
-            ) {
-                Log.d("PostRecyclerViewAdapter", "adsId: ${post.adsId}, now vs adsTo: ${compareTimestamps(Clock.System.now(), post.adsTo)}, adsTo: ${post.adsTo}")
+            if (post.adsId != null && post.adsId > 0) {
                 holder.sponsorStatus.visibility = View.VISIBLE
             }
 
