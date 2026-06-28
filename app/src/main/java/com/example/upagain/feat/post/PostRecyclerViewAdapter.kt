@@ -13,6 +13,7 @@ import com.example.upagain.R
 import com.example.upagain.model.post.PostDetailsResponse
 import com.example.upagain.util.bin.FALL_BACK_IMAGE_URL
 import com.example.upagain.util.datetime.formatTimestamptz
+import com.example.upagain.util.ui.getPostCategoryColor
 import com.example.upagain.util.ui.setOnClickListenerWithCooldown
 import com.example.upagain.util.ui.toggleBtnLoadingState
 import com.google.android.material.button.MaterialButton
@@ -62,6 +63,22 @@ class PostRecyclerViewAdapter(
         }
     }
 
+    /**
+     * ViewHolder remember the elements of each row item
+     */
+    class PostViewHolder(view: View) : RecyclerView.ViewHolder(view) {
+        val thumbnailImage: ImageView = view.findViewById(R.id.post_thumbnail)
+        val category: Button = view.findViewById(R.id.post_category)
+        val title: TextView = view.findViewById(R.id.post_title)
+        val author: TextView = view.findViewById(R.id.post_author)
+        val date: TextView = view.findViewById(R.id.post_date)
+        val views: TextView = view.findViewById(R.id.post_views)
+        val likes: TextView = view.findViewById(R.id.post_likes)
+        val likeBtn: MaterialButton = view.findViewById(R.id.btn_like)
+        val saveBtn: MaterialButton = view.findViewById(R.id.btn_save)
+        val likeIcon: ImageView = view.findViewById(R.id.ic_like)
+    }
+
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         // Feed raw data from API to the card
         if (holder is PostViewHolder) {
@@ -72,6 +89,7 @@ class PostRecyclerViewAdapter(
             holder.views.text = post.viewCount.toString()
             holder.likes.text = post.likeCount.toString()
             holder.category.text = post.category.toString().replace('_', ' ')
+            holder.category.setBackgroundColor(getPostCategoryColor(post.category.toString()))
 
             // Thumbnail image
             val thumbnailUrl = post.photos?.firstOrNull() ?: FALL_BACK_IMAGE_URL
@@ -134,23 +152,6 @@ class PostRecyclerViewAdapter(
 
     override fun getItemCount(): Int {
         return if (hasMorePages) postsData.size + 1 else postsData.size
-    }
-
-
-    /**
-     * ViewHolder remember the elements of each row item
-     */
-    class PostViewHolder(view: View) : RecyclerView.ViewHolder(view) {
-        val thumbnailImage: ImageView = view.findViewById(R.id.post_thumbnail)
-        val category: Button = view.findViewById(R.id.post_category)
-        val title: TextView = view.findViewById(R.id.post_title)
-        val author: TextView = view.findViewById(R.id.post_author)
-        val date: TextView = view.findViewById(R.id.post_date)
-        val views: TextView = view.findViewById(R.id.post_views)
-        val likes: TextView = view.findViewById(R.id.post_likes)
-        val likeBtn: MaterialButton = view.findViewById(R.id.btn_like)
-        val saveBtn: MaterialButton = view.findViewById(R.id.btn_save)
-        val likeIcon: ImageView = view.findViewById(R.id.ic_like)
     }
 
     class LoadMoreViewHolder(view: View) : RecyclerView.ViewHolder(view) {
