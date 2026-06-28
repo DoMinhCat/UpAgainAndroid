@@ -12,6 +12,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.upagain.R
+import com.example.upagain.SecuritySettingFragment
 import com.example.upagain.api.ApiClient
 import com.example.upagain.databinding.FragmentPostBinding
 import com.example.upagain.event.LikePostEvent
@@ -84,6 +85,12 @@ class PostFragment : Fragment() {
             object : PostRecyclerViewAdapter.OnClickListener {
                 override fun onPostClick(position: Int, post: PostDetailsResponse) {
                     // TODO: navigate to Post Detail frag
+                    val postDataToPass = loadedPosts.getOrNull(position)
+//                    val postDetailFragment = PostDetailFragment.newInstance(postDataToPass)
+//                    parentFragmentManager.beginTransaction()
+//                        .replace(R.id.fragment_container, postDetailFragment)
+//                        .addToBackStack(null)
+//                        .commit()
                 }
 
                 override fun onLikeClick(position: Int, post: PostDetailsResponse) {
