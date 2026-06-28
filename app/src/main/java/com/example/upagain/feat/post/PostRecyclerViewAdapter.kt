@@ -1,5 +1,6 @@
 package com.example.upagain.feat.post
 
+import android.content.res.ColorStateList
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -85,13 +86,14 @@ class PostRecyclerViewAdapter(
         // Feed raw data from API to the card
         if (holder is PostViewHolder) {
             val post = postsData[position]
+            val categoryColor = getPostCategoryColor(post.category.toString())
             holder.title.text = post.title
             holder.author.text = post.creator
             holder.date.text = formatTimestamptz(post.createdAt)
             holder.views.text = post.viewCount.toString()
             holder.likes.text = post.likeCount.toString()
             holder.category.text = post.category.toString().replace('_', ' ')
-            holder.category.setBackgroundColor(getPostCategoryColor(post.category.toString()))
+            holder.category.backgroundTintList = ColorStateList.valueOf(categoryColor)
             if (post.adsId != null && post.adsFrom != null && post.adsTo != null && compareTimestamps(
                     Clock.System.now(),
                     post.adsFrom
