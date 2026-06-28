@@ -81,6 +81,16 @@ class PostRecyclerViewAdapter(
                 error(R.drawable.fall_back_image)
             }
 
+            // like/saved status
+            if (post.isLiked) {
+                holder.likeBtn.icon =
+                    holder.likeBtn.context.getDrawable(R.drawable.ic_love_filled)
+            }
+            if (post.isSaved) {
+                holder.saveBtn.icon =
+                    holder.saveBtn.context.getDrawable(R.drawable.ic_bookmark_filled)
+            }
+
             // On click listeners
             holder.itemView.setOnClickListener {
                 onClickListener.onPostClick(position, post)

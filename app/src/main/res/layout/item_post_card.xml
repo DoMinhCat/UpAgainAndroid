@@ -185,7 +185,7 @@
                         android:contentDescription="@string/btn_save"
                         app:icon="@drawable/ic_bookmark_outline"
                         app:iconSize="@dimen/icon_md"
-                        app:iconTint="@color/color_primary"
+                        app:iconTint="@color/color_accent"
                         app:backgroundTint="@color/color_surface"
                         app:cornerRadius="@dimen/button_radius" />
 
