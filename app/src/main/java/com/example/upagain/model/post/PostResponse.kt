@@ -16,7 +16,7 @@ data class PostDetailsResponse(
     @SerializedName("id_account") val idAccount: Int,
     @SerializedName("creator") val creator: String,
     @SerializedName("creator_id") val creatorId: Int,
-    @SerializedName("photos") val photos: List<String>,
+    @SerializedName("photos") val photos: List<String>? = emptyList(),
     @SerializedName("creator_avatar") val creatorAvatar: String?,
     @SerializedName("ads_id") val adsId: Int?,
     @SerializedName("ads_from") val adsFrom: String?,

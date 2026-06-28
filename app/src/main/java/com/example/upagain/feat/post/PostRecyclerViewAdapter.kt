@@ -71,10 +71,10 @@ class PostRecyclerViewAdapter(
             holder.date.text = formatTimestamptz(post.createdAt)
             holder.views.text = post.viewCount.toString()
             holder.likes.text = post.likeCount.toString()
-            holder.category.text = post.category.toString()
+            holder.category.text = post.category.toString().replace('_', ' ')
 
             // Thumbnail image
-            val thumbnailUrl = post.photos.firstOrNull() ?: FALL_BACK_IMAGE_URL
+            val thumbnailUrl = post.photos?.firstOrNull() ?: FALL_BACK_IMAGE_URL
             holder.thumbnailImage.load(thumbnailUrl) {
                 crossfade(true)
                 placeholder(R.color.color_primary_variant)

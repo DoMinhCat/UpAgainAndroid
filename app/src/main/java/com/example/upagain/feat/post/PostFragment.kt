@@ -88,6 +88,7 @@ class PostFragment : Fragment() {
                 }
                 override fun onSaveClick(position: Int, post: PostDetailsResponse) {
                     // TODO: save post
+                    viewModel.savePost(post.id)
                 }
                 override fun onLoadMoreClick() {
                     viewModel.loadPageOfAllPosts(currentPage + 1)
