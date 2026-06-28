@@ -18,8 +18,10 @@ import com.example.upagain.databinding.FragmentPostBinding
 import com.example.upagain.event.LikePostEvent
 import com.example.upagain.event.SavePostEvent
 import com.example.upagain.feat.error.ErrorActivity
+import com.example.upagain.model.post.PostCategory
 import com.example.upagain.model.post.PostDetailsResponse
 import com.example.upagain.model.post.PostPaginationRequest
+import com.example.upagain.model.post.PostSortOption
 import com.example.upagain.repository.PostRepo
 import com.example.upagain.util.ui.SnackbarLevel
 import com.example.upagain.util.ui.showTopSnackbar
@@ -126,29 +128,26 @@ class PostFragment : Fragment() {
 
             when (selectedChip) {
                 R.id.most_liked_chip -> {
-                    // TODO
-                    // Update sorting property selection state ...
+                    viewModel.updateFilter(PostPaginationRequest(sort = PostSortOption.MOST_LIKE))
                 }
                 R.id.most_viewed_chip -> {
-                    // Update sorting property selection state ...
+                    viewModel.updateFilter(PostPaginationRequest(sort = PostSortOption.MOST_VIEW))
                 }
             }
-            // Trigger page 1 reload filter update
-//            triggerFilterRefresh()
+            viewModel.loadPageOfAllPosts(1)
         }
         binding.chipGroupCategories.setOnCheckedStateChangeListener { group, checkedIds ->
             val selectedId = checkedIds.firstOrNull() ?: return@setOnCheckedStateChangeListener
 
             when (selectedId) {
-                R.id.tutorial_chip -> { /* Map filter */ }
-                R.id.project_chip -> { /* Map filter */ }
-                R.id.tip_chip -> { /* Map filter */ }
-                R.id.news_chip -> { /* Map filter */ }
-                R.id.case_study_chip -> { /* Map filter */ }
-                R.id.other_chip -> { /* Map filter */ }
+                R.id.tutorial_chip -> { viewModel.updateFilter(PostPaginationRequest(category = PostCategory.TUTORIAL)) }
+                R.id.project_chip -> { viewModel.updateFilter(PostPaginationRequest(category = PostCategory.PROJECT)) }
+                R.id.tip_chip -> { viewModel.updateFilter(PostPaginationRequest(category = PostCategory.TIPS)) }
+                R.id.news_chip -> { viewModel.updateFilter(PostPaginationRequest(category = PostCategory.NEWS)) }
+                R.id.case_study_chip -> { viewModel.updateFilter(PostPaginationRequest(category = PostCategory.CASE_STUDY)) }
+                R.id.other_chip -> { viewModel.updateFilter(PostPaginationRequest(category = PostCategory.OTHER)) }
             }
-            // Trigger page 1 reload filter update
-//            viewModel.getAllPosts(PostPaginationRequest(), true)
+            viewModel.loadPageOfAllPosts(1)
         }
 
     }

@@ -29,6 +29,8 @@ class PostViewModel(private val repository: PostRepo, application: Application) 
     val likePostEvent: SharedFlow<LikePostEvent> = _likePostEvent.asSharedFlow()
 
     private var currentFilters = PostPaginationRequest(page = 1)
+
+    // GET ALL POST METHODS
     fun getAllPosts(requestBody: PostPaginationRequest, isFirstPage: Boolean) {
         viewModelScope.launch {
             // only show full screen load if loading the first page
@@ -50,6 +52,11 @@ class PostViewModel(private val repository: PostRepo, application: Application) 
         getAllPosts(currentFilters, pageNumber == 1)
     }
 
+    fun updateFilter(newFilters: PostPaginationRequest) {
+        currentFilters = newFilters
+    }
+
+    // OTHER METHODS
     fun savePost(id: Int, position: Int) {
         // for optimistic update, emit success or fallback event to tell fragment to sync the data correspondingly
         viewModelScope.launch {

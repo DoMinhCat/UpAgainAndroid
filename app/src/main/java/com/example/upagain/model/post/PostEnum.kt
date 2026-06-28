@@ -3,14 +3,9 @@ package com.example.upagain.model.post
 import com.google.gson.annotations.SerializedName
 
 enum class PostSortOption(val value: String) {
-    @SerializedName("earliest_start_date") EARLIEST_START_DATE("earliest_start_date"),
-    @SerializedName("latest_start_date") LATEST_START_DATE("latest_start_date"),
-    @SerializedName("most_recent_creation") MOST_RECENT_CREATION("most_recent_creation"),
-    @SerializedName("oldest_creation") OLDEST_CREATION("oldest_creation"),
-    @SerializedName("highest_price") HIGHEST_PRICE("highest_price"),
-    @SerializedName("lowest_price") LOWEST_PRICE("lowest_price"),
-    @SerializedName("random") RANDOM("random"),
-    @SerializedName("most_popular") MOST_POPULAR("most_popular");
+    @SerializedName("highest_view") MOST_VIEW("highest_view"),
+    @SerializedName("highest_like") MOST_LIKE("highest_like"),
+    @SerializedName("") NONE("");
 
     companion object {
         /**
@@ -18,7 +13,7 @@ enum class PostSortOption(val value: String) {
          * Default to MOST_RECENT_CREATION if an unrecognized key is received.
          */
         fun fromString(value: String?): PostSortOption {
-            return entries.find { it.value.equals(value, ignoreCase = true) } ?: MOST_RECENT_CREATION
+            return entries.find { it.value.equals(value, ignoreCase = true) } ?: PostSortOption.NONE
         }
     }
 }
