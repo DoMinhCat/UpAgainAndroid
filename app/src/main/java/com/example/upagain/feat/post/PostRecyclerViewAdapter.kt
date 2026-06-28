@@ -8,9 +8,12 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.core.graphics.drawable.toDrawable
 import androidx.recyclerview.widget.RecyclerView
+import coil.load
 import com.example.upagain.R
 import com.example.upagain.model.post.PostDetailsResponse
+import com.example.upagain.util.bin.FALL_BACK_IMAGE_URL
 import com.example.upagain.util.datetime.formatTimestamptz
+import com.example.upagain.util.ui.setOnClickListenerWithCooldown
 import com.example.upagain.util.ui.toggleBtnLoadingState
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.progressindicator.CircularProgressIndicator
@@ -35,6 +38,8 @@ class PostRecyclerViewAdapter(
     interface OnClickListener {
         fun onPostClick(position: Int, post: PostDetailsResponse)
         fun onLoadMoreClick()
+        fun onLikeClick(position: Int, post: PostDetailsResponse)
+        fun onSaveClick(position: Int, post: PostDetailsResponse)
     }
 
     // Update data safely from the Fragment
@@ -68,34 +73,50 @@ class PostRecyclerViewAdapter(
             holder.likes.text = post.likeCount.toString()
             holder.category.text = post.category.toString()
 
+            // Thumbnail image
+            val thumbnailUrl = post.photos.firstOrNull() ?: FALL_BACK_IMAGE_URL
+            holder.thumbnailImage.load(thumbnailUrl) {
+                crossfade(true)
+                placeholder(R.color.color_primary_variant)
+                error(R.drawable.fall_back_image)
+            }
+
+            // On click listeners
             holder.itemView.setOnClickListener {
                 onClickListener.onPostClick(position, post)
             }
-        } else if (holder is LoadMoreViewHolder) {
-            val context = holder.btnLoadMore.context
-            val defaultText = context.getString(R.string.btn_load_more)
-            val defaultIcon = context.getDrawable(R.drawable.ic_chevron_double_down)
-            if (isLoadMoreBtnLoading) {
-                toggleBtnLoadingState(
-                    holder.btnLoadMore,
-                    holder.spinnerIndicator,
-                    true,
-                    defaultText,
-                    defaultIcon
-                )
-            } else {
-                toggleBtnLoadingState(
-                    holder.btnLoadMore,
-                    holder.spinnerIndicator,
-                    false,
-                    defaultText,
-                    defaultIcon
-                )
-                holder.btnLoadMore.setOnClickListener {
-                    onClickListener.onLoadMoreClick()
+            holder.likeBtn.setOnClickListenerWithCooldown(500L) {
+                onClickListener.onLikeClick(position, post)
+            }
+            holder.saveBtn.setOnClickListenerWithCooldown(500L) {
+                onClickListener.onSaveClick(position, post)
+            }
+        } else
+            if (holder is LoadMoreViewHolder) {
+                val context = holder.btnLoadMore.context
+                val defaultText = context.getString(R.string.btn_load_more)
+                val defaultIcon = context.getDrawable(R.drawable.ic_chevron_double_down)
+                if (isLoadMoreBtnLoading) {
+                    toggleBtnLoadingState(
+                        holder.btnLoadMore,
+                        holder.spinnerIndicator,
+                        true,
+                        defaultText,
+                        defaultIcon
+                    )
+                } else {
+                    toggleBtnLoadingState(
+                        holder.btnLoadMore,
+                        holder.spinnerIndicator,
+                        false,
+                        defaultText,
+                        defaultIcon
+                    )
+                    holder.btnLoadMore.setOnClickListener {
+                        onClickListener.onLoadMoreClick()
+                    }
                 }
             }
-        }
     }
 
     override fun getItemCount(): Int {
@@ -114,6 +135,8 @@ class PostRecyclerViewAdapter(
         val date: TextView = view.findViewById(R.id.post_date)
         val views: TextView = view.findViewById(R.id.post_views)
         val likes: TextView = view.findViewById(R.id.post_likes)
+        val likeBtn: MaterialButton = view.findViewById(R.id.btn_like)
+        val saveBtn: MaterialButton = view.findViewById(R.id.btn_save)
     }
 
     class LoadMoreViewHolder(view: View) : RecyclerView.ViewHolder(view) {

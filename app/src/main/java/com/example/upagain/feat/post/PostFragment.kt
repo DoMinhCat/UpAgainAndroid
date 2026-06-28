@@ -83,7 +83,12 @@ class PostFragment : Fragment() {
                 override fun onPostClick(position: Int, post: PostDetailsResponse) {
                     // TODO: navigate to Post Detail frag
                 }
-
+                override fun onLikeClick(position: Int, post: PostDetailsResponse) {
+                    // TODO: like post
+                }
+                override fun onSaveClick(position: Int, post: PostDetailsResponse) {
+                    // TODO: save post
+                }
                 override fun onLoadMoreClick() {
                     viewModel.loadPageOfAllPosts(currentPage + 1)
                 }
