@@ -5,7 +5,7 @@ import com.google.gson.annotations.SerializedName
 enum class PostSortOption(val value: String) {
     @SerializedName("highest_view") MOST_VIEW("highest_view"),
     @SerializedName("highest_like") MOST_LIKE("highest_like"),
-    @SerializedName("") NONE("");
+    @SerializedName("most_recent_creation") MOST_RECENT_CREATION("most_recent_creation");
 
     companion object {
         /**
@@ -13,7 +13,7 @@ enum class PostSortOption(val value: String) {
          * Default to MOST_RECENT_CREATION if an unrecognized key is received.
          */
         fun fromString(value: String?): PostSortOption {
-            return entries.find { it.value.equals(value, ignoreCase = true) } ?: PostSortOption.NONE
+            return entries.find { it.value.equals(value, ignoreCase = true) } ?: PostSortOption.MOST_RECENT_CREATION
         }
     }
 }

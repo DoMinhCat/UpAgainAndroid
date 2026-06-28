@@ -15,7 +15,7 @@ data class PostPaginationRequest(
             limit?.let { put("limit", it.toString()) }
             if (search.isNotEmpty()) put("search", search)
             sort?.let {
-                if (it != PostSortOption.NONE) {
+                if (it != PostSortOption.MOST_RECENT_CREATION) {
                     put("sort", it.value)
                 }
             }
