@@ -68,6 +68,8 @@
     <string name="date_dynamic" translatable="false">%1$s</string>
     <string name="count_dynamic" translatable="false">%1$d</string>
     <string name="float_dynamic" translatable="false">%1$.2f</string>
+    <string name="sponsored">• Sponsored</string>
+
 
     <!-- Container -->
     <string name="code">6-digit code</string>

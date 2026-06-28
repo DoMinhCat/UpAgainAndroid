@@ -6,18 +6,19 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
-import androidx.core.graphics.drawable.toDrawable
 import androidx.recyclerview.widget.RecyclerView
 import coil.load
 import com.example.upagain.R
 import com.example.upagain.model.post.PostDetailsResponse
 import com.example.upagain.util.bin.FALL_BACK_IMAGE_URL
+import com.example.upagain.util.datetime.compareTimestamps
 import com.example.upagain.util.datetime.formatTimestamptz
 import com.example.upagain.util.ui.getPostCategoryColor
 import com.example.upagain.util.ui.setOnClickListenerWithCooldown
 import com.example.upagain.util.ui.toggleBtnLoadingState
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.progressindicator.CircularProgressIndicator
+import kotlin.time.Clock
 
 /**
  * RecyclerViewAdapter pour afficher en liste (dans un RecyclerView) des prénoms
@@ -77,6 +78,7 @@ class PostRecyclerViewAdapter(
         val likeBtn: MaterialButton = view.findViewById(R.id.btn_like)
         val saveBtn: MaterialButton = view.findViewById(R.id.btn_save)
         val likeIcon: ImageView = view.findViewById(R.id.ic_like)
+        val sponsorStatus: TextView = view.findViewById(R.id.tv_sponsored)
     }
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
@@ -90,6 +92,13 @@ class PostRecyclerViewAdapter(
             holder.likes.text = post.likeCount.toString()
             holder.category.text = post.category.toString().replace('_', ' ')
             holder.category.setBackgroundColor(getPostCategoryColor(post.category.toString()))
+            if (post.adsId != null && post.adsFrom != null && post.adsTo != null && compareTimestamps(
+                    Clock.System.now(),
+                    post.adsFrom
+                ) > 0 && compareTimestamps(Clock.System.now(), post.adsTo) < 0
+            ) {
+                holder.sponsorStatus.visibility = View.VISIBLE
+            }
 
             // Thumbnail image
             val thumbnailUrl = post.photos?.firstOrNull() ?: FALL_BACK_IMAGE_URL

@@ -42,6 +42,7 @@
     <string name="btn_view">Voir</string>
     <string name="author_dynamic">par %1$s</string>
 
+    <string name="sponsored">• Sponsorisé</string>
     <string name="code">Code à 6 chiffres</string>
     <string name="code_hint">000000</string>
     <string name="barcode">Code-barres</string>

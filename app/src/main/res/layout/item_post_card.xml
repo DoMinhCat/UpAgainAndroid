@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<com.google.android.material.card.MaterialCardView
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -22,13 +21,13 @@
             android:id="@+id/post_thumbnail"
             android:layout_width="0dp"
             android:layout_height="120dp"
-            android:scaleType="centerCrop"
             android:background="@color/color_primary_variant"
+            android:contentDescription="@string/img_thumbnail_description"
+            android:scaleType="centerCrop"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            tools:srcCompat="@tools:sample/backgrounds/scenic"
-            android:contentDescription="@string/img_thumbnail_description" />
+            tools:srcCompat="@tools:sample/backgrounds/scenic" />
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/content_container"
@@ -45,11 +44,11 @@
                 android:layout_height="wrap_content"
                 android:backgroundTint="@color/color_accent"
                 android:minHeight="32dp"
-                app:cornerRadius="16dp"
                 android:paddingHorizontal="@dimen/space_md"
                 android:paddingVertical="0dp"
-                android:textColor="@color/color_on_surface"
                 android:text="@string/string_dynamic"
+                android:textColor="@color/color_on_surface"
+                app:cornerRadius="16dp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
@@ -83,8 +82,8 @@
                     style="@style/TextAppearance.UpAgain.BodyMedium"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textStyle="bold"
                     android:textColor="@color/color_on_surface"
+                    android:textStyle="bold"
                     tools:text="@string/author_dynamic" />
 
                 <TextView
@@ -95,6 +94,17 @@
                     android:layout_marginStart="@dimen/space_xs"
                     android:textColor="@color/color_secondary"
                     tools:text="@string/date_dynamic" />
+
+                <TextView
+                    android:id="@+id/tv_sponsored"
+                    style="@style/TextAppearance.UpAgain.BodySmall"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/space_sm"
+                    android:text="@string/sponsored"
+                    android:visibility="invisible"
+                    tools:visibility="visible"
+                    android:textColor="@color/color_secondary" />
             </LinearLayout>
 
             <View
@@ -102,8 +112,8 @@
                 android:layout_width="0dp"
                 android:layout_height="1dp"
                 android:layout_marginTop="@dimen/space_md"
-                android:background="@color/color_outline"
                 android:alpha="0.2"
+                android:background="@color/color_outline"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/author_date_row" />
@@ -163,8 +173,8 @@
                 <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:gravity="center_vertical">
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal">
 
                     <com.google.android.material.button.MaterialButton
                         android:id="@+id/btn_like"
@@ -172,11 +182,11 @@
                         android:layout_width="@dimen/min_touch"
                         android:layout_height="@dimen/button_height"
                         android:layout_marginEnd="@dimen/space_xs"
+                        app:backgroundTint="@color/color_surface"
+                        app:cornerRadius="@dimen/button_radius"
                         app:icon="@drawable/ic_love_outline"
                         app:iconSize="@dimen/icon_md"
-                        app:iconTint="@color/red"
-                        app:backgroundTint="@color/color_surface"
-                        app:cornerRadius="@dimen/button_radius" />
+                        app:iconTint="@color/red" />
 
                     <com.google.android.material.button.MaterialButton
                         android:id="@+id/btn_save"
@@ -184,11 +194,11 @@
                         android:layout_width="@dimen/min_touch"
                         android:layout_height="@dimen/button_height"
                         android:contentDescription="@string/btn_save"
+                        app:backgroundTint="@color/color_surface"
+                        app:cornerRadius="@dimen/button_radius"
                         app:icon="@drawable/ic_bookmark_outline"
                         app:iconSize="@dimen/icon_md"
-                        app:iconTint="@color/color_accent"
-                        app:backgroundTint="@color/color_surface"
-                        app:cornerRadius="@dimen/button_radius" />
+                        app:iconTint="@color/color_accent" />
 
                 </LinearLayout>
 
