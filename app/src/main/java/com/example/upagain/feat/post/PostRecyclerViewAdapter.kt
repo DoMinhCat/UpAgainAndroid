@@ -82,6 +82,9 @@ class PostRecyclerViewAdapter(
             }
 
             // like/saved status
+            if (post.likeCount == 0) {
+                holder.likeIcon.setImageResource(R.drawable.ic_love_outline)
+            }
             if (post.isLiked) {
                 holder.likeBtn.icon =
                     holder.likeBtn.context.getDrawable(R.drawable.ic_love_filled)
@@ -147,6 +150,7 @@ class PostRecyclerViewAdapter(
         val likes: TextView = view.findViewById(R.id.post_likes)
         val likeBtn: MaterialButton = view.findViewById(R.id.btn_like)
         val saveBtn: MaterialButton = view.findViewById(R.id.btn_save)
+        val likeIcon: ImageView = view.findViewById(R.id.ic_like)
     }
 
     class LoadMoreViewHolder(view: View) : RecyclerView.ViewHolder(view) {
