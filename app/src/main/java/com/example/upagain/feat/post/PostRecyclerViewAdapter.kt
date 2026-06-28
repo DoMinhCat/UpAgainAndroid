@@ -1,12 +1,14 @@
 package com.example.upagain.feat.post
 
 import android.content.res.ColorStateList
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import coil.load
 import com.example.upagain.R
@@ -86,7 +88,9 @@ class PostRecyclerViewAdapter(
         // Feed raw data from API to the card
         if (holder is PostViewHolder) {
             val post = postsData[position]
-            val categoryColor = getPostCategoryColor(post.category.toString())
+            val categoryColorResId = getPostCategoryColor(post.category.toString())
+            val categoryColor =  ContextCompat.getColor(holder.itemView.context, categoryColorResId)
+
             holder.title.text = post.title
             holder.author.text = post.creator
             holder.date.text = formatTimestamptz(post.createdAt)
@@ -99,6 +103,7 @@ class PostRecyclerViewAdapter(
                     post.adsFrom
                 ) > 0 && compareTimestamps(Clock.System.now(), post.adsTo) < 0
             ) {
+                Log.d("PostRecyclerViewAdapter", "adsId: ${post.adsId}, now vs adsTo: ${compareTimestamps(Clock.System.now(), post.adsTo)}, adsTo: ${post.adsTo}")
                 holder.sponsorStatus.visibility = View.VISIBLE
             }
 

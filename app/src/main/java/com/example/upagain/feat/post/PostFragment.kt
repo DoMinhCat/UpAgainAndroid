@@ -12,7 +12,6 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.upagain.R
-import com.example.upagain.SecuritySettingFragment
 import com.example.upagain.api.ApiClient
 import com.example.upagain.databinding.FragmentPostBinding
 import com.example.upagain.event.LikePostEvent
@@ -123,7 +122,7 @@ class PostFragment : Fragment() {
     }
 
     private fun setupListeners() {
-        binding.chipGroupSort.setOnCheckedStateChangeListener { group, checkedChips ->
+        binding.chipGroupSort.setOnCheckedStateChangeListener { _, checkedChips ->
             val selectedChip = checkedChips.firstOrNull() ?: return@setOnCheckedStateChangeListener
 
             when (selectedChip) {
@@ -136,7 +135,7 @@ class PostFragment : Fragment() {
             }
             viewModel.loadPageOfAllPosts(1)
         }
-        binding.chipGroupCategories.setOnCheckedStateChangeListener { group, checkedIds ->
+        binding.chipGroupCategories.setOnCheckedStateChangeListener { _, checkedIds ->
             val selectedId = checkedIds.firstOrNull() ?: return@setOnCheckedStateChangeListener
 
             when (selectedId) {
