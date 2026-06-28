@@ -16,7 +16,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:indeterminate="true"
-        app:indicatorSize="48dp"
+        app:indicatorSize="@dimen/icon_xl"
         app:trackThickness="4dp"
         app:indicatorColor="@color/color_primary"
         app:trackColor="@color/color_surface" />

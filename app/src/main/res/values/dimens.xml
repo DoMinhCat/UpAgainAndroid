@@ -31,4 +31,5 @@
     <dimen name="icon_sm">16dp</dimen>
     <dimen name="icon_md">24dp</dimen>
     <dimen name="icon_lg">32dp</dimen>
+    <dimen name="icon_xl">48dp</dimen>
 </resources>

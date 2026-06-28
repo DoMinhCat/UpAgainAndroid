@@ -24,7 +24,6 @@ import com.example.upagain.model.post.PostSortOption
 import com.example.upagain.repository.PostRepo
 import com.example.upagain.util.ui.SnackbarLevel
 import com.example.upagain.util.ui.showTopSnackbar
-import com.example.upagain.util.ui.toggleFullScreenLoading
 import com.example.upagain.viewmodel.PostViewModel
 import com.example.upagain.viewmodel.UiState
 import com.example.upagain.viewmodel.ViewModelFactory
@@ -296,9 +295,19 @@ class PostFragment : Fragment() {
 
     private fun toggleAllPostLoading(isLoading: Boolean, isFirstPage: Boolean) {
         if (isFirstPage) {
-            binding.loadingOverlay.root.toggleFullScreenLoading(isLoading)
+            togglePostsAreaLoading(isLoading)
         } else {
             postAdapter.toggleLoadMoreBtnLoadingState(isLoading)
+        }
+    }
+
+    private fun togglePostsAreaLoading(isLoading: Boolean) {
+        if (isLoading) {
+            binding.rvPosts.visibility = View.GONE
+            binding.postsLoader.visibility = View.VISIBLE
+        } else {
+            binding.postsLoader.visibility = View.GONE
+            binding.rvPosts.visibility = View.VISIBLE
         }
     }
 }
