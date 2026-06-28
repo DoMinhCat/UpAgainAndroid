@@ -14,6 +14,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.upagain.R
 import com.example.upagain.api.ApiClient
 import com.example.upagain.databinding.FragmentPostBinding
+import com.example.upagain.event.LikePostEvent
 import com.example.upagain.event.SavePostEvent
 import com.example.upagain.feat.error.ErrorActivity
 import com.example.upagain.model.post.PostDetailsResponse
@@ -86,14 +87,16 @@ class PostFragment : Fragment() {
                 }
 
                 override fun onLikeClick(position: Int, post: PostDetailsResponse) {
-                    // TODO: like post
+                    // optimistic update
+                    post.isLiked = !post.isLiked
+                    if (post.isLiked)
+                        post.likeCount += 1
+                    else post.likeCount -= 1
+                    postAdapter.updateSingleItem(position, post)
+                    viewModel.likePost(post.id, position)
                 }
 
                 override fun onSaveClick(position: Int, post: PostDetailsResponse) {
-                    // TODO: save post
-                    // keep original status to fallback if network fails
-                    val originalIsSaved = post.isSaved
-
                     // optimistic update
                     post.isSaved = !post.isSaved
                     // tell adapter to redraw single item to sync new status
@@ -183,7 +186,45 @@ class PostFragment : Fragment() {
                                     )
                                 }
                                 binding.main.showTopSnackbar(
-                                    R.string.error_media_msg,
+                                    R.string.err_save_post_msg,
+                                    SnackbarLevel.ERROR
+                                )
+                            }
+                        }
+                    }
+                }
+                // LIKE
+                launch {
+                    viewModel.likePostEvent.collect { event ->
+                        when (event) {
+                            is LikePostEvent.Succeeded -> {
+                                // get the post at that position
+                                val currentPost = loadedPosts.getOrNull(event.position)
+                                if (currentPost != null && currentPost.id == event.postId) {
+                                    if (currentPost.isLiked != event.isLiked) {
+                                        // sync isLiked status
+                                        currentPost.isLiked = event.isLiked
+                                        postAdapter.updateSingleItem(event.position, currentPost)
+                                    }
+                                }
+                            }
+
+                            is LikePostEvent.Rollback -> {
+                                val failingPost = loadedPosts.getOrNull(event.position)
+                                if (failingPost != null && failingPost.id == event.postId) {
+                                    // Revert isSaved status since update on server failed
+                                    failingPost.isLiked = !failingPost.isLiked
+                                    failingPost.likeCount -= 1
+                                    postAdapter.updateSingleItem(event.position, failingPost)
+
+                                    Log.e(
+                                        "PostFragment",
+                                        "Like failed for Post ${event.postId}. Status code: ${event.statusCode}",
+                                        event.exception
+                                    )
+                                }
+                                binding.main.showTopSnackbar(
+                                    R.string.err_like_post_msg,
                                     SnackbarLevel.ERROR
                                 )
                             }

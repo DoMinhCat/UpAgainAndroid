@@ -3,6 +3,7 @@ package com.example.upagain.viewmodel
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.upagain.event.LikePostEvent
 import com.example.upagain.event.SavePostEvent
 import com.example.upagain.model.post.PostPaginationRequest
 import com.example.upagain.model.post.PostPaginationResponse
@@ -23,6 +24,9 @@ class PostViewModel(private val repository: PostRepo, application: Application) 
     val allPostsState: StateFlow<UiState<PostPaginationResponse>> = _allPostsState
     private val _savePostEvent = MutableSharedFlow<SavePostEvent>()
     val savePostEvent: SharedFlow<SavePostEvent> = _savePostEvent.asSharedFlow()
+
+    private val _likePostEvent = MutableSharedFlow<LikePostEvent>()
+    val likePostEvent: SharedFlow<LikePostEvent> = _likePostEvent.asSharedFlow()
 
     private var currentFilters = PostPaginationRequest(page = 1)
     fun getAllPosts(requestBody: PostPaginationRequest, isFirstPage: Boolean) {
@@ -58,6 +62,20 @@ class PostViewModel(private val repository: PostRepo, application: Application) 
                     val statusCode = (exception as? HttpException)?.code()
                     // Broadcast error containing exact instructions on what index row to roll back
                     _savePostEvent.emit(SavePostEvent.Rollback(position, id, statusCode, exception))
+                }
+        }
+    }
+
+    fun likePost(id: Int, position: Int) {
+        viewModelScope.launch {
+            // optimistic update for like post, no loading state needed
+            repository.likePost(id)
+                .onSuccess { likePostResponse ->
+                    _likePostEvent.emit(LikePostEvent.Succeeded(position, id, likePostResponse.isLiked))
+                }
+                .onFailure { exception ->
+                    val statusCode = (exception as? HttpException)?.code()
+                    _likePostEvent.emit(LikePostEvent.Rollback(position, id, statusCode, exception))
                 }
         }
     }
