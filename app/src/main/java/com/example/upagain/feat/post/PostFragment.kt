@@ -5,20 +5,21 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.compose.runtime.currentRecomposeScope
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.upagain.R
 import com.example.upagain.api.ApiClient
 import com.example.upagain.databinding.FragmentPostBinding
+import com.example.upagain.event.SavePostEvent
 import com.example.upagain.feat.error.ErrorActivity
 import com.example.upagain.model.post.PostDetailsResponse
-import com.example.upagain.model.post.PostPaginationRequest
 import com.example.upagain.repository.PostRepo
-import com.example.upagain.util.ui.toggleBtnLoadingState
+import com.example.upagain.util.ui.SnackbarLevel
+import com.example.upagain.util.ui.showTopSnackbar
 import com.example.upagain.util.ui.toggleFullScreenLoading
 import com.example.upagain.viewmodel.PostViewModel
 import com.example.upagain.viewmodel.UiState
@@ -83,13 +84,24 @@ class PostFragment : Fragment() {
                 override fun onPostClick(position: Int, post: PostDetailsResponse) {
                     // TODO: navigate to Post Detail frag
                 }
+
                 override fun onLikeClick(position: Int, post: PostDetailsResponse) {
                     // TODO: like post
                 }
+
                 override fun onSaveClick(position: Int, post: PostDetailsResponse) {
                     // TODO: save post
-                    viewModel.savePost(post.id)
+                    // keep original status to fallback if network fails
+                    val originalIsSaved = post.isSaved
+
+                    // optimistic update
+                    post.isSaved = !post.isSaved
+                    // tell adapter to redraw single item to sync new status
+                    postAdapter.updateSingleItem(position, post)
+
+                    viewModel.savePost(post.id, position)
                 }
+
                 override fun onLoadMoreClick() {
                     viewModel.loadPageOfAllPosts(currentPage + 1)
                 }
@@ -141,15 +153,55 @@ class PostFragment : Fragment() {
                         }
                     }
                 }
+                // SAVE
+                launch {
+                    viewModel.savePostEvent.collect { event ->
+                        when (event) {
+                            is SavePostEvent.Succeeded -> {
+                                // get the post at that position
+                                val currentPost = loadedPosts.getOrNull(event.position)
+                                if (currentPost != null && currentPost.id == event.postId) {
+                                    if (currentPost.isSaved != event.isSaved) {
+                                        // sync isSaved status
+                                        currentPost.isSaved = event.isSaved
+                                        postAdapter.updateSingleItem(event.position, currentPost)
+                                    }
+                                }
+                            }
+
+                            is SavePostEvent.Rollback -> {
+                                val failingPost = loadedPosts.getOrNull(event.position)
+                                if (failingPost != null && failingPost.id == event.postId) {
+                                    // Revert isSaved status since update on server failed
+                                    failingPost.isSaved = !failingPost.isSaved
+                                    postAdapter.updateSingleItem(event.position, failingPost)
+
+                                    Log.e(
+                                        "PostFragment",
+                                        "Save failed for Post ${event.postId}. Status code: ${event.statusCode}",
+                                        event.exception
+                                    )
+                                }
+                                binding.main.showTopSnackbar(
+                                    R.string.error_media_msg,
+                                    SnackbarLevel.ERROR
+                                )
+                            }
+                        }
+                    }
+                }
             }
         }
     }
 
     private fun toggleAllPostLoading(isLoading: Boolean, isFirstPage: Boolean) {
-        if(isFirstPage){
+        if (isFirstPage) {
             binding.loadingOverlay.root.toggleFullScreenLoading(isLoading)
-        } else{
+        } else {
             postAdapter.toggleLoadMoreBtnLoadingState(isLoading)
         }
     }
 }
+
+
+

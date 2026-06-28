@@ -3,13 +3,15 @@ package com.example.upagain.viewmodel
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.upagain.model.LoginRequest
+import com.example.upagain.event.SavePostEvent
 import com.example.upagain.model.post.PostPaginationRequest
 import com.example.upagain.model.post.PostPaginationResponse
-import com.example.upagain.model.post.SavePostResponse
 import com.example.upagain.repository.PostRepo
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.launch
 import retrofit2.HttpException
 
@@ -19,8 +21,8 @@ class PostViewModel(private val repository: PostRepo, application: Application) 
 
     private val _allPostsState = MutableStateFlow<UiState<PostPaginationResponse>>(UiState.Loading())
     val allPostsState: StateFlow<UiState<PostPaginationResponse>> = _allPostsState
-    private val _savePostsState = MutableStateFlow<UiState<SavePostResponse>>(UiState.Idle)
-    val savePostsState: StateFlow<UiState<SavePostResponse>> = _savePostsState
+    private val _savePostEvent = MutableSharedFlow<SavePostEvent>()
+    val savePostEvent: SharedFlow<SavePostEvent> = _savePostEvent.asSharedFlow()
 
     private var currentFilters = PostPaginationRequest(page = 1)
     fun getAllPosts(requestBody: PostPaginationRequest, isFirstPage: Boolean) {
@@ -44,17 +46,18 @@ class PostViewModel(private val repository: PostRepo, application: Application) 
         getAllPosts(currentFilters, pageNumber == 1)
     }
 
-    fun savePost(id: Int) {
+    fun savePost(id: Int, position: Int) {
+        // for optimistic update, emit success or fallback event to tell fragment to sync the data correspondingly
         viewModelScope.launch {
-            _savePostsState.value = UiState.Loading()
-
+            // optimistic update for save post, no loading state needed
             repository.savePost(id)
                 .onSuccess { savePostResponse ->
-                    _savePostsState.value = UiState.Success(savePostResponse)
+                    _savePostEvent.emit(SavePostEvent.Succeeded(position, id, savePostResponse.isSaved))
                 }
                 .onFailure { exception ->
                     val statusCode = (exception as? HttpException)?.code()
-                    _savePostsState.value = UiState.Error(statusCode, exception)
+                    // Broadcast error containing exact instructions on what index row to roll back
+                    _savePostEvent.emit(SavePostEvent.Rollback(position, id, statusCode, exception))
                 }
         }
     }

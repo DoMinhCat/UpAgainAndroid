@@ -66,6 +66,7 @@
     <string name="error_404_msg">Oups ! Il semblerait que la nature ait repris ses droits sur ce chemin. Remettons-nous sur le bon chemin.</string>
     <string name="error_401_msg">Bienvenue, inconnu ; veuillez d\'abord vous connecter pour continuer.</string>
     <string name="error_403_msg">Oups ! Vous vous aventurez dans la zone interdite de la forêt.</string>
+    <string name="err_like_post_msg">Échec d\'aimer l\'article</string>
     <string name="btn_home">Retour à l\'accueil</string>
     <string name="error_500_msg">Oups ! Nos serveurs sont actuellement très sollicités. Nous mettons tout en œuvre pour résoudre le problème au plus vite.</string>
     <string name="btn_refresh">Actualiser la page</string>
@@ -118,4 +119,5 @@
     <string name="snack_avatar_update_fail">Échec de la mise à jour de l\'avatar : %1$s</string>
     <string name="snack_container_open_success">Conteneur déverrouillé</string>
     <string name="snack_container_open_fail">Échec de l\'ouverture du conteneur : %1$s</string>
+    <string name="err_save_post_msg">Échec de l\'enregistrement</string>
 </resources>

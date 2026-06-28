@@ -56,11 +56,11 @@ interface ApiService {
     @POST(Endpoints.POST_CREATE)
     fun createPost(@Body request: PostCreateRequest): Call<Unit>
 
-    @POST(Endpoints.POST_LIKE)
-    fun likePost(@Path("id") id: Int): Call<LikePostResponse>
-
     @POST(Endpoints.POST_VIEW)
     fun viewPost(@Path("id") id: Int): Call<ViewPostResponse>
+
+    @POST(Endpoints.POST_LIKE)
+    fun likePost(@Path("id") id: Int): Call<LikePostResponse>
 
     @POST(Endpoints.POST_SAVE)
     fun savePost(@Path("id") id: Int): Call<SavePostResponse>

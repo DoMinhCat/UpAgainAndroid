@@ -104,6 +104,9 @@
     <string name="invalid_request_body">Invalid request body</string>
     <string name="no_browser">No browser found</string>
 
+    <string name="err_save_post_msg">Failed to save post</string>
+    <string name="err_like_post_msg">Failed to like post</string>
+
     <string name="btn_home">Back to home</string>
     <string name="btn_refresh">Refresh page</string>
 

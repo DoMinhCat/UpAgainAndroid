@@ -170,4 +170,10 @@ class PostRecyclerViewAdapter(
             notifyItemChanged(postsData.size)
         }
     }
+
+    // Public method to update only one single card item (like/save)
+    fun updateSingleItem(position: Int, updatedPost: PostDetailsResponse) {
+        this.postsData[position] = updatedPost
+        notifyItemChanged(position)
+    }
 }

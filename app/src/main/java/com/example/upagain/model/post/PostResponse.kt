@@ -10,7 +10,7 @@ data class PostDetailsResponse(
     @SerializedName("content") val content: String,
     @SerializedName("category") val category: PostCategory,
     @SerializedName("view_count") val viewCount: Int,
-    @SerializedName("like_count") val likeCount: Int,
+    @SerializedName("like_count") var likeCount: Int,
     @SerializedName("save_count") val saveCount: Int,
     @SerializedName("comment_count") val commentCount: Int,
     @SerializedName("id_account") val idAccount: Int,
@@ -21,8 +21,8 @@ data class PostDetailsResponse(
     @SerializedName("ads_id") val adsId: Int?,
     @SerializedName("ads_from") val adsFrom: String?,
     @SerializedName("ads_to") val adsTo: String?,
-    @SerializedName("is_liked") val isLiked: Boolean,
-    @SerializedName("is_saved") val isSaved: Boolean
+    @SerializedName("is_liked") var isLiked: Boolean,
+    @SerializedName("is_saved") var isSaved: Boolean
 )
 
 data class PostPaginationResponse (
