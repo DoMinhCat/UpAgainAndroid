@@ -71,6 +71,8 @@
     <string name="sponsored">Sponsored</string>
     <string name="no_posts_found">No posts found</string>
     <string name="no_posts_description">Try adjusting your filters or active keyword queries.</string>
+    <string name="hint_write_comment">Write a comment…</string>
+
 
     <!-- Container -->
     <string name="code">6-digit code</string>

@@ -1,9 +1,308 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.coordinatorlayout.widget.CoordinatorLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".feat.post.PostDetailFragment">
+    android:background="@color/color_background">
+
+    <com.google.android.material.appbar.AppBarLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/color_background"
+        app:elevation="0dp">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingTop="@dimen/space_lg"
+            android:paddingBottom="@dimen/space_md">
+
+            <ImageView
+                android:id="@+id/btn_back"
+                android:layout_width="@dimen/min_touch"
+                android:layout_height="@dimen/min_touch"
+                android:padding="@dimen/space_sm"
+                android:src="@drawable/ic_back"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:tint="@color/color_primary" />
+
+            <TextView
+                style="@style/TextAppearance.Material3.HeadlineMedium"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="@string/string_dynamic"
+                android:textColor="@color/color_on_background"
+                android:textStyle="bold"
+                android:gravity="center"
+                android:paddingHorizontal="@dimen/min_touch"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </com.google.android.material.appbar.AppBarLayout>
 
 
-</FrameLayout>
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:clipToPadding="false"
+        android:paddingBottom="@dimen/space_xl"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="250dp"
+                android:background="@color/color_surface">
+
+                <androidx.viewpager2.widget.ViewPager2
+                    android:id="@+id/vp_carousel"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent" />
+
+                <com.google.android.material.tabs.TabLayout
+                    android:id="@+id/tl_carousel_indicator"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="bottom|center_horizontal"
+                    android:layout_marginBottom="@dimen/space_sm"
+                    android:background="@android:color/transparent"
+                    app:tabBackground="@drawable/tl_dot_indicator_selector"
+                    app:tabGravity="center"
+                    app:tabIndicatorHeight="0dp"
+                    app:tabMaxWidth="12dp" />
+            </FrameLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
+                android:paddingHorizontal="@dimen/space_lg"
+                android:paddingVertical="@dimen/space_sm"
+                android:background="@color/color_surface">
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical"
+                    android:layout_marginEnd="@dimen/space_md">
+
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/btn_action_like"
+                        style="@style/Widget.Material3.Button.IconButton"
+                        android:layout_width="@dimen/min_touch"
+                        android:layout_height="@dimen/min_touch"
+                        app:icon="@drawable/ic_love_outline"
+                        app:iconTint="@color/red"
+                        app:iconSize="@dimen/icon_md" />
+
+                    <TextView
+                        android:id="@+id/tv_like_count"
+                        style="@style/TextAppearance.UpAgain.BodyMedium"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/color_on_surface"
+                        tools:text="1.2k" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical">
+
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/btn_action_save"
+                        style="@style/Widget.Material3.Button.IconButton"
+                        android:layout_width="@dimen/min_touch"
+                        android:layout_height="@dimen/min_touch"
+                        app:icon="@drawable/ic_bookmark_outline"
+                        app:iconTint="@color/color_accent"
+                        app:iconSize="@dimen/icon_md" />
+
+                    <TextView
+                        android:id="@+id/tv_save_label"
+                        style="@style/TextAppearance.UpAgain.BodyMedium"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/color_secondary"
+                        tools:text="Save" />
+                </LinearLayout>
+
+                <View
+                    android:layout_width="0dp"
+                    android:layout_height="1dp"
+                    android:layout_weight="1" />
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/post_category"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:minHeight="32dp"
+                    android:paddingHorizontal="@dimen/space_md"
+                    android:paddingVertical="0dp"
+                    android:text="@string/string_dynamic"
+                    android:textColor="@color/color_on_surface"
+                    app:cornerRadius="16dp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:paddingHorizontal="@dimen/space_lg"
+                android:paddingTop="@dimen/space_md">
+
+                <TextView
+                    android:id="@+id/tv_detail_title"
+                    style="@style/TextAppearance.UpAgain.H1"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/color_on_background"
+                    tools:text="This is an incredibly long title placeholder text style description" />
+
+                <com.google.android.material.card.MaterialCardView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/space_md"
+                    android:paddingHorizontal="@dimen/space_md"
+                    app:cardBackgroundColor="@color/color_surface"
+                    app:cardCornerRadius="@dimen/card_radius"
+                    app:strokeColor="@color/color_outline"
+                    app:strokeWidth="1dp">
+
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:padding="@dimen/card_padding">
+
+                        <com.google.android.material.imageview.ShapeableImageView
+                            android:id="@+id/iv_author_avatar"
+                            android:layout_width="40dp"
+                            android:layout_height="40dp"
+                            android:scaleType="centerCrop"
+                            app:shapeAppearanceOverlay="@style/ShapeAppearance.Material3.Corner.Full"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            tools:src="@tools:sample/avatars" />
+
+                        <TextView
+                            android:id="@+id/tv_author_name"
+                            style="@style/TextAppearance.UpAgain.BodyLarge"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="@dimen/space_md"
+                            android:textStyle="bold"
+                            android:textColor="@color/color_on_surface"
+                            app:layout_constraintStart_toEndOf="@id/iv_author_avatar"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintTop_toTopOf="@id/iv_author_avatar"
+                            tools:text="Sarah Jenkins" />
+
+                        <TextView
+                            android:id="@+id/tv_post_time"
+                            style="@style/TextAppearance.UpAgain.BodySmall"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:textColor="@color/color_secondary"
+                            app:layout_constraintStart_toStartOf="@id/tv_author_name"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintTop_toBottomOf="@id/tv_author_name"
+                            tools:text="14:12:22 - June 4 2026" />
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+                </com.google.android.material.card.MaterialCardView>
+
+                <TextView
+                    android:id="@+id/tv_html_content_body"
+                    style="@style/TextAppearance.UpAgain.BodyMedium"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/space_lg"
+                    android:lineSpacingMultiplier="1.2"
+                    android:textColor="@color/color_on_background"
+                    tools:text="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam elementum sodales dolor ac sodales." />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="@color/color_outline"
+                    android:alpha="0.3"
+                    android:layout_marginVertical="@dimen/space_xl"/>
+
+                <TextView
+                    android:id="@+id/tv_comment_count"
+                    style="@style/TextAppearance.UpAgain.H3"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    tools:text="Comments (24)" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:gravity="bottom"
+                    android:layout_marginTop="@dimen/space_md"
+                    android:layout_marginBottom="@dimen/space_lg">
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:id="@+id/til_write_comment"
+                        style="@style/Widget.Material3.TextInputLayout.OutlinedBox"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        app:hintEnabled="false"
+                        app:errorEnabled="false"
+                        app:boxCornerRadiusBottomEnd="@dimen/input_radius"
+                        app:boxCornerRadiusBottomStart="@dimen/input_radius"
+                        app:boxCornerRadiusTopEnd="@dimen/input_radius"
+                        app:boxCornerRadiusTopStart="@dimen/input_radius">
+
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/et_write_comment"
+                            style="@style/TextAppearance.UpAgain.BodyMedium"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:hint="@string/hint_write_comment"
+                            android:inputType="textMultiLine"
+                            android:maxLines="4" />
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/btn_send_comment"
+                        style="@style/Widget.Material3.Button.IconButton"
+                        android:layout_width="@dimen/min_touch"
+                        android:layout_height="@dimen/min_touch"
+                        android:layout_marginStart="@dimen/space_sm"
+                        app:icon="@drawable/ic_send"
+                        app:iconTint="@color/color_primary"
+                        app:iconSize="@dimen/icon_md" />
+                </LinearLayout>
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/rv_comments"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:nestedScrollingEnabled="false"
+                    tools:itemCount="3"
+                    tools:listitem="@layout/item_comment" />
+
+            </LinearLayout>
+        </LinearLayout>
+    </androidx.core.widget.NestedScrollView>
+</androidx.coordinatorlayout.widget.CoordinatorLayout>
