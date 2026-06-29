@@ -88,7 +88,7 @@ class PostFragment : Fragment() {
             object : PostRecyclerViewAdapter.OnClickListener {
                 override fun onPostClick(position: Int, post: PostDetailsResponse) {
                     // TODO: navigate to Post Detail frag
-                    val postDataToPass = loadedPosts.getOrNull(position)
+//                    val postDataToPass = loadedPosts.getOrNull(position)
 //                    val postDetailFragment = PostDetailFragment.newInstance(postDataToPass)
 //                    parentFragmentManager.beginTransaction()
 //                        .replace(R.id.fragment_container, postDetailFragment)
@@ -186,6 +186,14 @@ class PostFragment : Fragment() {
             } else {
                 false
             }
+        }
+        // SAVED POSTS
+        binding.icSavedPosts.setOnClickListener {
+            // TODO: navigate to saved posts
+        }
+        // MY POSTS
+        binding.icMyPosts.setOnClickListener {
+            // TODO: navigate to my posts
         }
     }
 
