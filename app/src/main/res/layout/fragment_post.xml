@@ -254,6 +254,41 @@
                 app:indicatorSize="@dimen/icon_xl"
                 app:trackThickness="4dp" />
         </LinearLayout>
+        <LinearLayout
+            android:id="@+id/layout_posts_empty"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:orientation="vertical"
+            android:background="@color/color_background"
+            android:padding="@dimen/space_xl"
+            android:visibility="gone"
+            tools:visibility="visible">
+
+            <ImageView
+                android:layout_width="80dp"
+                android:layout_height="80dp"
+                android:src="@drawable/ic_no_results" app:tint="@color/color_secondary"
+                android:alpha="0.4" />
+
+            <TextView
+                style="@style/TextAppearance.UpAgain.H3"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/space_md"
+                android:text="@string/no_posts_found"
+                android:textColor="@color/color_on_surface" />
+
+            <TextView
+                style="@style/TextAppearance.UpAgain.BodyMedium"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/space_xs"
+                android:text="@string/no_posts_description"
+                android:textColor="@color/color_secondary"
+                android:gravity="center"
+                android:alpha="0.7" />
+        </LinearLayout>
 
     </FrameLayout>
 

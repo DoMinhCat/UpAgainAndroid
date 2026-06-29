@@ -43,6 +43,7 @@
     <string name="author_dynamic">par %1$s</string>
 
     <string name="sponsored">Sponsorisé</string>
+    <string name="no_posts_description">Essayez d\'ajuster vos filtres et vos mots-clés.</string>
     <string name="code">Code à 6 chiffres</string>
     <string name="code_hint">000000</string>
     <string name="barcode">Code-barres</string>
@@ -121,4 +122,5 @@
     <string name="snack_container_open_success">Conteneur déverrouillé</string>
     <string name="snack_container_open_fail">Échec de l\'ouverture du conteneur : %1$s</string>
     <string name="err_save_post_msg">Échec de l\'enregistrement</string>
+    <string name="no_posts_found">Aucun article trouvé</string>
 </resources>

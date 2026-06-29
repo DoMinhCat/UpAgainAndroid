@@ -97,6 +97,8 @@ class PostRecyclerViewAdapter(
             holder.category.backgroundTintList = ColorStateList.valueOf(categoryColor)
             if (post.adsId != null && post.adsId > 0) {
                 holder.sponsorStatus.visibility = View.VISIBLE
+            } else {
+                holder.sponsorStatus.visibility = View.INVISIBLE
             }
 
             // Thumbnail image

@@ -69,7 +69,8 @@
     <string name="count_dynamic" translatable="false">%1$d</string>
     <string name="float_dynamic" translatable="false">%1$.2f</string>
     <string name="sponsored">Sponsored</string>
-
+    <string name="no_posts_found">No posts found</string>
+    <string name="no_posts_description">Try adjusting your filters or active keyword queries.</string>
 
     <!-- Container -->
     <string name="code">6-digit code</string>
@@ -162,7 +163,7 @@
     <string name="snack_avatar_update_fail">Avatar update failed: %1$s</string>
     <string name="snack_container_open_success">Container unlocked</string>
     <string name="snack_container_open_fail">Failed to open container: %1$s</string>
-    <!-- TODO: Remove or change this placeholder text -->
+
     <string name="hello_blank_fragment">Hello blank fragment</string>
 
 </resources>

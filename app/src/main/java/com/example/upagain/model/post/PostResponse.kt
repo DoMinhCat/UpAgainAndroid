@@ -26,7 +26,7 @@ data class PostDetailsResponse(
 )
 
 data class PostPaginationResponse (
-    @SerializedName("posts") val posts: List<PostDetailsResponse>,
+    @SerializedName("posts") val posts: List<PostDetailsResponse>? = emptyList(),
     @SerializedName("current_page") val currentPage: Int,
     @SerializedName("last_page") val lastPage: Int,
     @SerializedName("limit") val limit: Int,

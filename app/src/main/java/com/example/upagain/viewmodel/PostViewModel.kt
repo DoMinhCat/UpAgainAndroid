@@ -5,8 +5,10 @@ import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.upagain.event.LikePostEvent
 import com.example.upagain.event.SavePostEvent
+import com.example.upagain.model.post.PostCategory
 import com.example.upagain.model.post.PostPaginationRequest
 import com.example.upagain.model.post.PostPaginationResponse
+import com.example.upagain.model.post.PostSortOption
 import com.example.upagain.repository.PostRepo
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -52,8 +54,16 @@ class PostViewModel(private val repository: PostRepo, application: Application) 
         getAllPosts(currentFilters, pageNumber == 1)
     }
 
-    fun updateFilter(newFilters: PostPaginationRequest) {
-        currentFilters = newFilters
+    fun updateSortFilter(sortOption: PostSortOption?) {
+        currentFilters = currentFilters.copy(sort = sortOption, page = 1)
+    }
+
+    fun updateCategoryFilter(categoryOption: PostCategory?) {
+        currentFilters = currentFilters.copy(category = categoryOption, page = 1)
+    }
+
+    fun updateSearchFilter(query: String) {
+        currentFilters = currentFilters.copy(search = query, page = 1)
     }
 
     // OTHER METHODS

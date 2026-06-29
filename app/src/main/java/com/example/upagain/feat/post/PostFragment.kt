@@ -5,6 +5,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.inputmethod.EditorInfo
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
@@ -23,6 +24,7 @@ import com.example.upagain.model.post.PostPaginationRequest
 import com.example.upagain.model.post.PostSortOption
 import com.example.upagain.repository.PostRepo
 import com.example.upagain.util.ui.SnackbarLevel
+import com.example.upagain.util.ui.hideKeyboard
 import com.example.upagain.util.ui.showTopSnackbar
 import com.example.upagain.viewmodel.PostViewModel
 import com.example.upagain.viewmodel.UiState
@@ -121,19 +123,20 @@ class PostFragment : Fragment() {
     }
 
     private fun setupListeners() {
+        // FILTER CHIPS
         binding.chipGroupSort.setOnCheckedStateChangeListener { _, checkedChips ->
             val selectedChip = checkedChips.firstOrNull()
 
             if (selectedChip == null) {
-                viewModel.updateFilter(PostPaginationRequest(sort = null))
+                viewModel.updateSortFilter(null)
             } else {
                 when (selectedChip) {
                     R.id.most_liked_chip -> {
-                        viewModel.updateFilter(PostPaginationRequest(sort = PostSortOption.MOST_LIKE))
+                        viewModel.updateSortFilter(PostSortOption.MOST_LIKE)
                     }
 
                     R.id.most_viewed_chip -> {
-                        viewModel.updateFilter(PostPaginationRequest(sort = PostSortOption.MOST_VIEW))
+                        viewModel.updateSortFilter(PostSortOption.MOST_VIEW)
                     }
                 }
             }
@@ -142,35 +145,47 @@ class PostFragment : Fragment() {
         binding.chipGroupCategories.setOnCheckedStateChangeListener { _, checkedChips ->
             val selectedChip = checkedChips.firstOrNull()
             if (selectedChip == null) {
-                viewModel.updateFilter(PostPaginationRequest(sort = null))
+                viewModel.updateCategoryFilter(null)
             } else {
                 when (selectedChip) {
                     R.id.tutorial_chip -> {
-                        viewModel.updateFilter(PostPaginationRequest(category = PostCategory.TUTORIAL))
+                        viewModel.updateCategoryFilter(PostCategory.TUTORIAL)
                     }
 
                     R.id.project_chip -> {
-                        viewModel.updateFilter(PostPaginationRequest(category = PostCategory.PROJECT))
+                        viewModel.updateCategoryFilter(PostCategory.PROJECT)
                     }
 
                     R.id.tip_chip -> {
-                        viewModel.updateFilter(PostPaginationRequest(category = PostCategory.TIPS))
+                        viewModel.updateCategoryFilter(PostCategory.TIPS)
                     }
 
                     R.id.news_chip -> {
-                        viewModel.updateFilter(PostPaginationRequest(category = PostCategory.NEWS))
+                        viewModel.updateCategoryFilter(PostCategory.NEWS)
                     }
 
                     R.id.case_study_chip -> {
-                        viewModel.updateFilter(PostPaginationRequest(category = PostCategory.CASE_STUDY))
+                        viewModel.updateCategoryFilter(PostCategory.CASE_STUDY)
                     }
 
                     R.id.other_chip -> {
-                        viewModel.updateFilter(PostPaginationRequest(category = PostCategory.OTHER))
+                        viewModel.updateCategoryFilter(PostCategory.OTHER)
                     }
                 }
             }
             viewModel.loadPageOfAllPosts(1)
+        }
+        // SEARCH
+        binding.etSearch.setOnEditorActionListener { textView, actionId, _ ->
+            if (actionId == EditorInfo.IME_ACTION_SEARCH || actionId == EditorInfo.IME_ACTION_DONE) {
+                // when submit
+                activity?.hideKeyboard()
+                viewModel.updateSearchFilter(textView.text.toString())
+                viewModel.loadPageOfAllPosts(1)
+                true
+            } else {
+                false
+            }
         }
     }
 
@@ -195,7 +210,17 @@ class PostFragment : Fragment() {
                                     loadedPosts.clear()
                                     toggleAllPostLoading(false, isFirstPage = true)
                                 }
-                                loadedPosts.addAll(allPostsResponse.posts)
+
+                                // handle empty state
+                                if (allPostsResponse.posts.isNullOrEmpty()) {
+                                    binding.layoutPostsEmpty.visibility = View.VISIBLE
+                                    binding.rvPosts.visibility = View.GONE
+                                } else {
+                                    binding.layoutPostsEmpty.visibility = View.GONE
+                                    binding.rvPosts.visibility = View.VISIBLE
+                                }
+
+                                loadedPosts.addAll(allPostsResponse.posts ?: emptyList())
 
                                 val hasMore =
                                     allPostsResponse.currentPage < allPostsResponse.lastPage
