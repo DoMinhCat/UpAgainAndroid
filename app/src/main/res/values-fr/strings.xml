@@ -45,6 +45,7 @@
     <string name="sponsored">Sponsorisé</string>
     <string name="no_posts_description">Essayez d\'ajuster vos filtres et vos mots-clés.</string>
     <string name="hint_write_comment">Écrire un commentaire…</string>
+    <string name="post_details">Détails de l\'article</string>
     <string name="code">Code à 6 chiffres</string>
     <string name="code_hint">000000</string>
     <string name="barcode">Code-barres</string>
