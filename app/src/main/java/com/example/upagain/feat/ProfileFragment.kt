@@ -24,6 +24,7 @@ import com.example.upagain.feat.error.ErrorActivity
 import com.example.upagain.model.account.AccountUpdateRequest
 import com.example.upagain.repository.AccountRepo
 import com.example.upagain.util.auth.SessionManager
+import com.example.upagain.util.bin.ImageType
 import com.example.upagain.util.datetime.formatTimestamptz
 import com.example.upagain.util.ui.DialogUtils
 import com.example.upagain.util.ui.SnackbarLevel
@@ -224,7 +225,7 @@ class ProfileFragment : Fragment() {
                                 binding.etProfilePhone.setText(account.phone)
 
                                 // build url and let coil handle image serving for avatar
-                                binding.ivAvatar.load(buildImageUrl(account.avatar)) {
+                                binding.ivAvatar.load(buildImageUrl(account.avatar, ImageType.AVATAR)) {
                                     crossfade(true)
                                     placeholder(R.drawable.ic_avatar_unknown)
                                     error(R.drawable.ic_avatar_unknown)

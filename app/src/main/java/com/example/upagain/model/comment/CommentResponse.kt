@@ -17,7 +17,7 @@ data class CommentDetailsResponse(
 data class CommentPaginationResponse(
     @SerializedName("total_comments") val totalComments: Int,
     @SerializedName("comments") val comments: List<CommentDetailsResponse>?,
-    @SerializedName("comments") val currentPage: Int,
+    @SerializedName("current_page") val currentPage: Int,
     @SerializedName("last_page") val lastPage: Int,
     @SerializedName("limit") val limit: Int,
 )

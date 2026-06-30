@@ -15,7 +15,6 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.upagain.api.ApiClient
 import com.example.upagain.databinding.FragmentPostDetailBinding
 import com.example.upagain.feat.error.ErrorActivity
-import com.example.upagain.feat.post.index.PostRecyclerViewAdapter
 import com.example.upagain.repository.PostRepo
 import com.example.upagain.util.datetime.formatTimestamptz
 import com.example.upagain.util.ui.setOnBackClickListener
@@ -100,14 +99,18 @@ class PostDetailFragment : Fragment() {
     private fun setupRecyclerView() {
         binding.rvComments.layoutManager = LinearLayoutManager(requireContext())
         // init empty, data will be passed in observer once api response arrive
-        commentAdapter = CommentRecyclerViewAdapter(false,
+        commentAdapter = CommentRecyclerViewAdapter(
+            false,
             object : CommentRecyclerViewAdapter.OnClickListener {
                 override fun onLoadMoreClick() {
-                    TODO("Not yet implemented")
+                    idPost?.let { id ->
+                        viewModel.loadPageOfComments(id, currentCommentPage + 1)
+                    }
                 }
             })
         binding.rvComments.adapter = commentAdapter
     }
+
     private fun setupListeners() {
         // BACK
         binding.btnBack.setOnBackClickListener()
@@ -173,8 +176,8 @@ class PostDetailFragment : Fragment() {
                                 val newComments = commentsResponse.comments.orEmpty()
 
                                 // handle loading state
-                                if (commentsResponse.currentPage==1) {
-                                    toggleCommentLoadingState(isLoading = true, isFirstPage = false)
+                                if (commentsResponse.currentPage == 1) {
+                                    toggleCommentLoadingState(isLoading = false, isFirstPage = true)
                                 } else {
                                     commentAdapter.toggleLoadMoreBtnLoadingState(false)
                                 }
@@ -186,7 +189,8 @@ class PostDetailFragment : Fragment() {
                                     commentAdapter.currentList + newComments
                                 }
                                 // tell adapter to draw load more btn at the bottom or not
-                                val hasMore = commentsResponse.currentPage < commentsResponse.lastPage
+                                val hasMore =
+                                    commentsResponse.currentPage < commentsResponse.lastPage
                                 commentAdapter.updatePaginationStatus(hasMore)
 
                                 commentAdapter.submitList(combinedList)
@@ -204,7 +208,10 @@ class PostDetailFragment : Fragment() {
 
                             is UiState.Error -> {
                                 commentAdapter.toggleLoadMoreBtnLoadingState(false)
-                                toggleCommentLoadingState(false, isFirstPage = (currentCommentPage == 1))
+                                toggleCommentLoadingState(
+                                    false,
+                                    isFirstPage = (currentCommentPage == 1)
+                                )
                                 Log.e(
                                     "PostDetailFragment",
                                     "Load post's comments failed. Status code: ${state.statusCode}",
@@ -229,11 +236,11 @@ class PostDetailFragment : Fragment() {
 
     private fun toggleCommentAreaLoading(isLoading: Boolean) {
         if (isLoading) {
-            binding.rvComments.visibility = View.GONE
+            binding.rvComments.visibility = View.INVISIBLE
             binding.commentsLoader.visibility = View.VISIBLE
         } else {
-            binding.commentsLoader.visibility = View.GONE
             binding.rvComments.visibility = View.VISIBLE
+            binding.commentsLoader.visibility = View.GONE
         }
     }
 }
