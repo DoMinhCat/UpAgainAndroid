@@ -10,6 +10,7 @@ import com.example.upagain.model.post.LikePostResponse
 import com.example.upagain.model.post.PostCreateRequest
 import com.example.upagain.model.post.PostDetailsResponse
 import com.example.upagain.model.post.PostPaginationResponse
+import com.example.upagain.model.post.ProjectStepResponse
 import com.example.upagain.model.post.SavePostResponse
 import com.example.upagain.model.post.ViewPostResponse
 import okhttp3.MultipartBody
@@ -77,6 +78,9 @@ interface ApiService {
 
     @GET(Endpoints.POST_DETAILS)
     fun getPostDetails(@Path("id") id: Int): Call<PostDetailsResponse>
+
+    @GET(Endpoints.STEPS_GET)
+    fun getProjectSteps(@Path("id") id: Int): Call<ProjectStepResponse>
 
     @GET(Endpoints.COMMENTS_ALL)
     fun getPostComments(

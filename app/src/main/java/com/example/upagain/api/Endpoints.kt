@@ -40,6 +40,13 @@ object Endpoints {
     const val COMMENTS_LIKE = "comments/{id}/like"
     const val COMMENTS_DELETE = "comments/{id}"
 
+    // Step Endpoints
+    const val STEPS_GET = "posts/{id}/steps"
+    const val STEPS_CREATE = "posts/{id}/steps"
+    const val STEPS_EDIT = "posts/steps/{id}"
+    const val STEPS_REORDER = "posts/steps/{id}/reorder"
+    const val STEPS_DELETE = "posts/steps/{id}"
+
     // Ad Endpoints
     const val ADS_CREATE = "ads"
     const val ADS_UPDATE = "ads/{id}"

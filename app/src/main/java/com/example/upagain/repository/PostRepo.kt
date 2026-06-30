@@ -8,6 +8,7 @@ import com.example.upagain.model.post.PostCreateRequest
 import com.example.upagain.model.post.PostDetailsResponse
 import com.example.upagain.model.post.PostPaginationRequest
 import com.example.upagain.model.post.PostPaginationResponse
+import com.example.upagain.model.post.ProjectStepResponse
 import com.example.upagain.model.post.SavePostResponse
 import com.example.upagain.model.post.ViewPostResponse
 import retrofit2.HttpException
@@ -78,6 +79,21 @@ class PostRepo(private val apiService: ApiService) {
     suspend fun getPostComments(id: Int, request: CommentPaginationRequest): Result<CommentPaginationResponse> {
         return try {
             val response = apiService.getPostComments(id, request.toQueryMap()).awaitResponse()
+            val body = response.body()
+
+            if (response.isSuccessful && body != null) {
+                Result.success(body)
+            } else {
+                Result.failure(HttpException(response))
+            }
+        } catch (e: Exception) {
+            Result.failure(e)
+        }
+    }
+
+    suspend fun getProjectSteps(idPost: Int): Result<ProjectStepResponse> {
+        return try {
+            val response = apiService.getProjectSteps(idPost).awaitResponse()
             val body = response.body()
 
             if (response.isSuccessful && body != null) {

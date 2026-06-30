@@ -12,6 +12,7 @@ import com.example.upagain.model.post.PostDetailsResponse
 import com.example.upagain.model.post.PostPaginationRequest
 import com.example.upagain.model.post.PostPaginationResponse
 import com.example.upagain.model.post.PostSortOption
+import com.example.upagain.model.post.ProjectStepResponse
 import com.example.upagain.repository.PostRepo
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -30,6 +31,8 @@ class PostViewModel(private val repository: PostRepo, application: Application) 
     val allPostsState: StateFlow<UiState<PostPaginationResponse>> = _allPostsState
     private val _postDetailState = MutableStateFlow<UiState<PostDetailsResponse>>(UiState.Loading())
     val postDetailState: StateFlow<UiState<PostDetailsResponse>> = _postDetailState
+    private val _projectStepsState = MutableStateFlow<UiState<ProjectStepResponse>>(UiState.Idle)
+    val projectStepsState: StateFlow<UiState<ProjectStepResponse>> = _projectStepsState
     private val _allCommentsState =
         MutableStateFlow<UiState<CommentPaginationResponse>>(UiState.Loading())
     val allCommentsState: StateFlow<UiState<CommentPaginationResponse>> = _allCommentsState
@@ -83,10 +86,29 @@ class PostViewModel(private val repository: PostRepo, application: Application) 
             repository.getPostDetails(idPost)
                 .onSuccess { postDetails ->
                     _postDetailState.value = UiState.Success(postDetails)
+                    val category = postDetails.category
+                    if (category == PostCategory.PROJECT) {
+                        getProjectSteps(idPost)
+                    }
                 }
                 .onFailure { exception ->
                     val statusCode = (exception as? HttpException)?.code()
                     _postDetailState.value = UiState.Error(statusCode, exception)
+                }
+        }
+    }
+
+    fun getProjectSteps(idPost: Int) {
+        viewModelScope.launch {
+            _projectStepsState.value = UiState.Loading()
+
+            repository.getProjectSteps(idPost)
+                .onSuccess { steps ->
+                    _projectStepsState.value = UiState.Success(steps)
+                }
+                .onFailure { exception ->
+                    val statusCode = (exception as? HttpException)?.code()
+                    _projectStepsState.value = UiState.Error(statusCode, exception)
                 }
         }
     }

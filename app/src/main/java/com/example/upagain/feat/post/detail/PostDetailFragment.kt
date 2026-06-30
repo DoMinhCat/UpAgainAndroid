@@ -328,7 +328,32 @@ class PostDetailFragment : Fragment() {
                         }
                     }
                 }
-
+                // PROJECT STEPS
+                launch {
+                    viewModel.projectStepsState.collect { state ->
+                        when (state) {
+                            is UiState.Idle -> {
+                                // Hide steps layout/container completely by default
+//                                binding.layoutProjectStepsContainer.visibility = View.GONE
+                            }
+                            is UiState.Loading -> {
+//                                binding.layoutProjectStepsContainer.visibility = View.VISIBLE
+//                                binding.stepsProgressBar.visibility = View.VISIBLE
+                            }
+                            is UiState.Success -> {
+//                                binding.stepsProgressBar.visibility = View.GONE
+//                                // Pass the steps list to your step adapter/view hierarchy
+//                                stepAdapter.submitList(state.data)
+                            }
+                            is UiState.Error -> {
+//                                binding.stepsProgressBar.visibility = View.GONE
+                                // show error message layout
+                                // Handle non-fatal steps error gracefully without breaking the whole page
+                                Log.e("PostDetailFragment", "Failed to load project steps. Status code: ${state.statusCode}", state.exception)
+                            }
+                        }
+                    }
+                }
             }
         }
     }
