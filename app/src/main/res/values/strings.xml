@@ -71,8 +71,11 @@
     <string name="sponsored">Sponsored</string>
     <string name="no_posts_found">No posts found</string>
     <string name="no_posts_description">Try adjusting your filters or active keyword queries.</string>
+    <!-- Detail page -->
     <string name="hint_write_comment">Write a comment…</string>
     <string name="post_details">Post Details</string>
+    <string name="no_comments_found">No comments</string>
+    <string name="no_comments_description">Be the first to share your opinion</string>
 
 
     <!-- Container -->
@@ -166,7 +169,5 @@
     <string name="snack_avatar_update_fail">Avatar update failed: %1$s</string>
     <string name="snack_container_open_success">Container unlocked</string>
     <string name="snack_container_open_fail">Failed to open container: %1$s</string>
-
-    <string name="hello_blank_fragment">Hello blank fragment</string>
 
 </resources>
