@@ -170,21 +170,40 @@ class PostDetailFragment : Fragment() {
 
                             is UiState.Success -> {
                                 val commentsResponse = state.data
+                                val newComments = commentsResponse.comments.orEmpty()
+
+                                // handle loading state
                                 if (commentsResponse.currentPage==1) {
-                                    toggleCommentLoadingState(isLoading = true, isFirstPage = true)
+                                    toggleCommentLoadingState(isLoading = true, isFirstPage = false)
+                                } else {
+                                    commentAdapter.toggleLoadMoreBtnLoadingState(false)
                                 }
 
+                                val combinedList = if (commentsResponse.currentPage == 1) {
+                                    newComments
+                                } else {
+                                    // append the new page comments to existing comments
+                                    commentAdapter.currentList + newComments
+                                }
+                                // tell adapter to draw load more btn at the bottom or not
+                                val hasMore = commentsResponse.currentPage < commentsResponse.lastPage
+                                commentAdapter.updatePaginationStatus(hasMore)
+
+                                commentAdapter.submitList(combinedList)
+
                                 // handle empty state
-                                if (commentsResponse.comments.isNullOrEmpty()) {
+                                if (combinedList.isEmpty()) {
                                     binding.layoutCommentsEmpty.visibility = View.VISIBLE
                                     binding.rvComments.visibility = View.GONE
                                 } else {
                                     binding.layoutCommentsEmpty.visibility = View.GONE
                                     binding.rvComments.visibility = View.VISIBLE
                                 }
+                                currentCommentPage = commentsResponse.currentPage
                             }
 
                             is UiState.Error -> {
+                                commentAdapter.toggleLoadMoreBtnLoadingState(false)
                                 toggleCommentLoadingState(false, isFirstPage = (currentCommentPage == 1))
                                 Log.e(
                                     "PostDetailFragment",
