@@ -5,6 +5,8 @@ import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.upagain.event.LikePostEvent
 import com.example.upagain.event.SavePostEvent
+import com.example.upagain.model.comment.CommentPaginationRequest
+import com.example.upagain.model.comment.CommentPaginationResponse
 import com.example.upagain.model.post.PostCategory
 import com.example.upagain.model.post.PostDetailsResponse
 import com.example.upagain.model.post.PostPaginationRequest
@@ -23,10 +25,14 @@ class PostViewModel(private val repository: PostRepo, application: Application) 
     AndroidViewModel(application) {
     private val context get() = getApplication<Application>().applicationContext
 
-    private val _allPostsState = MutableStateFlow<UiState<PostPaginationResponse>>(UiState.Loading())
+    private val _allPostsState =
+        MutableStateFlow<UiState<PostPaginationResponse>>(UiState.Loading())
     val allPostsState: StateFlow<UiState<PostPaginationResponse>> = _allPostsState
     private val _postDetailState = MutableStateFlow<UiState<PostDetailsResponse>>(UiState.Loading())
     val postDetailState: StateFlow<UiState<PostDetailsResponse>> = _postDetailState
+    private val _allCommentsState =
+        MutableStateFlow<UiState<CommentPaginationResponse>>(UiState.Loading())
+    val allCommentsState: StateFlow<UiState<CommentPaginationResponse>> = _allCommentsState
 
     private val _savePostEvent = MutableSharedFlow<SavePostEvent>()
     val savePostEvent: SharedFlow<SavePostEvent> = _savePostEvent.asSharedFlow()
@@ -84,13 +90,39 @@ class PostViewModel(private val repository: PostRepo, application: Application) 
                 }
         }
     }
+
+    fun getPostComments(idPost: Int, requestBody: CommentPaginationRequest, isFirstPage: Boolean) {
+        viewModelScope.launch {
+            _allCommentsState.value = UiState.Loading(isFirstPage = isFirstPage)
+
+            repository.getPostComments(idPost, requestBody)
+                .onSuccess { allComments ->
+                    _allCommentsState.value = UiState.Success(allComments)
+                }
+                .onFailure { exception ->
+                    val statusCode = (exception as? HttpException)?.code()
+                    _allCommentsState.value = UiState.Error(statusCode, exception)
+                }
+        }
+    }
+
+    fun loadPageOfComments(idPost: Int, pageNumber: Int) {
+        getPostComments(idPost, CommentPaginationRequest(page = pageNumber), pageNumber == 1)
+    }
+
     fun savePost(id: Int, position: Int) {
         // for optimistic update, emit success or fallback event to tell fragment to sync the data correspondingly
         viewModelScope.launch {
             // optimistic update for save post, no loading state needed
             repository.savePost(id)
                 .onSuccess { savePostResponse ->
-                    _savePostEvent.emit(SavePostEvent.Succeeded(position, id, savePostResponse.isSaved))
+                    _savePostEvent.emit(
+                        SavePostEvent.Succeeded(
+                            position,
+                            id,
+                            savePostResponse.isSaved
+                        )
+                    )
                 }
                 .onFailure { exception ->
                     val statusCode = (exception as? HttpException)?.code()
@@ -105,7 +137,13 @@ class PostViewModel(private val repository: PostRepo, application: Application) 
             // optimistic update for like post, no loading state needed
             repository.likePost(id)
                 .onSuccess { likePostResponse ->
-                    _likePostEvent.emit(LikePostEvent.Succeeded(position, id, likePostResponse.isLiked))
+                    _likePostEvent.emit(
+                        LikePostEvent.Succeeded(
+                            position,
+                            id,
+                            likePostResponse.isLiked
+                        )
+                    )
                 }
                 .onFailure { exception ->
                     val statusCode = (exception as? HttpException)?.code()
