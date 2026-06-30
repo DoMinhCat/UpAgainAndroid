@@ -34,6 +34,7 @@ import com.example.upagain.util.ui.toggleFullScreenLoading
 import com.example.upagain.viewmodel.PostViewModel
 import com.example.upagain.viewmodel.UiState
 import com.example.upagain.viewmodel.ViewModelFactory
+import com.google.android.material.tabs.TabLayoutMediator
 import kotlinx.coroutines.launch
 
 private const val ARG_POST_ID = "arg_post_id"
@@ -52,6 +53,7 @@ class PostDetailFragment : Fragment() {
     }
 
     private lateinit var commentAdapter: CommentRecyclerViewAdapter
+    private lateinit var carouselAdapter: CarouselImageAdapter
     private var currentCommentPage = 1
 
 
@@ -119,7 +121,9 @@ class PostDetailFragment : Fragment() {
                     }
                 }
             })
+        carouselAdapter = CarouselImageAdapter()
         binding.rvComments.adapter = commentAdapter
+        binding.vpCarousel.adapter = carouselAdapter
     }
 
     private fun setupListeners() {
@@ -167,7 +171,21 @@ class PostDetailFragment : Fragment() {
                                 binding.loadingOverlay.root.toggleFullScreenLoading(false)
                                 val post = state.data
 
-                                // TODO: show images in carousel
+                                // show image in carousel
+                                val photosList = post.photos.orEmpty()
+                                carouselAdapter.submitList(photosList)
+                                if (photosList.size > 1) {
+                                    binding.tlCarouselIndicator.visibility = View.VISIBLE
+                                    TabLayoutMediator(
+                                        binding.tlCarouselIndicator,
+                                        binding.vpCarousel
+                                    ) { _, _ ->
+                                    }.attach()
+                                } else {
+                                    // Hide indicator entirely if there is only 1 or 0 images
+                                    binding.tlCarouselIndicator.visibility = View.GONE
+                                }
+
                                 binding.ivAuthorAvatar.load(
                                     buildImageUrl(
                                         post.creatorAvatar,
@@ -336,20 +354,27 @@ class PostDetailFragment : Fragment() {
                                 // Hide steps layout/container completely by default
 //                                binding.layoutProjectStepsContainer.visibility = View.GONE
                             }
+
                             is UiState.Loading -> {
 //                                binding.layoutProjectStepsContainer.visibility = View.VISIBLE
 //                                binding.stepsProgressBar.visibility = View.VISIBLE
                             }
+
                             is UiState.Success -> {
 //                                binding.stepsProgressBar.visibility = View.GONE
 //                                // Pass the steps list to your step adapter/view hierarchy
 //                                stepAdapter.submitList(state.data)
                             }
+
                             is UiState.Error -> {
 //                                binding.stepsProgressBar.visibility = View.GONE
                                 // show error message layout
                                 // Handle non-fatal steps error gracefully without breaking the whole page
-                                Log.e("PostDetailFragment", "Failed to load project steps. Status code: ${state.statusCode}", state.exception)
+                                Log.e(
+                                    "PostDetailFragment",
+                                    "Failed to load project steps. Status code: ${state.statusCode}",
+                                    state.exception
+                                )
                             }
                         }
                     }
@@ -365,6 +390,7 @@ class PostDetailFragment : Fragment() {
         }
         return null
     }
+
     private fun toggleCommentLoadingState(isLoading: Boolean, isFirstPage: Boolean) {
         if (isFirstPage) {
             toggleCommentAreaLoading(isLoading)

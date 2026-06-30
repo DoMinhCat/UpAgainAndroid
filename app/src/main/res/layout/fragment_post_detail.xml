@@ -16,6 +16,7 @@
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:paddingHorizontal="@dimen/space_lg"
             android:paddingTop="@dimen/space_lg"
             android:paddingBottom="@dimen/space_md">
 
@@ -73,14 +74,18 @@
                 <com.google.android.material.tabs.TabLayout
                     android:id="@+id/tl_carousel_indicator"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_height="24dp"
                     android:layout_gravity="bottom|center_horizontal"
                     android:layout_marginBottom="@dimen/space_sm"
                     android:background="@android:color/transparent"
                     app:tabBackground="@drawable/tl_dot_indicator_selector"
                     app:tabGravity="center"
                     app:tabIndicatorHeight="0dp"
-                    app:tabMaxWidth="12dp" />
+                    app:tabInlineLabel="true"
+                    app:tabMaxWidth="24dp"
+                    app:tabMinWidth="0dp"
+                    app:tabPaddingEnd="4dp"
+                    app:tabPaddingStart="4dp" />
             </FrameLayout>
 
             <LinearLayout
@@ -325,6 +330,7 @@
                         </LinearLayout>
                     </FrameLayout>
                 </LinearLayout>
+
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
