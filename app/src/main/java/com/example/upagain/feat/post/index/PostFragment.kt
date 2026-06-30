@@ -18,7 +18,7 @@ import com.example.upagain.databinding.FragmentPostBinding
 import com.example.upagain.event.LikePostEvent
 import com.example.upagain.event.SavePostEvent
 import com.example.upagain.feat.error.ErrorActivity
-import com.example.upagain.feat.post.PostDetailFragment
+import com.example.upagain.feat.post.detail.PostDetailFragment
 import com.example.upagain.model.post.PostCategory
 import com.example.upagain.model.post.PostDetailsResponse
 import com.example.upagain.model.post.PostSortOption

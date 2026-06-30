@@ -1,24 +1,22 @@
-package com.example.upagain.feat.post
+package com.example.upagain.feat.post.detail
 
-import android.content.res.ColorStateList
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.content.ContextCompat
 import androidx.core.text.HtmlCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.upagain.api.ApiClient
 import com.example.upagain.databinding.FragmentPostDetailBinding
 import com.example.upagain.feat.error.ErrorActivity
 import com.example.upagain.repository.PostRepo
 import com.example.upagain.util.datetime.formatTimestamptz
-import com.example.upagain.util.ui.getPostCategoryColor
 import com.example.upagain.util.ui.setOnBackClickListener
 import com.example.upagain.util.ui.setPostCategoryTextAndColor
 import com.example.upagain.util.ui.toggleFullScreenLoading
@@ -41,6 +39,8 @@ class PostDetailFragment : Fragment() {
     private val viewModel: PostViewModel by viewModels {
         ViewModelFactory { PostViewModel(repository, appInstance) }
     }
+
+    private lateinit var commentAdapter: CommentRecyclerViewAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -65,7 +65,7 @@ class PostDetailFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         // ! Always set up listeners and observers before API call
-//        setupRecyclerView()
+        setupRecyclerView()
         setupListeners()
         observeState()
 
@@ -93,6 +93,12 @@ class PostDetailFragment : Fragment() {
     }
 
     // PRIVATE ZONE
+    private fun setupRecyclerView() {
+        binding.rvComments.layoutManager = LinearLayoutManager(requireContext())
+        // init empty, data will be passed in observer once api response arrive
+        commentAdapter = CommentRecyclerViewAdapter()
+        binding.rvComments.adapter = commentAdapter
+    }
     private fun setupListeners() {
         // BACK
         binding.btnBack.setOnBackClickListener()
@@ -131,7 +137,8 @@ class PostDetailFragment : Fragment() {
                                 )
                                 binding.tvCommentCount.text = post.commentCount.toString()
 
-                                // TODO: set up comment adapter
+                                // TODO: feed the adapter comment data
+
                             }
 
                             is UiState.Error -> {

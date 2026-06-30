@@ -62,15 +62,14 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
-        <ImageView
+        <com.google.android.material.button.MaterialButton
             android:id="@+id/btn_cmt_like"
-            android:layout_width="@dimen/icon_sm"
-            android:layout_height="@dimen/icon_sm"
+            style="@style/Widget.Material3.Button.IconButton"
+            android:layout_width="@dimen/min_touch" android:layout_height="@dimen/min_touch"
             android:layout_marginTop="@dimen/space_xs"
-            android:src="@drawable/ic_love_outline"
-            android:clickable="true"
-            android:focusable="true"
-            app:tint="@color/red" />
+            app:icon="@drawable/ic_love_outline"
+            app:iconSize="@dimen/icon_sm"
+            app:iconTint="@color/red" />
 
         <TextView
             android:id="@+id/tv_cmt_like_nb"

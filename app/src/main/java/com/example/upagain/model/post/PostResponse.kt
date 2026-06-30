@@ -3,7 +3,6 @@ package com.example.upagain.model.post
 import com.google.gson.annotations.SerializedName
 
 data class PostDetailsResponse(
-    // TODO: remove unused fields
     @SerializedName("id") val id: Int,
     @SerializedName("created_at") val createdAt: String,
     @SerializedName("title") val title: String,
