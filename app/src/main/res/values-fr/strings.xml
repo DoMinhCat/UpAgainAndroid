@@ -46,7 +46,7 @@
     <string name="no_posts_description">Essayez d\'ajuster vos filtres et vos mots-clés.</string>
     <string name="hint_write_comment">Écrire un commentaire…</string>
     <string name="post_details">Détails de l\'article</string>
-    <string name="no_comments_description">Soyez le premier à partager votre avis</string>
+    <string name="no_comments_description">Soyez le premier à partager votre avis !</string>
     <string name="code">Code à 6 chiffres</string>
     <string name="code_hint">000000</string>
     <string name="barcode">Code-barres</string>
@@ -82,6 +82,7 @@
     <string name="invalid_request_body">Demande invalide</string>
     <string name="no_browser">Aucun navigateur trouvé</string>
     <string name="btn_save">Sauvegarder</string>
+    <string name="btn_saved">Sauvegardé</string>
     <string name="settings">Paramètres</string>
     <string name="security">Sécurité</string>
     <string name="notification">Notifications</string>

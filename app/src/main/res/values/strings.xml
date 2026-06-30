@@ -76,7 +76,7 @@
     <string name="post_details">Post Details</string>
     <string name="comment_count">Comments (%1$d)</string>
     <string name="no_comments_found">No comments</string>
-    <string name="no_comments_description">Be the first to share your opinion</string>
+    <string name="no_comments_description">Be the first to share your opinion!</string>
 
 
     <!-- Container -->
@@ -122,6 +122,7 @@
 
     <!-- Profile & Settings -->
     <string name="btn_save">Save</string>
+    <string name="btn_saved">Saved</string>
     <string name="settings">Settings</string>
     <string name="security">Security</string>
     <string name="notification">Notifications</string>

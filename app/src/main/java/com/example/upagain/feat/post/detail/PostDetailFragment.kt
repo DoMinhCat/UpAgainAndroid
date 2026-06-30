@@ -13,11 +13,14 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.recyclerview.widget.LinearLayoutManager
+import coil.load
 import com.example.upagain.R
 import com.example.upagain.api.ApiClient
 import com.example.upagain.databinding.FragmentPostDetailBinding
 import com.example.upagain.feat.error.ErrorActivity
 import com.example.upagain.repository.PostRepo
+import com.example.upagain.util.bin.ImageType
+import com.example.upagain.util.bin.buildImageUrl
 import com.example.upagain.util.datetime.formatTimestamptz
 import com.example.upagain.util.ui.setOnBackClickListener
 import com.example.upagain.util.ui.setPostCategoryTextAndColor
@@ -135,6 +138,11 @@ class PostDetailFragment : Fragment() {
                                 val post = state.data
 
                                 // TODO: show images in carousel
+                                binding.ivAuthorAvatar.load(buildImageUrl(post.creatorAvatar, ImageType.AVATAR)) {
+                                    crossfade(true)
+                                    placeholder(R.drawable.ic_avatar_unknown)
+                                    error(R.drawable.ic_avatar_unknown)
+                                }
 
                                 // feed text data
                                 binding.tvLikeCount.text = post.likeCount.toString()
@@ -162,6 +170,7 @@ class PostDetailFragment : Fragment() {
                                         binding.btnActionSave.context,
                                         R.drawable.ic_bookmark_filled
                                     )
+                                    binding.tvSaveLabel.text = getString(R.string.btn_saved)
                                 }
                             }
 

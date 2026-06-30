@@ -341,6 +341,16 @@
                             android:layout_height="wrap_content"
                             android:text="@string/no_comments_found"
                             android:textColor="@color/color_on_surface" />
+
+                        <TextView
+                            style="@style/TextAppearance.UpAgain.BodyMedium"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/space_xs"
+                            android:alpha="0.7"
+                            android:gravity="center"
+                            android:text="@string/no_comments_description"
+                            android:textColor="@color/color_secondary" />
                     </LinearLayout>
                 </FrameLayout>
             </LinearLayout>
