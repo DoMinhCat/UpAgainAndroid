@@ -305,4 +305,7 @@
             </LinearLayout>
         </LinearLayout>
     </androidx.core.widget.NestedScrollView>
+    <include
+        android:id="@+id/loading_overlay"
+        layout="@layout/layout_fullscreen_loading" />
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

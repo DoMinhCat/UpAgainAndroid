@@ -12,10 +12,11 @@ import com.example.upagain.repository.PostRepo
 import com.example.upagain.viewmodel.PostViewModel
 import com.example.upagain.viewmodel.ViewModelFactory
 
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
+private const val ARG_POST_ID = "arg_post_id"
 
 class PostDetailFragment : Fragment() {
+    private var postId: Int? = null
+
     // elements binding
     private var _binding: FragmentPostDetailBinding? = null
     private val binding get() = _binding!!
@@ -29,6 +30,7 @@ class PostDetailFragment : Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
+            postId = it.getInt(ARG_POST_ID)
         }
     }
 
@@ -50,17 +52,14 @@ class PostDetailFragment : Fragment() {
          * Use this factory method to create a new instance of
          * this fragment using the provided parameters.
          *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
+         * @param postId The ID of the post to display.
          * @return A new instance of fragment PostDetailFragment.
          */
-        // TODO: Rename and change types and number of parameters
         @JvmStatic
-        fun newInstance(param1: String, param2: String) =
+        fun newInstance(postId: Int) =
             PostDetailFragment().apply {
                 arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-                    putString(ARG_PARAM2, param2)
+                    putInt(ARG_POST_ID, postId)
                 }
             }
     }
