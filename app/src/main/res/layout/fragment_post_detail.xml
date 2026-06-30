@@ -169,7 +169,7 @@
                 android:paddingTop="@dimen/space_md">
 
                 <TextView
-                    android:id="@+id/tv_detail_title"
+                    android:id="@+id/tv_title"
                     style="@style/TextAppearance.UpAgain.H1"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
