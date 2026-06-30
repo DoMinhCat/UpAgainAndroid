@@ -95,7 +95,6 @@
                 <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginEnd="@dimen/space_md"
                     android:gravity="center_vertical"
                     android:orientation="horizontal">
 
@@ -137,8 +136,8 @@
                         style="@style/TextAppearance.UpAgain.BodyMedium"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:textColor="@color/color_secondary"
-                        tools:text="Save" />
+                        android:text="@string/btn_save"
+                        android:textColor="@color/color_secondary" />
                 </LinearLayout>
 
                 <View
@@ -249,8 +248,7 @@
                     style="@style/TextAppearance.UpAgain.H3"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/comment_count"
-                    tools:text="Comments (24)" />
+                    android:text="@string/comment_count" />
 
                 <LinearLayout
                     android:layout_width="match_parent"

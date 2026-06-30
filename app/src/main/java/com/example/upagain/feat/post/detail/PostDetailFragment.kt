@@ -5,6 +5,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.appcompat.content.res.AppCompatResources
 import androidx.core.text.HtmlCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -12,6 +13,7 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.upagain.R
 import com.example.upagain.api.ApiClient
 import com.example.upagain.databinding.FragmentPostDetailBinding
 import com.example.upagain.feat.error.ErrorActivity
@@ -147,7 +149,20 @@ class PostDetailFragment : Fragment() {
                                     post.content,
                                     HtmlCompat.FROM_HTML_MODE_LEGACY
                                 )
-                                binding.tvCommentCount.text = post.commentCount.toString()
+                                binding.tvCommentCount.text =
+                                    getString(R.string.comment_count, post.commentCount)
+                                if (post.isLiked) {
+                                    binding.btnActionLike.icon = AppCompatResources.getDrawable(
+                                        binding.btnActionLike.context,
+                                        R.drawable.ic_love_filled
+                                    )
+                                }
+                                if (post.isSaved) {
+                                    binding.btnActionSave.icon = AppCompatResources.getDrawable(
+                                        binding.btnActionSave.context,
+                                        R.drawable.ic_bookmark_filled
+                                    )
+                                }
                             }
 
                             is UiState.Error -> {
