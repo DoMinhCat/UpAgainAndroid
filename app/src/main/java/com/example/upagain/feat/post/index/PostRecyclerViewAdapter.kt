@@ -17,6 +17,7 @@ import com.example.upagain.util.bin.FALL_BACK_IMAGE_URL
 import com.example.upagain.util.datetime.formatTimestamptz
 import com.example.upagain.util.ui.getPostCategoryColor
 import com.example.upagain.util.ui.setOnClickListenerWithCooldown
+import com.example.upagain.util.ui.setPostCategoryTextAndColor
 import com.example.upagain.util.ui.toggleBtnLoadingState
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.progressindicator.CircularProgressIndicator
@@ -70,7 +71,7 @@ class PostRecyclerViewAdapter(
      */
     class PostViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         val thumbnailImage: ImageView = view.findViewById(R.id.post_thumbnail)
-        val category: Button = view.findViewById(R.id.post_category)
+        val category: MaterialButton = view.findViewById(R.id.post_category)
         val title: TextView = view.findViewById(R.id.post_title)
         val author: TextView = view.findViewById(R.id.post_author)
         val date: TextView = view.findViewById(R.id.post_date)
@@ -86,16 +87,13 @@ class PostRecyclerViewAdapter(
         // Feed raw data from API to the card
         if (holder is PostViewHolder) {
             val post = postsData[position]
-            val categoryColorResId = getPostCategoryColor(post.category.toString())
-            val categoryColor = ContextCompat.getColor(holder.itemView.context, categoryColorResId)
 
             holder.title.text = post.title
             holder.author.text = post.creator
             holder.date.text = formatTimestamptz(post.createdAt)
             holder.views.text = post.viewCount.toString()
             holder.likes.text = post.likeCount.toString()
-            holder.category.text = post.category.toString().replace('_', ' ')
-            holder.category.backgroundTintList = ColorStateList.valueOf(categoryColor)
+            holder.category.setPostCategoryTextAndColor(holder.category.context, post.category.toString())
             if (post.adsId != null && post.adsId > 0) {
                 holder.sponsorStatus.visibility = View.VISIBLE
             } else {

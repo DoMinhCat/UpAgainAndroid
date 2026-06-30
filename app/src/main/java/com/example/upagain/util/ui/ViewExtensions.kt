@@ -1,5 +1,7 @@
 package com.example.upagain.util.ui
 
+import android.content.Context
+import android.content.res.ColorStateList
 import android.graphics.drawable.Drawable
 import android.os.SystemClock
 import android.view.View
@@ -8,6 +10,7 @@ import com.google.android.material.progressindicator.CircularProgressIndicator
 import android.os.Handler
 import android.os.Looper
 import androidx.activity.findViewTreeOnBackPressedDispatcherOwner
+import androidx.core.content.ContextCompat
 
 /**
  * Toggle loading state of a button
@@ -96,4 +99,15 @@ fun View.setOnBackClickListener() {
  */
 fun View.toggleFullScreenLoading(isLoading: Boolean) {
     this.visibility = if (isLoading) View.VISIBLE else View.GONE
+}
+
+/**
+ * Set the background color and text for post's category pill
+ */
+fun MaterialButton.setPostCategoryTextAndColor(context: Context, category: String) {
+    val categoryColorResId = getPostCategoryColor(category)
+    val categoryColor = ContextCompat.getColor(context, categoryColorResId)
+
+    this.backgroundTintList = ColorStateList.valueOf(categoryColor)
+    this.text = category.replace('_', ' ')
 }
