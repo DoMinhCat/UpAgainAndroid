@@ -6,6 +6,7 @@ import androidx.lifecycle.viewModelScope
 import com.example.upagain.event.LikePostEvent
 import com.example.upagain.event.SavePostEvent
 import com.example.upagain.model.post.PostCategory
+import com.example.upagain.model.post.PostDetailsResponse
 import com.example.upagain.model.post.PostPaginationRequest
 import com.example.upagain.model.post.PostPaginationResponse
 import com.example.upagain.model.post.PostSortOption
@@ -24,9 +25,11 @@ class PostViewModel(private val repository: PostRepo, application: Application) 
 
     private val _allPostsState = MutableStateFlow<UiState<PostPaginationResponse>>(UiState.Loading())
     val allPostsState: StateFlow<UiState<PostPaginationResponse>> = _allPostsState
+    private val _postDetailState = MutableStateFlow<UiState<PostDetailsResponse>>(UiState.Loading())
+    val postDetailState: StateFlow<UiState<PostDetailsResponse>> = _postDetailState
+
     private val _savePostEvent = MutableSharedFlow<SavePostEvent>()
     val savePostEvent: SharedFlow<SavePostEvent> = _savePostEvent.asSharedFlow()
-
     private val _likePostEvent = MutableSharedFlow<LikePostEvent>()
     val likePostEvent: SharedFlow<LikePostEvent> = _likePostEvent.asSharedFlow()
 
@@ -67,6 +70,20 @@ class PostViewModel(private val repository: PostRepo, application: Application) 
     }
 
     // OTHER METHODS
+    fun getPostDetails(idPost: Int) {
+        viewModelScope.launch {
+            _postDetailState.value = UiState.Loading()
+
+            repository.getPostDetails(idPost)
+                .onSuccess { postDetails ->
+                    _postDetailState.value = UiState.Success(postDetails)
+                }
+                .onFailure { exception ->
+                    val statusCode = (exception as? HttpException)?.code()
+                    _postDetailState.value = UiState.Error(statusCode, exception)
+                }
+        }
+    }
     fun savePost(id: Int, position: Int) {
         // for optimistic update, emit success or fallback event to tell fragment to sync the data correspondingly
         viewModelScope.launch {
