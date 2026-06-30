@@ -1,6 +1,8 @@
 package com.example.upagain.repository
 
 import com.example.upagain.api.ApiService
+import com.example.upagain.model.comment.CommentPaginationRequest
+import com.example.upagain.model.comment.CommentPaginationResponse
 import com.example.upagain.model.post.LikePostResponse
 import com.example.upagain.model.post.PostCreateRequest
 import com.example.upagain.model.post.PostDetailsResponse
@@ -61,6 +63,21 @@ class PostRepo(private val apiService: ApiService) {
     suspend fun getPostDetails(id: Int): Result<PostDetailsResponse> {
         return try {
             val response = apiService.getPostDetails(id).awaitResponse()
+            val body = response.body()
+
+            if (response.isSuccessful && body != null) {
+                Result.success(body)
+            } else {
+                Result.failure(HttpException(response))
+            }
+        } catch (e: Exception) {
+            Result.failure(e)
+        }
+    }
+
+    suspend fun getPostComments(id: Int, request: CommentPaginationRequest): Result<CommentPaginationResponse> {
+        return try {
+            val response = apiService.getPostComments(id, request.toQueryMap()).awaitResponse()
             val body = response.body()
 
             if (response.isSuccessful && body != null) {
