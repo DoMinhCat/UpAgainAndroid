@@ -74,6 +74,7 @@
     <!-- Detail page -->
     <string name="hint_write_comment">Write a comment…</string>
     <string name="post_details">Post Details</string>
+    <string name="comment_count">Comments (%1$d)</string>
     <string name="no_comments_found">No comments</string>
     <string name="no_comments_description">Be the first to share your opinion</string>
 

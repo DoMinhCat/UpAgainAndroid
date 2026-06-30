@@ -126,5 +126,6 @@
     <string name="snack_container_open_fail">Échec de l\'ouverture du conteneur : %1$s</string>
     <string name="err_save_post_msg">Échec de l\'enregistrement</string>
     <string name="no_posts_found">Aucun article trouvé</string>
+    <string name="comment_count">Commentaires (%1$d)</string>
     <string name="no_comments_found">Aucun commentaire</string>
 </resources>

@@ -249,6 +249,7 @@
                     style="@style/TextAppearance.UpAgain.H3"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:text="@string/comment_count"
                     tools:text="Comments (24)" />
 
                 <LinearLayout
@@ -295,29 +296,28 @@
 
                 <FrameLayout
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    app:layout_behavior="@string/appbar_scrolling_view_behavior">
+                    android:layout_height="wrap_content"
+                    android:minHeight="200dp">
 
                     <androidx.recyclerview.widget.RecyclerView
                         android:id="@+id/rv_comments"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:nestedScrollingEnabled="false"
+                        android:visibility="visible"
                         tools:itemCount="3"
                         tools:listitem="@layout/item_comment" />
 
-                    <!-- Loading state -->
                     <LinearLayout
                         android:id="@+id/comments_loader"
                         android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:background="@color/color_background"
+                        android:layout_height="200dp"
                         android:clickable="true"
                         android:focusable="true"
                         android:gravity="center"
                         android:orientation="vertical"
-                        android:visibility="visible"
-                        tools:visibility="gone">
+                        android:visibility="gone"
+                        tools:visibility="visible">
 
                         <com.google.android.material.progressindicator.CircularProgressIndicator
                             android:layout_width="wrap_content"
@@ -328,38 +328,23 @@
                             app:trackThickness="4dp" />
                     </LinearLayout>
 
-                    <!-- Empty state -->
                     <LinearLayout
                         android:id="@+id/layout_comments_empty"
                         android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:background="@color/color_background"
+                        android:layout_height="wrap_content"
                         android:gravity="center"
                         android:orientation="vertical"
                         android:padding="@dimen/space_xl"
-                        android:visibility="gone"
-                        tools:visibility="invisible">
+                        android:visibility="gone">
 
                         <TextView
                             style="@style/TextAppearance.UpAgain.H3"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_marginTop="@dimen/space_md"
                             android:text="@string/no_comments_found"
                             android:textColor="@color/color_on_surface" />
-
-                        <TextView
-                            style="@style/TextAppearance.UpAgain.BodyMedium"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="@dimen/space_xs"
-                            android:alpha="0.7"
-                            android:gravity="center"
-                            android:text="@string/no_comments_description"
-                            android:textColor="@color/color_secondary" />
                     </LinearLayout>
                 </FrameLayout>
-
             </LinearLayout>
         </LinearLayout>
     </androidx.core.widget.NestedScrollView>

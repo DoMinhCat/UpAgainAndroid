@@ -125,11 +125,11 @@ class PostDetailFragment : Fragment() {
                         when (state) {
                             is UiState.Idle -> {}
                             is UiState.Loading -> {
-                                binding.main.toggleFullScreenLoading(true)
+                                binding.loadingOverlay.root.toggleFullScreenLoading(true)
                             }
 
                             is UiState.Success -> {
-                                binding.main.toggleFullScreenLoading(false)
+                                binding.loadingOverlay.root.toggleFullScreenLoading(false)
                                 val post = state.data
 
                                 // TODO: show images in carousel
