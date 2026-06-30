@@ -76,7 +76,10 @@ class PostRepo(private val apiService: ApiService) {
         }
     }
 
-    suspend fun getPostComments(id: Int, request: CommentPaginationRequest): Result<CommentPaginationResponse> {
+    suspend fun getPostComments(
+        id: Int,
+        request: CommentPaginationRequest
+    ): Result<CommentPaginationResponse> {
         return try {
             val response = apiService.getPostComments(id, request.toQueryMap()).awaitResponse()
             val body = response.body()
@@ -91,13 +94,14 @@ class PostRepo(private val apiService: ApiService) {
         }
     }
 
-    suspend fun getProjectSteps(idPost: Int): Result<ProjectStepResponse> {
+    suspend fun getProjectSteps(idPost: Int): Result<List<ProjectStepResponse>> {
         return try {
             val response = apiService.getProjectSteps(idPost).awaitResponse()
-            val body = response.body()
 
-            if (response.isSuccessful && body != null) {
-                Result.success(body)
+            if (response.isSuccessful) {
+                val stepsList = response.body() ?: emptyList()
+                Result.success(stepsList)
+                Result.success(stepsList)
             } else {
                 Result.failure(HttpException(response))
             }

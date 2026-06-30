@@ -21,6 +21,7 @@ import com.example.upagain.event.LikePostEvent
 import com.example.upagain.event.SavePostEvent
 import com.example.upagain.feat.error.ErrorActivity
 import com.example.upagain.model.post.PostDetailsResponse
+import com.example.upagain.model.post.ProjectStepResponse
 import com.example.upagain.repository.PostRepo
 import com.example.upagain.util.bin.ImageType
 import com.example.upagain.util.bin.buildImageUrl
@@ -54,6 +55,7 @@ class PostDetailFragment : Fragment() {
 
     private lateinit var commentAdapter: CommentRecyclerViewAdapter
     private lateinit var carouselAdapter: CarouselImageAdapter
+    private lateinit var stepsAdapter: ProjectStepsAdapter
     private var currentCommentPage = 1
 
 
@@ -111,6 +113,8 @@ class PostDetailFragment : Fragment() {
     // PRIVATE ZONE
     private fun setupRecyclerView() {
         binding.rvComments.layoutManager = LinearLayoutManager(requireContext())
+        binding.rvProjectSteps.layoutManager = LinearLayoutManager(requireContext())
+
         // init empty, data will be passed in observer once api response arrive
         commentAdapter = CommentRecyclerViewAdapter(
             false,
@@ -122,6 +126,19 @@ class PostDetailFragment : Fragment() {
                 }
             })
         carouselAdapter = CarouselImageAdapter()
+        stepsAdapter = ProjectStepsAdapter(object : ProjectStepsAdapter.OnStepClickListener {
+            override fun onEditClick(step: ProjectStepResponse) {
+                // TODO
+                // Handle step edit navigation or action dialog sheet
+            }
+
+            override fun onDeleteClick(step: ProjectStepResponse) {
+                // TODO
+                // Trigger verification dialog or network delete routine
+            }
+        })
+
+        binding.rvProjectSteps.adapter = stepsAdapter
         binding.rvComments.adapter = commentAdapter
         binding.vpCarousel.adapter = carouselAdapter
     }
@@ -351,25 +368,42 @@ class PostDetailFragment : Fragment() {
                     viewModel.projectStepsState.collect { state ->
                         when (state) {
                             is UiState.Idle -> {
-                                // Hide steps layout/container completely by default
-//                                binding.layoutProjectStepsContainer.visibility = View.GONE
+                                binding.layoutProjectStepsContainer.visibility = View.GONE
                             }
 
                             is UiState.Loading -> {
-//                                binding.layoutProjectStepsContainer.visibility = View.VISIBLE
-//                                binding.stepsProgressBar.visibility = View.VISIBLE
+                                // Keep the area frame wrapper visible, but shift view focal state to the loader spinner
+                                binding.layoutProjectStepsContainer.visibility = View.VISIBLE
+                                binding.stepsLoader.visibility = View.VISIBLE
+                                binding.rvProjectSteps.visibility = View.GONE
+                                binding.layoutStepsError.visibility = View.GONE
                             }
 
                             is UiState.Success -> {
-//                                binding.stepsProgressBar.visibility = View.GONE
-//                                // Pass the steps list to your step adapter/view hierarchy
-//                                stepAdapter.submitList(state.data)
+                                val steps = state.data.orEmpty()
+
+                                // Hide the loader container spinner
+                                binding.stepsLoader.visibility = View.GONE
+                                binding.layoutStepsError.visibility = View.GONE
+
+                                if (steps.isEmpty()) {
+                                    // Fallback to error/empty graphic if the project has no steps added yet
+                                    binding.rvProjectSteps.visibility = View.GONE
+                                    binding.layoutStepsError.visibility = View.VISIBLE
+                                } else {
+                                    binding.rvProjectSteps.visibility = View.VISIBLE
+                                    stepsAdapter.submitList(steps)
+                                }
                             }
 
                             is UiState.Error -> {
-//                                binding.stepsProgressBar.visibility = View.GONE
-                                // show error message layout
-                                // Handle non-fatal steps error gracefully without breaking the whole page
+                                // Clear the loading indicator widget
+                                binding.stepsLoader.visibility = View.GONE
+                                binding.rvProjectSteps.visibility = View.GONE
+
+                                binding.layoutStepsError.visibility = View.VISIBLE
+                                binding.ivStepsErrorImage.setImageResource(R.drawable.ic_error)
+
                                 Log.e(
                                     "PostDetailFragment",
                                     "Failed to load project steps. Status code: ${state.statusCode}",
@@ -378,8 +412,7 @@ class PostDetailFragment : Fragment() {
                             }
                         }
                     }
-                }
-            }
+                }            }
         }
     }
 

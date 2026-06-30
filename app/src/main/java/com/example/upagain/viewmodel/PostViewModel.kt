@@ -31,8 +31,8 @@ class PostViewModel(private val repository: PostRepo, application: Application) 
     val allPostsState: StateFlow<UiState<PostPaginationResponse>> = _allPostsState
     private val _postDetailState = MutableStateFlow<UiState<PostDetailsResponse>>(UiState.Loading())
     val postDetailState: StateFlow<UiState<PostDetailsResponse>> = _postDetailState
-    private val _projectStepsState = MutableStateFlow<UiState<ProjectStepResponse>>(UiState.Idle)
-    val projectStepsState: StateFlow<UiState<ProjectStepResponse>> = _projectStepsState
+    private val _projectStepsState = MutableStateFlow<UiState<List<ProjectStepResponse>>>(UiState.Idle)
+    val projectStepsState: StateFlow<UiState<List<ProjectStepResponse>>> = _projectStepsState
     private val _allCommentsState =
         MutableStateFlow<UiState<CommentPaginationResponse>>(UiState.Loading())
     val allCommentsState: StateFlow<UiState<CommentPaginationResponse>> = _allCommentsState

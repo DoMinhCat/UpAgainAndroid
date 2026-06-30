@@ -80,7 +80,7 @@ interface ApiService {
     fun getPostDetails(@Path("id") id: Int): Call<PostDetailsResponse>
 
     @GET(Endpoints.STEPS_GET)
-    fun getProjectSteps(@Path("id") id: Int): Call<ProjectStepResponse>
+    fun getProjectSteps(@Path("id") id: Int): Call<List<ProjectStepResponse>>
 
     @GET(Endpoints.COMMENTS_ALL)
     fun getPostComments(
