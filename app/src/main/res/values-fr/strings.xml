@@ -48,6 +48,7 @@
     <string name="post_details">Détails de l\'article</string>
     <string name="no_comments_description">Soyez le premier à partager votre avis !</string>
     <string name="project_steps">Étapes du Projet</string>
+    <string name="items_used">Matériels utilisés</string>
     <string name="code">Code à 6 chiffres</string>
     <string name="code_hint">000000</string>
     <string name="barcode">Code-barres</string>

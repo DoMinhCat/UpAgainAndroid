@@ -298,7 +298,7 @@
                             android:orientation="vertical"
                             android:padding="@dimen/space_xl"
                             android:visibility="gone"
-                            tools:visibility="visible">
+                            tools:visibility="gone">
 
                             <ImageView
                                 android:id="@+id/iv_steps_error_image"
