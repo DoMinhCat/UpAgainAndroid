@@ -194,7 +194,7 @@ class PostDetailFragment : Fragment() {
                                 )
                                 binding.tvCommentCount.text =
                                     getString(R.string.comment_count, post.commentCount)
-                                toggleLikeIconAndCount(post.isLiked, post)
+                                toggleLikeIconAndCount(post.isLiked, null)
                                 toggleSaveIconAndText(post.isSaved)
                             }
 
@@ -304,8 +304,7 @@ class PostDetailFragment : Fragment() {
                     viewModel.likePostEvent.collect { event ->
                         when (event) {
                             is LikePostEvent.Succeeded -> {
-                                val post = getPostData()
-                                    toggleLikeIconAndCount(event.isLiked, post)
+                                // Do nothing, data and state already updated optimistically
                             }
 
                             is LikePostEvent.Rollback -> {
