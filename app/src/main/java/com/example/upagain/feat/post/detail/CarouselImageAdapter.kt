@@ -30,7 +30,7 @@ class CarouselImageAdapter : ListAdapter<String, CarouselImageAdapter.ViewHolder
         fun bind(imageUrl: String?) {
             binding.ivCarouselItem.load(buildImageUrl(imageUrl, ImageType.MEDIA)) {
                 crossfade(true)
-                placeholder(R.color.color_primary_variant)
+                placeholder(R.color.color_surface)
                 error(R.drawable.fall_back_image)
             }
         }

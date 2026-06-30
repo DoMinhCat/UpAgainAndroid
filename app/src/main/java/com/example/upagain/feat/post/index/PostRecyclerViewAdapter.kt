@@ -102,7 +102,7 @@ class PostRecyclerViewAdapter(
             val thumbnailUrl = buildImageUrl(post.photos?.firstOrNull(), ImageType.MEDIA)
             holder.thumbnailImage.load(thumbnailUrl) {
                 crossfade(true)
-                placeholder(R.color.color_primary_variant)
+                placeholder(R.color.color_surface)
                 error(R.drawable.fall_back_image)
             }
 
