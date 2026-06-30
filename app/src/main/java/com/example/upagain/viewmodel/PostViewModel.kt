@@ -70,7 +70,7 @@ class PostViewModel(private val repository: PostRepo, application: Application) 
         currentFilters = currentFilters.copy(sort = sortOption, page = 1)
     }
 
-    fun updateCategoryFilter(categoryOption: PostCategory?) {
+    fun updateCategoryFilter(categoryOption: PostCategory) {
         currentFilters = currentFilters.copy(category = categoryOption, page = 1)
     }
 

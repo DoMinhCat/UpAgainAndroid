@@ -144,7 +144,7 @@ class PostFragment : Fragment() {
         binding.chipGroupCategories.setOnCheckedStateChangeListener { _, checkedChips ->
             val selectedChip = checkedChips.firstOrNull()
             if (selectedChip == null) {
-                viewModel.updateCategoryFilter(null)
+                viewModel.updateCategoryFilter(PostCategory.ALL)
             } else {
                 when (selectedChip) {
                     R.id.tutorial_chip -> {
