@@ -77,6 +77,7 @@
     <string name="comment_count">Comments (%1$d)</string>
     <string name="no_comments_found">No comments</string>
     <string name="no_comments_description">Be the first to share your opinion!</string>
+    <string name="project_steps">Project Steps</string>
 
 
     <!-- Container -->
@@ -109,6 +110,7 @@
     <string name="error_404_msg">Oops! It seems nature has reclaimed this path. Let\'s get back on track.</string>
     <string name="error_500_msg">Oops! Our servers are currently very busy. We are doing everything we can to resolve the problem as quickly as possible.</string>
     <string name="error_connection_msg">Oops! Your connection was interrupted. Please check your signal and try again to continue your journey.</string>
+    <string name="error_generic_msg">Oops! Something went wrong. Please check your connection and try again later.</string>
     <string name="exception_message">An error occurred</string>
     <string name="error_media_msg">Failed to load media</string>
     <string name="invalid_request_body">Invalid request body</string>

@@ -47,6 +47,7 @@
     <string name="hint_write_comment">Écrire un commentaire…</string>
     <string name="post_details">Détails de l\'article</string>
     <string name="no_comments_description">Soyez le premier à partager votre avis !</string>
+    <string name="project_steps">Étapes du Projet</string>
     <string name="code">Code à 6 chiffres</string>
     <string name="code_hint">000000</string>
     <string name="barcode">Code-barres</string>
@@ -77,6 +78,7 @@
     <string name="btn_refresh">Actualiser la page</string>
     <string name="error_connection_msg">Oups ! Votre connexion a été interrompue. Veuillez vérifier votre signal et réessayer pour poursuivre votre voyage.</string>
 
+    <string name="error_generic_msg">Oups ! Une erreur s\'est produite. Veuillez vérifier votre connexion et réessayer plus tard.</string>
     <string name="exception_message">Une erreur s\'est produite</string>
     <string name="error_media_msg">Impossible de charger l\'image</string>
     <string name="invalid_request_body">Demande invalide</string>
