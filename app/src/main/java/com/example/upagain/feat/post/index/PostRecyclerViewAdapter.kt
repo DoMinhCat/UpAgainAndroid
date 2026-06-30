@@ -1,4 +1,4 @@
-package com.example.upagain.feat.post
+package com.example.upagain.feat.post.index
 
 import android.content.res.ColorStateList
 import android.view.LayoutInflater
@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.appcompat.content.res.AppCompatResources
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import coil.load
@@ -115,11 +116,17 @@ class PostRecyclerViewAdapter(
             }
             if (post.isLiked) {
                 holder.likeBtn.icon =
-                    holder.likeBtn.context.getDrawable(R.drawable.ic_love_filled)
+                    AppCompatResources.getDrawable(
+                        holder.likeBtn.context,
+                        R.drawable.ic_love_filled
+                    )
             }
             if (post.isSaved) {
                 holder.saveBtn.icon =
-                    holder.saveBtn.context.getDrawable(R.drawable.ic_bookmark_filled)
+                    AppCompatResources.getDrawable(
+                        holder.saveBtn.context,
+                        R.drawable.ic_bookmark_filled
+                    )
             }
 
             // On click listeners
@@ -136,7 +143,7 @@ class PostRecyclerViewAdapter(
             if (holder is LoadMoreViewHolder) {
                 val context = holder.btnLoadMore.context
                 val defaultText = context.getString(R.string.btn_load_more)
-                val defaultIcon = context.getDrawable(R.drawable.ic_chevron_double_down)
+                val defaultIcon = AppCompatResources.getDrawable(context, R.drawable.ic_chevron_double_down)
                 if (isLoadMoreBtnLoading) {
                     toggleBtnLoadingState(
                         holder.btnLoadMore,

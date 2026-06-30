@@ -1,4 +1,4 @@
-package com.example.upagain.feat.post
+package com.example.upagain.feat.post.index
 
 import android.os.Bundle
 import android.util.Log
@@ -20,7 +20,6 @@ import com.example.upagain.event.SavePostEvent
 import com.example.upagain.feat.error.ErrorActivity
 import com.example.upagain.model.post.PostCategory
 import com.example.upagain.model.post.PostDetailsResponse
-import com.example.upagain.model.post.PostPaginationRequest
 import com.example.upagain.model.post.PostSortOption
 import com.example.upagain.repository.PostRepo
 import com.example.upagain.util.ui.SnackbarLevel
