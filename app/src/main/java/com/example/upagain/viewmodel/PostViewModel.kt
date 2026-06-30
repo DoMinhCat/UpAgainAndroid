@@ -110,7 +110,7 @@ class PostViewModel(private val repository: PostRepo, application: Application) 
         getPostComments(idPost, CommentPaginationRequest(page = pageNumber), pageNumber == 1)
     }
 
-    fun savePost(id: Int, position: Int) {
+    fun savePost(id: Int, position: Int = -1) {
         // for optimistic update, emit success or fallback event to tell fragment to sync the data correspondingly
         viewModelScope.launch {
             // optimistic update for save post, no loading state needed
@@ -132,7 +132,7 @@ class PostViewModel(private val repository: PostRepo, application: Application) 
         }
     }
 
-    fun likePost(id: Int, position: Int) {
+    fun likePost(id: Int, position: Int = -1) {
         viewModelScope.launch {
             // optimistic update for like post, no loading state needed
             repository.likePost(id)

@@ -17,13 +17,19 @@ import coil.load
 import com.example.upagain.R
 import com.example.upagain.api.ApiClient
 import com.example.upagain.databinding.FragmentPostDetailBinding
+import com.example.upagain.event.LikePostEvent
+import com.example.upagain.event.SavePostEvent
 import com.example.upagain.feat.error.ErrorActivity
+import com.example.upagain.model.post.PostDetailsResponse
 import com.example.upagain.repository.PostRepo
 import com.example.upagain.util.bin.ImageType
 import com.example.upagain.util.bin.buildImageUrl
 import com.example.upagain.util.datetime.formatTimestamptz
+import com.example.upagain.util.ui.SnackbarLevel
 import com.example.upagain.util.ui.setOnBackClickListener
+import com.example.upagain.util.ui.setOnClickListenerWithCooldown
 import com.example.upagain.util.ui.setPostCategoryTextAndColor
+import com.example.upagain.util.ui.showTopSnackbar
 import com.example.upagain.util.ui.toggleFullScreenLoading
 import com.example.upagain.viewmodel.PostViewModel
 import com.example.upagain.viewmodel.UiState
@@ -119,12 +125,36 @@ class PostDetailFragment : Fragment() {
     private fun setupListeners() {
         // BACK
         binding.btnBack.setOnBackClickListener()
-        //
+        // LIKE
+        binding.btnActionLike.setOnClickListenerWithCooldown(500L) {
+            val post = getPostData()
+            if (post != null) {
+                post.isLiked = !post.isLiked
+                toggleLikeIconAndCount(post.isLiked, post)
+
+                viewModel.likePost(post.id)
+            } else {
+                // The post hasn't loaded yet or failed
+            }
+        }
+        // SAVE
+        binding.btnActionSave.setOnClickListenerWithCooldown(500L) {
+            val post = getPostData()
+            if (post != null) {
+                // optimistic update
+                post.isSaved = !post.isSaved
+                toggleSaveIconAndText(post.isSaved)
+                viewModel.savePost(post.id)
+            } else {
+                // The post hasn't loaded yet or failed
+            }
+        }
     }
 
     private fun observeState() {
         lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
+                // GET POST DETAIL
                 launch {
                     viewModel.postDetailState.collect { state ->
                         when (state) {
@@ -138,7 +168,12 @@ class PostDetailFragment : Fragment() {
                                 val post = state.data
 
                                 // TODO: show images in carousel
-                                binding.ivAuthorAvatar.load(buildImageUrl(post.creatorAvatar, ImageType.AVATAR)) {
+                                binding.ivAuthorAvatar.load(
+                                    buildImageUrl(
+                                        post.creatorAvatar,
+                                        ImageType.AVATAR
+                                    )
+                                ) {
                                     crossfade(true)
                                     placeholder(R.drawable.ic_avatar_unknown)
                                     error(R.drawable.ic_avatar_unknown)
@@ -159,19 +194,8 @@ class PostDetailFragment : Fragment() {
                                 )
                                 binding.tvCommentCount.text =
                                     getString(R.string.comment_count, post.commentCount)
-                                if (post.isLiked) {
-                                    binding.btnActionLike.icon = AppCompatResources.getDrawable(
-                                        binding.btnActionLike.context,
-                                        R.drawable.ic_love_filled
-                                    )
-                                }
-                                if (post.isSaved) {
-                                    binding.btnActionSave.icon = AppCompatResources.getDrawable(
-                                        binding.btnActionSave.context,
-                                        R.drawable.ic_bookmark_filled
-                                    )
-                                    binding.tvSaveLabel.text = getString(R.string.btn_saved)
-                                }
+                                toggleLikeIconAndCount(post.isLiked, post)
+                                toggleSaveIconAndText(post.isSaved)
                             }
 
                             is UiState.Error -> {
@@ -187,6 +211,7 @@ class PostDetailFragment : Fragment() {
                     }
 
                 }
+                // GET COMMENTS
                 launch {
                     viewModel.allCommentsState.collect { state ->
                         when (state) {
@@ -246,10 +271,76 @@ class PostDetailFragment : Fragment() {
                         }
                     }
                 }
+                // SAVE
+                launch {
+                    viewModel.savePostEvent.collect { event ->
+                        when (event) {
+                            is SavePostEvent.Succeeded -> {
+                                toggleSaveIconAndText(event.isSaved)
+                            }
+
+                            is SavePostEvent.Rollback -> {
+                                val post = getPostData()
+                                if (post != null) {
+                                    // Revert isSaved status since update on server failed
+                                    post.isSaved = !post.isSaved
+                                    toggleSaveIconAndText(post.isSaved)
+                                    Log.e(
+                                        "PostDetailFragment",
+                                        "Save failed for Post ${event.postId}. Status code: ${event.statusCode}",
+                                        event.exception
+                                    )
+                                }
+                                binding.main.showTopSnackbar(
+                                    R.string.err_save_post_msg,
+                                    SnackbarLevel.ERROR
+                                )
+                            }
+                        }
+                    }
+                }
+                // LIKE
+                launch {
+                    viewModel.likePostEvent.collect { event ->
+                        when (event) {
+                            is LikePostEvent.Succeeded -> {
+                                val post = getPostData()
+                                    toggleLikeIconAndCount(event.isLiked, post)
+                            }
+
+                            is LikePostEvent.Rollback -> {
+                                val post = getPostData()
+                                if (post != null) {
+                                    // Revert isLiked status since update on server failed
+                                    post.isLiked = !post.isLiked
+                                    toggleLikeIconAndCount(post.isLiked, post)
+                                    post.likeCount -= 1
+                                    Log.e(
+                                        "PostDetailFragment",
+                                        "Like failed for Post ${event.postId}. Status code: ${event.statusCode}",
+                                        event.exception
+                                    )
+                                }
+                                binding.main.showTopSnackbar(
+                                    R.string.err_like_post_msg,
+                                    SnackbarLevel.ERROR
+                                )
+                            }
+                        }
+                    }
+                }
+
             }
         }
     }
 
+    private fun getPostData(): PostDetailsResponse? {
+        val currentState = viewModel.postDetailState.value
+        if (currentState is UiState.Success) {
+            return currentState.data
+        }
+        return null
+    }
     private fun toggleCommentLoadingState(isLoading: Boolean, isFirstPage: Boolean) {
         if (isFirstPage) {
             toggleCommentAreaLoading(isLoading)
@@ -265,6 +356,44 @@ class PostDetailFragment : Fragment() {
         } else {
             binding.rvComments.visibility = View.VISIBLE
             binding.commentsLoader.visibility = View.GONE
+        }
+    }
+
+    private fun toggleSaveIconAndText(isSaved: Boolean) {
+        if (isSaved) {
+            binding.btnActionSave.icon = AppCompatResources.getDrawable(
+                binding.btnActionSave.context,
+                R.drawable.ic_bookmark_filled
+            )
+            binding.tvSaveLabel.text = getString(R.string.btn_saved)
+        } else {
+            binding.btnActionSave.icon = AppCompatResources.getDrawable(
+                binding.btnActionSave.context,
+                R.drawable.ic_bookmark_outline
+            )
+            binding.tvSaveLabel.text = getString(R.string.btn_save)
+        }
+    }
+
+    private fun toggleLikeIconAndCount(isLiked: Boolean, post: PostDetailsResponse?) {
+        if (isLiked) {
+            binding.btnActionLike.icon = AppCompatResources.getDrawable(
+                binding.btnActionLike.context,
+                R.drawable.ic_love_filled
+            )
+            if (post != null) {
+                post.likeCount += 1
+                binding.tvLikeCount.text = post.likeCount.toString()
+            }
+        } else {
+            binding.btnActionLike.icon = AppCompatResources.getDrawable(
+                binding.btnActionLike.context,
+                R.drawable.ic_love_outline
+            )
+            if (post != null) {
+                post.likeCount -= 1
+                binding.tvLikeCount.text = post.likeCount.toString()
+            }
         }
     }
 }
