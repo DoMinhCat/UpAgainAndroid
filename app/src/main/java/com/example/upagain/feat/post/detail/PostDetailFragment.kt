@@ -15,6 +15,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.upagain.api.ApiClient
 import com.example.upagain.databinding.FragmentPostDetailBinding
 import com.example.upagain.feat.error.ErrorActivity
+import com.example.upagain.feat.post.index.PostRecyclerViewAdapter
 import com.example.upagain.repository.PostRepo
 import com.example.upagain.util.datetime.formatTimestamptz
 import com.example.upagain.util.ui.setOnBackClickListener
@@ -41,6 +42,8 @@ class PostDetailFragment : Fragment() {
     }
 
     private lateinit var commentAdapter: CommentRecyclerViewAdapter
+    private var currentCommentPage = 1
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -72,6 +75,7 @@ class PostDetailFragment : Fragment() {
         // API call
         idPost?.let { id ->
             viewModel.getPostDetails(id)
+            viewModel.loadPageOfComments(id, 1)
         }
     }
 
@@ -96,7 +100,12 @@ class PostDetailFragment : Fragment() {
     private fun setupRecyclerView() {
         binding.rvComments.layoutManager = LinearLayoutManager(requireContext())
         // init empty, data will be passed in observer once api response arrive
-        commentAdapter = CommentRecyclerViewAdapter()
+        commentAdapter = CommentRecyclerViewAdapter(false,
+            object : CommentRecyclerViewAdapter.OnClickListener {
+                override fun onLoadMoreClick() {
+                    TODO("Not yet implemented")
+                }
+            })
         binding.rvComments.adapter = commentAdapter
     }
     private fun setupListeners() {
@@ -136,9 +145,6 @@ class PostDetailFragment : Fragment() {
                                     HtmlCompat.FROM_HTML_MODE_LEGACY
                                 )
                                 binding.tvCommentCount.text = post.commentCount.toString()
-
-                                // TODO: feed the adapter comment data
-
                             }
 
                             is UiState.Error -> {
@@ -154,7 +160,61 @@ class PostDetailFragment : Fragment() {
                     }
 
                 }
+                launch {
+                    viewModel.allCommentsState.collect { state ->
+                        when (state) {
+                            is UiState.Idle -> {}
+                            is UiState.Loading -> {
+                                toggleCommentLoadingState(true, state.isFirstPage)
+                            }
+
+                            is UiState.Success -> {
+                                val commentsResponse = state.data
+                                if (commentsResponse.currentPage==1) {
+                                    toggleCommentLoadingState(isLoading = true, isFirstPage = true)
+                                }
+
+                                // handle empty state
+                                if (commentsResponse.comments.isNullOrEmpty()) {
+                                    binding.layoutCommentsEmpty.visibility = View.VISIBLE
+                                    binding.rvComments.visibility = View.GONE
+                                } else {
+                                    binding.layoutCommentsEmpty.visibility = View.GONE
+                                    binding.rvComments.visibility = View.VISIBLE
+                                }
+                            }
+
+                            is UiState.Error -> {
+                                toggleCommentLoadingState(false, isFirstPage = (currentCommentPage == 1))
+                                Log.e(
+                                    "PostDetailFragment",
+                                    "Load post's comments failed. Status code: ${state.statusCode}",
+                                    state.exception
+                                )
+                                ErrorActivity.start(requireContext(), state.statusCode ?: 0)
+                            }
+                        }
+                    }
+                }
             }
+        }
+    }
+
+    private fun toggleCommentLoadingState(isLoading: Boolean, isFirstPage: Boolean) {
+        if (isFirstPage) {
+            toggleCommentAreaLoading(isLoading)
+        } else {
+            commentAdapter.toggleLoadMoreBtnLoadingState(isLoading)
+        }
+    }
+
+    private fun toggleCommentAreaLoading(isLoading: Boolean) {
+        if (isLoading) {
+            binding.rvComments.visibility = View.GONE
+            binding.commentsLoader.visibility = View.VISIBLE
+        } else {
+            binding.commentsLoader.visibility = View.GONE
+            binding.rvComments.visibility = View.VISIBLE
         }
     }
 }
