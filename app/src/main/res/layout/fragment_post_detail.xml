@@ -108,6 +108,7 @@
                         style="@style/Widget.Material3.Button.IconButton"
                         android:layout_width="@dimen/min_touch"
                         android:layout_height="@dimen/min_touch"
+                        app:iconGravity="textStart"
                         app:icon="@drawable/ic_love_outline"
                         app:iconSize="@dimen/icon_md"
                         app:iconTint="@color/red" />
@@ -133,6 +134,7 @@
                         android:layout_width="@dimen/min_touch"
                         android:layout_height="@dimen/min_touch"
                         app:icon="@drawable/ic_bookmark_outline"
+                        app:iconGravity="textStart"
                         app:iconSize="@dimen/icon_md"
                         app:iconTint="@color/color_accent" />
 
@@ -408,6 +410,7 @@
                         style="@style/Widget.Material3.Button.IconButton"
                         android:layout_width="@dimen/min_touch"
                         android:layout_height="@dimen/min_touch"
+                        app:iconGravity="textStart"
                         android:layout_marginStart="@dimen/space_sm"
                         app:icon="@drawable/ic_send"
                         app:iconSize="@dimen/icon_md"

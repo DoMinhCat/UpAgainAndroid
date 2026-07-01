@@ -186,12 +186,13 @@
                         android:id="@+id/btn_like"
                         style="@style/Widget.Material3.Button.IconButton"
                         android:layout_width="@dimen/min_touch"
-                        android:layout_height="@dimen/button_height"
+                        android:layout_height="@dimen/min_touch"
                         android:layout_marginEnd="@dimen/space_xs"
                         app:backgroundTint="@color/color_surface"
                         app:cornerRadius="@dimen/button_radius"
                         app:icon="@drawable/ic_love_outline"
                         app:iconSize="@dimen/icon_md"
+                        app:iconGravity="textStart"
                         app:iconTint="@color/red" />
 
                     <com.google.android.material.button.MaterialButton
@@ -199,6 +200,7 @@
                         style="@style/Widget.Material3.Button.IconButton"
                         android:layout_width="@dimen/min_touch"
                         android:layout_height="@dimen/button_height"
+                        app:iconGravity="textStart"
                         android:contentDescription="@string/btn_save"
                         app:backgroundTint="@color/color_surface"
                         app:cornerRadius="@dimen/button_radius"
