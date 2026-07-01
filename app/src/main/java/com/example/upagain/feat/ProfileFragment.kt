@@ -49,7 +49,6 @@ import com.example.upagain.util.ui.toggleFullScreenLoading
 import com.example.upagain.util.ui.toggleIconLoadingState
 import com.google.android.material.snackbar.Snackbar
 
-// TODO: notification settings fragment
 class ProfileFragment : Fragment() {
     // elements binding
     private var _binding: FragmentProfileBinding? = null

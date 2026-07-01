@@ -10,7 +10,6 @@ import androidx.recyclerview.widget.RecyclerView
 import coil.load
 import com.example.upagain.R
 import com.example.upagain.model.post.PostDetailsResponse
-import com.example.upagain.util.bin.FALL_BACK_IMAGE_URL
 import com.example.upagain.util.bin.ImageType
 import com.example.upagain.util.bin.buildImageUrl
 import com.example.upagain.util.datetime.formatTimestamptz
@@ -91,7 +90,10 @@ class PostRecyclerViewAdapter(
             holder.date.text = formatTimestamptz(post.createdAt)
             holder.views.text = post.viewCount.toString()
             holder.likes.text = post.likeCount.toString()
-            holder.category.setPostCategoryTextAndColor(holder.category.context, post.category.toString())
+            holder.category.setPostCategoryTextAndColor(
+                holder.category.context,
+                post.category.toString()
+            )
             if (post.adsId != null && post.adsId > 0) {
                 holder.sponsorStatus.visibility = View.VISIBLE
             } else {
@@ -139,7 +141,8 @@ class PostRecyclerViewAdapter(
             if (holder is LoadMoreViewHolder) {
                 val context = holder.btnLoadMore.context
                 val defaultText = context.getString(R.string.btn_load_more)
-                val defaultIcon = AppCompatResources.getDrawable(context, R.drawable.ic_chevron_double_down)
+                val defaultIcon =
+                    AppCompatResources.getDrawable(context, R.drawable.ic_chevron_double_down)
                 if (isLoadMoreBtnLoading) {
                     toggleBtnLoadingState(
                         holder.btnLoadMore,

@@ -490,11 +490,13 @@ class PostDetailFragment : Fragment() {
 
     private fun showFullScreenImageDialog(absoluteImageUrl: String) {
         // Create an unstyled fullscreen dialog wrapper window context
-        val dialog = android.app.Dialog(requireContext(), android.R.style.Theme_Black_NoTitleBar_Fullscreen)
+        val dialog =
+            android.app.Dialog(requireContext(), android.R.style.Theme_Black_NoTitleBar_Fullscreen)
         dialog.setContentView(R.layout.dialog_fullscreen_image)
         dialog.setCancelable(true)
 
-        val imageView = dialog.findViewById<com.google.android.material.imageview.ShapeableImageView>(R.id.iv_fullscreen_target)
+        val imageView =
+            dialog.findViewById<com.google.android.material.imageview.ShapeableImageView>(R.id.iv_fullscreen_target)
         val btnClose = dialog.findViewById<android.widget.ImageView>(R.id.btn_close_fullscreen)
 
         // Populate image immediately

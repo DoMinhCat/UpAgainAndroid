@@ -41,7 +41,7 @@ class ProjectStepsAdapter(
     ) : RecyclerView.ViewHolder(binding.root) {
 
         // Instantiated once per ViewHolder view creation block to optimize memory metrics
-        private val stepCarouselAdapter = CarouselImageAdapter{ url ->
+        private val stepCarouselAdapter = CarouselImageAdapter { url ->
             onStepImageClick(url) // Safely link item clicks back up the tree layout matrix!
         }
         private var isMediatorAttached = false

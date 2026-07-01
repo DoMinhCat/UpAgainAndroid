@@ -80,7 +80,8 @@ class CommentRecyclerViewAdapter(
         } else if (holder is LoadMoreViewHolder) {
             val context = holder.btnLoadMore.context
             val defaultText = context.getString(R.string.btn_load_more)
-            val defaultIcon = AppCompatResources.getDrawable(context, R.drawable.ic_chevron_double_down)
+            val defaultIcon =
+                AppCompatResources.getDrawable(context, R.drawable.ic_chevron_double_down)
 
             if (isLoadMoreBtnLoading) {
                 toggleBtnLoadingState(
