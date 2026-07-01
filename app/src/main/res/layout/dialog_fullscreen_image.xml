@@ -16,8 +16,8 @@
         android:layout_width="@dimen/min_touch"
         android:layout_height="@dimen/min_touch"
         android:layout_gravity="top|start"
-        android:layout_marginStart="@dimen/space_md"
-        android:layout_marginTop="@dimen/space_md"
+        android:layout_marginStart="@dimen/space_lg"
+        android:layout_marginTop="@dimen/space_lg"
         android:padding="@dimen/space_sm"
         android:src="@drawable/ic_back"
         app:tint="@android:color/white" />

@@ -500,6 +500,8 @@ class PostDetailFragment : Fragment() {
         // Populate image immediately
         imageView.load(absoluteImageUrl) {
             crossfade(true)
+            placeholder(R.color.color_surface)
+            error(R.drawable.fall_back_image)
         }
 
         btnClose.setOnClickListener { dialog.dismiss() }
