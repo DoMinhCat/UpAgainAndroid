@@ -27,10 +27,10 @@ class CarouselImageAdapter : ListAdapter<String, CarouselImageAdapter.ViewHolder
     class ViewHolder(private val binding: ItemCarouselImageBinding) :
         RecyclerView.ViewHolder(binding.root) {
 
-        fun bind(imageUrl: String?) {
+        fun bind(imageUrl: String) {
             binding.ivCarouselItem.load(buildImageUrl(imageUrl, ImageType.MEDIA)) {
                 crossfade(true)
-                placeholder(R.color.color_surface)
+                placeholder(R.drawable.fall_back_image)
                 error(R.drawable.fall_back_image)
             }
         }
