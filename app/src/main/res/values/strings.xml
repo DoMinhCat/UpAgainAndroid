@@ -71,6 +71,20 @@
     <string name="sponsored">Sponsored</string>
     <string name="no_posts_found">No posts found</string>
     <string name="no_posts_description">Try adjusting your filters or active keyword queries.</string>
+    <!-- Detail page -->
+    <string name="hint_write_comment">Write a comment…</string>
+    <string name="post_details">Post Details</string>
+    <string name="comment_count">Comments (%1$d)</string>
+    <string name="no_comments_found">No comments</string>
+    <string name="no_comments_description">Be the first to share your opinion!</string>
+    <string name="project_steps">Project Steps</string>
+    <string name="items_used">Items used</string>
+    <string name="no_steps_found">No steps</string>
+    <string name="no_steps_description">This project is still ongoing!</string>
+    <!-- My page -->
+    <string name="btn_reorder">Reorder</string>
+
+
 
     <!-- Container -->
     <string name="code">6-digit code</string>
@@ -102,6 +116,7 @@
     <string name="error_404_msg">Oops! It seems nature has reclaimed this path. Let\'s get back on track.</string>
     <string name="error_500_msg">Oops! Our servers are currently very busy. We are doing everything we can to resolve the problem as quickly as possible.</string>
     <string name="error_connection_msg">Oops! Your connection was interrupted. Please check your signal and try again to continue your journey.</string>
+    <string name="error_generic_msg">Oops! Something went wrong. Please check your connection and try again later.</string>
     <string name="exception_message">An error occurred</string>
     <string name="error_media_msg">Failed to load media</string>
     <string name="invalid_request_body">Invalid request body</string>
@@ -115,6 +130,7 @@
 
     <!-- Profile & Settings -->
     <string name="btn_save">Save</string>
+    <string name="btn_saved">Saved</string>
     <string name="settings">Settings</string>
     <string name="security">Security</string>
     <string name="notification">Notifications</string>
@@ -163,7 +179,5 @@
     <string name="snack_avatar_update_fail">Avatar update failed: %1$s</string>
     <string name="snack_container_open_success">Container unlocked</string>
     <string name="snack_container_open_fail">Failed to open container: %1$s</string>
-
-    <string name="hello_blank_fragment">Hello blank fragment</string>
 
 </resources>

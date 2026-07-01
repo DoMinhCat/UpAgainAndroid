@@ -20,7 +20,7 @@ data class PostPaginationRequest(
                 }
             }
             category?.let {
-                if (it != PostCategory.OTHER) {
+                if (it != PostCategory.ALL) {
                     put("category", it.value)
                 }
             }

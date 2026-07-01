@@ -7,7 +7,9 @@ import java.time.format.DateTimeFormatter
 import java.time.format.FormatStyle
 import java.util.Locale
 
-
+/**
+ * Return a formatted locale date from a timestamptz string
+ */
 fun formatTimestamptz(input: String, currentLocale: Locale = Locale.getDefault()): String {
     try {
         val zonedDateTime = ZonedDateTime.parse(input, DateTimeFormatter.ISO_DATE_TIME)

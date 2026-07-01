@@ -1,4 +1,4 @@
-package com.example.upagain.feat.post
+package com.example.upagain.feat.post.index
 
 import android.os.Bundle
 import android.util.Log
@@ -18,9 +18,9 @@ import com.example.upagain.databinding.FragmentPostBinding
 import com.example.upagain.event.LikePostEvent
 import com.example.upagain.event.SavePostEvent
 import com.example.upagain.feat.error.ErrorActivity
+import com.example.upagain.feat.post.detail.PostDetailFragment
 import com.example.upagain.model.post.PostCategory
 import com.example.upagain.model.post.PostDetailsResponse
-import com.example.upagain.model.post.PostPaginationRequest
 import com.example.upagain.model.post.PostSortOption
 import com.example.upagain.repository.PostRepo
 import com.example.upagain.util.ui.SnackbarLevel
@@ -87,13 +87,12 @@ class PostFragment : Fragment() {
             false,
             object : PostRecyclerViewAdapter.OnClickListener {
                 override fun onPostClick(position: Int, post: PostDetailsResponse) {
-                    // TODO: navigate to Post Detail frag
-//                    val postDataToPass = loadedPosts.getOrNull(position)
-//                    val postDetailFragment = PostDetailFragment.newInstance(postDataToPass)
-//                    parentFragmentManager.beginTransaction()
-//                        .replace(R.id.fragment_container, postDetailFragment)
-//                        .addToBackStack(null)
-//                        .commit()
+                    val postId = loadedPosts.getOrNull(position)?.id ?: return
+                    val postDetailFragment = PostDetailFragment.newInstance(postId)
+                    parentFragmentManager.beginTransaction()
+                        .replace(R.id.fragment_container, postDetailFragment)
+                        .addToBackStack(null)
+                        .commit()
                 }
 
                 override fun onLikeClick(position: Int, post: PostDetailsResponse) {
@@ -145,7 +144,7 @@ class PostFragment : Fragment() {
         binding.chipGroupCategories.setOnCheckedStateChangeListener { _, checkedChips ->
             val selectedChip = checkedChips.firstOrNull()
             if (selectedChip == null) {
-                viewModel.updateCategoryFilter(null)
+                viewModel.updateCategoryFilter(PostCategory.ALL)
             } else {
                 when (selectedChip) {
                     R.id.tutorial_chip -> {

@@ -1,14 +1,16 @@
 package com.example.upagain.api
 
+import com.example.upagain.model.LoginRequest
+import com.example.upagain.model.TokenResponse
 import com.example.upagain.model.account.AccountDetailsResponse
 import com.example.upagain.model.account.AccountUpdateRequest
-import com.example.upagain.model.TokenResponse
-import com.example.upagain.model.LoginRequest
 import com.example.upagain.model.account.PasswordUpdateRequest
+import com.example.upagain.model.comment.CommentPaginationResponse
 import com.example.upagain.model.post.LikePostResponse
 import com.example.upagain.model.post.PostCreateRequest
 import com.example.upagain.model.post.PostDetailsResponse
 import com.example.upagain.model.post.PostPaginationResponse
+import com.example.upagain.model.post.ProjectStepResponse
 import com.example.upagain.model.post.SavePostResponse
 import com.example.upagain.model.post.ViewPostResponse
 import okhttp3.MultipartBody
@@ -76,6 +78,15 @@ interface ApiService {
 
     @GET(Endpoints.POST_DETAILS)
     fun getPostDetails(@Path("id") id: Int): Call<PostDetailsResponse>
+
+    @GET(Endpoints.STEPS_GET)
+    fun getProjectSteps(@Path("id") id: Int): Call<List<ProjectStepResponse>>
+
+    @GET(Endpoints.COMMENTS_ALL)
+    fun getPostComments(
+        @Path("id") id: Int,
+        @QueryMap options: Map<String, String>
+    ): Call<CommentPaginationResponse>
 
     @DELETE(Endpoints.POST_DELETE)
     fun deletePost(@Path("id") id: Int): Call<Unit>

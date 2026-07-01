@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@android:color/black">
+
+    <com.google.android.material.imageview.ShapeableImageView
+        android:id="@+id/iv_fullscreen_target"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scaleType="fitCenter" />
+
+    <ImageView
+        android:id="@+id/btn_close_fullscreen"
+        android:layout_width="@dimen/min_touch"
+        android:layout_height="@dimen/min_touch"
+        android:layout_gravity="top|start"
+        android:layout_marginStart="@dimen/space_lg"
+        android:layout_marginTop="@dimen/space_lg"
+        android:padding="@dimen/space_sm"
+        android:src="@drawable/ic_back"
+        app:tint="@android:color/white" />
+
+</FrameLayout>

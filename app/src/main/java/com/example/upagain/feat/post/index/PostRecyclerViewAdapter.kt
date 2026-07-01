@@ -1,21 +1,20 @@
-package com.example.upagain.feat.post
+package com.example.upagain.feat.post.index
 
-import android.content.res.ColorStateList
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
-import androidx.core.content.ContextCompat
+import androidx.appcompat.content.res.AppCompatResources
 import androidx.recyclerview.widget.RecyclerView
 import coil.load
 import com.example.upagain.R
 import com.example.upagain.model.post.PostDetailsResponse
-import com.example.upagain.util.bin.FALL_BACK_IMAGE_URL
+import com.example.upagain.util.bin.ImageType
+import com.example.upagain.util.bin.buildImageUrl
 import com.example.upagain.util.datetime.formatTimestamptz
-import com.example.upagain.util.ui.getPostCategoryColor
 import com.example.upagain.util.ui.setOnClickListenerWithCooldown
+import com.example.upagain.util.ui.setPostCategoryTextAndColor
 import com.example.upagain.util.ui.toggleBtnLoadingState
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.progressindicator.CircularProgressIndicator
@@ -44,7 +43,7 @@ class PostRecyclerViewAdapter(
         fun onSaveClick(position: Int, post: PostDetailsResponse)
     }
 
-    // Update data safely from the Fragment
+    // Update data from the Fragment
     fun updateData(newPosts: List<PostDetailsResponse>, nextPagesAvailable: Boolean) {
         this.postsData = newPosts.toMutableList()
         this.hasMorePages = nextPagesAvailable
@@ -59,7 +58,7 @@ class PostRecyclerViewAdapter(
             val view = inflater.inflate(R.layout.item_post_card, parent, false)
             PostViewHolder(view)
         } else {
-            val view = inflater.inflate(R.layout.item_post_load_more, parent, false)
+            val view = inflater.inflate(R.layout.item_load_more, parent, false)
             LoadMoreViewHolder(view)
         }
     }
@@ -69,7 +68,7 @@ class PostRecyclerViewAdapter(
      */
     class PostViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         val thumbnailImage: ImageView = view.findViewById(R.id.post_thumbnail)
-        val category: Button = view.findViewById(R.id.post_category)
+        val category: MaterialButton = view.findViewById(R.id.post_category)
         val title: TextView = view.findViewById(R.id.post_title)
         val author: TextView = view.findViewById(R.id.post_author)
         val date: TextView = view.findViewById(R.id.post_date)
@@ -85,16 +84,16 @@ class PostRecyclerViewAdapter(
         // Feed raw data from API to the card
         if (holder is PostViewHolder) {
             val post = postsData[position]
-            val categoryColorResId = getPostCategoryColor(post.category.toString())
-            val categoryColor = ContextCompat.getColor(holder.itemView.context, categoryColorResId)
 
             holder.title.text = post.title
             holder.author.text = post.creator
             holder.date.text = formatTimestamptz(post.createdAt)
             holder.views.text = post.viewCount.toString()
             holder.likes.text = post.likeCount.toString()
-            holder.category.text = post.category.toString().replace('_', ' ')
-            holder.category.backgroundTintList = ColorStateList.valueOf(categoryColor)
+            holder.category.setPostCategoryTextAndColor(
+                holder.category.context,
+                post.category.toString()
+            )
             if (post.adsId != null && post.adsId > 0) {
                 holder.sponsorStatus.visibility = View.VISIBLE
             } else {
@@ -102,10 +101,10 @@ class PostRecyclerViewAdapter(
             }
 
             // Thumbnail image
-            val thumbnailUrl = post.photos?.firstOrNull() ?: FALL_BACK_IMAGE_URL
+            val thumbnailUrl = buildImageUrl(post.photos?.firstOrNull(), ImageType.MEDIA)
             holder.thumbnailImage.load(thumbnailUrl) {
                 crossfade(true)
-                placeholder(R.color.color_primary_variant)
+                placeholder(R.color.color_surface)
                 error(R.drawable.fall_back_image)
             }
 
@@ -115,11 +114,17 @@ class PostRecyclerViewAdapter(
             }
             if (post.isLiked) {
                 holder.likeBtn.icon =
-                    holder.likeBtn.context.getDrawable(R.drawable.ic_love_filled)
+                    AppCompatResources.getDrawable(
+                        holder.likeBtn.context,
+                        R.drawable.ic_love_filled
+                    )
             }
             if (post.isSaved) {
                 holder.saveBtn.icon =
-                    holder.saveBtn.context.getDrawable(R.drawable.ic_bookmark_filled)
+                    AppCompatResources.getDrawable(
+                        holder.saveBtn.context,
+                        R.drawable.ic_bookmark_filled
+                    )
             }
 
             // On click listeners
@@ -136,7 +141,8 @@ class PostRecyclerViewAdapter(
             if (holder is LoadMoreViewHolder) {
                 val context = holder.btnLoadMore.context
                 val defaultText = context.getString(R.string.btn_load_more)
-                val defaultIcon = context.getDrawable(R.drawable.ic_chevron_double_down)
+                val defaultIcon =
+                    AppCompatResources.getDrawable(context, R.drawable.ic_chevron_double_down)
                 if (isLoadMoreBtnLoading) {
                     toggleBtnLoadingState(
                         holder.btnLoadMore,

@@ -19,6 +19,7 @@ enum class PostSortOption(val value: String) {
 }
 
 enum class PostCategory(val value: String) {
+    @SerializedName("") ALL(""),
     @SerializedName("tutorial") TUTORIAL("tutorial"),
     @SerializedName("project") PROJECT("project"),
     @SerializedName("tips") TIPS("tips"),
@@ -28,7 +29,7 @@ enum class PostCategory(val value: String) {
 
     companion object {
         fun fromString(value: String?): PostCategory {
-            return entries.find { it.value.equals(value, ignoreCase = true) } ?: OTHER
+            return entries.find { it.value.equals(value, ignoreCase = true) } ?: ALL
         }
     }
 }

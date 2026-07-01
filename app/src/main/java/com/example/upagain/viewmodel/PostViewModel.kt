@@ -5,10 +5,14 @@ import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.upagain.event.LikePostEvent
 import com.example.upagain.event.SavePostEvent
+import com.example.upagain.model.comment.CommentPaginationRequest
+import com.example.upagain.model.comment.CommentPaginationResponse
 import com.example.upagain.model.post.PostCategory
+import com.example.upagain.model.post.PostDetailsResponse
 import com.example.upagain.model.post.PostPaginationRequest
 import com.example.upagain.model.post.PostPaginationResponse
 import com.example.upagain.model.post.PostSortOption
+import com.example.upagain.model.post.ProjectStepResponse
 import com.example.upagain.repository.PostRepo
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -22,11 +26,19 @@ class PostViewModel(private val repository: PostRepo, application: Application) 
     AndroidViewModel(application) {
     private val context get() = getApplication<Application>().applicationContext
 
-    private val _allPostsState = MutableStateFlow<UiState<PostPaginationResponse>>(UiState.Loading())
+    private val _allPostsState =
+        MutableStateFlow<UiState<PostPaginationResponse>>(UiState.Loading())
     val allPostsState: StateFlow<UiState<PostPaginationResponse>> = _allPostsState
+    private val _postDetailState = MutableStateFlow<UiState<PostDetailsResponse>>(UiState.Loading())
+    val postDetailState: StateFlow<UiState<PostDetailsResponse>> = _postDetailState
+    private val _projectStepsState = MutableStateFlow<UiState<List<ProjectStepResponse>>>(UiState.Idle)
+    val projectStepsState: StateFlow<UiState<List<ProjectStepResponse>>> = _projectStepsState
+    private val _allCommentsState =
+        MutableStateFlow<UiState<CommentPaginationResponse>>(UiState.Loading())
+    val allCommentsState: StateFlow<UiState<CommentPaginationResponse>> = _allCommentsState
+
     private val _savePostEvent = MutableSharedFlow<SavePostEvent>()
     val savePostEvent: SharedFlow<SavePostEvent> = _savePostEvent.asSharedFlow()
-
     private val _likePostEvent = MutableSharedFlow<LikePostEvent>()
     val likePostEvent: SharedFlow<LikePostEvent> = _likePostEvent.asSharedFlow()
 
@@ -58,7 +70,7 @@ class PostViewModel(private val repository: PostRepo, application: Application) 
         currentFilters = currentFilters.copy(sort = sortOption, page = 1)
     }
 
-    fun updateCategoryFilter(categoryOption: PostCategory?) {
+    fun updateCategoryFilter(categoryOption: PostCategory) {
         currentFilters = currentFilters.copy(category = categoryOption, page = 1)
     }
 
@@ -67,13 +79,72 @@ class PostViewModel(private val repository: PostRepo, application: Application) 
     }
 
     // OTHER METHODS
-    fun savePost(id: Int, position: Int) {
+    fun getPostDetails(idPost: Int) {
+        viewModelScope.launch {
+            _postDetailState.value = UiState.Loading()
+
+            repository.getPostDetails(idPost)
+                .onSuccess { postDetails ->
+                    _postDetailState.value = UiState.Success(postDetails)
+                    val category = postDetails.category
+                    if (category == PostCategory.PROJECT) {
+                        getProjectSteps(idPost)
+                    }
+                }
+                .onFailure { exception ->
+                    val statusCode = (exception as? HttpException)?.code()
+                    _postDetailState.value = UiState.Error(statusCode, exception)
+                }
+        }
+    }
+
+    fun getProjectSteps(idPost: Int) {
+        viewModelScope.launch {
+            _projectStepsState.value = UiState.Loading()
+
+            repository.getProjectSteps(idPost)
+                .onSuccess { steps ->
+                    _projectStepsState.value = UiState.Success(steps)
+                }
+                .onFailure { exception ->
+                    val statusCode = (exception as? HttpException)?.code()
+                    _projectStepsState.value = UiState.Error(statusCode, exception)
+                }
+        }
+    }
+
+    fun getPostComments(idPost: Int, requestBody: CommentPaginationRequest, isFirstPage: Boolean) {
+        viewModelScope.launch {
+            _allCommentsState.value = UiState.Loading(isFirstPage = isFirstPage)
+
+            repository.getPostComments(idPost, requestBody)
+                .onSuccess { allComments ->
+                    _allCommentsState.value = UiState.Success(allComments)
+                }
+                .onFailure { exception ->
+                    val statusCode = (exception as? HttpException)?.code()
+                    _allCommentsState.value = UiState.Error(statusCode, exception)
+                }
+        }
+    }
+
+    fun loadPageOfComments(idPost: Int, pageNumber: Int) {
+        getPostComments(idPost, CommentPaginationRequest(page = pageNumber), pageNumber == 1)
+    }
+
+    fun savePost(id: Int, position: Int = -1) {
         // for optimistic update, emit success or fallback event to tell fragment to sync the data correspondingly
         viewModelScope.launch {
             // optimistic update for save post, no loading state needed
             repository.savePost(id)
                 .onSuccess { savePostResponse ->
-                    _savePostEvent.emit(SavePostEvent.Succeeded(position, id, savePostResponse.isSaved))
+                    _savePostEvent.emit(
+                        SavePostEvent.Succeeded(
+                            position,
+                            id,
+                            savePostResponse.isSaved
+                        )
+                    )
                 }
                 .onFailure { exception ->
                     val statusCode = (exception as? HttpException)?.code()
@@ -83,12 +154,18 @@ class PostViewModel(private val repository: PostRepo, application: Application) 
         }
     }
 
-    fun likePost(id: Int, position: Int) {
+    fun likePost(id: Int, position: Int = -1) {
         viewModelScope.launch {
             // optimistic update for like post, no loading state needed
             repository.likePost(id)
                 .onSuccess { likePostResponse ->
-                    _likePostEvent.emit(LikePostEvent.Succeeded(position, id, likePostResponse.isLiked))
+                    _likePostEvent.emit(
+                        LikePostEvent.Succeeded(
+                            position,
+                            id,
+                            likePostResponse.isLiked
+                        )
+                    )
                 }
                 .onFailure { exception ->
                     val statusCode = (exception as? HttpException)?.code()

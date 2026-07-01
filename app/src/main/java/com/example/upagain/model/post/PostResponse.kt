@@ -3,7 +3,6 @@ package com.example.upagain.model.post
 import com.google.gson.annotations.SerializedName
 
 data class PostDetailsResponse(
-    // TODO: remove unused fields
     @SerializedName("id") val id: Int,
     @SerializedName("created_at") val createdAt: String,
     @SerializedName("title") val title: String,
@@ -25,7 +24,7 @@ data class PostDetailsResponse(
     @SerializedName("is_saved") var isSaved: Boolean
 )
 
-data class PostPaginationResponse (
+data class PostPaginationResponse(
     @SerializedName("posts") val posts: List<PostDetailsResponse>? = emptyList(),
     @SerializedName("current_page") val currentPage: Int,
     @SerializedName("last_page") val lastPage: Int,
@@ -33,14 +32,30 @@ data class PostPaginationResponse (
     @SerializedName("total_records") val totalRecords: Int
 )
 
-data class LikePostResponse (
+data class LikePostResponse(
     @SerializedName("is_liked") val isLiked: Boolean,
 )
 
-data class ViewPostResponse (
+data class ViewPostResponse(
     @SerializedName("counted") val counted: Boolean,
 )
 
-data class SavePostResponse (
+data class SavePostResponse(
     @SerializedName("is_saved") val isSaved: Boolean,
+)
+
+data class StepItem(
+    @SerializedName("id") val id: Int,
+    @SerializedName("title") val title: String,
+)
+
+data class ProjectStepResponse(
+    @SerializedName("id") val id: Int,
+    @SerializedName("id_post") val idPost: Int,
+    @SerializedName("created_at") val createdAt: String,
+    @SerializedName("title") val title: String,
+    @SerializedName("description") val description: String,
+    @SerializedName("photos") val photos: List<String>? = emptyList(),
+    @SerializedName("order") val order: Float,
+    @SerializedName("items") val items: List<StepItem>? = emptyList(),
 )

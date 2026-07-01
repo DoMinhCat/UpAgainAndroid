@@ -1,11 +1,14 @@
 package com.example.upagain.repository
 
 import com.example.upagain.api.ApiService
+import com.example.upagain.model.comment.CommentPaginationRequest
+import com.example.upagain.model.comment.CommentPaginationResponse
 import com.example.upagain.model.post.LikePostResponse
 import com.example.upagain.model.post.PostCreateRequest
 import com.example.upagain.model.post.PostDetailsResponse
 import com.example.upagain.model.post.PostPaginationRequest
 import com.example.upagain.model.post.PostPaginationResponse
+import com.example.upagain.model.post.ProjectStepResponse
 import com.example.upagain.model.post.SavePostResponse
 import com.example.upagain.model.post.ViewPostResponse
 import retrofit2.HttpException
@@ -65,6 +68,40 @@ class PostRepo(private val apiService: ApiService) {
 
             if (response.isSuccessful && body != null) {
                 Result.success(body)
+            } else {
+                Result.failure(HttpException(response))
+            }
+        } catch (e: Exception) {
+            Result.failure(e)
+        }
+    }
+
+    suspend fun getPostComments(
+        id: Int,
+        request: CommentPaginationRequest
+    ): Result<CommentPaginationResponse> {
+        return try {
+            val response = apiService.getPostComments(id, request.toQueryMap()).awaitResponse()
+            val body = response.body()
+
+            if (response.isSuccessful && body != null) {
+                Result.success(body)
+            } else {
+                Result.failure(HttpException(response))
+            }
+        } catch (e: Exception) {
+            Result.failure(e)
+        }
+    }
+
+    suspend fun getProjectSteps(idPost: Int): Result<List<ProjectStepResponse>> {
+        return try {
+            val response = apiService.getProjectSteps(idPost).awaitResponse()
+
+            if (response.isSuccessful) {
+                val stepsList = response.body() ?: emptyList()
+                Result.success(stepsList)
+                Result.success(stepsList)
             } else {
                 Result.failure(HttpException(response))
             }
