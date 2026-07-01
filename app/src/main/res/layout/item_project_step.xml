@@ -77,7 +77,7 @@
                 android:layout_width="@dimen/min_touch"
                 android:layout_height="@dimen/min_touch"
                 app:icon="@drawable/ic_edit"
-                app:iconSize="@dimen/icon_sm"
+                app:iconSize="@dimen/icon_md"
                 app:iconTint="@color/color_accent"
                 app:layout_constraintEnd_toStartOf="@id/btn_step_delete"
                 app:layout_constraintTop_toTopOf="parent" />
@@ -88,7 +88,7 @@
                 android:layout_width="@dimen/min_touch"
                 android:layout_height="@dimen/min_touch"
                 app:icon="@drawable/ic_trash"
-                app:iconSize="@dimen/icon_sm"
+                app:iconSize="@dimen/icon_md"
                 app:iconTint="@color/red"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />

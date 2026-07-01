@@ -79,6 +79,9 @@
     <string name="no_comments_description">Be the first to share your opinion!</string>
     <string name="project_steps">Project Steps</string>
     <string name="items_used">Items used</string>
+    <!-- My page -->
+    <string name="btn_reorder">Reorder</string>
+
 
 
     <!-- Container -->

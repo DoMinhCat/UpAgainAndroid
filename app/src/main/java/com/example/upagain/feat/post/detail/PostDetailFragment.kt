@@ -125,18 +125,21 @@ class PostDetailFragment : Fragment() {
                     }
                 }
             })
-        carouselAdapter = CarouselImageAdapter()
-        stepsAdapter = ProjectStepsAdapter(object : ProjectStepsAdapter.OnStepClickListener {
-            override fun onEditClick(step: ProjectStepResponse) {
-                // TODO
-                // Handle step edit navigation or action dialog sheet
-            }
+        stepsAdapter = ProjectStepsAdapter(
+            isEditable = false,
+            listener = object : ProjectStepsAdapter.OnStepClickListener {
+                override fun onEditClick(step: ProjectStepResponse) {
+                    // TODO
+                    // Handle step edit navigation or action dialog sheet
+                }
 
-            override fun onDeleteClick(step: ProjectStepResponse) {
-                // TODO
-                // Trigger verification dialog or network delete routine
-            }
-        })
+                override fun onDeleteClick(step: ProjectStepResponse) {
+                    // TODO
+                    // Trigger verification dialog or network delete routine
+                }
+            },
+        )
+        carouselAdapter = CarouselImageAdapter()
 
         binding.rvProjectSteps.adapter = stepsAdapter
         binding.rvComments.adapter = commentAdapter
@@ -412,7 +415,8 @@ class PostDetailFragment : Fragment() {
                             }
                         }
                     }
-                }            }
+                }
+            }
         }
     }
 

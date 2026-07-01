@@ -13,6 +13,7 @@ import com.example.upagain.util.datetime.formatTimestamptz
 import com.google.android.material.tabs.TabLayoutMediator
 
 class ProjectStepsAdapter(
+    private val isEditable: Boolean,
     private val listener: OnStepClickListener
 ) : ListAdapter<ProjectStepResponse, ProjectStepsAdapter.StepViewHolder>(DiffCallback) {
 
@@ -29,7 +30,7 @@ class ProjectStepsAdapter(
     }
 
     override fun onBindViewHolder(holder: StepViewHolder, position: Int) {
-        holder.bind(getItem(position))
+        holder.bind(getItem(position), isEditable)
     }
 
     class StepViewHolder(
@@ -46,7 +47,7 @@ class ProjectStepsAdapter(
             binding.vpStepCarousel.adapter = stepCarouselAdapter
         }
 
-        fun bind(step: ProjectStepResponse) {
+        fun bind(step: ProjectStepResponse, isEditable: Boolean) {
             // 1. Text Data Bindings
             binding.tvStepTitle.text = step.title
             binding.tvStepDescription.text = HtmlCompat.fromHtml(
@@ -54,6 +55,22 @@ class ProjectStepsAdapter(
                 HtmlCompat.FROM_HTML_MODE_LEGACY
             )
             binding.tvStepDate.text = formatTimestamptz(step.createdAt)
+
+            if (isEditable) {
+                binding.btnStepEdit.visibility = View.VISIBLE
+                binding.btnStepDelete.visibility = View.VISIBLE
+
+                // Assign listeners only if the elements are interactive
+                binding.btnStepEdit.setOnClickListener { listener.onEditClick(step) }
+                binding.btnStepDelete.setOnClickListener { listener.onDeleteClick(step) }
+            } else {
+                binding.btnStepEdit.visibility = View.GONE
+                binding.btnStepDelete.visibility = View.GONE
+
+                // Clear out listeners on detached non-interactive rows
+                binding.btnStepEdit.setOnClickListener(null)
+                binding.btnStepDelete.setOnClickListener(null)
+            }
 
             // 2. Format Items Required Bullet List
             val materialsList = step.items.orEmpty()
