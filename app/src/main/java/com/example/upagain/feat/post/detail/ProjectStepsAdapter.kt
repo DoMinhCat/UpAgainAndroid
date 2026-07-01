@@ -14,6 +14,7 @@ import com.google.android.material.tabs.TabLayoutMediator
 
 class ProjectStepsAdapter(
     private val isEditable: Boolean,
+    private val onStepImageClick: (String) -> Unit,
     private val listener: OnStepClickListener
 ) : ListAdapter<ProjectStepResponse, ProjectStepsAdapter.StepViewHolder>(DiffCallback) {
 
@@ -26,7 +27,7 @@ class ProjectStepsAdapter(
         val binding = ItemProjectStepBinding.inflate(
             LayoutInflater.from(parent.context), parent, false
         )
-        return StepViewHolder(binding, listener)
+        return StepViewHolder(binding, onStepImageClick, listener)
     }
 
     override fun onBindViewHolder(holder: StepViewHolder, position: Int) {
@@ -35,11 +36,14 @@ class ProjectStepsAdapter(
 
     class StepViewHolder(
         private val binding: ItemProjectStepBinding,
+        private val onStepImageClick: (String) -> Unit,
         private val listener: OnStepClickListener
     ) : RecyclerView.ViewHolder(binding.root) {
 
         // Instantiated once per ViewHolder view creation block to optimize memory metrics
-        private val stepCarouselAdapter = CarouselImageAdapter()
+        private val stepCarouselAdapter = CarouselImageAdapter{ url ->
+            onStepImageClick(url) // Safely link item clicks back up the tree layout matrix!
+        }
         private var isMediatorAttached = false
 
         init {

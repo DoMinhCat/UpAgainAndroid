@@ -127,6 +127,9 @@ class PostDetailFragment : Fragment() {
             })
         stepsAdapter = ProjectStepsAdapter(
             isEditable = false,
+            onStepImageClick = { absoluteUrl ->
+                showFullScreenImageDialog(absoluteUrl) // Both adapters open the exact same fullscreen viewer!
+            },
             listener = object : ProjectStepsAdapter.OnStepClickListener {
                 override fun onEditClick(step: ProjectStepResponse) {
                     // TODO
@@ -139,7 +142,9 @@ class PostDetailFragment : Fragment() {
                 }
             },
         )
-        carouselAdapter = CarouselImageAdapter()
+        carouselAdapter = CarouselImageAdapter { absoluteUrl ->
+            showFullScreenImageDialog(absoluteUrl)
+        }
 
         binding.rvProjectSteps.adapter = stepsAdapter
         binding.rvComments.adapter = commentAdapter
@@ -481,5 +486,23 @@ class PostDetailFragment : Fragment() {
                 binding.tvLikeCount.text = post.likeCount.toString()
             }
         }
+    }
+
+    private fun showFullScreenImageDialog(absoluteImageUrl: String) {
+        // Create an unstyled fullscreen dialog wrapper window context
+        val dialog = android.app.Dialog(requireContext(), android.R.style.Theme_Black_NoTitleBar_Fullscreen)
+        dialog.setContentView(R.layout.dialog_fullscreen_image)
+        dialog.setCancelable(true)
+
+        val imageView = dialog.findViewById<com.google.android.material.imageview.ShapeableImageView>(R.id.iv_fullscreen_target)
+        val btnClose = dialog.findViewById<android.widget.ImageView>(R.id.btn_close_fullscreen)
+
+        // Populate image immediately
+        imageView.load(absoluteImageUrl) {
+            crossfade(true)
+        }
+
+        btnClose.setOnClickListener { dialog.dismiss() }
+        dialog.show()
     }
 }
