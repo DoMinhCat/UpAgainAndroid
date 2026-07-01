@@ -383,16 +383,15 @@ class PostDetailFragment : Fragment() {
                             }
 
                             is UiState.Success -> {
-                                val steps = state.data.orEmpty()
+                                val steps = state.data
 
                                 // Hide the loader container spinner
                                 binding.stepsLoader.visibility = View.GONE
                                 binding.layoutStepsError.visibility = View.GONE
 
                                 if (steps.isEmpty()) {
-                                    // Fallback to error/empty graphic if the project has no steps added yet
                                     binding.rvProjectSteps.visibility = View.GONE
-                                    binding.layoutStepsError.visibility = View.VISIBLE
+                                    binding.layoutStepsEmpty.visibility = View.VISIBLE
                                 } else {
                                     binding.rvProjectSteps.visibility = View.VISIBLE
                                     stepsAdapter.submitList(steps)

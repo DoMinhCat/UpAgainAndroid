@@ -79,6 +79,8 @@
     <string name="no_comments_description">Be the first to share your opinion!</string>
     <string name="project_steps">Project Steps</string>
     <string name="items_used">Items used</string>
+    <string name="no_steps_found">No steps</string>
+    <string name="no_steps_description">This project is still ongoing!</string>
     <!-- My page -->
     <string name="btn_reorder">Reorder</string>
 

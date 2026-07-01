@@ -49,6 +49,7 @@
     <string name="no_comments_description">Soyez le premier à partager votre avis !</string>
     <string name="project_steps">Étapes du Projet</string>
     <string name="items_used">Matériels utilisés</string>
+    <string name="no_steps_description">Ce projet est toujours en cours !</string>
     <string name="btn_reorder">Réorganiser</string>
     <string name="code">Code à 6 chiffres</string>
     <string name="code_hint">000000</string>
@@ -132,5 +133,6 @@
     <string name="err_save_post_msg">Échec de l\'enregistrement</string>
     <string name="no_posts_found">Aucun article trouvé</string>
     <string name="comment_count">Commentaires (%1$d)</string>
-    <string name="no_comments_found">Aucun commentaire</string>
+    <string name="no_comments_found">Aucun commentaire trouvé</string>
+    <string name="no_steps_found">Aucune étape trouvée</string>
 </resources>
