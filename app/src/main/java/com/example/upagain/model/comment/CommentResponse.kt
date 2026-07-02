@@ -21,3 +21,7 @@ data class CommentPaginationResponse(
     @SerializedName("last_page") val lastPage: Int,
     @SerializedName("limit") val limit: Int,
 )
+
+data class LikeCommentResponse(
+    @SerializedName("is_liked") val isLiked: Boolean,
+)

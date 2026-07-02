@@ -5,6 +5,8 @@ import com.example.upagain.model.TokenResponse
 import com.example.upagain.model.account.AccountDetailsResponse
 import com.example.upagain.model.account.AccountUpdateRequest
 import com.example.upagain.model.account.PasswordUpdateRequest
+import com.example.upagain.model.comment.CommentCreateRequest
+import com.example.upagain.model.comment.CommentDetailsResponse
 import com.example.upagain.model.comment.CommentPaginationResponse
 import com.example.upagain.model.post.LikePostResponse
 import com.example.upagain.model.post.PostCreateRequest
@@ -82,14 +84,24 @@ interface ApiService {
     @GET(Endpoints.STEPS_GET)
     fun getProjectSteps(@Path("id") id: Int): Call<List<ProjectStepResponse>>
 
+    @DELETE(Endpoints.POST_DELETE)
+    fun deletePost(@Path("id") id: Int): Call<Unit>
+
+    // COMMENTS
+    @POST(Endpoints.COMMENTS_NEW)
+    fun createComment(@Path("id") id: Int, @Body request: CommentCreateRequest): Call<CommentDetailsResponse>
+
+    @POST(Endpoints.COMMENTS_LIKE)
+    fun likeComment(@Path("id") id: Int): Call<Unit>
+
     @GET(Endpoints.COMMENTS_ALL)
     fun getPostComments(
         @Path("id") id: Int,
         @QueryMap options: Map<String, String>
     ): Call<CommentPaginationResponse>
 
-    @DELETE(Endpoints.POST_DELETE)
-    fun deletePost(@Path("id") id: Int): Call<Unit>
+    @DELETE(Endpoints.COMMENTS_DELETE)
+    fun deleteComment(@Path("id") id: Int): Call<Unit>
 
     // CONTAINER
     @Multipart
