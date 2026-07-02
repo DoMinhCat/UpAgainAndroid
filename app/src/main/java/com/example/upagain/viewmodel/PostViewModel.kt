@@ -5,15 +5,12 @@ import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.upagain.event.LikePostEvent
 import com.example.upagain.event.SavePostEvent
-import com.example.upagain.model.comment.CommentPaginationRequest
-import com.example.upagain.model.comment.CommentPaginationResponse
 import com.example.upagain.model.post.PostCategory
 import com.example.upagain.model.post.PostDetailsResponse
 import com.example.upagain.model.post.PostPaginationRequest
 import com.example.upagain.model.post.PostPaginationResponse
 import com.example.upagain.model.post.PostSortOption
 import com.example.upagain.model.post.ProjectStepResponse
-import com.example.upagain.repository.CommentRepo
 import com.example.upagain.repository.PostRepo
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -23,20 +20,18 @@ import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.launch
 import retrofit2.HttpException
 
-class PostViewModel(private val postRepository: PostRepo, private val commentRepository: CommentRepo, application: Application) :
+class PostViewModel(private val repository: PostRepo, application: Application) :
     AndroidViewModel(application) {
-    private val context get() = getApplication<Application>().applicationContext
+//    private val context get() = getApplication<Application>().applicationContext
 
     private val _allPostsState =
         MutableStateFlow<UiState<PostPaginationResponse>>(UiState.Loading())
     val allPostsState: StateFlow<UiState<PostPaginationResponse>> = _allPostsState
     private val _postDetailState = MutableStateFlow<UiState<PostDetailsResponse>>(UiState.Loading())
     val postDetailState: StateFlow<UiState<PostDetailsResponse>> = _postDetailState
-    private val _projectStepsState = MutableStateFlow<UiState<List<ProjectStepResponse>>>(UiState.Idle)
+    private val _projectStepsState =
+        MutableStateFlow<UiState<List<ProjectStepResponse>>>(UiState.Idle)
     val projectStepsState: StateFlow<UiState<List<ProjectStepResponse>>> = _projectStepsState
-    private val _allCommentsState =
-        MutableStateFlow<UiState<CommentPaginationResponse>>(UiState.Loading())
-    val allCommentsState: StateFlow<UiState<CommentPaginationResponse>> = _allCommentsState
 
     private val _savePostEvent = MutableSharedFlow<SavePostEvent>()
     val savePostEvent: SharedFlow<SavePostEvent> = _savePostEvent.asSharedFlow()
@@ -51,7 +46,7 @@ class PostViewModel(private val postRepository: PostRepo, private val commentRep
             // only show full screen load if loading the first page
             _allPostsState.value = UiState.Loading(isFirstPage = isFirstPage)
 
-            postRepository.getAllPosts(requestBody)
+            repository.getAllPosts(requestBody)
                 .onSuccess { allPostsData ->
                     _allPostsState.value = UiState.Success(allPostsData)
                 }
@@ -84,7 +79,7 @@ class PostViewModel(private val postRepository: PostRepo, private val commentRep
         viewModelScope.launch {
             _postDetailState.value = UiState.Loading()
 
-            postRepository.getPostDetails(idPost)
+            repository.getPostDetails(idPost)
                 .onSuccess { postDetails ->
                     _postDetailState.value = UiState.Success(postDetails)
                     val category = postDetails.category
@@ -103,7 +98,7 @@ class PostViewModel(private val postRepository: PostRepo, private val commentRep
         viewModelScope.launch {
             _projectStepsState.value = UiState.Loading()
 
-            postRepository.getProjectSteps(idPost)
+            repository.getProjectSteps(idPost)
                 .onSuccess { steps ->
                     _projectStepsState.value = UiState.Success(steps)
                 }
@@ -114,31 +109,11 @@ class PostViewModel(private val postRepository: PostRepo, private val commentRep
         }
     }
 
-    fun getPostComments(idPost: Int, requestBody: CommentPaginationRequest, isFirstPage: Boolean) {
-        viewModelScope.launch {
-            _allCommentsState.value = UiState.Loading(isFirstPage = isFirstPage)
-
-            commentRepository.getPostComments(idPost, requestBody)
-                .onSuccess { allComments ->
-                    _allCommentsState.value = UiState.Success(allComments)
-                }
-                .onFailure { exception ->
-                    val statusCode = (exception as? HttpException)?.code()
-                    _allCommentsState.value = UiState.Error(statusCode, exception)
-                }
-        }
-    }
-
-    // TODO: move to comment vm
-    fun loadPageOfComments(idPost: Int, pageNumber: Int) {
-        getPostComments(idPost, CommentPaginationRequest(page = pageNumber), pageNumber == 1)
-    }
-
     fun savePost(id: Int, position: Int = -1) {
         // for optimistic update, emit success or fallback event to tell fragment to sync the data correspondingly
         viewModelScope.launch {
             // optimistic update for save post, no loading state needed
-            postRepository.savePost(id)
+            repository.savePost(id)
                 .onSuccess { savePostResponse ->
                     _savePostEvent.emit(
                         SavePostEvent.Succeeded(
@@ -159,7 +134,7 @@ class PostViewModel(private val postRepository: PostRepo, private val commentRep
     fun likePost(id: Int, position: Int = -1) {
         viewModelScope.launch {
             // optimistic update for like post, no loading state needed
-            postRepository.likePost(id)
+            repository.likePost(id)
                 .onSuccess { likePostResponse ->
                     _likePostEvent.emit(
                         LikePostEvent.Succeeded(

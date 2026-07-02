@@ -33,6 +33,7 @@ import com.example.upagain.util.ui.setOnClickListenerWithCooldown
 import com.example.upagain.util.ui.setPostCategoryTextAndColor
 import com.example.upagain.util.ui.showTopSnackbar
 import com.example.upagain.util.ui.toggleFullScreenLoading
+import com.example.upagain.viewmodel.CommentViewModel
 import com.example.upagain.viewmodel.PostViewModel
 import com.example.upagain.viewmodel.UiState
 import com.example.upagain.viewmodel.ViewModelFactory
@@ -51,8 +52,11 @@ class PostDetailFragment : Fragment() {
     private val postRepository by lazy { PostRepo(apiService) }
     private val commentRepository by lazy { CommentRepo(apiService) }
     private val appInstance by lazy { requireActivity().application }
-    private val viewModel: PostViewModel by viewModels {
-        ViewModelFactory { PostViewModel(postRepository, commentRepository, appInstance) }
+    private val postViewModel: PostViewModel by viewModels {
+        ViewModelFactory { PostViewModel(postRepository, appInstance) }
+    }
+    private val commentViewModel: CommentViewModel by viewModels {
+        ViewModelFactory { CommentViewModel(commentRepository) }
     }
 
     private lateinit var commentAdapter: CommentRecyclerViewAdapter
@@ -90,8 +94,8 @@ class PostDetailFragment : Fragment() {
 
         // API call
         idPost?.let { id ->
-            viewModel.getPostDetails(id)
-            viewModel.loadPageOfComments(id, 1)
+            postViewModel.getPostDetails(id)
+            commentViewModel.loadPageOfComments(id, 1)
         }
     }
 
@@ -123,7 +127,7 @@ class PostDetailFragment : Fragment() {
             object : CommentRecyclerViewAdapter.OnClickListener {
                 override fun onLoadMoreClick() {
                     idPost?.let { id ->
-                        viewModel.loadPageOfComments(id, currentCommentPage + 1)
+                        commentViewModel.loadPageOfComments(id, currentCommentPage + 1)
                     }
                 }
             })
@@ -163,7 +167,7 @@ class PostDetailFragment : Fragment() {
                 post.isLiked = !post.isLiked
                 toggleLikeIconAndCount(post.isLiked, post)
 
-                viewModel.likePost(post.id)
+                postViewModel.likePost(post.id)
             } else {
                 // The post hasn't loaded yet or failed
             }
@@ -175,7 +179,7 @@ class PostDetailFragment : Fragment() {
                 // optimistic update
                 post.isSaved = !post.isSaved
                 toggleSaveIconAndText(post.isSaved)
-                viewModel.savePost(post.id)
+                postViewModel.savePost(post.id)
             } else {
                 // The post hasn't loaded yet or failed
             }
@@ -187,7 +191,7 @@ class PostDetailFragment : Fragment() {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
                 // GET POST DETAIL
                 launch {
-                    viewModel.postDetailState.collect { state ->
+                    postViewModel.postDetailState.collect { state ->
                         when (state) {
                             is UiState.Idle -> {}
                             is UiState.Loading -> {
@@ -258,7 +262,7 @@ class PostDetailFragment : Fragment() {
                 }
                 // GET COMMENTS
                 launch {
-                    viewModel.allCommentsState.collect { state ->
+                    commentViewModel.allCommentsState.collect { state ->
                         when (state) {
                             is UiState.Idle -> {}
                             is UiState.Loading -> {
@@ -318,7 +322,7 @@ class PostDetailFragment : Fragment() {
                 }
                 // SAVE
                 launch {
-                    viewModel.savePostEvent.collect { event ->
+                    postViewModel.savePostEvent.collect { event ->
                         when (event) {
                             is SavePostEvent.Succeeded -> {
                                 toggleSaveIconAndText(event.isSaved)
@@ -332,7 +336,7 @@ class PostDetailFragment : Fragment() {
                                     toggleSaveIconAndText(post.isSaved)
                                     Log.e(
                                         "PostDetailFragment",
-                                        "Save failed for Post ${event.postId}. Status code: ${event.statusCode}",
+                                        "Save failed for Post ${event.idPost}. Status code: ${event.statusCode}",
                                         event.exception
                                     )
                                 }
@@ -346,7 +350,7 @@ class PostDetailFragment : Fragment() {
                 }
                 // LIKE
                 launch {
-                    viewModel.likePostEvent.collect { event ->
+                    postViewModel.likePostEvent.collect { event ->
                         when (event) {
                             is LikePostEvent.Succeeded -> {
                                 // Do nothing, data and state already updated optimistically
@@ -361,7 +365,7 @@ class PostDetailFragment : Fragment() {
                                     post.likeCount -= 1
                                     Log.e(
                                         "PostDetailFragment",
-                                        "Like failed for Post ${event.postId}. Status code: ${event.statusCode}",
+                                        "Like failed for Post ${event.idPost}. Status code: ${event.statusCode}",
                                         event.exception
                                     )
                                 }
@@ -375,7 +379,7 @@ class PostDetailFragment : Fragment() {
                 }
                 // PROJECT STEPS
                 launch {
-                    viewModel.projectStepsState.collect { state ->
+                    postViewModel.projectStepsState.collect { state ->
                         when (state) {
                             is UiState.Idle -> {
                                 binding.layoutProjectStepsContainer.visibility = View.GONE
@@ -427,7 +431,7 @@ class PostDetailFragment : Fragment() {
     }
 
     private fun getPostData(): PostDetailsResponse? {
-        val currentState = viewModel.postDetailState.value
+        val currentState = postViewModel.postDetailState.value
         if (currentState is UiState.Success) {
             return currentState.data
         }

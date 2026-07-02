@@ -5,7 +5,7 @@ import com.example.upagain.model.TokenResponse
 import com.example.upagain.model.account.AccountDetailsResponse
 import com.example.upagain.model.account.AccountUpdateRequest
 import com.example.upagain.model.account.PasswordUpdateRequest
-import com.example.upagain.model.comment.CommentCreateRequest
+import com.example.upagain.model.comment.CreateCommentRequest
 import com.example.upagain.model.comment.CommentDetailsResponse
 import com.example.upagain.model.comment.CommentPaginationResponse
 import com.example.upagain.model.comment.LikeCommentResponse
@@ -90,7 +90,7 @@ interface ApiService {
 
     // COMMENTS
     @POST(Endpoints.COMMENTS_NEW)
-    fun createComment(@Path("id") id: Int, @Body request: CommentCreateRequest): Call<CommentDetailsResponse>
+    fun createComment(@Path("id") id: Int, @Body request: CreateCommentRequest): Call<CommentDetailsResponse>
 
     @POST(Endpoints.COMMENTS_LIKE)
     fun likeComment(@Path("id") id: Int): Call<LikeCommentResponse>
