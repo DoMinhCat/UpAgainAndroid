@@ -22,6 +22,7 @@ import com.example.upagain.event.SavePostEvent
 import com.example.upagain.feat.error.ErrorActivity
 import com.example.upagain.model.post.PostDetailsResponse
 import com.example.upagain.model.post.ProjectStepResponse
+import com.example.upagain.repository.CommentRepo
 import com.example.upagain.repository.PostRepo
 import com.example.upagain.util.bin.ImageType
 import com.example.upagain.util.bin.buildImageUrl
@@ -47,10 +48,11 @@ class PostDetailFragment : Fragment() {
     private var _binding: FragmentPostDetailBinding? = null
     private val binding get() = _binding!!
     private val apiService by lazy { ApiClient.apiService }
-    private val repository by lazy { PostRepo(apiService) }
+    private val postRepository by lazy { PostRepo(apiService) }
+    private val commentRepository by lazy { CommentRepo(apiService) }
     private val appInstance by lazy { requireActivity().application }
     private val viewModel: PostViewModel by viewModels {
-        ViewModelFactory { PostViewModel(repository, appInstance) }
+        ViewModelFactory { PostViewModel(postRepository, commentRepository, appInstance) }
     }
 
     private lateinit var commentAdapter: CommentRecyclerViewAdapter

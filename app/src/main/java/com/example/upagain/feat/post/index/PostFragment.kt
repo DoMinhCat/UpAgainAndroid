@@ -22,6 +22,7 @@ import com.example.upagain.feat.post.detail.PostDetailFragment
 import com.example.upagain.model.post.PostCategory
 import com.example.upagain.model.post.PostDetailsResponse
 import com.example.upagain.model.post.PostSortOption
+import com.example.upagain.repository.CommentRepo
 import com.example.upagain.repository.PostRepo
 import com.example.upagain.util.ui.SnackbarLevel
 import com.example.upagain.util.ui.hideKeyboard
@@ -36,10 +37,11 @@ class PostFragment : Fragment() {
     private var _binding: FragmentPostBinding? = null
     private val binding get() = _binding!!
     private val apiService by lazy { ApiClient.apiService }
-    private val repository by lazy { PostRepo(apiService) }
+    private val postRepository by lazy { PostRepo(apiService) }
+    private val commentRepository by lazy { CommentRepo(apiService) }
     private val appInstance by lazy { requireActivity().application }
     private val viewModel: PostViewModel by viewModels {
-        ViewModelFactory { PostViewModel(repository, appInstance) }
+        ViewModelFactory { PostViewModel(postRepository, commentRepository, appInstance) }
     }
 
     // Get all posts pagination

@@ -13,6 +13,7 @@ import com.example.upagain.model.post.PostPaginationRequest
 import com.example.upagain.model.post.PostPaginationResponse
 import com.example.upagain.model.post.PostSortOption
 import com.example.upagain.model.post.ProjectStepResponse
+import com.example.upagain.repository.CommentRepo
 import com.example.upagain.repository.PostRepo
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -22,7 +23,7 @@ import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.launch
 import retrofit2.HttpException
 
-class PostViewModel(private val repository: PostRepo, application: Application) :
+class PostViewModel(private val postRepository: PostRepo, private val commentRepository: CommentRepo, application: Application) :
     AndroidViewModel(application) {
     private val context get() = getApplication<Application>().applicationContext
 
@@ -50,7 +51,7 @@ class PostViewModel(private val repository: PostRepo, application: Application) 
             // only show full screen load if loading the first page
             _allPostsState.value = UiState.Loading(isFirstPage = isFirstPage)
 
-            repository.getAllPosts(requestBody)
+            postRepository.getAllPosts(requestBody)
                 .onSuccess { allPostsData ->
                     _allPostsState.value = UiState.Success(allPostsData)
                 }
@@ -83,7 +84,7 @@ class PostViewModel(private val repository: PostRepo, application: Application) 
         viewModelScope.launch {
             _postDetailState.value = UiState.Loading()
 
-            repository.getPostDetails(idPost)
+            postRepository.getPostDetails(idPost)
                 .onSuccess { postDetails ->
                     _postDetailState.value = UiState.Success(postDetails)
                     val category = postDetails.category
@@ -102,7 +103,7 @@ class PostViewModel(private val repository: PostRepo, application: Application) 
         viewModelScope.launch {
             _projectStepsState.value = UiState.Loading()
 
-            repository.getProjectSteps(idPost)
+            postRepository.getProjectSteps(idPost)
                 .onSuccess { steps ->
                     _projectStepsState.value = UiState.Success(steps)
                 }
@@ -117,7 +118,7 @@ class PostViewModel(private val repository: PostRepo, application: Application) 
         viewModelScope.launch {
             _allCommentsState.value = UiState.Loading(isFirstPage = isFirstPage)
 
-            repository.getPostComments(idPost, requestBody)
+            commentRepository.getPostComments(idPost, requestBody)
                 .onSuccess { allComments ->
                     _allCommentsState.value = UiState.Success(allComments)
                 }
@@ -136,7 +137,7 @@ class PostViewModel(private val repository: PostRepo, application: Application) 
         // for optimistic update, emit success or fallback event to tell fragment to sync the data correspondingly
         viewModelScope.launch {
             // optimistic update for save post, no loading state needed
-            repository.savePost(id)
+            postRepository.savePost(id)
                 .onSuccess { savePostResponse ->
                     _savePostEvent.emit(
                         SavePostEvent.Succeeded(
@@ -157,7 +158,7 @@ class PostViewModel(private val repository: PostRepo, application: Application) 
     fun likePost(id: Int, position: Int = -1) {
         viewModelScope.launch {
             // optimistic update for like post, no loading state needed
-            repository.likePost(id)
+            postRepository.likePost(id)
                 .onSuccess { likePostResponse ->
                     _likePostEvent.emit(
                         LikePostEvent.Succeeded(
