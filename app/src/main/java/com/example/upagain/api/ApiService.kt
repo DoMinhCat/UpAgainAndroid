@@ -8,6 +8,7 @@ import com.example.upagain.model.account.PasswordUpdateRequest
 import com.example.upagain.model.comment.CommentCreateRequest
 import com.example.upagain.model.comment.CommentDetailsResponse
 import com.example.upagain.model.comment.CommentPaginationResponse
+import com.example.upagain.model.comment.LikeCommentResponse
 import com.example.upagain.model.post.LikePostResponse
 import com.example.upagain.model.post.PostCreateRequest
 import com.example.upagain.model.post.PostDetailsResponse
@@ -92,7 +93,7 @@ interface ApiService {
     fun createComment(@Path("id") id: Int, @Body request: CommentCreateRequest): Call<CommentDetailsResponse>
 
     @POST(Endpoints.COMMENTS_LIKE)
-    fun likeComment(@Path("id") id: Int): Call<Unit>
+    fun likeComment(@Path("id") id: Int): Call<LikeCommentResponse>
 
     @GET(Endpoints.COMMENTS_ALL)
     fun getPostComments(

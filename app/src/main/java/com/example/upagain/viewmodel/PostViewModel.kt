@@ -129,6 +129,7 @@ class PostViewModel(private val postRepository: PostRepo, private val commentRep
         }
     }
 
+    // TODO: move to comment vm
     fun loadPageOfComments(idPost: Int, pageNumber: Int) {
         getPostComments(idPost, CommentPaginationRequest(page = pageNumber), pageNumber == 1)
     }
