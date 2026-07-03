@@ -109,9 +109,8 @@ class PostFragment : Fragment() {
                 override fun onSaveClick(position: Int, post: PostDetailsResponse) {
                     // optimistic update
                     post.isSaved = !post.isSaved
-                    // tell adapter to redraw single item to sync new status
+                    // tell adapter to redraw single item
                     postAdapter.updateSingleItem(position, post)
-
                     viewModel.savePost(post.id, position)
                 }
 

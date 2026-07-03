@@ -17,14 +17,17 @@ import coil.load
 import com.example.upagain.R
 import com.example.upagain.api.ApiClient
 import com.example.upagain.databinding.FragmentPostDetailBinding
+import com.example.upagain.event.LikeCommentEvent
 import com.example.upagain.event.LikePostEvent
 import com.example.upagain.event.SavePostEvent
 import com.example.upagain.feat.error.ErrorActivity
+import com.example.upagain.model.comment.CommentDetailsResponse
 import com.example.upagain.model.comment.CreateCommentRequest
 import com.example.upagain.model.post.PostDetailsResponse
 import com.example.upagain.model.post.ProjectStepResponse
 import com.example.upagain.repository.CommentRepo
 import com.example.upagain.repository.PostRepo
+import com.example.upagain.util.auth.SessionManager
 import com.example.upagain.util.bin.ImageType
 import com.example.upagain.util.bin.buildImageUrl
 import com.example.upagain.util.datetime.formatTimestamptz
@@ -35,7 +38,6 @@ import com.example.upagain.util.ui.setPostCategoryTextAndColor
 import com.example.upagain.util.ui.showTopSnackbar
 import com.example.upagain.util.ui.toggleBtnLoadingState
 import com.example.upagain.util.ui.toggleFullScreenLoading
-import com.example.upagain.util.ui.toggleIconLoadingState
 import com.example.upagain.viewmodel.CommentViewModel
 import com.example.upagain.viewmodel.PostViewModel
 import com.example.upagain.viewmodel.UiState
@@ -66,7 +68,6 @@ class PostDetailFragment : Fragment() {
     private lateinit var carouselAdapter: CarouselImageAdapter
     private lateinit var stepsAdapter: ProjectStepsAdapter
     private var currentCommentPage = 1
-
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -126,12 +127,27 @@ class PostDetailFragment : Fragment() {
 
         // init empty, data will be passed in observer once api response arrive
         commentAdapter = CommentRecyclerViewAdapter(
+            SessionManager.accountId ?: -1,
             false,
             object : CommentRecyclerViewAdapter.OnClickListener {
                 override fun onLoadMoreClick() {
                     idPost?.let { id ->
                         commentViewModel.loadPageOfComments(id, currentCommentPage + 1)
                     }
+                }
+
+                override fun onDeleteClick(commentId: Int, position: Int) {
+                    commentViewModel.deleteComment(commentId)
+                }
+
+                override fun onLikeClick(position: Int, comment: CommentDetailsResponse) {
+                    // optimistic update
+                    comment.isLiked = !comment.isLiked
+                    if (comment.isLiked)
+                        comment.likeCount += 1
+                    else comment.likeCount -= 1
+                    commentAdapter.notifyItemChanged(position)
+                    commentViewModel.likeComment(comment.id, position)
                 }
             })
         stepsAdapter = ProjectStepsAdapter(
@@ -332,7 +348,7 @@ class PostDetailFragment : Fragment() {
                         }
                     }
                 }
-                // SAVE
+                // SAVE POST
                 launch {
                     postViewModel.savePostEvent.collect { event ->
                         when (event) {
@@ -360,7 +376,7 @@ class PostDetailFragment : Fragment() {
                         }
                     }
                 }
-                // LIKE
+                // LIKE POST
                 launch {
                     postViewModel.likePostEvent.collect { event ->
                         when (event) {
@@ -465,6 +481,72 @@ class PostDetailFragment : Fragment() {
                                     "PostDetailFragment",
                                     "Send comment failed. Status code: ${state.statusCode}",
                                     state.exception
+                                )
+                            }
+                        }
+                    }
+                }
+                // LIKE COMMENT
+                launch {
+                    commentViewModel.likeCommentEvent.collect { event ->
+                        when (event) {
+                            is LikeCommentEvent.Succeeded -> {
+                                // optimistic update succeeded, do nothing
+                            }
+
+                            is LikeCommentEvent.Rollback -> {
+                                val failedPosition =
+                                    event.position // Assuming your state wraps the targeted index row
+
+                                if (failedPosition < commentAdapter.currentList.size) {
+                                    val comment = commentAdapter.currentList[failedPosition]
+                                    comment.isLiked = !comment.isLiked
+                                    if (comment.isLiked) {
+                                        comment.likeCount += 1
+                                    } else {
+                                        comment.likeCount -= 1
+                                    }
+
+                                    commentAdapter.notifyItemChanged(failedPosition)
+                                }
+                                binding.main.showTopSnackbar(
+                                    R.string.err_like_comment_msg,
+                                    SnackbarLevel.ERROR
+                                )
+                                Log.e(
+                                    "PostDetailFragment",
+                                    "Like failed for Comment ${event.idComment}. Status code: ${event.statusCode}",
+                                    event.exception
+                                )
+                            }
+                        }
+                    }
+                }
+                // DELETE COMMENT
+                launch {
+                    commentViewModel.deleteCommentState.collect { state ->
+                        when (state) {
+                            is UiState.Idle -> {}
+
+                            is UiState.Loading -> {}
+
+                            is UiState.Success -> {
+                                // refetch comments
+                                currentCommentPage = 1
+                                idPost?.let { id ->
+                                    commentViewModel.loadPageOfComments(id, 1)
+                                }
+                            }
+
+                            is UiState.Error -> {
+                                Log.e(
+                                    "PostDetailFragment",
+                                    "Failed to delete comment. Status code: ${state.statusCode}",
+                                    state.exception
+                                )
+                                binding.main.showTopSnackbar(
+                                    R.string.err_delete_comment_msg,
+                                    SnackbarLevel.ERROR
                                 )
                             }
                         }

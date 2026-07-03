@@ -76,6 +76,7 @@
     <string name="error_401_msg">Bienvenue, inconnu ; veuillez d\'abord vous connecter pour continuer.</string>
     <string name="error_403_msg">Oups ! Vous vous aventurez dans la zone interdite de la forêt.</string>
     <string name="err_like_post_msg">Échec d\'aimer l\'article</string>
+    <string name="err_delete_comment_msg">Impossible de supprimer le commentaire</string>
     <string name="btn_home">Retour à l\'accueil</string>
     <string name="error_500_msg">Oups ! Nos serveurs sont actuellement très sollicités. Nous mettons tout en œuvre pour résoudre le problème au plus vite.</string>
     <string name="btn_refresh">Actualiser la page</string>
@@ -135,4 +136,6 @@
     <string name="comment_count">Commentaires (%1$d)</string>
     <string name="no_comments_found">Aucun commentaire trouvé</string>
     <string name="no_steps_found">Aucune étape trouvée</string>
+    <string name="err_create_comment_msg">Impossible de publier le commentaire</string>
+    <string name="err_like_comment_msg">Impossible d\'aimer le commentaire</string>
 </resources>

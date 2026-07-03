@@ -28,6 +28,9 @@ class CommentViewModel(private val repository: CommentRepo) : ViewModel() {
 
     private val _likeCommentEvent = MutableSharedFlow<LikeCommentEvent>()
     val likeCommentEvent: SharedFlow<LikeCommentEvent> = _likeCommentEvent.asSharedFlow()
+    private val _deleteCommentState =
+        MutableStateFlow<UiState<Unit>>(UiState.Idle)
+    val deleteCommentState: StateFlow<UiState<Unit>> = _deleteCommentState
 
     fun createComment(idPost: Int, requestBody: CreateCommentRequest) {
         viewModelScope.launch {
@@ -82,4 +85,19 @@ class CommentViewModel(private val repository: CommentRepo) : ViewModel() {
                 }
         }
     }
+    fun deleteComment(idCmt: Int, position: Int = -1) {
+        viewModelScope.launch {
+            _deleteCommentState.value = UiState.Loading()
+
+            repository.deleteComment(idCmt)
+                .onSuccess { deleteCommentResponse ->
+                    _deleteCommentState.value = UiState.Success(deleteCommentResponse)
+                }
+                .onFailure { exception ->
+                    val statusCode = (exception as? HttpException)?.code()
+                    _deleteCommentState.value = UiState.Error(statusCode, exception)
+                }
+        }
+    }
+
 }
