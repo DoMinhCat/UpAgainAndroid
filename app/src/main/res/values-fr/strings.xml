@@ -50,6 +50,7 @@
     <string name="project_steps">Étapes du Projet</string>
     <string name="items_used">Matériels utilisés</string>
     <string name="no_steps_description">Ce projet est toujours en cours !</string>
+    <string name="post_saved">Articles sauvegardés</string>
     <string name="btn_reorder">Réorganiser</string>
     <string name="code">Code à 6 chiffres</string>
     <string name="code_hint">000000</string>
