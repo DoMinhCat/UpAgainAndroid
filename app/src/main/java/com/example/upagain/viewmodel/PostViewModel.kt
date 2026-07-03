@@ -29,6 +29,9 @@ class PostViewModel(private val repository: PostRepo, application: Application) 
     private val _allPostsState =
         MutableStateFlow<UiState<PostPaginationResponse>>(UiState.Loading())
     val allPostsState: StateFlow<UiState<PostPaginationResponse>> = _allPostsState
+    private val _savedPostsState =
+        MutableStateFlow<UiState<PostPaginationResponse>>(UiState.Loading())
+    val savedPostsState: StateFlow<UiState<PostPaginationResponse>> = _savedPostsState
     private val _postDetailState = MutableStateFlow<UiState<PostDetailsResponse>>(UiState.Loading())
     val postDetailState: StateFlow<UiState<PostDetailsResponse>> = _postDetailState
     private val _projectStepsState = MutableStateFlow<UiState<List<ProjectStepResponse>>>(UiState.Idle)
@@ -42,7 +45,8 @@ class PostViewModel(private val repository: PostRepo, application: Application) 
     private val _likePostEvent = MutableSharedFlow<LikePostEvent>()
     val likePostEvent: SharedFlow<LikePostEvent> = _likePostEvent.asSharedFlow()
 
-    private var currentFilters = PostPaginationRequest(page = 1)
+    private var currentGetAllFilters = PostPaginationRequest(page = 1)
+    private var currentGetSavedFilters = PostPaginationRequest(page = 1)
 
     // GET ALL POST METHODS
     fun getAllPosts(requestBody: PostPaginationRequest, isFirstPage: Boolean) {
@@ -62,20 +66,46 @@ class PostViewModel(private val repository: PostRepo, application: Application) 
     }
 
     fun loadPageOfAllPosts(pageNumber: Int) {
-        currentFilters = currentFilters.copy(page = pageNumber)
-        getAllPosts(currentFilters, pageNumber == 1)
+        currentGetAllFilters = currentGetAllFilters.copy(page = pageNumber)
+        getAllPosts(currentGetAllFilters, pageNumber == 1)
+    }
+
+    // GET SAVED POST METHODS
+    fun getSavedPosts(requestBody: PostPaginationRequest, isFirstPage: Boolean) {
+        viewModelScope.launch {
+            // only show full screen load if loading the first page
+            _savedPostsState.value = UiState.Loading(isFirstPage = isFirstPage)
+
+            repository.getSavedPosts(requestBody)
+                .onSuccess { allPostsData ->
+                    _savedPostsState.value = UiState.Success(allPostsData)
+                }
+                .onFailure { exception ->
+                    val statusCode = (exception as? HttpException)?.code()
+                    _savedPostsState.value = UiState.Error(statusCode, exception)
+                }
+        }
+    }
+
+    fun loadPageOfSavedPosts(pageNumber: Int) {
+        currentGetSavedFilters = currentGetSavedFilters.copy(page = pageNumber)
+        getSavedPosts(currentGetSavedFilters, pageNumber == 1)
+    }
+
+    fun updateSavedPostsCategoryFilter(categoryOption: PostCategory) {
+        currentGetSavedFilters = currentGetSavedFilters.copy(category = categoryOption, page = 1)
     }
 
     fun updateSortFilter(sortOption: PostSortOption?) {
-        currentFilters = currentFilters.copy(sort = sortOption, page = 1)
+        currentGetAllFilters = currentGetAllFilters.copy(sort = sortOption, page = 1)
     }
 
-    fun updateCategoryFilter(categoryOption: PostCategory) {
-        currentFilters = currentFilters.copy(category = categoryOption, page = 1)
+    fun updateAllPostsCategoryFilter(categoryOption: PostCategory) {
+        currentGetAllFilters = currentGetAllFilters.copy(category = categoryOption, page = 1)
     }
 
     fun updateSearchFilter(query: String) {
-        currentFilters = currentFilters.copy(search = query, page = 1)
+        currentGetAllFilters = currentGetAllFilters.copy(search = query, page = 1)
     }
 
     // OTHER METHODS

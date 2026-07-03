@@ -49,8 +49,7 @@ class PostFragment : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        arguments?.let {
-        }
+        arguments?.let {}
     }
 
     override fun onCreateView(
@@ -144,31 +143,31 @@ class PostFragment : Fragment() {
         binding.chipGroupCategories.setOnCheckedStateChangeListener { _, checkedChips ->
             val selectedChip = checkedChips.firstOrNull()
             if (selectedChip == null) {
-                viewModel.updateCategoryFilter(PostCategory.ALL)
+                viewModel.updateAllPostsCategoryFilter(PostCategory.ALL)
             } else {
                 when (selectedChip) {
                     R.id.tutorial_chip -> {
-                        viewModel.updateCategoryFilter(PostCategory.TUTORIAL)
+                        viewModel.updateAllPostsCategoryFilter(PostCategory.TUTORIAL)
                     }
 
                     R.id.project_chip -> {
-                        viewModel.updateCategoryFilter(PostCategory.PROJECT)
+                        viewModel.updateAllPostsCategoryFilter(PostCategory.PROJECT)
                     }
 
                     R.id.tip_chip -> {
-                        viewModel.updateCategoryFilter(PostCategory.TIPS)
+                        viewModel.updateAllPostsCategoryFilter(PostCategory.TIPS)
                     }
 
                     R.id.news_chip -> {
-                        viewModel.updateCategoryFilter(PostCategory.NEWS)
+                        viewModel.updateAllPostsCategoryFilter(PostCategory.NEWS)
                     }
 
                     R.id.case_study_chip -> {
-                        viewModel.updateCategoryFilter(PostCategory.CASE_STUDY)
+                        viewModel.updateAllPostsCategoryFilter(PostCategory.CASE_STUDY)
                     }
 
                     R.id.other_chip -> {
-                        viewModel.updateCategoryFilter(PostCategory.OTHER)
+                        viewModel.updateAllPostsCategoryFilter(PostCategory.OTHER)
                     }
                 }
             }
