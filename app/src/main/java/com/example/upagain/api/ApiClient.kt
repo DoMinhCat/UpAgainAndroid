@@ -27,7 +27,8 @@ object ApiClient {
 
     private val EXCLUDED_ENDPOINTS = setOf(
         Endpoints.IMAGES,
-        Endpoints.CONTAINER_OPEN
+        Endpoints.CONTAINER_OPEN,
+        Endpoints.COMMENTS_NEW
     )
 
     fun initialize(context: Context) {

@@ -20,6 +20,7 @@ import com.example.upagain.databinding.FragmentPostDetailBinding
 import com.example.upagain.event.LikePostEvent
 import com.example.upagain.event.SavePostEvent
 import com.example.upagain.feat.error.ErrorActivity
+import com.example.upagain.model.comment.CreateCommentRequest
 import com.example.upagain.model.post.PostDetailsResponse
 import com.example.upagain.model.post.ProjectStepResponse
 import com.example.upagain.repository.CommentRepo
@@ -32,7 +33,9 @@ import com.example.upagain.util.ui.setOnBackClickListener
 import com.example.upagain.util.ui.setOnClickListenerWithCooldown
 import com.example.upagain.util.ui.setPostCategoryTextAndColor
 import com.example.upagain.util.ui.showTopSnackbar
+import com.example.upagain.util.ui.toggleBtnLoadingState
 import com.example.upagain.util.ui.toggleFullScreenLoading
+import com.example.upagain.util.ui.toggleIconLoadingState
 import com.example.upagain.viewmodel.CommentViewModel
 import com.example.upagain.viewmodel.PostViewModel
 import com.example.upagain.viewmodel.UiState
@@ -182,6 +185,15 @@ class PostDetailFragment : Fragment() {
                 postViewModel.savePost(post.id)
             } else {
                 // The post hasn't loaded yet or failed
+            }
+        }
+        // SEND COMMENT
+        binding.btnSendComment.setOnClickListenerWithCooldown {
+            idPost?.let { id ->
+                commentViewModel.createComment(
+                    id,
+                    CreateCommentRequest(binding.etWriteComment.text.toString())
+                )
             }
         }
     }
@@ -426,6 +438,38 @@ class PostDetailFragment : Fragment() {
                         }
                     }
                 }
+                // NEW COMMENT
+                launch {
+                    commentViewModel.createCommentState.collect { state ->
+                        when (state) {
+                            is UiState.Idle -> {}
+
+                            is UiState.Loading -> {
+                                toggleSendCommentBtnLoading(true)
+                            }
+
+                            is UiState.Success -> {
+                                toggleSendCommentBtnLoading(false)
+
+                                binding.etWriteComment.text?.clear()
+                                currentCommentPage = 1
+                                // reload comments
+                                idPost?.let { id ->
+                                    commentViewModel.loadPageOfComments(id, 1)
+                                }
+                            }
+
+                            is UiState.Error -> {
+                                toggleSendCommentBtnLoading(false)
+                                Log.e(
+                                    "PostDetailFragment",
+                                    "Send comment failed. Status code: ${state.statusCode}",
+                                    state.exception
+                                )
+                            }
+                        }
+                    }
+                }
             }
         }
     }
@@ -454,6 +498,16 @@ class PostDetailFragment : Fragment() {
             binding.rvComments.visibility = View.VISIBLE
             binding.commentsLoader.visibility = View.GONE
         }
+    }
+
+    private fun toggleSendCommentBtnLoading(isLoading: Boolean) {
+        toggleBtnLoadingState(
+            binding.btnSendComment,
+            binding.sendCommentLoader,
+            isLoading,
+            "",
+            AppCompatResources.getDrawable(requireContext(), R.drawable.ic_send)
+        )
     }
 
     private fun toggleSaveIconAndText(isSaved: Boolean) {
