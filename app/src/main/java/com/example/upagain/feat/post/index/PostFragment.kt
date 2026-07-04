@@ -23,6 +23,7 @@ import com.example.upagain.feat.post.detail.PostDetailFragment
 import com.example.upagain.model.post.PostCategory
 import com.example.upagain.model.post.PostDetailsResponse
 import com.example.upagain.model.post.PostSortOption
+import com.example.upagain.repository.CommentRepo
 import com.example.upagain.repository.PostRepo
 import com.example.upagain.util.ui.SnackbarLevel
 import com.example.upagain.util.ui.hideKeyboard
@@ -37,10 +38,10 @@ class PostFragment : Fragment() {
     private var _binding: FragmentPostBinding? = null
     private val binding get() = _binding!!
     private val apiService by lazy { ApiClient.apiService }
-    private val repository by lazy { PostRepo(apiService) }
+    private val postRepository by lazy { PostRepo(apiService) }
     private val appInstance by lazy { requireActivity().application }
     private val viewModel: PostViewModel by viewModels {
-        ViewModelFactory { PostViewModel(repository, appInstance) }
+        ViewModelFactory { PostViewModel(postRepository, appInstance) }
     }
 
     // Get all posts pagination
@@ -103,9 +104,8 @@ class PostFragment : Fragment() {
                 override fun onSaveClick(position: Int, post: PostDetailsResponse) {
                     // optimistic update
                     post.isSaved = !post.isSaved
-                    // tell adapter to redraw single item to sync new status
+                    // tell adapter to redraw single item
                     postAdapter.updateSingleItem(position, post)
-
                     viewModel.savePost(post.id, position)
                 }
 
@@ -250,7 +250,7 @@ class PostFragment : Fragment() {
                             is SavePostEvent.Succeeded -> {
                                 // get the post at that position
                                 val currentPost = loadedPosts.getOrNull(event.position)
-                                if (currentPost != null && currentPost.id == event.postId) {
+                                if (currentPost != null && currentPost.id == event.idPost) {
                                     if (currentPost.isSaved != event.isSaved) {
                                         // sync isSaved status
                                         currentPost.isSaved = event.isSaved
@@ -261,14 +261,14 @@ class PostFragment : Fragment() {
 
                             is SavePostEvent.Rollback -> {
                                 val failingPost = loadedPosts.getOrNull(event.position)
-                                if (failingPost != null && failingPost.id == event.postId) {
+                                if (failingPost != null && failingPost.id == event.idPost) {
                                     // Revert isSaved status since update on server failed
                                     failingPost.isSaved = !failingPost.isSaved
                                     postAdapter.updateSingleItem(event.position, failingPost)
 
                                     Log.e(
                                         "PostFragment",
-                                        "Save failed for Post ${event.postId}. Status code: ${event.statusCode}",
+                                        "Save failed for Post ${event.idPost}. Status code: ${event.statusCode}",
                                         event.exception
                                     )
                                 }
@@ -286,7 +286,7 @@ class PostFragment : Fragment() {
                             is LikePostEvent.Succeeded -> {
                                 // get the post at that position
                                 val currentPost = loadedPosts.getOrNull(event.position)
-                                if (currentPost != null && currentPost.id == event.postId) {
+                                if (currentPost != null && currentPost.id == event.idPost) {
                                     if (currentPost.isLiked != event.isLiked) {
                                         // sync isLiked status
                                         currentPost.isLiked = event.isLiked
@@ -297,7 +297,7 @@ class PostFragment : Fragment() {
 
                             is LikePostEvent.Rollback -> {
                                 val failingPost = loadedPosts.getOrNull(event.position)
-                                if (failingPost != null && failingPost.id == event.postId) {
+                                if (failingPost != null && failingPost.id == event.idPost) {
                                     // Revert isSaved status since update on server failed
                                     failingPost.isLiked = !failingPost.isLiked
                                     failingPost.likeCount -= 1
@@ -305,7 +305,7 @@ class PostFragment : Fragment() {
 
                                     Log.e(
                                         "PostFragment",
-                                        "Like failed for Post ${event.postId}. Status code: ${event.statusCode}",
+                                        "Like failed for Post ${event.idPost}. Status code: ${event.statusCode}",
                                         event.exception
                                     )
                                 }

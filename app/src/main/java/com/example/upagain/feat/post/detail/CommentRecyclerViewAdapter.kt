@@ -14,12 +14,14 @@ import com.example.upagain.model.comment.CommentDetailsResponse
 import com.example.upagain.util.bin.ImageType
 import com.example.upagain.util.bin.buildImageUrl
 import com.example.upagain.util.datetime.formatTimestamptz
+import com.example.upagain.util.ui.setOnClickListenerWithCooldown
 import com.example.upagain.util.ui.toggleBtnLoadingState
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.imageview.ShapeableImageView
 import com.google.android.material.progressindicator.CircularProgressIndicator
 
 class CommentRecyclerViewAdapter(
+    private val userId: Int,
     private var hasMorePages: Boolean,
     private val onClickListener: OnClickListener
 ) : ListAdapter<CommentDetailsResponse, RecyclerView.ViewHolder>(
@@ -35,6 +37,8 @@ class CommentRecyclerViewAdapter(
 
     interface OnClickListener {
         fun onLoadMoreClick()
+        fun onDeleteClick(commentId: Int, position: Int)
+        fun onLikeClick(position: Int, comment: CommentDetailsResponse)
     }
 
     override fun getItemViewType(position: Int): Int {
@@ -54,7 +58,7 @@ class CommentRecyclerViewAdapter(
         val inflater = LayoutInflater.from(parent.context)
         return if (viewType == TYPE_COMMENT) {
             val view = inflater.inflate(R.layout.item_comment, parent, false)
-            CommentViewHolder(view)
+            CommentViewHolder(view, onClickListener)
         } else {
             val view = inflater.inflate(R.layout.item_load_more, parent, false)
             LoadMoreViewHolder(view)
@@ -65,40 +69,17 @@ class CommentRecyclerViewAdapter(
         if (holder is CommentViewHolder) {
             if (position < currentList.size) {
                 val comment = getItem(position)
-
-                holder.username.text = comment.username
-                holder.content.text = comment.content
-                holder.createdAt.text = formatTimestamptz(comment.createdAt)
-                holder.likeNb.text = comment.likeCount.toString()
-                val avatarUrl = buildImageUrl(comment.userAvatar, ImageType.AVATAR)
-                holder.avatar.load(avatarUrl) {
-                    crossfade(true)
-                    placeholder(R.drawable.ic_avatar_unknown)
-                    error(R.drawable.ic_avatar_unknown)
-                }
+                holder.bind(comment, userId)
             }
         } else if (holder is LoadMoreViewHolder) {
             val context = holder.btnLoadMore.context
             val defaultText = context.getString(R.string.btn_load_more)
-            val defaultIcon =
-                AppCompatResources.getDrawable(context, R.drawable.ic_chevron_double_down)
+            val defaultIcon = AppCompatResources.getDrawable(context, R.drawable.ic_chevron_double_down)
 
             if (isLoadMoreBtnLoading) {
-                toggleBtnLoadingState(
-                    holder.btnLoadMore,
-                    holder.spinnerIndicator,
-                    true,
-                    defaultText,
-                    defaultIcon
-                )
+                toggleBtnLoadingState(holder.btnLoadMore, holder.spinnerIndicator, true, defaultText, defaultIcon)
             } else {
-                toggleBtnLoadingState(
-                    holder.btnLoadMore,
-                    holder.spinnerIndicator,
-                    false,
-                    defaultText,
-                    defaultIcon
-                )
+                toggleBtnLoadingState(holder.btnLoadMore, holder.spinnerIndicator, false, defaultText, defaultIcon)
                 holder.btnLoadMore.setOnClickListener {
                     onClickListener.onLoadMoreClick()
                 }
@@ -125,13 +106,47 @@ class CommentRecyclerViewAdapter(
         }
     }
 
-    class CommentViewHolder(view: View) : RecyclerView.ViewHolder(view) {
+    class CommentViewHolder(view: View, private val listener: OnClickListener) : RecyclerView.ViewHolder(view) {
         val avatar: ShapeableImageView = view.findViewById(R.id.iv_cmt_avatar)
         val username: TextView = view.findViewById(R.id.tv_cmt_user_name)
         val createdAt: TextView = view.findViewById(R.id.tv_cmt_time)
         val content: TextView = view.findViewById(R.id.tv_cmt_content)
         val likeBtn: MaterialButton = view.findViewById(R.id.btn_cmt_like)
         val likeNb: TextView = view.findViewById(R.id.tv_cmt_like_nb)
+
+        // 1. Resolve your delete view item component
+        val deleteBtn: View = view.findViewById(R.id.btn_delete)
+
+        fun bind(comment: CommentDetailsResponse, currentUserId: Int?) {
+            username.text = comment.username
+            content.text = comment.content
+            createdAt.text = formatTimestamptz(comment.createdAt)
+            likeNb.text = comment.likeCount.toString()
+
+            val avatarUrl = buildImageUrl(comment.userAvatar, ImageType.AVATAR)
+            avatar.load(avatarUrl) {
+                crossfade(true)
+                placeholder(R.drawable.ic_avatar_unknown)
+                error(R.drawable.ic_avatar_unknown)
+            }
+
+            // 2. Perform the matching logic correctly inside the bind loop execution path
+            val isMyComment = currentUserId != null && comment.idAccount == currentUserId
+
+            if (isMyComment) {
+                deleteBtn.visibility = View.VISIBLE
+                deleteBtn.setOnClickListener {
+                    listener.onDeleteClick(comment.id, bindingAdapterPosition)
+                }
+            } else {
+                deleteBtn.visibility = View.GONE
+                deleteBtn.setOnClickListener(null)
+            }
+
+            likeBtn.setOnClickListenerWithCooldown(500L) {
+                listener.onLikeClick(bindingAdapterPosition, comment)
+            }
+        }
     }
 
     class LoadMoreViewHolder(view: View) : RecyclerView.ViewHolder(view) {

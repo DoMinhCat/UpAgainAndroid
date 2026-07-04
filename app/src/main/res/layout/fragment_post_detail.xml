@@ -108,6 +108,7 @@
                         style="@style/Widget.Material3.Button.IconButton"
                         android:layout_width="@dimen/min_touch"
                         android:layout_height="@dimen/min_touch"
+                        app:iconGravity="textStart"
                         app:icon="@drawable/ic_love_outline"
                         app:iconSize="@dimen/icon_md"
                         app:iconTint="@color/red" />
@@ -133,6 +134,7 @@
                         android:layout_width="@dimen/min_touch"
                         android:layout_height="@dimen/min_touch"
                         app:icon="@drawable/ic_bookmark_outline"
+                        app:iconGravity="textStart"
                         app:iconSize="@dimen/icon_md"
                         app:iconTint="@color/color_accent" />
 
@@ -469,15 +471,34 @@
                             android:maxLines="4" />
                     </com.google.android.material.textfield.TextInputLayout>
 
-                    <com.google.android.material.button.MaterialButton
-                        android:id="@+id/btn_send_comment"
-                        style="@style/Widget.Material3.Button.IconButton"
+                    <FrameLayout
                         android:layout_width="@dimen/min_touch"
                         android:layout_height="@dimen/min_touch"
-                        android:layout_marginStart="@dimen/space_sm"
-                        app:icon="@drawable/ic_send"
-                        app:iconSize="@dimen/icon_md"
-                        app:iconTint="@color/color_primary" />
+                        android:layout_marginStart="@dimen/space_sm">
+
+                        <com.google.android.material.button.MaterialButton
+                            android:id="@+id/btn_send_comment"
+                            style="@style/Widget.Material3.Button.IconButton"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            app:iconGravity="textStart"
+                            app:icon="@drawable/ic_send"
+                            app:iconSize="@dimen/icon_md"
+                            app:iconTint="@color/color_primary" />
+
+                        <com.google.android.material.progressindicator.CircularProgressIndicator
+                            android:id="@+id/send_comment_loader"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:indeterminate="true"
+                            app:indicatorSize="24dp"
+                            app:trackThickness="2.5dp"
+                            app:indicatorColor="@color/color_primary"
+                            android:visibility="gone"
+                            tools:visibility="visible" />
+
+                    </FrameLayout>
                 </LinearLayout>
 
                 <FrameLayout

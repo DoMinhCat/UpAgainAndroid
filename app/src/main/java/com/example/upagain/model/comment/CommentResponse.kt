@@ -6,12 +6,12 @@ data class CommentDetailsResponse(
     @SerializedName("id") val id: Int,
     @SerializedName("content") val content: String,
     @SerializedName("created_at") val createdAt: String,
-    @SerializedName("like_count") val likeCount: Int,
+    @SerializedName("like_count") var likeCount: Int,
     @SerializedName("id_post") val idPost: Int,
     @SerializedName("id_account") val idAccount: Int,
     @SerializedName("user_avatar") val userAvatar: String? = null,
     @SerializedName("user_name") val username: String,
-    @SerializedName("is_liked") val isLiked: Boolean
+    @SerializedName("is_liked") var isLiked: Boolean
 )
 
 data class CommentPaginationResponse(
@@ -20,4 +20,8 @@ data class CommentPaginationResponse(
     @SerializedName("current_page") val currentPage: Int,
     @SerializedName("last_page") val lastPage: Int,
     @SerializedName("limit") val limit: Int,
+)
+
+data class LikeCommentResponse(
+    @SerializedName("is_liked") val isLiked: Boolean,
 )

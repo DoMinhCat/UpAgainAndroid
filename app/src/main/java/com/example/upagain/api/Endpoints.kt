@@ -36,7 +36,7 @@ object Endpoints {
 
     // Comment Endpoints
     const val COMMENTS_ALL = "posts/{id}/comments"
-    const val COMMENTS_ADD = "posts/{id}/comments"
+    const val COMMENTS_NEW = "posts/{id}/comments"
     const val COMMENTS_LIKE = "comments/{id}/like"
     const val COMMENTS_DELETE = "comments/{id}"
 

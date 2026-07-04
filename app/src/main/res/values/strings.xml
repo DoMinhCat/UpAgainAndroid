@@ -132,6 +132,9 @@
 
     <string name="err_save_post_msg">Failed to save post</string>
     <string name="err_like_post_msg">Failed to like post</string>
+    <string name="err_create_comment_msg">Failed to post a comment</string>
+    <string name="err_like_comment_msg">Failed to like comment</string>
+    <string name="err_delete_comment_msg">Failed to delete comment</string>
 
     <string name="btn_home">Back to home</string>
     <string name="btn_refresh">Refresh page</string>

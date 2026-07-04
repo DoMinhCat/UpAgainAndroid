@@ -13,3 +13,7 @@ data class CommentPaginationRequest(
         }
     }
 }
+
+data class CreateCommentRequest(
+    @SerializedName("content") val content: String
+)
