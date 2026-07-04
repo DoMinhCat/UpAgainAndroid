@@ -185,7 +185,7 @@ class PostSavedFragment : Fragment() {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
                 // GET ALL SAVED POSTS
                 launch {
-                    viewModel.allPostsState.collect { state ->
+                    viewModel.savedPostsState.collect { state ->
                         when (state) {
                             is UiState.Idle -> {}
                             is UiState.Loading -> {
