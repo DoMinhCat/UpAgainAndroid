@@ -12,6 +12,7 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.upagain.PostMeFragment
 import com.example.upagain.PostSavedFragment
 import com.example.upagain.R
 import com.example.upagain.api.ApiClient
@@ -189,7 +190,9 @@ class PostFragment : Fragment() {
         }
         // MY POSTS
         binding.icMyPosts.setOnClickListener {
-            // TODO: navigate to my posts
+            val myPostFragment = PostMeFragment.newInstance()
+            parentFragmentManager.beginTransaction()
+                .replace(R.id.fragment_container, myPostFragment).addToBackStack(null).commit()
         }
     }
 
