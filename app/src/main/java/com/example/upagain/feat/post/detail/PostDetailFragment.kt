@@ -206,9 +206,13 @@ class PostDetailFragment : Fragment() {
         // SEND COMMENT
         binding.btnSendComment.setOnClickListenerWithCooldown {
             idPost?.let { id ->
+                val commentBody = binding.etWriteComment.text.toString().trim()
+                if (commentBody.isEmpty()) {
+                    return@setOnClickListenerWithCooldown
+                }
                 commentViewModel.createComment(
                     id,
-                    CreateCommentRequest(binding.etWriteComment.text.toString())
+                    CreateCommentRequest(commentBody)
                 )
             }
         }
@@ -473,6 +477,10 @@ class PostDetailFragment : Fragment() {
                                 idPost?.let { id ->
                                     commentViewModel.loadPageOfComments(id, 1)
                                 }
+                                // update count
+                                getPostData()?.commentCount += 1
+                                binding.tvCommentCount.text =
+                                    getString(R.string.comment_count, getPostData()?.commentCount)
                             }
 
                             is UiState.Error -> {
@@ -481,6 +489,10 @@ class PostDetailFragment : Fragment() {
                                     "PostDetailFragment",
                                     "Send comment failed. Status code: ${state.statusCode}",
                                     state.exception
+                                )
+                                binding.main.showTopSnackbar(
+                                    R.string.err_create_comment_msg,
+                                    SnackbarLevel.ERROR
                                 )
                             }
                         }
@@ -536,6 +548,10 @@ class PostDetailFragment : Fragment() {
                                 idPost?.let { id ->
                                     commentViewModel.loadPageOfComments(id, 1)
                                 }
+                                // update count
+                                getPostData()?.commentCount -= 1
+                                binding.tvCommentCount.text =
+                                    getString(R.string.comment_count, getPostData()?.commentCount)
                             }
 
                             is UiState.Error -> {
