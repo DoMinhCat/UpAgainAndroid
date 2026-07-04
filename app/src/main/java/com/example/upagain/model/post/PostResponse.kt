@@ -11,7 +11,7 @@ data class PostDetailsResponse(
     @SerializedName("view_count") val viewCount: Int,
     @SerializedName("like_count") var likeCount: Int,
     @SerializedName("save_count") val saveCount: Int,
-    @SerializedName("comment_count") val commentCount: Int,
+    @SerializedName("comment_count") var commentCount: Int,
     @SerializedName("id_account") val idAccount: Int,
     @SerializedName("creator") val creator: String,
     @SerializedName("creator_id") val creatorId: Int,
