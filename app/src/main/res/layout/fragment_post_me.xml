@@ -46,36 +46,79 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btn_new_post"
+                style="@style/Widget.Material3.Button.IconButton"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                android:layout_width="@dimen/min_touch"
+                android:layout_height="@dimen/button_height"
+                android:layout_marginStart="@dimen/space_sm"
+                app:icon="@drawable/ic_new_post"
+                app:iconTint="@color/color_primary"
+                app:cornerRadius="@dimen/button_radius"
+                app:iconGravity="textStart"
+                app:iconSize="@dimen/icon_lg" />
+
         </androidx.constraintlayout.widget.ConstraintLayout>
 
         <LinearLayout
+
             android:layout_width="match_parent"
+
             android:layout_height="@dimen/button_height"
+
             android:layout_marginHorizontal="@dimen/space_lg"
+
             android:layout_marginTop="@dimen/space_md"
+
+            android:layout_marginBottom="@dimen/space_lg"
+
             android:background="@drawable/input_round"
+
             android:gravity="center_vertical"
+
             android:orientation="horizontal"
+
             android:paddingHorizontal="@dimen/space_md">
 
+
             <ImageView
+
                 android:layout_width="@dimen/icon_md"
+
                 android:layout_height="@dimen/icon_md"
+
                 android:contentDescription="@string/placeholder_search"
+
                 android:src="@drawable/ic_search"
+
                 app:tint="@color/color_secondary" />
 
+
             <EditText
+
                 android:id="@+id/et_search"
+
                 style="@style/TextAppearance.UpAgain.BodyMedium"
+
                 android:layout_width="match_parent"
+
                 android:layout_height="match_parent"
+
                 android:layout_marginStart="@dimen/space_sm"
+
                 android:background="@android:color/transparent"
+
                 android:hint="@string/placeholder_search"
+
                 android:inputType="text"
+
                 android:textColor="@color/color_on_background"
+
                 android:textColorHint="@color/color_secondary" />
+
 
         </LinearLayout>
 
