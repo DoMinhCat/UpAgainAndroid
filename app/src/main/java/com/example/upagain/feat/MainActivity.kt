@@ -37,8 +37,8 @@ class MainActivity : AppCompatActivity() {
         enableEdgeToEdge()
         setContentView(binding.root)
 
+        // CHECK CONNECTION
         networkMonitor = NetworkMonitor(applicationContext)
-
         observeNetworkState()
 
         // SESSION CHECK
@@ -50,7 +50,8 @@ class MainActivity : AppCompatActivity() {
         }
 
         // STYLING
-        binding.bottomNav.itemIconTintList = ContextCompat.getColorStateList(this, R.color.color_on_surface)
+        binding.bottomNav.itemIconTintList =
+            ContextCompat.getColorStateList(this, R.color.color_on_surface)
         ViewCompat.setOnApplyWindowInsetsListener(binding.main) { v, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, 0)
@@ -71,22 +72,27 @@ class MainActivity : AppCompatActivity() {
                     replaceFragment(ShopFragment())
                     true
                 }
+
                 R.id.nav_container -> {
                     replaceFragment(ContainerFragment())
                     true
                 }
+
                 R.id.nav_dashboard -> {
                     replaceFragment(DashboardFragment())
                     true
                 }
+
                 R.id.nav_community -> {
                     replaceFragment(PostFragment())
                     true
                 }
+
                 R.id.nav_profile -> {
                     replaceFragment(ProfileFragment())
                     true
                 }
+
                 else -> false
             }
         }

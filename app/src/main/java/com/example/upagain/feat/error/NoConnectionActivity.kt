@@ -1,21 +1,36 @@
 package com.example.upagain.feat.error
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import com.example.upagain.R
+import com.example.upagain.databinding.MainActivityBinding
+import com.example.upagain.databinding.NoConnectionActivityBinding
+import com.example.upagain.feat.MainActivity
 
 class NoConnectionActivity : AppCompatActivity() {
+    private lateinit var binding: NoConnectionActivityBinding
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        binding = NoConnectionActivityBinding.inflate(layoutInflater)
         enableEdgeToEdge()
-        setContentView(R.layout.no_connection_activity)
+        setContentView(binding.root)
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
+        }
+
+        binding.btnErrorAction.setOnClickListener {
+            val intent = Intent(this, MainActivity::class.java).apply {
+                flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+            }
+            startActivity(intent)
+            finish()
         }
     }
 }
