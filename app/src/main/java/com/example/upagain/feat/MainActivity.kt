@@ -13,22 +13,33 @@ import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.updatePadding
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import com.example.upagain.R
 import com.example.upagain.databinding.MainActivityBinding
 import com.example.upagain.feat.auth.LoginActivity
 import com.example.upagain.feat.dashboard.DashboardFragment
+import com.example.upagain.feat.error.NoConnectionActivity
 import com.example.upagain.feat.post.index.PostFragment
 import com.example.upagain.feat.shop.ShopFragment
 import com.example.upagain.util.auth.SessionManager
+import com.example.upagain.util.network.NetworkMonitor
+import kotlinx.coroutines.launch
 
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: MainActivityBinding
+    private lateinit var networkMonitor: NetworkMonitor
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = MainActivityBinding.inflate(layoutInflater)
         enableEdgeToEdge()
         setContentView(binding.root)
+
+        // CHECK CONNECTION
+        networkMonitor = NetworkMonitor(applicationContext)
+        observeNetworkState()
 
         // SESSION CHECK
         SessionManager.init(this)
@@ -39,7 +50,8 @@ class MainActivity : AppCompatActivity() {
         }
 
         // STYLING
-        binding.bottomNav.itemIconTintList = ContextCompat.getColorStateList(this, R.color.color_on_surface)
+        binding.bottomNav.itemIconTintList =
+            ContextCompat.getColorStateList(this, R.color.color_on_surface)
         ViewCompat.setOnApplyWindowInsetsListener(binding.main) { v, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, 0)
@@ -60,22 +72,27 @@ class MainActivity : AppCompatActivity() {
                     replaceFragment(ShopFragment())
                     true
                 }
+
                 R.id.nav_container -> {
                     replaceFragment(ContainerFragment())
                     true
                 }
+
                 R.id.nav_dashboard -> {
                     replaceFragment(DashboardFragment())
                     true
                 }
+
                 R.id.nav_community -> {
                     replaceFragment(PostFragment())
                     true
                 }
+
                 R.id.nav_profile -> {
                     replaceFragment(ProfileFragment())
                     true
                 }
+
                 else -> false
             }
         }
@@ -111,9 +128,24 @@ class MainActivity : AppCompatActivity() {
         return super.dispatchTouchEvent(event)
     }
 
-//    private fun isUserLoggedIn(): Boolean {
-//        val sharedPrefs = getSharedPreferences("auth_prefs", MODE_PRIVATE)
-//        val token = sharedPrefs.getString(KEY_TOKEN, null)
-//        return !token.isNullOrEmpty()
-//    }
+    private fun observeNetworkState() {
+        lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                networkMonitor.isConnected.collect { isConnected ->
+                    if (!isConnected) {
+                        navigateToErrorPage()
+                    }
+                }
+            }
+        }
+    }
+
+    private fun navigateToErrorPage() {
+        val intent = Intent(this, NoConnectionActivity::class.java).apply {
+            // Prevent multiple instances of ErrorActivity from piling up
+            flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+        }
+        startActivity(intent)
+        finish()
+    }
 }
