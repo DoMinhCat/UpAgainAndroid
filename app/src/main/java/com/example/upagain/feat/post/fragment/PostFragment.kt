@@ -197,7 +197,9 @@ class PostFragment : Fragment() {
         }
         // MY POSTS
         binding.icMyPosts.setOnClickListener {
-            // TODO: navigate to my posts
+            val myPost = PostMeFragment.newInstance()
+            parentFragmentManager.beginTransaction()
+                .replace(R.id.fragment_container, myPost).addToBackStack(null).commit()
         }
     }
 

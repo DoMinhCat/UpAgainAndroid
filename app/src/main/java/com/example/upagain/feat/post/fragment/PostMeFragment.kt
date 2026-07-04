@@ -19,7 +19,6 @@ import com.example.upagain.event.LikePostEvent
 import com.example.upagain.event.SavePostEvent
 import com.example.upagain.feat.error.ErrorActivity
 import com.example.upagain.feat.post.adapter.PostAdapter
-import com.example.upagain.model.post.PostCategory
 import com.example.upagain.model.post.PostDetailsResponse
 import com.example.upagain.repository.PostRepo
 import com.example.upagain.util.ui.SnackbarLevel
@@ -132,53 +131,23 @@ class PostMeFragment : Fragment() {
                 }
 
                 override fun onLoadMoreClick() {
-                    viewModel.loadPageOfAllPosts(currentPage + 1)
+                    viewModel.loadPageOfMyPosts(currentPage + 1)
                 }
             })
         binding.rvPosts.adapter = postAdapter
     }
 
     private fun setupListeners() {
-        // FILTER CHIPS
-        binding.chipGroupCategories.setOnCheckedStateChangeListener { _, checkedChips ->
-            val selectedChip = checkedChips.firstOrNull()
-            if (selectedChip == null) {
-                viewModel.updateAllPostsCategoryFilter(PostCategory.ALL)
-            } else {
-                when (selectedChip) {
-                    R.id.tutorial_chip -> {
-                        viewModel.updateAllPostsCategoryFilter(PostCategory.TUTORIAL)
-                    }
-
-                    R.id.project_chip -> {
-                        viewModel.updateAllPostsCategoryFilter(PostCategory.PROJECT)
-                    }
-
-                    R.id.tip_chip -> {
-                        viewModel.updateAllPostsCategoryFilter(PostCategory.TIPS)
-                    }
-
-                    R.id.news_chip -> {
-                        viewModel.updateAllPostsCategoryFilter(PostCategory.NEWS)
-                    }
-
-                    R.id.case_study_chip -> {
-                        viewModel.updateAllPostsCategoryFilter(PostCategory.CASE_STUDY)
-                    }
-
-                    R.id.other_chip -> {
-                        viewModel.updateAllPostsCategoryFilter(PostCategory.OTHER)
-                    }
-                }
-            }
-            viewModel.loadPageOfMyPosts(1)
+        // BACK
+        binding.btnBack.setOnClickListener {
+            parentFragmentManager.popBackStack()
         }
         // SEARCH
         binding.etSearch.setOnEditorActionListener { textView, actionId, _ ->
             if (actionId == EditorInfo.IME_ACTION_SEARCH || actionId == EditorInfo.IME_ACTION_DONE) {
                 // when submit
                 activity?.hideKeyboard()
-                viewModel.updateSearchAllPostsFilter(textView.text.toString())
+                viewModel.updateSearchMyPostsFilter(textView.text.toString())
                 viewModel.loadPageOfMyPosts(1)
                 true
             } else {
@@ -235,7 +204,10 @@ class PostMeFragment : Fragment() {
                                     "Load all posts failed. Status code: ${state.statusCode}",
                                     state.exception
                                 )
-                                ErrorActivity.Companion.start(requireContext(), state.statusCode ?: 0)
+                                ErrorActivity.Companion.start(
+                                    requireContext(),
+                                    state.statusCode ?: 0
+                                )
                             }
                         }
                     }

@@ -30,8 +30,7 @@ class PostViewModel(private val repository: PostRepo, application: Application) 
     private val _savedPostsState =
         MutableStateFlow<UiState<PostPaginationResponse>>(UiState.Loading())
     val savedPostsState: StateFlow<UiState<PostPaginationResponse>> = _savedPostsState
-    private val _myPostsState =
-        MutableStateFlow<UiState<PostPaginationResponse>>(UiState.Loading())
+    private val _myPostsState = MutableStateFlow<UiState<PostPaginationResponse>>(UiState.Loading())
     val myPostsState: StateFlow<UiState<PostPaginationResponse>> = _myPostsState
     private val _postDetailState = MutableStateFlow<UiState<PostDetailsResponse>>(UiState.Loading())
     val postDetailState: StateFlow<UiState<PostDetailsResponse>> = _postDetailState
@@ -54,11 +53,9 @@ class PostViewModel(private val repository: PostRepo, application: Application) 
             // only show full screen load if loading the first page
             _allPostsState.value = UiState.Loading(isFirstPage = isFirstPage)
 
-            repository.getAllPosts(requestBody)
-                .onSuccess { allPostsData ->
+            repository.getAllPosts(requestBody).onSuccess { allPostsData ->
                     _allPostsState.value = UiState.Success(allPostsData)
-                }
-                .onFailure { exception ->
+                }.onFailure { exception ->
                     val statusCode = (exception as? HttpException)?.code()
                     _allPostsState.value = UiState.Error(statusCode, exception)
                 }
@@ -76,11 +73,9 @@ class PostViewModel(private val repository: PostRepo, application: Application) 
             // only show full screen load if loading the first page
             _savedPostsState.value = UiState.Loading(isFirstPage = isFirstPage)
 
-            repository.getSavedPosts(requestBody)
-                .onSuccess { allPostsData ->
+            repository.getSavedPosts(requestBody).onSuccess { allPostsData ->
                     _savedPostsState.value = UiState.Success(allPostsData)
-                }
-                .onFailure { exception ->
+                }.onFailure { exception ->
                     val statusCode = (exception as? HttpException)?.code()
                     _savedPostsState.value = UiState.Error(statusCode, exception)
                 }
@@ -114,11 +109,9 @@ class PostViewModel(private val repository: PostRepo, application: Application) 
             // only show full screen load if loading the first page
             _myPostsState.value = UiState.Loading(isFirstPage = isFirstPage)
 
-            repository.getMyPosts(requestBody)
-                .onSuccess { myPostsData ->
+            repository.getMyPosts(requestBody).onSuccess { myPostsData ->
                     _myPostsState.value = UiState.Success(myPostsData)
-                }
-                .onFailure { exception ->
+                }.onFailure { exception ->
                     val statusCode = (exception as? HttpException)?.code()
                     _myPostsState.value = UiState.Error(statusCode, exception)
                 }
@@ -134,24 +127,18 @@ class PostViewModel(private val repository: PostRepo, application: Application) 
         currentGetMyPostsFilters = currentGetMyPostsFilters.copy(search = query, page = 1)
     }
 
-    fun updateMyPostsCategoryFilter(categoryOption: PostCategory) {
-        currentGetMyPostsFilters = currentGetMyPostsFilters.copy(category = categoryOption, page = 1)
-    }
-
     // OTHER METHODS
     fun getPostDetails(idPost: Int) {
         viewModelScope.launch {
             _postDetailState.value = UiState.Loading()
 
-            repository.getPostDetails(idPost)
-                .onSuccess { postDetails ->
+            repository.getPostDetails(idPost).onSuccess { postDetails ->
                     _postDetailState.value = UiState.Success(postDetails)
                     val category = postDetails.category
                     if (category == PostCategory.PROJECT) {
                         getProjectSteps(idPost)
                     }
-                }
-                .onFailure { exception ->
+                }.onFailure { exception ->
                     val statusCode = (exception as? HttpException)?.code()
                     _postDetailState.value = UiState.Error(statusCode, exception)
                 }
@@ -162,11 +149,9 @@ class PostViewModel(private val repository: PostRepo, application: Application) 
         viewModelScope.launch {
             _projectStepsState.value = UiState.Loading()
 
-            repository.getProjectSteps(idPost)
-                .onSuccess { steps ->
+            repository.getProjectSteps(idPost).onSuccess { steps ->
                     _projectStepsState.value = UiState.Success(steps)
-                }
-                .onFailure { exception ->
+                }.onFailure { exception ->
                     val statusCode = (exception as? HttpException)?.code()
                     _projectStepsState.value = UiState.Error(statusCode, exception)
                 }
@@ -177,17 +162,13 @@ class PostViewModel(private val repository: PostRepo, application: Application) 
         // for optimistic update, emit success or fallback event to tell fragment to sync the data correspondingly
         viewModelScope.launch {
             // optimistic update for save post, no loading state needed
-            repository.savePost(id)
-                .onSuccess { savePostResponse ->
+            repository.savePost(id).onSuccess { savePostResponse ->
                     _savePostEvent.emit(
                         SavePostEvent.Succeeded(
-                            position,
-                            id,
-                            savePostResponse.isSaved
+                            position, id, savePostResponse.isSaved
                         )
                     )
-                }
-                .onFailure { exception ->
+                }.onFailure { exception ->
                     val statusCode = (exception as? HttpException)?.code()
                     // Broadcast error containing exact instructions on what index row to roll back
                     _savePostEvent.emit(SavePostEvent.Rollback(position, id, statusCode, exception))
@@ -198,17 +179,13 @@ class PostViewModel(private val repository: PostRepo, application: Application) 
     fun likePost(id: Int, position: Int = -1) {
         viewModelScope.launch {
             // optimistic update for like post, no loading state needed
-            repository.likePost(id)
-                .onSuccess { likePostResponse ->
+            repository.likePost(id).onSuccess { likePostResponse ->
                     _likePostEvent.emit(
                         LikePostEvent.Succeeded(
-                            position,
-                            id,
-                            likePostResponse.isLiked
+                            position, id, likePostResponse.isLiked
                         )
                     )
-                }
-                .onFailure { exception ->
+                }.onFailure { exception ->
                     val statusCode = (exception as? HttpException)?.code()
                     _likePostEvent.emit(LikePostEvent.Rollback(position, id, statusCode, exception))
                 }
