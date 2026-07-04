@@ -61,10 +61,9 @@ class CommentRepo(private val apiService: ApiService) {
     suspend fun deleteComment(idCmt: Int): Result<Unit> {
         return try {
             val response = apiService.deleteComment(idCmt).awaitResponse()
-            val body = response.body()
 
-            if (response.isSuccessful && body != null) {
-                Result.success(body)
+            if (response.isSuccessful) {
+                Result.success(Unit)
             } else {
                 Result.failure(HttpException(response))
             }

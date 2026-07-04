@@ -1,10 +1,12 @@
-package com.example.upagain.feat.post.detail
+package com.example.upagain.feat.post.fragment
 
+import android.app.Dialog
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import androidx.appcompat.content.res.AppCompatResources
 import androidx.core.text.HtmlCompat
 import androidx.fragment.app.Fragment
@@ -21,6 +23,9 @@ import com.example.upagain.event.LikeCommentEvent
 import com.example.upagain.event.LikePostEvent
 import com.example.upagain.event.SavePostEvent
 import com.example.upagain.feat.error.ErrorActivity
+import com.example.upagain.feat.post.adapter.CarouselImageAdapter
+import com.example.upagain.feat.post.adapter.CommentRecyclerViewAdapter
+import com.example.upagain.feat.post.adapter.ProjectStepsAdapter
 import com.example.upagain.model.comment.CommentDetailsResponse
 import com.example.upagain.model.comment.CreateCommentRequest
 import com.example.upagain.model.post.PostDetailsResponse
@@ -42,6 +47,7 @@ import com.example.upagain.viewmodel.CommentViewModel
 import com.example.upagain.viewmodel.PostViewModel
 import com.example.upagain.viewmodel.UiState
 import com.example.upagain.viewmodel.ViewModelFactory
+import com.google.android.material.imageview.ShapeableImageView
 import com.google.android.material.tabs.TabLayoutMediator
 import kotlinx.coroutines.launch
 
@@ -206,9 +212,13 @@ class PostDetailFragment : Fragment() {
         // SEND COMMENT
         binding.btnSendComment.setOnClickListenerWithCooldown {
             idPost?.let { id ->
+                val commentBody = binding.etWriteComment.text.toString().trim()
+                if (commentBody.isEmpty()) {
+                    return@setOnClickListenerWithCooldown
+                }
                 commentViewModel.createComment(
                     id,
-                    CreateCommentRequest(binding.etWriteComment.text.toString())
+                    CreateCommentRequest(commentBody)
                 )
             }
         }
@@ -473,6 +483,10 @@ class PostDetailFragment : Fragment() {
                                 idPost?.let { id ->
                                     commentViewModel.loadPageOfComments(id, 1)
                                 }
+                                // update count
+                                getPostData()?.commentCount += 1
+                                binding.tvCommentCount.text =
+                                    getString(R.string.comment_count, getPostData()?.commentCount)
                             }
 
                             is UiState.Error -> {
@@ -481,6 +495,10 @@ class PostDetailFragment : Fragment() {
                                     "PostDetailFragment",
                                     "Send comment failed. Status code: ${state.statusCode}",
                                     state.exception
+                                )
+                                binding.main.showTopSnackbar(
+                                    R.string.err_create_comment_msg,
+                                    SnackbarLevel.ERROR
                                 )
                             }
                         }
@@ -536,6 +554,10 @@ class PostDetailFragment : Fragment() {
                                 idPost?.let { id ->
                                     commentViewModel.loadPageOfComments(id, 1)
                                 }
+                                // update count
+                                getPostData()?.commentCount -= 1
+                                binding.tvCommentCount.text =
+                                    getString(R.string.comment_count, getPostData()?.commentCount)
                             }
 
                             is UiState.Error -> {
@@ -633,13 +655,13 @@ class PostDetailFragment : Fragment() {
     private fun showFullScreenImageDialog(absoluteImageUrl: String) {
         // Create an unstyled fullscreen dialog wrapper window context
         val dialog =
-            android.app.Dialog(requireContext(), android.R.style.Theme_Black_NoTitleBar_Fullscreen)
+            Dialog(requireContext(), android.R.style.Theme_Black_NoTitleBar_Fullscreen)
         dialog.setContentView(R.layout.dialog_fullscreen_image)
         dialog.setCancelable(true)
 
         val imageView =
-            dialog.findViewById<com.google.android.material.imageview.ShapeableImageView>(R.id.iv_fullscreen_target)
-        val btnClose = dialog.findViewById<android.widget.ImageView>(R.id.btn_close_fullscreen)
+            dialog.findViewById<ShapeableImageView>(R.id.iv_fullscreen_target)
+        val btnClose = dialog.findViewById<ImageView>(R.id.btn_close_fullscreen)
 
         // Populate image immediately
         imageView.load(absoluteImageUrl) {

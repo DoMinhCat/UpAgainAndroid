@@ -1,4 +1,4 @@
-package com.example.upagain.feat.post.detail
+package com.example.upagain.feat.post.adapter
 
 import android.view.LayoutInflater
 import android.view.View
@@ -114,7 +114,6 @@ class CommentRecyclerViewAdapter(
         val likeBtn: MaterialButton = view.findViewById(R.id.btn_cmt_like)
         val likeNb: TextView = view.findViewById(R.id.tv_cmt_like_nb)
 
-        // 1. Resolve your delete view item component
         val deleteBtn: View = view.findViewById(R.id.btn_delete)
 
         fun bind(comment: CommentDetailsResponse, currentUserId: Int?) {
@@ -123,6 +122,12 @@ class CommentRecyclerViewAdapter(
             createdAt.text = formatTimestamptz(comment.createdAt)
             likeNb.text = comment.likeCount.toString()
 
+            // change like icon
+            likeBtn.icon = AppCompatResources.getDrawable(likeBtn.context, R.drawable.ic_love_outline)
+            if (comment.isLiked) {
+                likeBtn.icon = AppCompatResources.getDrawable(likeBtn.context, R.drawable.ic_love_filled)
+            }
+
             val avatarUrl = buildImageUrl(comment.userAvatar, ImageType.AVATAR)
             avatar.load(avatarUrl) {
                 crossfade(true)
@@ -130,7 +135,7 @@ class CommentRecyclerViewAdapter(
                 error(R.drawable.ic_avatar_unknown)
             }
 
-            // 2. Perform the matching logic correctly inside the bind loop execution path
+            // Only show delete if it is my comment
             val isMyComment = currentUserId != null && comment.idAccount == currentUserId
 
             if (isMyComment) {

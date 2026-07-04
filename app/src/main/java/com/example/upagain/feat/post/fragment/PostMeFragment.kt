@@ -1,4 +1,4 @@
-package com.example.upagain.feat.post.index
+package com.example.upagain.feat.post.fragment
 
 import android.os.Bundle
 import android.util.Log
@@ -12,19 +12,15 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.example.upagain.PostMeFragment
-import com.example.upagain.PostSavedFragment
 import com.example.upagain.R
 import com.example.upagain.api.ApiClient
-import com.example.upagain.databinding.FragmentPostBinding
+import com.example.upagain.databinding.FragmentPostMeBinding
 import com.example.upagain.event.LikePostEvent
 import com.example.upagain.event.SavePostEvent
 import com.example.upagain.feat.error.ErrorActivity
-import com.example.upagain.feat.post.detail.PostDetailFragment
+import com.example.upagain.feat.post.adapter.PostAdapter
 import com.example.upagain.model.post.PostCategory
 import com.example.upagain.model.post.PostDetailsResponse
-import com.example.upagain.model.post.PostSortOption
-import com.example.upagain.repository.CommentRepo
 import com.example.upagain.repository.PostRepo
 import com.example.upagain.util.ui.SnackbarLevel
 import com.example.upagain.util.ui.hideKeyboard
@@ -34,21 +30,20 @@ import com.example.upagain.viewmodel.UiState
 import com.example.upagain.viewmodel.ViewModelFactory
 import kotlinx.coroutines.launch
 
-class PostFragment : Fragment() {
+class PostMeFragment : Fragment() {
     // elements binding
-    private var _binding: FragmentPostBinding? = null
+    private var _binding: FragmentPostMeBinding? = null
     private val binding get() = _binding!!
     private val apiService by lazy { ApiClient.apiService }
-    private val postRepository by lazy { PostRepo(apiService) }
+    private val repository by lazy { PostRepo(apiService) }
     private val appInstance by lazy { requireActivity().application }
     private val viewModel: PostViewModel by viewModels {
-        ViewModelFactory { PostViewModel(postRepository, appInstance) }
+        ViewModelFactory { PostViewModel(repository, appInstance) }
     }
 
-    // Get all posts pagination
     private var currentPage = 1
-    private var loadedPosts = mutableListOf<PostDetailsResponse>()
-    private lateinit var postAdapter: PostRecyclerViewAdapter
+    private var myPosts = mutableListOf<PostDetailsResponse>()
+    private lateinit var postAdapter: PostAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -56,9 +51,10 @@ class PostFragment : Fragment() {
     }
 
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
+        inflater: LayoutInflater, container: ViewGroup?,
+        savedInstanceState: Bundle?
     ): View {
-        _binding = FragmentPostBinding.inflate(inflater, container, false)
+        _binding = FragmentPostMeBinding.inflate(inflater, container, false)
         return binding.root
     }
 
@@ -75,39 +71,64 @@ class PostFragment : Fragment() {
         observePostState()
 
         // API call
-        viewModel.loadPageOfAllPosts(1)
+        viewModel.loadPageOfMyPosts(1)
+    }
+
+    companion object {
+        /**
+         * Use this factory method to create a new instance of
+         * this fragment using the provided parameters.
+         *
+         * @return A new instance of fragment PostMeFragment.
+         */
+        @JvmStatic
+        fun newInstance() =
+            PostMeFragment().apply {
+                arguments = Bundle().apply {
+                }
+            }
     }
 
     // PRIVATE ZONE
     private fun setupRecyclerView() {
-        // Tell Recycler View to arrange items horizontally
         binding.rvPosts.layoutManager = LinearLayoutManager(requireContext())
         // Attach the adapter
-        postAdapter = PostRecyclerViewAdapter(
-            loadedPosts, false, object : PostRecyclerViewAdapter.OnClickListener {
+        postAdapter = PostAdapter(
+            object : PostAdapter.OnClickListener {
                 override fun onPostClick(position: Int, post: PostDetailsResponse) {
-                    val postId = loadedPosts.getOrNull(position)?.id ?: return
-                    val postDetailFragment = PostDetailFragment.newInstance(postId)
+                    val postId = postAdapter.currentList.getOrNull(position)?.id ?: return
+                    val postDetailFragment = PostDetailFragment.Companion.newInstance(postId)
                     parentFragmentManager.beginTransaction()
-                        .replace(R.id.fragment_container, postDetailFragment).addToBackStack(null)
+                        .replace(R.id.fragment_container, postDetailFragment)
+                        .addToBackStack(null)
                         .commit()
                 }
 
                 override fun onLikeClick(position: Int, post: PostDetailsResponse) {
                     // optimistic update
-                    post.isLiked = !post.isLiked
-                    if (post.isLiked) post.likeCount += 1
-                    else post.likeCount -= 1
-                    postAdapter.updateSingleItem(position, post)
-                    viewModel.likePost(post.id, position)
+                    val updatedPost = post.copy(
+                        isLiked = !post.isLiked,
+                        likeCount = if (!post.isLiked) post.likeCount + 1 else post.likeCount - 1
+                    )
+
+                    val newList = postAdapter.currentList.toMutableList()
+                    if (position in newList.indices) {
+                        newList[position] = updatedPost
+                        postAdapter.submitList(newList)
+                    }
+                    viewModel.likePost(updatedPost.id, position)
                 }
 
                 override fun onSaveClick(position: Int, post: PostDetailsResponse) {
                     // optimistic update
-                    post.isSaved = !post.isSaved
-                    // tell adapter to redraw single item
-                    postAdapter.updateSingleItem(position, post)
-                    viewModel.savePost(post.id, position)
+                    val updatedPost = post.copy(isSaved = !post.isSaved)
+
+                    val newList = postAdapter.currentList.toMutableList()
+                    if (position in newList.indices) {
+                        newList[position] = updatedPost
+                        postAdapter.submitList(newList)
+                    }
+                    viewModel.savePost(updatedPost.id, position)
                 }
 
                 override fun onLoadMoreClick() {
@@ -119,24 +140,6 @@ class PostFragment : Fragment() {
 
     private fun setupListeners() {
         // FILTER CHIPS
-        binding.chipGroupSort.setOnCheckedStateChangeListener { _, checkedChips ->
-            val selectedChip = checkedChips.firstOrNull()
-
-            if (selectedChip == null) {
-                viewModel.updateSortFilter(null)
-            } else {
-                when (selectedChip) {
-                    R.id.most_liked_chip -> {
-                        viewModel.updateSortFilter(PostSortOption.MOST_LIKE)
-                    }
-
-                    R.id.most_viewed_chip -> {
-                        viewModel.updateSortFilter(PostSortOption.MOST_VIEW)
-                    }
-                }
-            }
-            viewModel.loadPageOfAllPosts(1)
-        }
         binding.chipGroupCategories.setOnCheckedStateChangeListener { _, checkedChips ->
             val selectedChip = checkedChips.firstOrNull()
             if (selectedChip == null) {
@@ -168,7 +171,7 @@ class PostFragment : Fragment() {
                     }
                 }
             }
-            viewModel.loadPageOfAllPosts(1)
+            viewModel.loadPageOfMyPosts(1)
         }
         // SEARCH
         binding.etSearch.setOnEditorActionListener { textView, actionId, _ ->
@@ -176,32 +179,20 @@ class PostFragment : Fragment() {
                 // when submit
                 activity?.hideKeyboard()
                 viewModel.updateSearchAllPostsFilter(textView.text.toString())
-                viewModel.loadPageOfAllPosts(1)
+                viewModel.loadPageOfMyPosts(1)
                 true
             } else {
                 false
             }
-        }
-        // SAVED POSTS
-        binding.icSavedPosts.setOnClickListener {
-            val postSavedFragment = PostSavedFragment.newInstance()
-            parentFragmentManager.beginTransaction()
-                .replace(R.id.fragment_container, postSavedFragment).addToBackStack(null).commit()
-        }
-        // MY POSTS
-        binding.icMyPosts.setOnClickListener {
-            val myPostFragment = PostMeFragment.newInstance()
-            parentFragmentManager.beginTransaction()
-                .replace(R.id.fragment_container, myPostFragment).addToBackStack(null).commit()
         }
     }
 
     private fun observePostState() {
         lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
-                // GET ALL POSTS
+                // GET MY POSTS
                 launch {
-                    viewModel.allPostsState.collect { state ->
+                    viewModel.myPostsState.collect { state ->
                         when (state) {
                             is UiState.Idle -> {}
                             is UiState.Loading -> {
@@ -209,17 +200,19 @@ class PostFragment : Fragment() {
                             }
 
                             is UiState.Success -> {
-                                val allPostsResponse = state.data
+                                val myPostsResponse = state.data
 
-                                currentPage = allPostsResponse.currentPage
+                                currentPage = myPostsResponse.currentPage
                                 if (currentPage == 1) {
                                     // if it is the default page then clear all first then load
-                                    loadedPosts.clear()
+                                    myPosts.clear()
                                     toggleAllPostLoading(false, isFirstPage = true)
+                                } else {
+                                    toggleAllPostLoading(false, isFirstPage = false)
                                 }
 
                                 // handle empty state
-                                if (allPostsResponse.posts.isNullOrEmpty()) {
+                                if (myPostsResponse.posts.isNullOrEmpty()) {
                                     binding.layoutPostsEmpty.visibility = View.VISIBLE
                                     binding.rvPosts.visibility = View.GONE
                                 } else {
@@ -227,21 +220,22 @@ class PostFragment : Fragment() {
                                     binding.rvPosts.visibility = View.VISIBLE
                                 }
 
-                                loadedPosts.addAll(allPostsResponse.posts ?: emptyList())
+                                myPosts.addAll(myPostsResponse.posts ?: emptyList())
 
                                 val hasMore =
-                                    allPostsResponse.currentPage < allPostsResponse.lastPage
-                                postAdapter.updateData(loadedPosts, hasMore)
+                                    myPostsResponse.currentPage < myPostsResponse.lastPage
+                                postAdapter.updatePaginationState(hasMore)
+                                postAdapter.submitList(myPosts.toList())
                             }
 
                             is UiState.Error -> {
                                 toggleAllPostLoading(false, isFirstPage = (currentPage == 1))
                                 Log.e(
-                                    "PostFragment",
+                                    "PostMeFragment",
                                     "Load all posts failed. Status code: ${state.statusCode}",
                                     state.exception
                                 )
-                                ErrorActivity.start(requireContext(), state.statusCode ?: 0)
+                                ErrorActivity.Companion.start(requireContext(), state.statusCode ?: 0)
                             }
                         }
                     }
@@ -252,31 +246,38 @@ class PostFragment : Fragment() {
                         when (event) {
                             is SavePostEvent.Succeeded -> {
                                 // get the post at that position
-                                val currentPost = loadedPosts.getOrNull(event.position)
+                                val currentPost = postAdapter.currentList.getOrNull(event.position)
                                 if (currentPost != null && currentPost.id == event.idPost) {
                                     if (currentPost.isSaved != event.isSaved) {
                                         // sync isSaved status
                                         currentPost.isSaved = event.isSaved
-                                        postAdapter.updateSingleItem(event.position, currentPost)
+
+                                        val newList = postAdapter.currentList.toMutableList()
+                                        newList[event.position] = currentPost
+                                        postAdapter.submitList(newList)
                                     }
                                 }
                             }
 
                             is SavePostEvent.Rollback -> {
-                                val failingPost = loadedPosts.getOrNull(event.position)
+                                val failingPost = postAdapter.currentList.getOrNull(event.position)
                                 if (failingPost != null && failingPost.id == event.idPost) {
                                     // Revert isSaved status since update on server failed
                                     failingPost.isSaved = !failingPost.isSaved
-                                    postAdapter.updateSingleItem(event.position, failingPost)
+
+                                    val newList = postAdapter.currentList.toMutableList()
+                                    newList[event.position] = failingPost
+                                    postAdapter.submitList(newList)
 
                                     Log.e(
-                                        "PostFragment",
+                                        "PostMeFragment",
                                         "Save failed for Post ${event.idPost}. Status code: ${event.statusCode}",
                                         event.exception
                                     )
                                 }
                                 binding.main.showTopSnackbar(
-                                    R.string.err_save_post_msg, SnackbarLevel.ERROR
+                                    R.string.err_save_post_msg,
+                                    SnackbarLevel.ERROR
                                 )
                             }
                         }
@@ -288,32 +289,39 @@ class PostFragment : Fragment() {
                         when (event) {
                             is LikePostEvent.Succeeded -> {
                                 // get the post at that position
-                                val currentPost = loadedPosts.getOrNull(event.position)
+                                val currentPost = postAdapter.currentList.getOrNull(event.position)
                                 if (currentPost != null && currentPost.id == event.idPost) {
                                     if (currentPost.isLiked != event.isLiked) {
                                         // sync isLiked status
                                         currentPost.isLiked = event.isLiked
-                                        postAdapter.updateSingleItem(event.position, currentPost)
+
+                                        val newList = postAdapter.currentList.toMutableList()
+                                        newList[event.position] = currentPost
+                                        postAdapter.submitList(newList)
                                     }
                                 }
                             }
 
                             is LikePostEvent.Rollback -> {
-                                val failingPost = loadedPosts.getOrNull(event.position)
+                                val failingPost = postAdapter.currentList.getOrNull(event.position)
                                 if (failingPost != null && failingPost.id == event.idPost) {
                                     // Revert isSaved status since update on server failed
                                     failingPost.isLiked = !failingPost.isLiked
                                     failingPost.likeCount -= 1
-                                    postAdapter.updateSingleItem(event.position, failingPost)
+
+                                    val newList = postAdapter.currentList.toMutableList()
+                                    newList[event.position] = failingPost
+                                    postAdapter.submitList(newList)
 
                                     Log.e(
-                                        "PostFragment",
+                                        "PostMeFragment",
                                         "Like failed for Post ${event.idPost}. Status code: ${event.statusCode}",
                                         event.exception
                                     )
                                 }
                                 binding.main.showTopSnackbar(
-                                    R.string.err_like_post_msg, SnackbarLevel.ERROR
+                                    R.string.err_like_post_msg,
+                                    SnackbarLevel.ERROR
                                 )
                             }
                         }
@@ -341,6 +349,3 @@ class PostFragment : Fragment() {
         }
     }
 }
-
-
-
