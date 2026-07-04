@@ -23,6 +23,7 @@ import com.example.upagain.util.ui.hideKeyboard
 import com.example.upagain.util.ui.setOnClickListenerWithCooldown
 import com.example.upagain.util.ui.showTopSnackbar
 import com.example.upagain.util.ui.toggleBtnLoadingState
+import com.example.upagain.util.ui.toggleTilError
 import com.example.upagain.util.validator.FieldValidator
 import com.example.upagain.util.validator.MaxLengthRule
 import com.example.upagain.util.validator.MinLengthRule
@@ -247,27 +248,12 @@ class ContainerFragment : Fragment() {
     }
 
     private fun toggleTilCodeErrorState(isError: Boolean) {
-        binding.tilCode.isErrorEnabled = isError
-        if (isError) {
-            binding.tilCode.isErrorEnabled = true
-            binding.tilCode.error = getString(R.string.invalid_digit_code)
-            return
-        } else {
-            binding.tilCode.error = null
-            binding.tilCode.isErrorEnabled = false
-        }
+        toggleTilError(binding.tilCode, R.string.invalid_digit_code, isError)
     }
 
     private fun toggleTilIdErrorState(isError: Boolean) {
-        binding.tilContainerId.isErrorEnabled = isError
-        if (isError) {
-            binding.tilContainerId.isErrorEnabled = true
-            binding.tilContainerId.error = getString(R.string.invalid_container_id)
-            return
-        } else {
-            binding.tilContainerId.error = null
-            binding.tilContainerId.isErrorEnabled = false
-        }
+        toggleTilError(binding.tilContainerId, R.string.invalid_container_id, isError)
+
     }
 
     private fun toggleSubmitBtnLoadingState(isLoading: Boolean) {
