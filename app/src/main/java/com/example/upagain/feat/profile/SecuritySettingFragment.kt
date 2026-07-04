@@ -1,4 +1,4 @@
-package com.example.upagain
+package com.example.upagain.feat.profile
 
 import android.os.Build
 import android.os.Bundle
@@ -12,6 +12,7 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
+import com.example.upagain.R
 import com.example.upagain.api.ApiClient
 import com.example.upagain.databinding.FragmentSecuritySettingBinding
 import com.example.upagain.model.account.AccountUpdateRequest
@@ -253,7 +254,8 @@ class SecuritySettingFragment : Fragment() {
         toggleBtnLoadingState(binding.btnSaveEmail, binding.emailSaveLoader, isLoading, getString(R.string.btn_save))
     }
     private fun togglePasswordBtnLoading(isLoading: Boolean) {
-        toggleBtnLoadingState(binding.btnSavePassword, binding.passwordSaveLoader, isLoading, getString(R.string.btn_save))
+        toggleBtnLoadingState(binding.btnSavePassword, binding.passwordSaveLoader, isLoading, getString(
+            R.string.btn_save))
     }
 
     private fun toggleEmailErrorState(isError: Boolean) {

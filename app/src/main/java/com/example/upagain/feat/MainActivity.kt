@@ -16,8 +16,10 @@ import androidx.fragment.app.Fragment
 import com.example.upagain.R
 import com.example.upagain.databinding.MainActivityBinding
 import com.example.upagain.feat.auth.LoginActivity
+import com.example.upagain.feat.container.ContainerFragment
 import com.example.upagain.feat.dashboard.DashboardFragment
 import com.example.upagain.feat.post.index.PostFragment
+import com.example.upagain.feat.profile.ProfileFragment
 import com.example.upagain.feat.shop.ShopFragment
 import com.example.upagain.util.auth.SessionManager
 

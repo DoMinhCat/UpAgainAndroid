@@ -1,4 +1,4 @@
-package com.example.upagain.feat.post.index
+package com.example.upagain.feat.post
 
 import android.view.LayoutInflater
 import android.view.View
