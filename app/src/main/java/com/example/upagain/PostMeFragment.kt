@@ -2,11 +2,11 @@ package com.example.upagain
 
 import android.os.Bundle
 import android.util.Log
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
@@ -29,7 +29,6 @@ import com.example.upagain.viewmodel.PostViewModel
 import com.example.upagain.viewmodel.UiState
 import com.example.upagain.viewmodel.ViewModelFactory
 import kotlinx.coroutines.launch
-import kotlin.getValue
 
 //private const val ARG_PARAM1 = "param1"
 
@@ -84,9 +83,8 @@ class PostMeFragment : Fragment() {
          *
          * @return A new instance of fragment PostMeFragment.
          */
-        // TODO: Rename and change types and number of parameters
         @JvmStatic
-        fun newInstance(param1: String, param2: String) =
+        fun newInstance() =
             PostMeFragment().apply {
                 arguments = Bundle().apply {
                 }

@@ -54,8 +54,7 @@ class PostFragment : Fragment() {
     }
 
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
+        inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View {
         _binding = FragmentPostBinding.inflate(inflater, container, false)
         return binding.root
@@ -83,23 +82,19 @@ class PostFragment : Fragment() {
         binding.rvPosts.layoutManager = LinearLayoutManager(requireContext())
         // Attach the adapter
         postAdapter = PostRecyclerViewAdapter(
-            loadedPosts,
-            false,
-            object : PostRecyclerViewAdapter.OnClickListener {
+            loadedPosts, false, object : PostRecyclerViewAdapter.OnClickListener {
                 override fun onPostClick(position: Int, post: PostDetailsResponse) {
                     val postId = loadedPosts.getOrNull(position)?.id ?: return
                     val postDetailFragment = PostDetailFragment.newInstance(postId)
                     parentFragmentManager.beginTransaction()
-                        .replace(R.id.fragment_container, postDetailFragment)
-                        .addToBackStack(null)
+                        .replace(R.id.fragment_container, postDetailFragment).addToBackStack(null)
                         .commit()
                 }
 
                 override fun onLikeClick(position: Int, post: PostDetailsResponse) {
                     // optimistic update
                     post.isLiked = !post.isLiked
-                    if (post.isLiked)
-                        post.likeCount += 1
+                    if (post.isLiked) post.likeCount += 1
                     else post.likeCount -= 1
                     postAdapter.updateSingleItem(position, post)
                     viewModel.likePost(post.id, position)
@@ -190,9 +185,7 @@ class PostFragment : Fragment() {
         binding.icSavedPosts.setOnClickListener {
             val postSavedFragment = PostSavedFragment.newInstance()
             parentFragmentManager.beginTransaction()
-                .replace(R.id.fragment_container, postSavedFragment)
-                .addToBackStack(null)
-                .commit()
+                .replace(R.id.fragment_container, postSavedFragment).addToBackStack(null).commit()
         }
         // MY POSTS
         binding.icMyPosts.setOnClickListener {
@@ -280,8 +273,7 @@ class PostFragment : Fragment() {
                                     )
                                 }
                                 binding.main.showTopSnackbar(
-                                    R.string.err_save_post_msg,
-                                    SnackbarLevel.ERROR
+                                    R.string.err_save_post_msg, SnackbarLevel.ERROR
                                 )
                             }
                         }
@@ -318,8 +310,7 @@ class PostFragment : Fragment() {
                                     )
                                 }
                                 binding.main.showTopSnackbar(
-                                    R.string.err_like_post_msg,
-                                    SnackbarLevel.ERROR
+                                    R.string.err_like_post_msg, SnackbarLevel.ERROR
                                 )
                             }
                         }
