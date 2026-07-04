@@ -179,7 +179,7 @@ class PostFragment : Fragment() {
             if (actionId == EditorInfo.IME_ACTION_SEARCH || actionId == EditorInfo.IME_ACTION_DONE) {
                 // when submit
                 activity?.hideKeyboard()
-                viewModel.updateSearchFilter(textView.text.toString())
+                viewModel.updateSearchAllPostsFilter(textView.text.toString())
                 viewModel.loadPageOfAllPosts(1)
                 true
             } else {
