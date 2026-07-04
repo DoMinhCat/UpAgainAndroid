@@ -38,7 +38,7 @@
                 android:layout_height="wrap_content"
                 android:gravity="center"
                 android:paddingHorizontal="@dimen/min_touch"
-                android:text="@string/post_saved"
+                android:text="@string/post_me"
                 android:textColor="@color/color_on_background"
                 android:textStyle="bold"
                 app:layout_constraintBottom_toBottomOf="parent"
@@ -48,6 +48,36 @@
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/button_height"
+            android:layout_marginHorizontal="@dimen/space_lg"
+            android:layout_marginTop="@dimen/space_md"
+            android:background="@drawable/input_round"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:paddingHorizontal="@dimen/space_md">
+
+            <ImageView
+                android:layout_width="@dimen/icon_md"
+                android:layout_height="@dimen/icon_md"
+                android:contentDescription="@string/placeholder_search"
+                android:src="@drawable/ic_search"
+                app:tint="@color/color_secondary" />
+
+            <EditText
+                android:id="@+id/et_search"
+                style="@style/TextAppearance.UpAgain.BodyMedium"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginStart="@dimen/space_sm"
+                android:background="@android:color/transparent"
+                android:hint="@string/placeholder_search"
+                android:inputType="text"
+                android:textColor="@color/color_on_background"
+                android:textColorHint="@color/color_secondary" />
+
+        </LinearLayout>
 
         <HorizontalScrollView
             android:layout_width="match_parent"
@@ -200,7 +230,7 @@
                 android:layout_marginTop="@dimen/space_xs"
                 android:alpha="0.7"
                 android:gravity="center"
-                android:text="@string/no_saved_posts_description"
+                android:text="@string/no_my_posts_description"
                 android:textColor="@color/color_secondary" />
         </LinearLayout>
 
