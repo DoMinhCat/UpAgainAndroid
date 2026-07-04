@@ -1,4 +1,4 @@
-package com.example.upagain
+package com.example.upagain.feat.post.fragment
 
 import android.os.Bundle
 import android.util.Log
@@ -11,13 +11,13 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.upagain.R
 import com.example.upagain.api.ApiClient
 import com.example.upagain.databinding.FragmentPostSavedBinding
 import com.example.upagain.event.LikePostEvent
 import com.example.upagain.event.SavePostEvent
 import com.example.upagain.feat.error.ErrorActivity
-import com.example.upagain.feat.post.detail.PostDetailFragment
-import com.example.upagain.feat.post.index.PostRecyclerViewAdapter
+import com.example.upagain.feat.post.adapter.PostRecyclerViewAdapter
 import com.example.upagain.model.post.PostCategory
 import com.example.upagain.model.post.PostDetailsResponse
 import com.example.upagain.repository.PostRepo
@@ -28,8 +28,6 @@ import com.example.upagain.viewmodel.PostViewModel
 import com.example.upagain.viewmodel.UiState
 import com.example.upagain.viewmodel.ViewModelFactory
 import kotlinx.coroutines.launch
-
-//private const val ARG_PARAM1 = "param1"
 
 /**
  * A simple [Fragment] subclass.
@@ -76,7 +74,7 @@ class PostSavedFragment : Fragment() {
         observeState()
 
         // API call
-        viewModel.loadPageOfSavedPosts(1)
+        viewModel.loadPageOfSavedPosts(currentPage)
     }
 
     companion object {
@@ -104,7 +102,7 @@ class PostSavedFragment : Fragment() {
             object : PostRecyclerViewAdapter.OnClickListener {
                 override fun onPostClick(position: Int, post: PostDetailsResponse) {
                     val postId = savedPosts.getOrNull(position)?.id ?: return
-                    val postDetailFragment = PostDetailFragment.newInstance(postId)
+                    val postDetailFragment = PostDetailFragment.Companion.newInstance(postId)
                     parentFragmentManager.beginTransaction()
                         .replace(R.id.fragment_container, postDetailFragment)
                         .addToBackStack(null)
@@ -128,7 +126,6 @@ class PostSavedFragment : Fragment() {
                     postAdapter.updateSingleItem(position, post)
 
                     viewModel.savePost(post.id, position)
-                    // TODO: remove this post from savedPosts in observer success
                 }
 
                 override fun onLoadMoreClick() {
@@ -190,17 +187,19 @@ class PostSavedFragment : Fragment() {
                             }
 
                             is UiState.Success -> {
-                                val allPostsResponse = state.data
+                                val savedPostsResponse = state.data
 
-                                currentPage = allPostsResponse.currentPage
+                                currentPage = savedPostsResponse.currentPage
                                 if (currentPage == 1) {
                                     // if it is the default page then clear all first then load
                                     savedPosts.clear()
                                     toggleAllPostLoading(false, isFirstPage = true)
+                                } else {
+                                    toggleAllPostLoading(false, isFirstPage = false)
                                 }
 
                                 // handle empty state
-                                if (allPostsResponse.posts.isNullOrEmpty()) {
+                                if (savedPostsResponse.posts.isNullOrEmpty()) {
                                     binding.layoutPostsEmpty.visibility = View.VISIBLE
                                     binding.rvPosts.visibility = View.GONE
                                 } else {
@@ -208,10 +207,10 @@ class PostSavedFragment : Fragment() {
                                     binding.rvPosts.visibility = View.VISIBLE
                                 }
 
-                                savedPosts.addAll(allPostsResponse.posts ?: emptyList())
+                                savedPosts.addAll(savedPostsResponse.posts ?: emptyList())
 
                                 val hasMore =
-                                    allPostsResponse.currentPage < allPostsResponse.lastPage
+                                    savedPostsResponse.currentPage < savedPostsResponse.lastPage
                                 postAdapter.updateData(savedPosts, hasMore)
                             }
 
@@ -222,7 +221,7 @@ class PostSavedFragment : Fragment() {
                                     "Load saved posts failed. Status code: ${state.statusCode}",
                                     state.exception
                                 )
-                                ErrorActivity.start(requireContext(), state.statusCode ?: 0)
+                                ErrorActivity.Companion.start(requireContext(), state.statusCode ?: 0)
                             }
                         }
                     }
@@ -239,6 +238,13 @@ class PostSavedFragment : Fragment() {
                                         // sync isSaved status
                                         currentPost.isSaved = event.isSaved
                                         postAdapter.updateSingleItem(event.position, currentPost)
+                                    }
+                                    // remove the item if unsaved
+                                    if (!event.isSaved) {
+                                        // TODO: refactor adapter to ListAdapter and change this correspondingly
+                                        savedPosts.remove(currentPost)
+                                        postAdapter.notifyItemRemoved(event.position)
+                                        postAdapter.notifyItemRangeChanged(event.position, savedPosts.size - event.position)
                                     }
                                 }
                             }
@@ -319,8 +325,8 @@ class PostSavedFragment : Fragment() {
             binding.rvPosts.visibility = View.GONE
             binding.postsLoader.visibility = View.VISIBLE
         } else {
-            binding.postsLoader.visibility = View.GONE
             binding.rvPosts.visibility = View.VISIBLE
+            binding.postsLoader.visibility = View.GONE
         }
     }
 }

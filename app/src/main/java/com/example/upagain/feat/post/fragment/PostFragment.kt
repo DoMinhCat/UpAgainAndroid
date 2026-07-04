@@ -1,4 +1,4 @@
-package com.example.upagain.feat.post.index
+package com.example.upagain.feat.post.fragment
 
 import android.os.Bundle
 import android.util.Log
@@ -12,18 +12,16 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.example.upagain.PostSavedFragment
 import com.example.upagain.R
 import com.example.upagain.api.ApiClient
 import com.example.upagain.databinding.FragmentPostBinding
 import com.example.upagain.event.LikePostEvent
 import com.example.upagain.event.SavePostEvent
 import com.example.upagain.feat.error.ErrorActivity
-import com.example.upagain.feat.post.detail.PostDetailFragment
+import com.example.upagain.feat.post.adapter.PostRecyclerViewAdapter
 import com.example.upagain.model.post.PostCategory
 import com.example.upagain.model.post.PostDetailsResponse
 import com.example.upagain.model.post.PostSortOption
-import com.example.upagain.repository.CommentRepo
 import com.example.upagain.repository.PostRepo
 import com.example.upagain.util.ui.SnackbarLevel
 import com.example.upagain.util.ui.hideKeyboard
@@ -213,6 +211,8 @@ class PostFragment : Fragment() {
                                     // if it is the default page then clear all first then load
                                     loadedPosts.clear()
                                     toggleAllPostLoading(false, isFirstPage = true)
+                                } else {
+                                    toggleAllPostLoading(false, isFirstPage = false)
                                 }
 
                                 // handle empty state

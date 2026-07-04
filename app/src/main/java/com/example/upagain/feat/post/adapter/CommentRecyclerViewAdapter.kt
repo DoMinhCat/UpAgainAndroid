@@ -1,4 +1,4 @@
-package com.example.upagain.feat.post.detail
+package com.example.upagain.feat.post.adapter
 
 import android.view.LayoutInflater
 import android.view.View

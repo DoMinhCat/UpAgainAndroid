@@ -1,4 +1,4 @@
-package com.example.upagain.feat
+package com.example.upagain.feat.profile
 
 import android.content.Intent
 import android.os.Bundle
@@ -8,6 +8,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
+import android.widget.Filter
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.viewModels
@@ -15,8 +16,8 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import coil.load
+import coil.network.HttpException
 import com.example.upagain.R
-import com.example.upagain.SecuritySettingFragment
 import com.example.upagain.api.ApiClient
 import com.example.upagain.databinding.FragmentProfileBinding
 import com.example.upagain.feat.auth.LoginActivity
@@ -48,6 +49,7 @@ import com.example.upagain.util.ui.hideKeyboard
 import com.example.upagain.util.ui.toggleFullScreenLoading
 import com.example.upagain.util.ui.toggleIconLoadingState
 import com.google.android.material.snackbar.Snackbar
+import com.google.android.material.textfield.TextInputLayout
 
 class ProfileFragment : Fragment() {
     // elements binding
@@ -93,7 +95,7 @@ class ProfileFragment : Fragment() {
             R.layout.item_dropdown, // your custom item layout
             languages
         ) {
-            override fun getFilter() = object : android.widget.Filter() {
+            override fun getFilter() = object : Filter() {
                 override fun performFiltering(c: CharSequence?) =
                     FilterResults().apply { values = languages; count = languages.size }
 
@@ -240,7 +242,7 @@ class ProfileFragment : Fragment() {
                                             binding.avatarLoader.visibility = View.GONE
                                             val exception = result.throwable
                                             val statusCode =
-                                                (exception as? coil.network.HttpException)?.response?.code
+                                                (exception as? HttpException)?.response?.code
 
                                             Log.e(
                                                 "ProfileFragment",
@@ -466,7 +468,7 @@ class ProfileFragment : Fragment() {
     }
 
     private fun toggleErrorState(
-        til: com.google.android.material.textfield.TextInputLayout,
+        til: TextInputLayout,
         isError: Boolean
     ) {
         val errorString =
