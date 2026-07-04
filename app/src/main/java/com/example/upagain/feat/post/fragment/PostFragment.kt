@@ -81,9 +81,9 @@ class PostFragment : Fragment() {
         binding.rvPosts.layoutManager = LinearLayoutManager(requireContext())
         // Attach the adapter
         postAdapter = PostRecyclerViewAdapter(
-            loadedPosts, false, object : PostRecyclerViewAdapter.OnClickListener {
+            object : PostRecyclerViewAdapter.OnClickListener {
                 override fun onPostClick(position: Int, post: PostDetailsResponse) {
-                    val postId = loadedPosts.getOrNull(position)?.id ?: return
+                    val postId = postAdapter.currentList.getOrNull(position)?.id ?: return
                     val postDetailFragment = PostDetailFragment.newInstance(postId)
                     parentFragmentManager.beginTransaction()
                         .replace(R.id.fragment_container, postDetailFragment).addToBackStack(null)
@@ -95,15 +95,25 @@ class PostFragment : Fragment() {
                     post.isLiked = !post.isLiked
                     if (post.isLiked) post.likeCount += 1
                     else post.likeCount -= 1
-                    postAdapter.updateSingleItem(position, post)
+
+                    val newList = postAdapter.currentList.toMutableList()
+                    if (position in newList.indices) {
+                        newList[position] = post
+                        postAdapter.submitList(newList)
+                    }
                     viewModel.likePost(post.id, position)
                 }
 
                 override fun onSaveClick(position: Int, post: PostDetailsResponse) {
                     // optimistic update
                     post.isSaved = !post.isSaved
+
                     // tell adapter to redraw single item
-                    postAdapter.updateSingleItem(position, post)
+                    val newList = postAdapter.currentList.toMutableList()
+                    if (position in newList.indices) {
+                        newList[position] = post
+                        postAdapter.submitList(newList)
+                    }
                     viewModel.savePost(post.id, position)
                 }
 
@@ -228,7 +238,9 @@ class PostFragment : Fragment() {
 
                                 val hasMore =
                                     allPostsResponse.currentPage < allPostsResponse.lastPage
-                                postAdapter.updateData(loadedPosts, hasMore)
+
+                                postAdapter.updatePaginationState(hasMore)
+                                postAdapter.submitList(loadedPosts.toList())
                             }
 
                             is UiState.Error -> {
@@ -249,22 +261,28 @@ class PostFragment : Fragment() {
                         when (event) {
                             is SavePostEvent.Succeeded -> {
                                 // get the post at that position
-                                val currentPost = loadedPosts.getOrNull(event.position)
+                                val currentPost = postAdapter.currentList.getOrNull(event.position)
                                 if (currentPost != null && currentPost.id == event.idPost) {
                                     if (currentPost.isSaved != event.isSaved) {
                                         // sync isSaved status
                                         currentPost.isSaved = event.isSaved
-                                        postAdapter.updateSingleItem(event.position, currentPost)
+
+                                        val newList = postAdapter.currentList.toMutableList()
+                                        newList[event.position] = currentPost
+                                        postAdapter.submitList(newList)
                                     }
                                 }
                             }
 
                             is SavePostEvent.Rollback -> {
-                                val failingPost = loadedPosts.getOrNull(event.position)
+                                val failingPost = postAdapter.currentList.getOrNull(event.position)
                                 if (failingPost != null && failingPost.id == event.idPost) {
                                     // Revert isSaved status since update on server failed
                                     failingPost.isSaved = !failingPost.isSaved
-                                    postAdapter.updateSingleItem(event.position, failingPost)
+
+                                    val newList = postAdapter.currentList.toMutableList()
+                                    newList[event.position] = failingPost
+                                    postAdapter.submitList(newList)
 
                                     Log.e(
                                         "PostFragment",
@@ -285,23 +303,29 @@ class PostFragment : Fragment() {
                         when (event) {
                             is LikePostEvent.Succeeded -> {
                                 // get the post at that position
-                                val currentPost = loadedPosts.getOrNull(event.position)
+                                val currentPost = postAdapter.currentList.getOrNull(event.position)
                                 if (currentPost != null && currentPost.id == event.idPost) {
                                     if (currentPost.isLiked != event.isLiked) {
                                         // sync isLiked status
                                         currentPost.isLiked = event.isLiked
-                                        postAdapter.updateSingleItem(event.position, currentPost)
+
+                                        val newList = postAdapter.currentList.toMutableList()
+                                        newList[event.position] = currentPost
+                                        postAdapter.submitList(newList)
                                     }
                                 }
                             }
 
                             is LikePostEvent.Rollback -> {
-                                val failingPost = loadedPosts.getOrNull(event.position)
+                                val failingPost = postAdapter.currentList.getOrNull(event.position)
                                 if (failingPost != null && failingPost.id == event.idPost) {
                                     // Revert isSaved status since update on server failed
                                     failingPost.isLiked = !failingPost.isLiked
                                     failingPost.likeCount -= 1
-                                    postAdapter.updateSingleItem(event.position, failingPost)
+
+                                    val newList = postAdapter.currentList.toMutableList()
+                                    newList[event.position] = failingPost
+                                    postAdapter.submitList(newList)
 
                                     Log.e(
                                         "PostFragment",
@@ -338,6 +362,3 @@ class PostFragment : Fragment() {
         }
     }
 }
-
-
-
