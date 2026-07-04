@@ -234,7 +234,7 @@ class PostSavedFragment : Fragment() {
                             is SavePostEvent.Succeeded -> {
                                 // get the post at that position
                                 val currentPost = savedPosts.getOrNull(event.position)
-                                if (currentPost != null && currentPost.id == event.postId) {
+                                if (currentPost != null && currentPost.id == event.idPost) {
                                     if (currentPost.isSaved != event.isSaved) {
                                         // sync isSaved status
                                         currentPost.isSaved = event.isSaved
@@ -245,14 +245,14 @@ class PostSavedFragment : Fragment() {
 
                             is SavePostEvent.Rollback -> {
                                 val failingPost = savedPosts.getOrNull(event.position)
-                                if (failingPost != null && failingPost.id == event.postId) {
+                                if (failingPost != null && failingPost.id == event.idPost) {
                                     // Revert isSaved status since update on server failed
                                     failingPost.isSaved = !failingPost.isSaved
                                     postAdapter.updateSingleItem(event.position, failingPost)
 
                                     Log.e(
                                         "PostSavedFragment",
-                                        "Save failed for Post ${event.postId}. Status code: ${event.statusCode}",
+                                        "Save failed for Post ${event.idPost}. Status code: ${event.statusCode}",
                                         event.exception
                                     )
                                 }
@@ -271,7 +271,7 @@ class PostSavedFragment : Fragment() {
                             is LikePostEvent.Succeeded -> {
                                 // get the post at that position
                                 val currentPost = savedPosts.getOrNull(event.position)
-                                if (currentPost != null && currentPost.id == event.postId) {
+                                if (currentPost != null && currentPost.id == event.idPost) {
                                     if (currentPost.isLiked != event.isLiked) {
                                         // sync isLiked status
                                         currentPost.isLiked = event.isLiked
@@ -282,7 +282,7 @@ class PostSavedFragment : Fragment() {
 
                             is LikePostEvent.Rollback -> {
                                 val failingPost = savedPosts.getOrNull(event.position)
-                                if (failingPost != null && failingPost.id == event.postId) {
+                                if (failingPost != null && failingPost.id == event.idPost) {
                                     // Revert isSaved status since update on server failed
                                     failingPost.isLiked = !failingPost.isLiked
                                     failingPost.likeCount -= 1
@@ -290,7 +290,7 @@ class PostSavedFragment : Fragment() {
 
                                     Log.e(
                                         "PostSavedFragment",
-                                        "Like failed for Post ${event.postId}. Status code: ${event.statusCode}",
+                                        "Like failed for Post ${event.idPost}. Status code: ${event.statusCode}",
                                         event.exception
                                     )
                                 }
