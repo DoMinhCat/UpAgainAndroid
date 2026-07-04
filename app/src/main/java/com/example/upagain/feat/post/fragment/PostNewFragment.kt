@@ -127,7 +127,6 @@ class PostNewFragment : Fragment() {
         } else {
             binding.rvChosenImages.visibility = View.VISIBLE
             binding.layoutUploadPrompt.visibility = View.VISIBLE
-            // Optional: Keep upload prompt visible as a small tile if you want them to pick more pictures!
         }
     }
 }

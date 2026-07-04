@@ -58,8 +58,14 @@ interface ApiService {
     fun deleteAccount(@Path("id") id: Int): Call<Unit>
 
     // POST aka COMMUNITY
+    @Multipart
     @POST(Endpoints.POST_CREATE)
-    fun createPost(@Body request: PostCreateRequest): Call<Unit>
+    fun createPost(
+        @Part("title") title: RequestBody,
+        @Part("content") content: RequestBody,
+        @Part("category") category: RequestBody,
+        @Part images: List<MultipartBody.Part>
+    ): Call<Unit>
 
     @POST(Endpoints.POST_VIEW)
     fun viewPost(@Path("id") id: Int): Call<ViewPostResponse>
@@ -90,7 +96,10 @@ interface ApiService {
 
     // COMMENTS
     @POST(Endpoints.COMMENTS_NEW)
-    fun createComment(@Path("id") id: Int, @Body request: CreateCommentRequest): Call<CommentDetailsResponse>
+    fun createComment(
+        @Path("id") id: Int,
+        @Body request: CreateCommentRequest
+    ): Call<CommentDetailsResponse>
 
     @POST(Endpoints.COMMENTS_LIKE)
     fun likeComment(@Path("id") id: Int): Call<LikeCommentResponse>
