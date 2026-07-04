@@ -1,30 +1,38 @@
 package com.example.upagain
 
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.upagain.api.ApiClient
 import com.example.upagain.databinding.FragmentPostSavedBinding
+import com.example.upagain.event.LikePostEvent
+import com.example.upagain.event.SavePostEvent
+import com.example.upagain.feat.error.ErrorActivity
 import com.example.upagain.feat.post.detail.PostDetailFragment
 import com.example.upagain.feat.post.index.PostRecyclerViewAdapter
 import com.example.upagain.model.post.PostCategory
 import com.example.upagain.model.post.PostDetailsResponse
 import com.example.upagain.repository.PostRepo
+import com.example.upagain.util.ui.SnackbarLevel
 import com.example.upagain.util.ui.hideKeyboard
 import com.example.upagain.util.ui.setOnBackClickListener
+import com.example.upagain.util.ui.showTopSnackbar
 import com.example.upagain.viewmodel.PostViewModel
+import com.example.upagain.viewmodel.UiState
 import com.example.upagain.viewmodel.ViewModelFactory
+import kotlinx.coroutines.launch
 import kotlin.getValue
 
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
+//private const val ARG_PARAM1 = "param1"
 
 /**
  * A simple [Fragment] subclass.
@@ -67,8 +75,8 @@ class PostSavedFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         // ! Always set up listeners and observers before API call
         setupRecyclerView()
-//        setupListeners()
-//        observeState()
+        setupListeners()
+        observeState()
 
         // API call
         viewModel.loadPageOfSavedPosts(1)
@@ -79,17 +87,12 @@ class PostSavedFragment : Fragment() {
          * Use this factory method to create a new instance of
          * this fragment using the provided parameters.
          *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
          * @return A new instance of fragment PostSavedFragment.
          */
-        // TODO: Rename and change types and number of parameters
         @JvmStatic
-        fun newInstance(param1: String, param2: String) =
+        fun newInstance() =
             PostSavedFragment().apply {
                 arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-                    putString(ARG_PARAM2, param2)
                 }
             }
     }
@@ -177,4 +180,150 @@ class PostSavedFragment : Fragment() {
         binding.btnBack.setOnBackClickListener()
     }
 
+    private fun observeState() {
+        lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                // GET ALL SAVED POSTS
+                launch {
+                    viewModel.allPostsState.collect { state ->
+                        when (state) {
+                            is UiState.Idle -> {}
+                            is UiState.Loading -> {
+                                toggleAllPostLoading(true, state.isFirstPage)
+                            }
+
+                            is UiState.Success -> {
+                                val allPostsResponse = state.data
+
+                                currentPage = allPostsResponse.currentPage
+                                if (currentPage == 1) {
+                                    // if it is the default page then clear all first then load
+                                    savedPosts.clear()
+                                    toggleAllPostLoading(false, isFirstPage = true)
+                                }
+
+                                // handle empty state
+                                if (allPostsResponse.posts.isNullOrEmpty()) {
+                                    binding.layoutPostsEmpty.visibility = View.VISIBLE
+                                    binding.rvPosts.visibility = View.GONE
+                                } else {
+                                    binding.layoutPostsEmpty.visibility = View.GONE
+                                    binding.rvPosts.visibility = View.VISIBLE
+                                }
+
+                                savedPosts.addAll(allPostsResponse.posts ?: emptyList())
+
+                                val hasMore =
+                                    allPostsResponse.currentPage < allPostsResponse.lastPage
+                                postAdapter.updateData(savedPosts, hasMore)
+                            }
+
+                            is UiState.Error -> {
+                                toggleAllPostLoading(false, isFirstPage = (currentPage == 1))
+                                Log.e(
+                                    "PostSavedFragment",
+                                    "Load saved posts failed. Status code: ${state.statusCode}",
+                                    state.exception
+                                )
+                                ErrorActivity.start(requireContext(), state.statusCode ?: 0)
+                            }
+                        }
+                    }
+                }
+                // SAVE
+                launch {
+                    viewModel.savePostEvent.collect { event ->
+                        when (event) {
+                            is SavePostEvent.Succeeded -> {
+                                // get the post at that position
+                                val currentPost = savedPosts.getOrNull(event.position)
+                                if (currentPost != null && currentPost.id == event.postId) {
+                                    if (currentPost.isSaved != event.isSaved) {
+                                        // sync isSaved status
+                                        currentPost.isSaved = event.isSaved
+                                        postAdapter.updateSingleItem(event.position, currentPost)
+                                    }
+                                }
+                            }
+
+                            is SavePostEvent.Rollback -> {
+                                val failingPost = savedPosts.getOrNull(event.position)
+                                if (failingPost != null && failingPost.id == event.postId) {
+                                    // Revert isSaved status since update on server failed
+                                    failingPost.isSaved = !failingPost.isSaved
+                                    postAdapter.updateSingleItem(event.position, failingPost)
+
+                                    Log.e(
+                                        "PostSavedFragment",
+                                        "Save failed for Post ${event.postId}. Status code: ${event.statusCode}",
+                                        event.exception
+                                    )
+                                }
+                                binding.main.showTopSnackbar(
+                                    R.string.err_save_post_msg,
+                                    SnackbarLevel.ERROR
+                                )
+                            }
+                        }
+                    }
+                }
+                // LIKE
+                launch {
+                    viewModel.likePostEvent.collect { event ->
+                        when (event) {
+                            is LikePostEvent.Succeeded -> {
+                                // get the post at that position
+                                val currentPost = savedPosts.getOrNull(event.position)
+                                if (currentPost != null && currentPost.id == event.postId) {
+                                    if (currentPost.isLiked != event.isLiked) {
+                                        // sync isLiked status
+                                        currentPost.isLiked = event.isLiked
+                                        postAdapter.updateSingleItem(event.position, currentPost)
+                                    }
+                                }
+                            }
+
+                            is LikePostEvent.Rollback -> {
+                                val failingPost = savedPosts.getOrNull(event.position)
+                                if (failingPost != null && failingPost.id == event.postId) {
+                                    // Revert isSaved status since update on server failed
+                                    failingPost.isLiked = !failingPost.isLiked
+                                    failingPost.likeCount -= 1
+                                    postAdapter.updateSingleItem(event.position, failingPost)
+
+                                    Log.e(
+                                        "PostSavedFragment",
+                                        "Like failed for Post ${event.postId}. Status code: ${event.statusCode}",
+                                        event.exception
+                                    )
+                                }
+                                binding.main.showTopSnackbar(
+                                    R.string.err_like_post_msg,
+                                    SnackbarLevel.ERROR
+                                )
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    private fun toggleAllPostLoading(isLoading: Boolean, isFirstPage: Boolean) {
+        if (isFirstPage) {
+            togglePostsAreaLoading(isLoading)
+        } else {
+            postAdapter.toggleLoadMoreBtnLoadingState(isLoading)
+        }
+    }
+
+    private fun togglePostsAreaLoading(isLoading: Boolean) {
+        if (isLoading) {
+            binding.rvPosts.visibility = View.GONE
+            binding.postsLoader.visibility = View.VISIBLE
+        } else {
+            binding.postsLoader.visibility = View.GONE
+            binding.rvPosts.visibility = View.VISIBLE
+        }
+    }
 }
