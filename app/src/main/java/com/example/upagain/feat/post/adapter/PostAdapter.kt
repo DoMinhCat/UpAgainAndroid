@@ -21,7 +21,7 @@ import com.example.upagain.util.ui.toggleBtnLoadingState
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.progressindicator.CircularProgressIndicator
 
-class PostRecyclerViewAdapter(
+class PostAdapter(
     private val onClickListener: OnClickListener
 ) : ListAdapter<PostDetailsResponse, RecyclerView.ViewHolder>(PostDiffCallback()) {
 

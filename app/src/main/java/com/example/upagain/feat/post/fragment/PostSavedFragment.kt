@@ -17,7 +17,7 @@ import com.example.upagain.databinding.FragmentPostSavedBinding
 import com.example.upagain.event.LikePostEvent
 import com.example.upagain.event.SavePostEvent
 import com.example.upagain.feat.error.ErrorActivity
-import com.example.upagain.feat.post.adapter.PostRecyclerViewAdapter
+import com.example.upagain.feat.post.adapter.PostAdapter
 import com.example.upagain.model.post.PostCategory
 import com.example.upagain.model.post.PostDetailsResponse
 import com.example.upagain.repository.PostRepo
@@ -46,7 +46,7 @@ class PostSavedFragment : Fragment() {
 
     private var currentPage = 1
     private var savedPosts = mutableListOf<PostDetailsResponse>()
-    private lateinit var postAdapter: PostRecyclerViewAdapter
+    private lateinit var postAdapter: PostAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -96,8 +96,8 @@ class PostSavedFragment : Fragment() {
     private fun setupRecyclerView() {
         binding.rvPosts.layoutManager = LinearLayoutManager(requireContext())
         // Attach the adapter
-        postAdapter = PostRecyclerViewAdapter(
-            object : PostRecyclerViewAdapter.OnClickListener {
+        postAdapter = PostAdapter(
+            object : PostAdapter.OnClickListener {
                 override fun onPostClick(position: Int, post: PostDetailsResponse) {
                     val postId = postAdapter.currentList.getOrNull(position)?.id ?: return
                     val postDetailFragment = PostDetailFragment.Companion.newInstance(postId)
@@ -109,30 +109,36 @@ class PostSavedFragment : Fragment() {
 
                 override fun onLikeClick(position: Int, post: PostDetailsResponse) {
                     // optimistic update
-                    post.isLiked = !post.isLiked
-                    if (post.isLiked)
-                        post.likeCount += 1
-                    else post.likeCount -= 1
+                    val updatedPost = post.copy(
+                        isLiked = !post.isLiked,
+                        likeCount = if (!post.isLiked) post.likeCount + 1 else post.likeCount - 1
+                    )
 
                     val newList = postAdapter.currentList.toMutableList()
                     if (position in newList.indices) {
-                        newList[position] = post
+                        newList[position] = updatedPost
                         postAdapter.submitList(newList)
                     }
-                    viewModel.likePost(post.id, position)
+                    viewModel.likePost(updatedPost.id, position)
                 }
 
                 override fun onSaveClick(position: Int, post: PostDetailsResponse) {
-                    // optimistic update
-                    post.isSaved = !post.isSaved
-                    // tell adapter to redraw single item to sync new status
-
+                    val targetSavedState = !post.isSaved
                     val newList = postAdapter.currentList.toMutableList()
-                    if (position in newList.indices) {
-                        newList[position] = post
-                        postAdapter.submitList(newList)
-                    }
 
+                    if (!targetSavedState) {
+                        if (position in newList.indices) {
+                            newList.removeAt(position)
+                            postAdapter.submitList(newList)
+                        }
+                    } else {
+                        // If toggling on a reference update, use .copy()
+                        val updatedPost = post.copy(isSaved = true)
+                        if (position in newList.indices) {
+                            newList[position] = updatedPost
+                            postAdapter.submitList(newList)
+                        }
+                    }
                     viewModel.savePost(post.id, position)
                 }
 
