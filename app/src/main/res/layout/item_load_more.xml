@@ -8,16 +8,13 @@
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/btn_load_more"
-        style="@style/Widget.Material3.Button"
+        style="@style/TextAppearance.UpAgain.ButtonPrimary"
         android:layout_width="180dp"
         android:layout_height="@dimen/button_height"
         android:layout_gravity="center"
         android:text="@string/btn_load_more"
-        android:textColor="@color/color_on_primary"
-        app:backgroundTint="@color/color_primary"
         app:cornerRadius="@dimen/button_radius"
         app:icon="@drawable/ic_chevron_double_down"
-        app:iconTint="@color/color_on_primary"
         app:iconSize="@dimen/icon_sm"
         app:iconGravity="textEnd"
         app:iconPadding="@dimen/space_sm" />

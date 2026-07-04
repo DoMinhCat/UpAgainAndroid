@@ -138,5 +138,9 @@
     <string name="no_posts_found">Aucun article trouvé</string>
     <string name="comment_count">Commentaires (%1$d)</string>
     <string name="no_comments_found">Aucun commentaire trouvé</string>
+    <string name="btn_cancel_ad">Annuler pub</string>
     <string name="no_steps_found">Aucune étape trouvée</string>
+    <string name="btn_delete">Supprimer</string>
+    <string name="btn_edit">Modifier</string>
+    <string name="btn_book_ad">Réserver pub</string>
 </resources>

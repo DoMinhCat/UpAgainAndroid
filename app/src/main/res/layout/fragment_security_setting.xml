@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.coordinatorlayout.widget.CoordinatorLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/main"
@@ -37,11 +36,11 @@
                 style="@style/TextAppearance.Material3.HeadlineMedium"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:gravity="center"
+                android:paddingHorizontal="@dimen/min_touch"
                 android:text="@string/security"
                 android:textColor="@color/color_on_background"
                 android:textStyle="bold"
-                android:gravity="center"
-                android:paddingHorizontal="@dimen/min_touch"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -86,11 +85,10 @@
 
                     <com.google.android.material.button.MaterialButton
                         android:id="@+id/btn_save_email"
-                        style="@style/Widget.Material3.Button"
-                        android:textColor="@color/white"
+                        style="@style/TextAppearance.UpAgain.ButtonPrimary"
                         android:layout_width="match_parent"
                         android:layout_height="@dimen/button_height"
-                        android:text="@string/btn_save"/>
+                        android:text="@string/btn_save" />
 
                     <com.google.android.material.progressindicator.CircularProgressIndicator
                         android:id="@+id/email_save_loader"
@@ -98,9 +96,9 @@
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
                         android:indeterminate="true"
-                        app:indicatorSize="@dimen/icon_md"
-                        app:indicatorColor="@color/color_primary"
                         android:visibility="gone"
+                        app:indicatorColor="@color/color_primary"
+                        app:indicatorSize="@dimen/icon_md"
                         tools:visibility="visible" />
                 </FrameLayout>
             </androidx.constraintlayout.widget.ConstraintLayout>
@@ -108,34 +106,34 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/space_xl"
                 android:background="@drawable/input_round"
                 android:backgroundTint="@color/color_surface"
                 android:orientation="vertical"
-                android:padding="@dimen/space_md"
-                android:layout_marginBottom="@dimen/space_xl">
+                android:padding="@dimen/space_md">
 
                 <TextView
                     style="@style/TextAppearance.UpAgain.BodySmall"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/email"
-                    android:alpha="0.6" />
+                    android:alpha="0.6"
+                    android:text="@string/email" />
 
                 <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/til_security_email"
                     style="@style/Widget.Material3.TextInputLayout.OutlinedBox"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    app:hintEnabled="false"
-                    app:errorEnabled="false"
-                    app:errorTextColor="@color/color_error"
                     app:boxBackgroundColor="@android:color/transparent"
-                    app:boxStrokeWidth="0dp"
-                    app:boxStrokeWidthFocused="0dp"
                     app:boxCornerRadiusBottomEnd="@dimen/input_radius"
                     app:boxCornerRadiusBottomStart="@dimen/input_radius"
                     app:boxCornerRadiusTopEnd="@dimen/input_radius"
-                    app:boxCornerRadiusTopStart="@dimen/input_radius">
+                    app:boxCornerRadiusTopStart="@dimen/input_radius"
+                    app:boxStrokeWidth="0dp"
+                    app:boxStrokeWidthFocused="0dp"
+                    app:errorEnabled="false"
+                    app:errorTextColor="@color/color_error"
+                    app:hintEnabled="false">
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/et_security_email"
@@ -144,8 +142,8 @@
                         android:layout_height="wrap_content"
                         android:background="@null"
                         android:inputType="textEmailAddress"
-                        android:paddingVertical="@dimen/space_xs"
                         android:paddingHorizontal="@dimen/space_xs"
+                        android:paddingVertical="@dimen/space_xs"
                         tools:text="sarah.j@example.com" />
                 </com.google.android.material.textfield.TextInputLayout>
             </LinearLayout>
@@ -170,13 +168,13 @@
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toTopOf="parent">
+
                     <com.google.android.material.button.MaterialButton
                         android:id="@+id/btn_save_password"
-                        style="@style/Widget.Material3.Button"
+                        style="@style/TextAppearance.UpAgain.ButtonPrimary"
                         android:layout_width="match_parent"
                         android:layout_height="@dimen/button_height"
-                        android:text="@string/btn_save"
-                        android:textColor="@color/white" />
+                        android:text="@string/btn_save" />
 
                     <com.google.android.material.progressindicator.CircularProgressIndicator
                         android:id="@+id/password_save_loader"
@@ -184,9 +182,9 @@
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
                         android:indeterminate="true"
-                        app:indicatorSize="@dimen/icon_md"
-                        app:indicatorColor="@color/color_primary"
                         android:visibility="gone"
+                        app:indicatorColor="@color/color_primary"
+                        app:indicatorSize="@dimen/icon_md"
                         tools:visibility="visible" />
                 </FrameLayout>
 
@@ -204,26 +202,26 @@
                     style="@style/TextAppearance.UpAgain.BodySmall"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/new_password"
-                    android:alpha="0.6" />
+                    android:alpha="0.6"
+                    android:text="@string/new_password" />
 
                 <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/til_security_password"
                     style="@style/Widget.Material3.TextInputLayout.OutlinedBox"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    app:hintEnabled="false"
-                    app:errorEnabled="false"
-                    app:errorTextColor="@color/color_error"
-                    app:endIconMode="password_toggle"
-                    app:endIconTint="@color/color_secondary"
                     app:boxBackgroundColor="@android:color/transparent"
-                    app:boxStrokeWidth="0dp"
-                    app:boxStrokeWidthFocused="0dp"
                     app:boxCornerRadiusBottomEnd="@dimen/input_radius"
                     app:boxCornerRadiusBottomStart="@dimen/input_radius"
                     app:boxCornerRadiusTopEnd="@dimen/input_radius"
-                    app:boxCornerRadiusTopStart="@dimen/input_radius">
+                    app:boxCornerRadiusTopStart="@dimen/input_radius"
+                    app:boxStrokeWidth="0dp"
+                    app:boxStrokeWidthFocused="0dp"
+                    app:endIconMode="password_toggle"
+                    app:endIconTint="@color/color_secondary"
+                    app:errorEnabled="false"
+                    app:errorTextColor="@color/color_error"
+                    app:hintEnabled="false">
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/et_security_password"
@@ -231,10 +229,10 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:background="@null"
+                        android:hint="••••••••"
                         android:inputType="textPassword"
-                        android:paddingVertical="@dimen/space_xs"
                         android:paddingHorizontal="@dimen/space_xs"
-                        android:hint="••••••••" />
+                        android:paddingVertical="@dimen/space_xs" />
                 </com.google.android.material.textfield.TextInputLayout>
 
                 <View
@@ -247,26 +245,26 @@
                     style="@style/TextAppearance.UpAgain.BodySmall"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/confirm_password"
-                    android:alpha="0.6" />
+                    android:alpha="0.6"
+                    android:text="@string/confirm_password" />
 
                 <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/til_security_confirm_password"
                     style="@style/Widget.Material3.TextInputLayout.OutlinedBox"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    app:hintEnabled="false"
-                    app:errorEnabled="false"
-                    app:errorTextColor="@color/color_error"
-                    app:endIconMode="password_toggle"
-                    app:endIconTint="@color/color_secondary"
                     app:boxBackgroundColor="@android:color/transparent"
-                    app:boxStrokeWidth="0dp"
-                    app:boxStrokeWidthFocused="0dp"
                     app:boxCornerRadiusBottomEnd="@dimen/input_radius"
                     app:boxCornerRadiusBottomStart="@dimen/input_radius"
                     app:boxCornerRadiusTopEnd="@dimen/input_radius"
-                    app:boxCornerRadiusTopStart="@dimen/input_radius">
+                    app:boxCornerRadiusTopStart="@dimen/input_radius"
+                    app:boxStrokeWidth="0dp"
+                    app:boxStrokeWidthFocused="0dp"
+                    app:endIconMode="password_toggle"
+                    app:endIconTint="@color/color_secondary"
+                    app:errorEnabled="false"
+                    app:errorTextColor="@color/color_error"
+                    app:hintEnabled="false">
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/et_security_confirm_password"
@@ -274,10 +272,10 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:background="@null"
+                        android:hint="••••••••"
                         android:inputType="textPassword"
-                        android:paddingVertical="@dimen/space_xs"
                         android:paddingHorizontal="@dimen/space_xs"
-                        android:hint="••••••••" />
+                        android:paddingVertical="@dimen/space_xs" />
                 </com.google.android.material.textfield.TextInputLayout>
             </LinearLayout>
 

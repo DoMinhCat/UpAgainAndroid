@@ -49,7 +49,7 @@
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/btn_error_action"
-        style="@style/Widget.Material3.Button"
+        style="@style/TextAppearance.UpAgain.ButtonPrimary"
         android:layout_width="wrap_content"
         android:layout_height="@dimen/button_height"
         android:layout_marginTop="@dimen/space_xl"

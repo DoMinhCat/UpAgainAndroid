@@ -43,9 +43,27 @@
     </style>
 
     <!-- Button -->
-    <style name="TextAppearance.UpAgain.Button">
+    <style name="TextAppearance.UpAgain.ButtonPrimary">
+        <item name="android:textSize">14sp</item>
+        <item name="android:textColor">@color/color_on_primary</item>
+        <item name="android:iconTint">@color/color_on_primary</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="TextAppearance.UpAgain.ButtonEdit">
         <item name="android:textSize">14sp</item>
         <item name="android:textStyle">bold</item>
+        <item name="android:iconTint">@color/color_on_primary</item>
+        <item name="android:textColor">@color/color_on_primary</item>
+        <item name="android:backgroundTint">@color/color_accent</item>
+    </style>
+
+    <style name="TextAppearance.UpAgain.ButtonDelete">
+        <item name="android:textSize">14sp</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:iconTint">@color/color_on_primary</item>
+        <item name="android:textColor">@color/color_on_primary</item>
+        <item name="android:backgroundTint">@color/red</item>
     </style>
 
 

@@ -79,6 +79,10 @@
     <string name="no_comments_description">Be the first to share your opinion!</string>
     <string name="project_steps">Project Steps</string>
     <string name="items_used">Items used</string>
+    <string name="btn_delete">Delete</string>
+    <string name="btn_edit">Edit</string>
+    <string name="btn_book_ad">Book ads</string>
+    <string name="btn_cancel_ad">Cancel ads</string>
     <string name="no_steps_found">No steps</string>
     <string name="no_steps_description">This project is still ongoing!</string>
     <!-- Saved page -->

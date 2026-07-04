@@ -164,6 +164,72 @@
                     app:layout_constraintTop_toTopOf="parent" />
             </LinearLayout>
 
+            <HorizontalScrollView
+                android:id="@+id/scroll_action_ribbon"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/color_surface"
+                android:clipToPadding="false"
+                android:paddingHorizontal="@dimen/space_md"
+                android:paddingVertical="@dimen/space_xs"
+                android:scrollbars="none">
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal">
+
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/btn_ribbon_cancel_ad"
+                        style="@style/TextAppearance.UpAgain.ButtonDelete"
+                        android:layout_width="wrap_content"
+                        android:layout_height="@dimen/min_touch"
+                        android:layout_marginEnd="@dimen/space_sm"
+                        android:text="@string/btn_cancel_ad"
+                        android:visibility="gone"
+                        app:icon="@drawable/ic_ads"
+                        app:iconPadding="@dimen/space_xs"
+                        app:iconSize="@dimen/icon_sm"
+                        tools:visibility="visible" />
+
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/btn_ribbon_book_ad"
+                        style="@style/TextAppearance.UpAgain.ButtonPrimary"
+                        android:layout_width="wrap_content"
+                        android:layout_height="@dimen/min_touch"
+                        android:layout_marginEnd="@dimen/space_sm"
+                        android:text="@string/btn_book_ad"
+                        android:visibility="gone"
+                        app:icon="@drawable/ic_ads"
+                        app:iconPadding="@dimen/space_xs"
+                        app:iconSize="@dimen/icon_sm"
+                        tools:visibility="visible" />
+
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/btn_ribbon_edit_post"
+                        style="@style/TextAppearance.UpAgain.ButtonEdit"
+                        android:layout_width="wrap_content"
+                        android:layout_height="@dimen/min_touch"
+                        android:layout_marginEnd="@dimen/space_sm"
+                        android:text="@string/btn_edit"
+                        app:icon="@drawable/ic_edit"
+                        app:iconPadding="@dimen/space_xs"
+                        app:iconSize="@dimen/icon_sm" />
+
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/btn_ribbon_delete_post"
+                        style="@style/TextAppearance.UpAgain.ButtonDelete"
+                        android:layout_width="wrap_content"
+                        android:layout_height="@dimen/min_touch"
+                        android:text="@string/btn_delete"
+                        app:icon="@drawable/ic_trash"
+                        app:iconPadding="@dimen/space_xs"
+                        app:iconSize="@dimen/icon_sm" />
+
+                </LinearLayout>
+            </HorizontalScrollView>
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
