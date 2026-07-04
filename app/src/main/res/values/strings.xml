@@ -81,9 +81,10 @@
     <string name="items_used">Items used</string>
     <string name="no_steps_found">No steps</string>
     <string name="no_steps_description">This project is still ongoing!</string>
+    <!-- Detail page -->
+    <string name="post_saved">Saved posts</string>
     <!-- My page -->
     <string name="btn_reorder">Reorder</string>
-
 
 
     <!-- Container -->
