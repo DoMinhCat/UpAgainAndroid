@@ -32,6 +32,9 @@ class PostViewModel(private val repository: PostRepo, application: Application) 
     private val _savedPostsState =
         MutableStateFlow<UiState<PostPaginationResponse>>(UiState.Loading())
     val savedPostsState: StateFlow<UiState<PostPaginationResponse>> = _savedPostsState
+    private val _myPostsState =
+        MutableStateFlow<UiState<PostPaginationResponse>>(UiState.Loading())
+    val myPostsState: StateFlow<UiState<PostPaginationResponse>> = _myPostsState
     private val _postDetailState = MutableStateFlow<UiState<PostDetailsResponse>>(UiState.Loading())
     val postDetailState: StateFlow<UiState<PostDetailsResponse>> = _postDetailState
     private val _projectStepsState = MutableStateFlow<UiState<List<ProjectStepResponse>>>(UiState.Idle)
@@ -47,6 +50,7 @@ class PostViewModel(private val repository: PostRepo, application: Application) 
 
     private var currentGetAllFilters = PostPaginationRequest(page = 1)
     private var currentGetSavedFilters = PostPaginationRequest(page = 1)
+    private var currentGetMyPostsFilters = PostPaginationRequest(page = 1)
 
     // GET ALL POST METHODS
     fun getAllPosts(requestBody: PostPaginationRequest, isFirstPage: Boolean) {
@@ -104,8 +108,38 @@ class PostViewModel(private val repository: PostRepo, application: Application) 
         currentGetAllFilters = currentGetAllFilters.copy(category = categoryOption, page = 1)
     }
 
-    fun updateSearchFilter(query: String) {
+    fun updateSearchAllPostsFilter(query: String) {
         currentGetAllFilters = currentGetAllFilters.copy(search = query, page = 1)
+    }
+
+    // GET MY POST METHODS
+    fun getMyPosts(requestBody: PostPaginationRequest, isFirstPage: Boolean) {
+        viewModelScope.launch {
+            // only show full screen load if loading the first page
+            _myPostsState.value = UiState.Loading(isFirstPage = isFirstPage)
+
+            repository.getMyPosts(requestBody)
+                .onSuccess { myPostsData ->
+                    _myPostsState.value = UiState.Success(myPostsData)
+                }
+                .onFailure { exception ->
+                    val statusCode = (exception as? HttpException)?.code()
+                    _myPostsState.value = UiState.Error(statusCode, exception)
+                }
+        }
+    }
+
+    fun loadPageOfMyPosts(pageNumber: Int) {
+        currentGetMyPostsFilters = currentGetMyPostsFilters.copy(page = pageNumber)
+        getMyPosts(currentGetMyPostsFilters, pageNumber == 1)
+    }
+
+    fun updateSearchMyPostsFilter(query: String) {
+        currentGetMyPostsFilters = currentGetMyPostsFilters.copy(search = query, page = 1)
+    }
+
+    fun updateMyPostsCategoryFilter(categoryOption: PostCategory) {
+        currentGetMyPostsFilters = currentGetMyPostsFilters.copy(category = categoryOption, page = 1)
     }
 
     // OTHER METHODS

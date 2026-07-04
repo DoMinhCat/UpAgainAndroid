@@ -55,7 +55,7 @@
                     android:paddingHorizontal="@dimen/space_sm"
                     android:paddingVertical="2dp"
                     android:layout_marginEnd="@dimen/space_xs"
-                    android:textColor="@color/color_secondary"
+                    android:textColor="@color/color_on_primary"
                     tools:text="@string/string_dynamic" />
 
                 <TextView

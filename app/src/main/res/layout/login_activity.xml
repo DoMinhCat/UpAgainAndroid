@@ -124,12 +124,12 @@
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/btn_login"
+                style="@style/TextAppearance.UpAgain.ButtonPrimary"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/button_height"
                 android:layout_marginHorizontal="@dimen/space_md"
                 android:text="@string/login"
                 android:textAllCaps="false"
-                android:textColor="@color/white"
                 app:cornerRadius="@dimen/button_radius" />
 
             <com.google.android.material.progressindicator.CircularProgressIndicator

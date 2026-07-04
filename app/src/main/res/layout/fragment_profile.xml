@@ -296,7 +296,7 @@
                 android:layout_marginTop="@dimen/space_md">
                 <com.google.android.material.button.MaterialButton
                     android:id="@+id/btn_save_profile"
-                    style="@style/Widget.Material3.Button"
+                    style="@style/TextAppearance.UpAgain.ButtonPrimary"
                     android:textColor="@color/white"
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/button_height"

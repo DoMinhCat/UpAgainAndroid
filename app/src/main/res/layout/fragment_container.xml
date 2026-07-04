@@ -258,13 +258,12 @@
 
                 <com.google.android.material.button.MaterialButton
                     android:id="@+id/btn_submit"
-                    style="@style/Widget.Material3.Button"
+                    style="@style/TextAppearance.UpAgain.ButtonPrimary"
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/min_touch"
                     android:text="@string/btn_open_container"
                     android:textAllCaps="true"
-                    app:cornerRadius="@dimen/button_radius"
-                    app:backgroundTint="@color/color_primary" />
+                    app:cornerRadius="@dimen/button_radius" />
 
                 <com.google.android.material.progressindicator.CircularProgressIndicator
                     android:id="@+id/submit_loader"

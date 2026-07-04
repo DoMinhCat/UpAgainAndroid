@@ -46,7 +46,7 @@
                 android:paddingHorizontal="@dimen/space_md"
                 android:paddingVertical="0dp"
                 android:text="@string/string_dynamic"
-                android:textColor="@color/color_on_surface"
+                android:textColor="@color/color_on_primary"
                 app:cornerRadius="16dp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />

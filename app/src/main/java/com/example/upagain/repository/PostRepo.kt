@@ -33,7 +33,7 @@ class PostRepo(private val apiService: ApiService) {
 
     suspend fun getMyPosts(filters: PostPaginationRequest): Result<PostPaginationResponse> {
         return try {
-            val response = apiService.getAllPosts(filters.toQueryMap()).awaitResponse()
+            val response = apiService.getMyPosts(filters.toQueryMap()).awaitResponse()
             val body = response.body()
 
             if (response.isSuccessful && body != null) {
