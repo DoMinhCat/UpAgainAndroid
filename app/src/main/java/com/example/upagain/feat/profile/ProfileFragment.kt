@@ -226,7 +226,12 @@ class ProfileFragment : Fragment() {
                                 binding.etProfilePhone.setText(account.phone)
 
                                 // build url and let coil handle image serving for avatar
-                                binding.ivAvatar.load(buildImageUrl(account.avatar, ImageType.AVATAR)) {
+                                binding.ivAvatar.load(
+                                    buildImageUrl(
+                                        account.avatar,
+                                        ImageType.AVATAR
+                                    )
+                                ) {
                                     crossfade(true)
                                     placeholder(R.drawable.ic_avatar_unknown)
                                     error(R.drawable.ic_avatar_unknown)
@@ -250,12 +255,7 @@ class ProfileFragment : Fragment() {
                                                 exception
                                             )
                                             when (statusCode) {
-                                                404 -> {
-                                                    binding.main.showTopSnackbar(
-                                                        R.string.error_media_msg,
-                                                        SnackbarLevel.ERROR
-                                                    )
-                                                }
+                                                404 -> {}
 
                                                 else -> {
                                                     binding.main.showTopSnackbar(
