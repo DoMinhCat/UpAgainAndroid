@@ -42,18 +42,34 @@
     </style>
 
     <!-- Dialog -->
-    <style name="ThemeOverlay.UpAgain.MaterialAlertDialog" parent="ThemeOverlay.Material3.MaterialAlertDialog">
-        <item name="alertDialogStyle">@style/Style.UpAgain.AlertDialog</item>
-        <item name="buttonBarPositiveButtonStyle">@style/Widget.UpAgain.Button.TextButton.Destructive</item>
-    </style>
-
     <style name="Style.UpAgain.AlertDialog" parent="MaterialAlertDialog.Material3">
         <item name="cardBackgroundColor">@color/color_surface</item>
         <item name="shapeAppearance">@style/ShapeAppearance.Material3.Corner.Medium</item>
     </style>
 
-    <style name="Widget.UpAgain.Button.TextButton.Destructive" parent="Widget.Material3.Button.TextButton">
+    <style name="Widget.UpAgain.Button.TextButton.Error" parent="Widget.Material3.Button.TextButton">
         <item name="android:textColor">@color/color_error</item>
+    </style>
+
+    <style name="Widget.UpAgain.Button.TextButton.Primary" parent="Widget.Material3.Button.TextButton">
+        <item name="android:textColor">@color/color_primary</item>
+    </style>
+
+    <style name="Widget.UpAgain.Button.TextButton.Cancel" parent="Widget.Material3.Button.TextButton">
+        <item name="android:textColor">@color/color_outline</item>
+    </style>
+
+
+    <style name="ThemeOverlay.UpAgain.MaterialAlertDialog.Destructive" parent="ThemeOverlay.Material3.MaterialAlertDialog">
+        <item name="alertDialogStyle">@style/Style.UpAgain.AlertDialog</item>
+        <item name="buttonBarPositiveButtonStyle">@style/Widget.UpAgain.Button.TextButton.Error</item>
+        <item name="buttonBarNegativeButtonStyle">@style/Widget.UpAgain.Button.TextButton.Cancel</item>
+    </style>
+
+    <style name="ThemeOverlay.UpAgain.MaterialAlertDialog.Standard" parent="ThemeOverlay.Material3.MaterialAlertDialog">
+        <item name="alertDialogStyle">@style/Style.UpAgain.AlertDialog</item>
+        <item name="buttonBarPositiveButtonStyle">@style/Widget.UpAgain.Button.TextButton.Primary</item>
+        <item name="buttonBarNegativeButtonStyle">@style/Widget.UpAgain.Button.TextButton.Cancel</item>
     </style>
 
     <!-- Dropdown -->

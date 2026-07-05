@@ -31,7 +31,7 @@ object DialogUtils {
         cancelButtonText: String = context.getString(R.string.btn_cancel),
         onConfirm: () -> Unit
     ) {
-        MaterialAlertDialogBuilder(context, R.style.ThemeOverlay_UpAgain_MaterialAlertDialog)
+        MaterialAlertDialogBuilder(context, R.style.ThemeOverlay_UpAgain_MaterialAlertDialog_Destructive)
             .setTitle(title)
             .setMessage(message)
             .setPositiveButton(confirmButtonText) { dialog, _ ->
@@ -106,7 +106,7 @@ object DialogUtils {
         }
 
         // 4. Construct the Standard Styled Dialog Frame Wrapper
-        val alertDialog = MaterialAlertDialogBuilder(context, R.style.ThemeOverlay_UpAgain_MaterialAlertDialog)
+        val alertDialog = MaterialAlertDialogBuilder(context, R.style.ThemeOverlay_UpAgain_MaterialAlertDialog_Standard)
             .setTitle(getString(context, R.string.book_ads_title))
             .setView(binding.root)
             .setPositiveButton(context.getString(R.string.btn_confirm), null) // Intercepted below for valid checks
@@ -120,13 +120,24 @@ object DialogUtils {
         // 5. Intercept Click validation rules to prevent closure if no date is picked
         alertDialog.getButton(android.content.DialogInterface.BUTTON_POSITIVE).setOnClickListener {
             val dateStr = binding.etStartDate.text.toString()
-            if (dateStr.isEmpty() || selectedDateMs == null) {
+            val localSelectedDateMs = selectedDateMs
+
+            // Check Rule 1: Date text must not be blank
+            if (dateStr.isEmpty() || localSelectedDateMs == null) {
                 binding.tilStartDate.error = getString(context, R.string.invalid_date)
                 return@setOnClickListener
-            } else {
-                binding.tilStartDate.error = null
             }
 
+            // Check Rule 2: Date must not be in the past
+            // MaterialDatePicker operates strictly in UTC midnight values.
+            val todayUtcMs = MaterialDatePicker.todayInUtcMilliseconds()
+            if (localSelectedDateMs < todayUtcMs) {
+                // Ensure you add this string entry to your strings.xml file
+                binding.tilStartDate.error = context.getString(R.string.invalid_date)
+                return@setOnClickListener
+            }
+
+            binding.tilStartDate.error = null
             val formattedPayloadDate = datePayloadFormat.format(selectedDateMs)
 
             onConfirmBooking(formattedPayloadDate, selectedDuration)
