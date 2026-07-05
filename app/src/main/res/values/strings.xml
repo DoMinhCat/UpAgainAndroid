@@ -188,6 +188,14 @@
     <string name="btn_confirm">Confirm</string>
     <string name="btn_cancel">Cancel</string>
 
+    <!-- Ads Dialogs -->
+    <string name="start_date">Start date</string>
+    <string name="duration">Duration</string>
+    <string name="base_price">Base price</string>
+    <string name="vat">VAT (20%)</string>
+    <string name="processing_fee">Processing fee</string>
+    <string name="total_price">Total price</string>
+
     <!-- Snack bar messages -->
     <string name="snack_email_update_success">Email updated</string>
     <string name="snack_email_update_fail">Email update failed: %1$s</string>
