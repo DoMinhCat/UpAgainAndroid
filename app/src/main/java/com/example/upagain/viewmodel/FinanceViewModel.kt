@@ -12,7 +12,7 @@ import retrofit2.HttpException
 class FinanceViewModel(private val repository: FinanceRepo) : ViewModel() {
 
     private val _getFinanceSettingState =
-        MutableStateFlow<UiState<Double>>(UiState.Loading())
+        MutableStateFlow<UiState<Double>>(UiState.Idle)
     val getFinanceSettingState: StateFlow<UiState<Double>> = _getFinanceSettingState
 
     fun getFinanceSetting(key: FinanceKeyEnum) {

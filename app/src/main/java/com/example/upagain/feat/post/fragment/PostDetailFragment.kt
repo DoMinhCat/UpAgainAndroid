@@ -378,11 +378,11 @@ class PostDetailFragment : Fragment() {
                                             post.adsFrom
                                         ) < 0)
                                     ) {
-                                        binding.btnRibbonBookAd.visibility = View.VISIBLE
-                                        binding.btnRibbonCancelAd.visibility = View.GONE
+                                        binding.containerRibbonBookAd.visibility = View.VISIBLE
+                                        binding.containerRibbonCancelAd.visibility = View.GONE
                                     } else {
-                                        binding.btnRibbonBookAd.visibility = View.GONE
-                                        binding.btnRibbonCancelAd.visibility = View.VISIBLE
+                                        binding.containerRibbonBookAd.visibility = View.GONE
+                                        binding.containerRibbonCancelAd.visibility = View.VISIBLE
                                     }
                                 } else {
                                     binding.btnRibbonEditPost.visibility = View.GONE
@@ -689,7 +689,7 @@ class PostDetailFragment : Fragment() {
 
                             is UiState.Success -> {
                                 toggleDeletePostBtnLoading(false)
-                                val myPostsFrag = PostMeFragment.newInstance()
+                                val myPostsFrag = PostMeFragment.newInstance(justDeleted = true)
                                 parentFragmentManager.beginTransaction()
                                     .replace(R.id.fragment_container, myPostsFrag)
                                     .commit()
@@ -716,7 +716,9 @@ class PostDetailFragment : Fragment() {
                 launch {
                     financeViewModel.getFinanceSettingState.collect { state ->
                         when (state) {
-                            is UiState.Idle -> {}
+                            is UiState.Idle -> {
+                                toggleBookAdsBtnLoading(false)
+                            }
 
                             is UiState.Loading -> {
                                 toggleBookAdsBtnLoading(true)

@@ -48,7 +48,9 @@ fun compareTimestamps(timestamp1: String, timestamp2: String): Int {
  * @return positive if currentClockTime is earlier, negative if postgresTimestamptz is later, 0 if both are identical
  */
 fun compareNowWithTimestamp(postgresTimestamptz: String): Int {
+    // Correct package path for Instant
     val backendInstant = kotlin.time.Instant.parse(postgresTimestamptz)
 
-    return Clock.System.now().compareTo(backendInstant)
+    val result = Clock.System.now().compareTo(backendInstant)
+    return result
 }
