@@ -63,4 +63,7 @@ object Endpoints {
 
     // Stripe Endpoints
     const val STRIPE_VERIFY = "payments/verify"
+
+    // Finance
+    const val FINANCE_SETTING = "finance/settings/{key}"
 }

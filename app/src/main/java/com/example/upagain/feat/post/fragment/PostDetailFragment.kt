@@ -235,7 +235,7 @@ class PostDetailFragment : Fragment() {
             }
         }
         binding.btnRibbonBookAd.setOnClickListener {
-            // TODO
+            // TODO: fetch ads price
         }
         binding.btnRibbonCancelAd.setOnClickListener {
             // TODO

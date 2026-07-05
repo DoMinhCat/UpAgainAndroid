@@ -5,12 +5,12 @@ import com.example.upagain.model.TokenResponse
 import com.example.upagain.model.account.AccountDetailsResponse
 import com.example.upagain.model.account.AccountUpdateRequest
 import com.example.upagain.model.account.PasswordUpdateRequest
-import com.example.upagain.model.comment.CreateCommentRequest
 import com.example.upagain.model.comment.CommentDetailsResponse
 import com.example.upagain.model.comment.CommentPaginationResponse
+import com.example.upagain.model.comment.CreateCommentRequest
 import com.example.upagain.model.comment.LikeCommentResponse
+import com.example.upagain.model.finance.FinanceKeyEnum
 import com.example.upagain.model.post.LikePostResponse
-import com.example.upagain.model.post.PostCreateRequest
 import com.example.upagain.model.post.PostDetailsResponse
 import com.example.upagain.model.post.PostPaginationResponse
 import com.example.upagain.model.post.ProjectStepResponse
@@ -121,4 +121,8 @@ interface ApiService {
         @Part barcode: MultipartBody.Part?,
         @Part("code6digit") digitCode: RequestBody?
     ): Call<Unit>
+
+    // FINANCIAL SETTINGS
+    @GET(Endpoints.FINANCE_SETTING)
+    fun getFinanceSetting(@Path("key") key: FinanceKeyEnum): Call<Float>
 }
