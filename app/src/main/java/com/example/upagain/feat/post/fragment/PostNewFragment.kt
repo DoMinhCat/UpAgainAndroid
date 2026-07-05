@@ -21,8 +21,10 @@ import com.example.upagain.repository.PostRepo
 import com.example.upagain.util.ui.SnackbarLevel
 import com.example.upagain.util.ui.dpToPx
 import com.example.upagain.util.ui.hideKeyboard
+import com.example.upagain.util.ui.setOnBackClickListener
 import com.example.upagain.util.ui.setOnClickListenerWithCooldown
 import com.example.upagain.util.ui.showTopSnackbar
+import com.example.upagain.util.ui.toggleBtnLoadingState
 import com.example.upagain.util.ui.toggleTilError
 import com.example.upagain.util.validator.EmailRule
 import com.example.upagain.util.validator.FieldValidator
@@ -114,10 +116,12 @@ class PostNewFragment : Fragment() {
     }
 
     private fun setupListeners() {
+        // BACK
+        binding.btnBack.setOnBackClickListener()
         // TITLE FIELD
         binding.etPostTitle.setOnFocusChangeListener { _, hasFocus ->
             if (!hasFocus) {
-                val title = binding.etPostTitle.text.toString()
+                val title = binding.etPostTitle.text.toString().trim()
                 val isTitleValid = titleValidator.validate(title)
                 toggleTilError(binding.tilTitle, R.string.invalid_title,!isTitleValid)
             } else {
@@ -127,7 +131,7 @@ class PostNewFragment : Fragment() {
         // TITLE FIELD
         binding.etPostContent.setOnFocusChangeListener { _, hasFocus ->
             if (!hasFocus) {
-                val content = binding.etPostTitle.text.toString()
+                val content = binding.etPostTitle.text.toString().trim()
                 val isContentValid = contentValidator.validate(content)
                 toggleTilError(binding.tilContent, R.string.invalid_content,!isContentValid)
             } else {
@@ -166,16 +170,16 @@ class PostNewFragment : Fragment() {
                     viewModel.createPostsState.collect { state ->
                         when (state) {
                             is UiState.Idle -> {
-                                // TODO: btn loading false
+                                togglePublishLoadingState(false)
                             }
 
                             is UiState.Loading -> {
-                                // TODO: toggle btn loading
+                                togglePublishLoadingState(true)
                                 activity?.hideKeyboard()
                             }
 
                             is UiState.Success -> {
-                                // TODO: btn loading false
+                                togglePublishLoadingState(false)
                                 binding.btnPublish.isEnabled = true
                                 binding.btnPublish.text = getString(R.string.publish)
 
@@ -183,7 +187,7 @@ class PostNewFragment : Fragment() {
 
                             is UiState.Error -> {
                                 viewModel.resetCreatePostState()
-                                // TODO: btn loading false
+                                togglePublishLoadingState(false)
                                 Log.e("PostNewFragment", "Create post failed", state.exception)
                                 binding.main.showTopSnackbar(
                                     getString(
@@ -207,5 +211,9 @@ class PostNewFragment : Fragment() {
             binding.rvChosenImages.visibility = View.VISIBLE
             binding.layoutUploadPrompt.visibility = View.VISIBLE
         }
+    }
+
+    private fun togglePublishLoadingState(isLoading: Boolean) {
+        toggleBtnLoadingState(binding.btnPublish, binding.publishLoader, isLoading, getString(R.string.publish))
     }
 }
