@@ -16,6 +16,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.recyclerview.widget.LinearLayoutManager
 import coil.load
+import com.example.upagain.BuildConfig
 import com.example.upagain.R
 import com.example.upagain.api.ApiClient
 import com.example.upagain.databinding.FragmentPostDetailBinding
@@ -26,11 +27,13 @@ import com.example.upagain.feat.error.ErrorActivity
 import com.example.upagain.feat.post.adapter.CarouselImageAdapter
 import com.example.upagain.feat.post.adapter.CommentRecyclerViewAdapter
 import com.example.upagain.feat.post.adapter.ProjectStepsAdapter
+import com.example.upagain.model.ads.CreateAdsRequest
 import com.example.upagain.model.comment.CommentDetailsResponse
 import com.example.upagain.model.comment.CreateCommentRequest
 import com.example.upagain.model.finance.FinanceKeyEnum
 import com.example.upagain.model.post.PostDetailsResponse
 import com.example.upagain.model.post.ProjectStepResponse
+import com.example.upagain.repository.AdsRepo
 import com.example.upagain.repository.CommentRepo
 import com.example.upagain.repository.FinanceRepo
 import com.example.upagain.repository.PostRepo
@@ -48,6 +51,7 @@ import com.example.upagain.util.ui.setPostCategoryTextAndColor
 import com.example.upagain.util.ui.showTopSnackbar
 import com.example.upagain.util.ui.toggleBtnLoadingState
 import com.example.upagain.util.ui.toggleFullScreenLoading
+import com.example.upagain.viewmodel.AdsViewModel
 import com.example.upagain.viewmodel.CommentViewModel
 import com.example.upagain.viewmodel.FinanceViewModel
 import com.example.upagain.viewmodel.PostViewModel
@@ -61,17 +65,23 @@ private const val ARG_POST_ID = "arg_post_id"
 
 class PostDetailFragment : Fragment() {
     private var idPost: Int? = null
+    private var adsDuration: Int? = null
+    private var adsStartDate: String? = null
 
     // elements binding
     private var _binding: FragmentPostDetailBinding? = null
     private val binding get() = _binding!!
     private val apiService by lazy { ApiClient.apiService }
     private val postRepository by lazy { PostRepo(apiService) }
+    private val adsRepository by lazy { AdsRepo(apiService) }
     private val financeRepository by lazy { FinanceRepo(apiService) }
     private val commentRepository by lazy { CommentRepo(apiService) }
     private val appInstance by lazy { requireActivity().application }
     private val postViewModel: PostViewModel by viewModels {
         ViewModelFactory { PostViewModel(postRepository, appInstance) }
+    }
+    private val adsViewModel: AdsViewModel by viewModels {
+        ViewModelFactory { AdsViewModel(adsRepository) }
     }
     private val financeViewModel: FinanceViewModel by viewModels {
         ViewModelFactory { FinanceViewModel(financeRepository) }
@@ -132,6 +142,11 @@ class PostDetailFragment : Fragment() {
                 putInt(ARG_POST_ID, idPost)
             }
         }
+    }
+
+    // Triggered automatically when the parent Activity detects a return from Stripe
+    fun onPaymentSuccessReturned() {
+        // TODO
     }
 
     // PRIVATE ZONE
@@ -664,28 +679,64 @@ class PostDetailFragment : Fragment() {
                             is UiState.Success -> {
                                 toggleBookAdsBtnLoading(false)
                                 val price: Double = state.data
-                                showAdsBookingDialog(
-                                    context = requireContext(),
-                                    fragmentManager = childFragmentManager,
-                                    postTitle = getPostData()?.title ?: "Advertisement Campaign",
-                                    pricePerMonth = price
-                                ) { startDate, duration, totalAmount ->
-                                    // TODO: call api book ads
 
+                                idPost?.let { id ->
+                                    showAdsBookingDialog(
+                                        context = requireContext(),
+                                        fragmentManager = childFragmentManager,
+                                        postTitle = getPostData()?.title ?: getString(R.string.btn_book_ad),
+                                        pricePerMonth = price
+                                    ) { startDate, duration ->
+                                        val request = CreateAdsRequest(startDate, duration, id,
+                                            BuildConfig.PAYMENT_DEEPLINK, false)
+                                        adsViewModel.createAds(request)
+                                    }
                                 }
-
                             }
 
                             is UiState.Error -> {
                                 toggleBookAdsBtnLoading(false)
                                 Log.e(
                                     "PostDetailFragment",
-                                    "Failed to get ads price. Status code: ${state.statusCode}",
+                                    "Failed to get ads price therefore can't open book ads dialog. Status code: ${state.statusCode}",
                                     state.exception
                                 )
                                 binding.main.showTopSnackbar(
                                     getString(
                                         R.string.snack_get_ads_price_fail,
+                                        state.exception.message
+                                    ), SnackbarLevel.ERROR
+                                )
+                            }
+                        }
+                    }
+                }
+                // BOOK ADS
+                launch {
+                    adsViewModel.createAdsState.collect { state ->
+                        when (state) {
+                            is UiState.Idle -> {
+                                // TODO: toggle loading
+                            }
+
+                            is UiState.Loading -> {
+                                // TODO: toggle loading
+                            }
+
+                            is UiState.Success -> {
+                                // TODO: toggle loading, show snackbar success
+                            }
+
+                            is UiState.Error -> {
+                                toggleBookAdsBtnLoading(false)
+                                Log.e(
+                                    "PostDetailFragment",
+                                    "Failed to create ads. Status code: ${state.statusCode}",
+                                    state.exception
+                                )
+                                binding.main.showTopSnackbar(
+                                    getString(
+                                        R.string.snack_create_ads_fail,
                                         state.exception.message
                                     ), SnackbarLevel.ERROR
                                 )

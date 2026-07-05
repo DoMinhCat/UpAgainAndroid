@@ -49,7 +49,7 @@ object DialogUtils {
         fragmentManager: FragmentManager,
         postTitle: String,
         pricePerMonth: Double,
-        onConfirmBooking: (startDateStr: String, durationMonths: Int, finalAmount: Double) -> Unit
+        onConfirmBooking: (startDateStr: String, durationMonths: Int) -> Unit
     ) {
         val binding = DialogAdsBookingBinding.inflate(LayoutInflater.from(context))
 
@@ -127,15 +127,9 @@ object DialogUtils {
                 binding.tilStartDate.error = null
             }
 
-            // Re-calculate clean values for callback payload submission
-            val basePrice = pricePerMonth * selectedDuration
-            val vat = basePrice * 0.20
-            val processingFee = if (basePrice > 0) (basePrice * 0.015) + 0.25 else 0.0
-            val finalCalculatedTotal = basePrice + vat + processingFee
-
             val formattedPayloadDate = datePayloadFormat.format(selectedDateMs)
 
-            onConfirmBooking(formattedPayloadDate, selectedDuration, finalCalculatedTotal)
+            onConfirmBooking(formattedPayloadDate, selectedDuration)
             alertDialog.dismiss()
         }
     }

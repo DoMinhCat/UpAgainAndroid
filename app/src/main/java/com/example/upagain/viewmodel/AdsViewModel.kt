@@ -15,11 +15,11 @@ class AdsViewModel(private val repository: AdsRepo) : ViewModel() {
         MutableStateFlow<UiState<CreateAdsResponse>>(UiState.Idle)
     val createAdsState: StateFlow<UiState<CreateAdsResponse>> = _createAdsState
 
-    fun updateAccount(idPost: Int, request: CreateAdsRequest) {
+    fun createAds(request: CreateAdsRequest) {
         viewModelScope.launch {
             _createAdsState.value = UiState.Loading()
 
-            repository.createAds(idPost, request)
+            repository.createAds(request)
                 .onSuccess { createAdsResponse ->
                     _createAdsState.value = UiState.Success(createAdsResponse)
                 }

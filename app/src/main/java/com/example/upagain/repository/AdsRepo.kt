@@ -9,11 +9,10 @@ import retrofit2.awaitResponse
 class AdsRepo(private val apiService: ApiService) {
 
     suspend fun createAds(
-        id: Int,
         request: CreateAdsRequest
     ): Result<CreateAdsResponse> {
         return try {
-            val response = apiService.createAds(id, request).awaitResponse()
+            val response = apiService.createAds(request).awaitResponse()
             val body = response.body()
 
             if (response.isSuccessful && body != null) {

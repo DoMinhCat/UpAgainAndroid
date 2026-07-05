@@ -2,6 +2,7 @@ package com.example.upagain.feat
 
 import android.content.Intent
 import android.graphics.Rect
+import android.net.Uri
 import android.os.Bundle
 import android.view.MotionEvent
 import android.widget.EditText
@@ -22,6 +23,7 @@ import com.example.upagain.feat.auth.LoginActivity
 import com.example.upagain.feat.container.ContainerFragment
 import com.example.upagain.feat.dashboard.DashboardFragment
 import com.example.upagain.feat.error.NoConnectionActivity
+import com.example.upagain.feat.post.fragment.PostDetailFragment
 import com.example.upagain.feat.post.fragment.PostFragment
 import com.example.upagain.feat.profile.ProfileFragment
 import com.example.upagain.feat.shop.ShopFragment
@@ -50,6 +52,9 @@ class MainActivity : AppCompatActivity() {
             finish()
             return
         }
+
+        // DEEPLINK
+        handleIncomingDeepLink(intent)
 
         // STYLING
         binding.bottomNav.itemIconTintList =
@@ -101,7 +106,14 @@ class MainActivity : AppCompatActivity() {
 
     }
 
-    // Helper function to handle the transaction of replacing fragment
+
+    override fun onNewIntent(intent: Intent) {
+        super.onNewIntent(intent)
+        // Catch the deep link if the activity was already open in the background
+        handleIncomingDeepLink(intent)
+    }
+
+    // PRIVATE ZONE
     private fun replaceFragment(fragment: Fragment) {
         supportFragmentManager.beginTransaction()
             .replace(R.id.fragment_container, fragment)
@@ -149,5 +161,20 @@ class MainActivity : AppCompatActivity() {
         }
         startActivity(intent)
         finish()
+    }
+
+    private fun handleIncomingDeepLink(intent: Intent?) {
+        val uri: Uri? = intent?.data
+        if (uri != null && uri.scheme == "upagain" && uri.host == "payment") {
+            val paymentStatus = uri.getQueryParameter("payment") // "success" or "cancel"
+
+            // Find the visible Fragment inside your layout container
+            val fragment = supportFragmentManager.findFragmentById(R.id.fragment_container) as? PostDetailFragment
+
+            if (paymentStatus == "success") {
+                // Safely forward the notification to your Fragment
+                fragment?.onPaymentSuccessReturned()
+            }
+        }
     }
 }

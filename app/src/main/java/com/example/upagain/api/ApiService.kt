@@ -47,8 +47,7 @@ interface ApiService {
     @Multipart
     @POST(Endpoints.AVATAR_UPDATE)
     fun uploadAvatar(
-        @Path("id") idAccount: Int,
-        @Part avatar: MultipartBody.Part
+        @Path("id") idAccount: Int, @Part avatar: MultipartBody.Part
     ): Call<Unit>
 
     @PATCH(Endpoints.ACCOUNT_UPDATE)
@@ -100,8 +99,7 @@ interface ApiService {
     // COMMENTS
     @POST(Endpoints.COMMENTS_NEW)
     fun createComment(
-        @Path("id") id: Int,
-        @Body request: CreateCommentRequest
+        @Path("id") id: Int, @Body request: CreateCommentRequest
     ): Call<CommentDetailsResponse>
 
     @POST(Endpoints.COMMENTS_LIKE)
@@ -109,8 +107,7 @@ interface ApiService {
 
     @GET(Endpoints.COMMENTS_ALL)
     fun getPostComments(
-        @Path("id") id: Int,
-        @QueryMap options: Map<String, String>
+        @Path("id") id: Int, @QueryMap options: Map<String, String>
     ): Call<CommentPaginationResponse>
 
     @DELETE(Endpoints.COMMENTS_DELETE)
@@ -119,7 +116,6 @@ interface ApiService {
     // ADS
     @POST(Endpoints.ADS_CREATE)
     fun createAds(
-        @Path("id") id: Int,
         @Body request: CreateAdsRequest
     ): Call<CreateAdsResponse>
 
