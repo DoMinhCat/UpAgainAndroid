@@ -61,6 +61,7 @@
     <string name="image_upload_hint">Appuyez pour télécharger des images</string>
     <string name="publish">Publier</string>
     <string name="invalid_content">Contenu invalide</string>
+    <string name="images">Images</string>
     <string name="code">Code à 6 chiffres</string>
     <string name="code_hint">000000</string>
     <string name="barcode">Code-barres</string>

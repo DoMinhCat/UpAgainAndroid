@@ -16,6 +16,7 @@ import androidx.lifecycle.repeatOnLifecycle
 import com.example.upagain.R
 import com.example.upagain.api.ApiClient
 import com.example.upagain.databinding.FragmentPostNewBinding
+import com.example.upagain.feat.post.adapter.PreviewImageAdapter
 import com.example.upagain.model.post.PostCreateRequest
 import com.example.upagain.repository.PostRepo
 import com.example.upagain.util.ui.SnackbarLevel
@@ -57,15 +58,16 @@ class PostNewFragment : Fragment() {
     val contentValidator = FieldValidator(listOf(NotEmptyRule()))
 
 
-//    private lateinit var imagePreviewAdapter: SelectedImagesAdapter
+    private lateinit var imagePreviewAdapter: PreviewImageAdapter
 
     private var chosenImages = mutableListOf<Uri>()
     private val pickImageLauncher = registerForActivityResult(
         ActivityResultContracts.PickVisualMedia()
     ) { uri ->
-        if (uri != null) {
+        if (uri != null && !chosenImages.contains(uri)) {
             chosenImages.add(uri)
-//            imagePreviewAdapter.notifyItemInserted(chosenImages.size - 1)
+            // Pass a new instance list slice to ListAdapter for DiffUtil calculations
+            imagePreviewAdapter.submitList(chosenImages.toList())
             updatePreviewImagesVisibility()
         }
     }
@@ -112,7 +114,15 @@ class PostNewFragment : Fragment() {
 
     // PRIVATE ZONE
     private fun setupRecyclerView() {
+        imagePreviewAdapter = PreviewImageAdapter { deletedUri ->
+            chosenImages.remove(deletedUri)
+            imagePreviewAdapter.submitList(chosenImages.toList())
+            updatePreviewImagesVisibility()
+        }
 
+        binding.rvChosenImages.apply {
+            adapter = imagePreviewAdapter
+        }
     }
 
     private fun setupListeners() {
@@ -209,7 +219,6 @@ class PostNewFragment : Fragment() {
             binding.rvChosenImages.visibility = View.GONE
         } else {
             binding.rvChosenImages.visibility = View.VISIBLE
-            binding.layoutUploadPrompt.visibility = View.VISIBLE
         }
     }
 
