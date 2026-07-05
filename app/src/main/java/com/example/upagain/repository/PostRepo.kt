@@ -215,8 +215,8 @@ class PostRepo(private val apiService: ApiService) {
             val response = apiService.deletePost(id).awaitResponse()
             val body = response.body()
 
-            if (response.isSuccessful && body != null) {
-                Result.success(body)
+            if (response.isSuccessful) {
+                Result.success(Unit)
             } else {
                 val errMessage = parseErrorMessage(response.errorBody()?.string())
                 Result.failure(Exception(errMessage))

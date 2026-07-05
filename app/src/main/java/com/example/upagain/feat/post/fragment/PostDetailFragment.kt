@@ -36,8 +36,8 @@ import com.example.upagain.util.auth.SessionManager
 import com.example.upagain.util.bin.ImageType
 import com.example.upagain.util.bin.buildImageUrl
 import com.example.upagain.util.datetime.compareNowWithTimestamp
-import com.example.upagain.util.datetime.compareTimestamps
 import com.example.upagain.util.datetime.formatTimestamptz
+import com.example.upagain.util.ui.DialogUtils
 import com.example.upagain.util.ui.SnackbarLevel
 import com.example.upagain.util.ui.setOnBackClickListener
 import com.example.upagain.util.ui.setOnClickListenerWithCooldown
@@ -52,7 +52,6 @@ import com.example.upagain.viewmodel.ViewModelFactory
 import com.google.android.material.imageview.ShapeableImageView
 import com.google.android.material.tabs.TabLayoutMediator
 import kotlinx.coroutines.launch
-import java.time.Instant
 
 private const val ARG_POST_ID = "arg_post_id"
 
@@ -221,7 +220,26 @@ class PostDetailFragment : Fragment() {
                 )
             }
         }
-        // TODO: edit post, del post, book ads, remove ads
+        // EDIT POST
+        binding.btnRibbonEditPost.setOnClickListener {
+            // TODO
+        }
+        binding.btnRibbonDeletePost.setOnClickListener {
+            DialogUtils.showDestructiveConfirmationDialog(
+                context = requireContext(),
+                title = getString(R.string.confirm_del_post),
+            ) {
+                idPost?.let { id ->
+                    postViewModel.deletePost(id)
+                }
+            }
+        }
+        binding.btnRibbonBookAd.setOnClickListener {
+            // TODO
+        }
+        binding.btnRibbonCancelAd.setOnClickListener {
+            // TODO
+        }
     }
 
     private fun observeState() {
@@ -587,6 +605,44 @@ class PostDetailFragment : Fragment() {
                         }
                     }
                 }
+                // DELETE POST
+                launch {
+                    postViewModel.deletePostsState.collect { state ->
+                        when (state) {
+                            is UiState.Idle -> {
+                                toggleDeletePostBtnLoading(false)
+                            }
+
+                            is UiState.Loading -> {
+                                toggleDeletePostBtnLoading(true)
+                            }
+
+                            is UiState.Success -> {
+                                toggleDeletePostBtnLoading(false)
+                                // TODO: back to my posts, show snackbar success
+                                val myPostsFrag = PostMeFragment.newInstance()
+                                parentFragmentManager.beginTransaction()
+                                    .replace(R.id.fragment_container, myPostsFrag)
+                                    .commit()
+                            }
+
+                            is UiState.Error -> {
+                                toggleDeletePostBtnLoading(false)
+                                Log.e(
+                                    "PostDetailFragment",
+                                    "Failed to delete post. Status code: ${state.statusCode}",
+                                    state.exception
+                                )
+                                binding.main.showTopSnackbar(
+                                    getString(
+                                        R.string.snack_delete_post_fail,
+                                        state.exception.message
+                                    ), SnackbarLevel.ERROR
+                                )
+                            }
+                        }
+                    }
+                }
             }
         }
     }
@@ -624,6 +680,16 @@ class PostDetailFragment : Fragment() {
             isLoading,
             "",
             AppCompatResources.getDrawable(requireContext(), R.drawable.ic_send)
+        )
+    }
+
+    private fun toggleDeletePostBtnLoading(isLoading: Boolean) {
+        toggleBtnLoadingState(
+            binding.btnRibbonDeletePost,
+            binding.loaderRibbonDeletePost,
+            isLoading,
+            getString(R.string.btn_delete),
+            AppCompatResources.getDrawable(requireContext(), R.drawable.ic_trash)
         )
     }
 
