@@ -18,6 +18,7 @@ import com.example.upagain.model.post.SavePostResponse
 import com.example.upagain.model.post.ViewPostResponse
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
+import okhttp3.ResponseBody
 import retrofit2.Call
 import retrofit2.http.Body
 import retrofit2.http.DELETE
@@ -124,5 +125,5 @@ interface ApiService {
 
     // FINANCIAL SETTINGS
     @GET(Endpoints.FINANCE_SETTING)
-    fun getFinanceSetting(@Path("key") key: FinanceKeyEnum): Call<Float>
+    fun getFinanceSetting(@Path("key") key: FinanceKeyEnum): Call<ResponseBody>
 }

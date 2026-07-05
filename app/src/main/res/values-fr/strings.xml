@@ -133,6 +133,7 @@
     <string name="btn_confirm">Confirmer</string>
     <string name="btn_cancel">Annuler</string>
     <string name="total_price">Prix total</string>
+    <string name="month">Mois</string>
     <string name="snack_email_update_success">Email mis à jour</string>
     <string name="snack_email_update_fail">Échec de la mise à jour par email: %1$s</string>
     <string name="snack_account_details_update_success">Les détails du compte mis à jour</string>
@@ -159,6 +160,7 @@
     <string name="snack_create_post_fail">Échec de la création de l\'article : %1$s</string>
     <string name="invalid_title">Titre invalide</string>
     <string name="snack_create_post_success">Article publié</string>
+    <string name="book_ads_title">Réserver une publicité</string>
     <string name="start_date">Date de début</string>
     <string name="duration">Durée</string>
     <string name="base_price">Prix de base</string>
@@ -166,4 +168,7 @@
     <string name="processing_fee">Frais de traitement</string>
     <string name="snack_delete_post_success">Article supprimé</string>
     <string name="snack_delete_post_fail">Impossible de supprimer l\'article: %1$s</string>
+    <string name="invalid_date">Date invalide</string>
+    <string name="select_start_date">Choisir la date de début</string>
+    <string name="snack_get_ads_price_fail">Impossible de récupérer le prix: %1$s</string>
 </resources>

@@ -28,9 +28,11 @@ import com.example.upagain.feat.post.adapter.CommentRecyclerViewAdapter
 import com.example.upagain.feat.post.adapter.ProjectStepsAdapter
 import com.example.upagain.model.comment.CommentDetailsResponse
 import com.example.upagain.model.comment.CreateCommentRequest
+import com.example.upagain.model.finance.FinanceKeyEnum
 import com.example.upagain.model.post.PostDetailsResponse
 import com.example.upagain.model.post.ProjectStepResponse
 import com.example.upagain.repository.CommentRepo
+import com.example.upagain.repository.FinanceRepo
 import com.example.upagain.repository.PostRepo
 import com.example.upagain.util.auth.SessionManager
 import com.example.upagain.util.bin.ImageType
@@ -38,6 +40,7 @@ import com.example.upagain.util.bin.buildImageUrl
 import com.example.upagain.util.datetime.compareNowWithTimestamp
 import com.example.upagain.util.datetime.formatTimestamptz
 import com.example.upagain.util.ui.DialogUtils
+import com.example.upagain.util.ui.DialogUtils.showAdsBookingDialog
 import com.example.upagain.util.ui.SnackbarLevel
 import com.example.upagain.util.ui.setOnBackClickListener
 import com.example.upagain.util.ui.setOnClickListenerWithCooldown
@@ -46,6 +49,7 @@ import com.example.upagain.util.ui.showTopSnackbar
 import com.example.upagain.util.ui.toggleBtnLoadingState
 import com.example.upagain.util.ui.toggleFullScreenLoading
 import com.example.upagain.viewmodel.CommentViewModel
+import com.example.upagain.viewmodel.FinanceViewModel
 import com.example.upagain.viewmodel.PostViewModel
 import com.example.upagain.viewmodel.UiState
 import com.example.upagain.viewmodel.ViewModelFactory
@@ -63,10 +67,14 @@ class PostDetailFragment : Fragment() {
     private val binding get() = _binding!!
     private val apiService by lazy { ApiClient.apiService }
     private val postRepository by lazy { PostRepo(apiService) }
+    private val financeRepository by lazy { FinanceRepo(apiService) }
     private val commentRepository by lazy { CommentRepo(apiService) }
     private val appInstance by lazy { requireActivity().application }
     private val postViewModel: PostViewModel by viewModels {
         ViewModelFactory { PostViewModel(postRepository, appInstance) }
+    }
+    private val financeViewModel: FinanceViewModel by viewModels {
+        ViewModelFactory { FinanceViewModel(financeRepository) }
     }
     private val commentViewModel: CommentViewModel by viewModels {
         ViewModelFactory { CommentViewModel(commentRepository) }
@@ -235,7 +243,7 @@ class PostDetailFragment : Fragment() {
             }
         }
         binding.btnRibbonBookAd.setOnClickListener {
-            // TODO: fetch ads price
+            financeViewModel.getFinanceSetting(FinanceKeyEnum.ADS_PRICE_PER_MONTH)
         }
         binding.btnRibbonCancelAd.setOnClickListener {
             // TODO
@@ -619,7 +627,6 @@ class PostDetailFragment : Fragment() {
 
                             is UiState.Success -> {
                                 toggleDeletePostBtnLoading(false)
-                                // TODO: back to my posts, show snackbar success
                                 val myPostsFrag = PostMeFragment.newInstance()
                                 parentFragmentManager.beginTransaction()
                                     .replace(R.id.fragment_container, myPostsFrag)
@@ -636,6 +643,49 @@ class PostDetailFragment : Fragment() {
                                 binding.main.showTopSnackbar(
                                     getString(
                                         R.string.snack_delete_post_fail,
+                                        state.exception.message
+                                    ), SnackbarLevel.ERROR
+                                )
+                            }
+                        }
+                    }
+                }
+                // GET ADS PRICE / OPEN BOOK ADS DIALOG
+                launch {
+                    financeViewModel.getFinanceSettingState.collect { state ->
+                        when (state) {
+                            is UiState.Idle -> {}
+
+                            is UiState.Loading -> {
+                                toggleBookAdsBtnLoading(true)
+
+                            }
+
+                            is UiState.Success -> {
+                                toggleBookAdsBtnLoading(false)
+                                val price: Double = state.data
+                                showAdsBookingDialog(
+                                    context = requireContext(),
+                                    fragmentManager = childFragmentManager,
+                                    postTitle = getPostData()?.title ?: "Advertisement Campaign",
+                                    pricePerMonth = price
+                                ) { startDate, duration, totalAmount ->
+                                    // TODO: call api book ads
+
+                                }
+
+                            }
+
+                            is UiState.Error -> {
+                                toggleBookAdsBtnLoading(false)
+                                Log.e(
+                                    "PostDetailFragment",
+                                    "Failed to get ads price. Status code: ${state.statusCode}",
+                                    state.exception
+                                )
+                                binding.main.showTopSnackbar(
+                                    getString(
+                                        R.string.snack_get_ads_price_fail,
                                         state.exception.message
                                     ), SnackbarLevel.ERROR
                                 )
@@ -690,6 +740,16 @@ class PostDetailFragment : Fragment() {
             isLoading,
             getString(R.string.btn_delete),
             AppCompatResources.getDrawable(requireContext(), R.drawable.ic_trash)
+        )
+    }
+
+    private fun toggleBookAdsBtnLoading(isLoading: Boolean) {
+        toggleBtnLoadingState(
+            binding.btnRibbonBookAd,
+            binding.loaderRibbonBookAd,
+            isLoading,
+            getString(R.string.btn_book_ad),
+            AppCompatResources.getDrawable(requireContext(), R.drawable.ic_ads)
         )
     }
 

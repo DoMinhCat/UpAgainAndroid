@@ -217,5 +217,6 @@
     <string name="snack_create_post_success">Post created</string>
     <string name="snack_delete_post_success">Post deleted</string>
     <string name="snack_delete_post_fail">Failed to delete post: %1$s</string>
+    <string name="snack_get_ads_price_fail">Failed to get ads price: %1$s</string>
 
 </resources>
