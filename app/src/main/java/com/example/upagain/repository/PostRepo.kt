@@ -12,6 +12,7 @@ import com.example.upagain.model.post.SavePostResponse
 import com.example.upagain.model.post.ViewPostResponse
 import com.example.upagain.util.bin.getFileExtensionAndMime
 import com.example.upagain.util.bin.streamUriToTempFile
+import com.example.upagain.util.json.parseErrorMessage
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
 import okhttp3.RequestBody.Companion.asRequestBody
@@ -67,7 +68,8 @@ class PostRepo(private val apiService: ApiService) {
             if (response.isSuccessful) {
                 Result.success(Unit)
             } else {
-                Result.failure(HttpException(response))
+                val errMessage = parseErrorMessage(response.errorBody()?.string())
+                Result.failure(Exception(errMessage))
             }
         } catch (e: Exception) {
             Result.failure(e)
@@ -87,7 +89,8 @@ class PostRepo(private val apiService: ApiService) {
             if (response.isSuccessful && body != null) {
                 Result.success(body)
             } else {
-                Result.failure(HttpException(response))
+                val errMessage = parseErrorMessage(response.errorBody()?.string())
+                Result.failure(Exception(errMessage))
             }
         } catch (e: Exception) {
             Result.failure(e)
@@ -102,7 +105,8 @@ class PostRepo(private val apiService: ApiService) {
             if (response.isSuccessful && body != null) {
                 Result.success(body)
             } else {
-                Result.failure(HttpException(response))
+                val errMessage = parseErrorMessage(response.errorBody()?.string())
+                Result.failure(Exception(errMessage))
             }
         } catch (e: Exception) {
             Result.failure(e)
@@ -117,7 +121,8 @@ class PostRepo(private val apiService: ApiService) {
             if (response.isSuccessful && body != null) {
                 Result.success(body)
             } else {
-                Result.failure(HttpException(response))
+                val errMessage = parseErrorMessage(response.errorBody()?.string())
+                Result.failure(Exception(errMessage))
             }
         } catch (e: Exception) {
             Result.failure(e)
@@ -132,7 +137,8 @@ class PostRepo(private val apiService: ApiService) {
             if (response.isSuccessful && body != null) {
                 Result.success(body)
             } else {
-                Result.failure(HttpException(response))
+                val errMessage = parseErrorMessage(response.errorBody()?.string())
+                Result.failure(Exception(errMessage))
             }
         } catch (e: Exception) {
             Result.failure(e)
@@ -148,7 +154,8 @@ class PostRepo(private val apiService: ApiService) {
                 Result.success(stepsList)
                 Result.success(stepsList)
             } else {
-                Result.failure(HttpException(response))
+                val errMessage = parseErrorMessage(response.errorBody()?.string())
+                Result.failure(Exception(errMessage))
             }
         } catch (e: Exception) {
             Result.failure(e)
@@ -163,7 +170,8 @@ class PostRepo(private val apiService: ApiService) {
             if (response.isSuccessful && body != null) {
                 Result.success(body)
             } else {
-                Result.failure(HttpException(response))
+                val errMessage = parseErrorMessage(response.errorBody()?.string())
+                Result.failure(Exception(errMessage))
             }
         } catch (e: Exception) {
             Result.failure(e)
@@ -178,7 +186,8 @@ class PostRepo(private val apiService: ApiService) {
             if (response.isSuccessful && body != null) {
                 Result.success(body)
             } else {
-                Result.failure(HttpException(response))
+                val errMessage = parseErrorMessage(response.errorBody()?.string())
+                Result.failure(Exception(errMessage))
             }
         } catch (e: Exception) {
             Result.failure(e)
@@ -193,7 +202,8 @@ class PostRepo(private val apiService: ApiService) {
             if (response.isSuccessful && body != null) {
                 Result.success(body)
             } else {
-                Result.failure(HttpException(response))
+                val errMessage = parseErrorMessage(response.errorBody()?.string())
+                Result.failure(Exception(errMessage))
             }
         } catch (e: Exception) {
             Result.failure(e)
@@ -208,7 +218,8 @@ class PostRepo(private val apiService: ApiService) {
             if (response.isSuccessful && body != null) {
                 Result.success(body)
             } else {
-                Result.failure(HttpException(response))
+                val errMessage = parseErrorMessage(response.errorBody()?.string())
+                Result.failure(Exception(errMessage))
             }
         } catch (e: Exception) {
             Result.failure(e)
