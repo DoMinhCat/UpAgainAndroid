@@ -1,5 +1,6 @@
 package com.example.upagain.repository
 
+import android.content.Context
 import com.example.upagain.api.ApiService
 import com.example.upagain.model.post.LikePostResponse
 import com.example.upagain.model.post.PostCreateRequest
@@ -9,10 +10,76 @@ import com.example.upagain.model.post.PostPaginationResponse
 import com.example.upagain.model.post.ProjectStepResponse
 import com.example.upagain.model.post.SavePostResponse
 import com.example.upagain.model.post.ViewPostResponse
+import com.example.upagain.util.bin.getFileExtensionAndMime
+import com.example.upagain.util.bin.streamUriToTempFile
+import com.example.upagain.util.json.parseErrorMessage
+import okhttp3.MediaType.Companion.toMediaTypeOrNull
+import okhttp3.MultipartBody
+import okhttp3.RequestBody.Companion.asRequestBody
+import okhttp3.RequestBody.Companion.toRequestBody
 import retrofit2.HttpException
 import retrofit2.awaitResponse
+import java.io.File
+import java.util.UUID
 
 class PostRepo(private val apiService: ApiService) {
+
+
+    suspend fun createPost(
+        context: Context,
+        request: PostCreateRequest,
+    ): Result<Unit> {
+        val trackedTempFiles = mutableListOf<File>()
+
+        return try {
+            // put strings into form value
+            val textMediaType = "text/plain".toMediaTypeOrNull()
+            val titlePart = request.title.toRequestBody(textMediaType)
+            val contentPart = request.content.toRequestBody(textMediaType)
+            val categoryPart =
+                request.category.value.toRequestBody(textMediaType)
+
+            // handle file uploads
+            val imageParts = mutableListOf<MultipartBody.Part>()
+            if (!request.images.isNullOrEmpty()) {
+                request.images.forEach { imageUri ->
+                    val (mimeType, extension) = getFileExtensionAndMime(context, imageUri)
+                    val localTempFile =
+                        File(context.cacheDir, "post_upload_${UUID.randomUUID()}.$extension")
+                    trackedTempFiles.add(localTempFile)
+
+                    val streamSuccess = streamUriToTempFile(context, imageUri, localTempFile)
+                    if (!streamSuccess) throw Exception("Failed to stream URI data")
+
+                    val requestFile = localTempFile.asRequestBody(mimeType.toMediaTypeOrNull())
+                    val filePart =
+                        MultipartBody.Part.createFormData("images", localTempFile.name, requestFile)
+                    imageParts.add(filePart)
+                }
+            }
+
+            val response = apiService.createPost(
+                title = titlePart,
+                content = contentPart,
+                category = categoryPart,
+                images = imageParts
+            ).awaitResponse()
+
+            if (response.isSuccessful) {
+                Result.success(Unit)
+            } else {
+                val errMessage = parseErrorMessage(response.errorBody()?.string())
+                Result.failure(Exception(errMessage))
+            }
+        } catch (e: Exception) {
+            Result.failure(e)
+        } finally {
+            trackedTempFiles.forEach { file ->
+                if (file.exists()) file.delete()
+            }
+        }
+    }
+
 
     suspend fun getAllPosts(requestBody: PostPaginationRequest): Result<PostPaginationResponse> {
         return try {
@@ -22,7 +89,8 @@ class PostRepo(private val apiService: ApiService) {
             if (response.isSuccessful && body != null) {
                 Result.success(body)
             } else {
-                Result.failure(HttpException(response))
+                val errMessage = parseErrorMessage(response.errorBody()?.string())
+                Result.failure(Exception(errMessage))
             }
         } catch (e: Exception) {
             Result.failure(e)
@@ -37,7 +105,8 @@ class PostRepo(private val apiService: ApiService) {
             if (response.isSuccessful && body != null) {
                 Result.success(body)
             } else {
-                Result.failure(HttpException(response))
+                val errMessage = parseErrorMessage(response.errorBody()?.string())
+                Result.failure(Exception(errMessage))
             }
         } catch (e: Exception) {
             Result.failure(e)
@@ -52,7 +121,8 @@ class PostRepo(private val apiService: ApiService) {
             if (response.isSuccessful && body != null) {
                 Result.success(body)
             } else {
-                Result.failure(HttpException(response))
+                val errMessage = parseErrorMessage(response.errorBody()?.string())
+                Result.failure(Exception(errMessage))
             }
         } catch (e: Exception) {
             Result.failure(e)
@@ -67,7 +137,8 @@ class PostRepo(private val apiService: ApiService) {
             if (response.isSuccessful && body != null) {
                 Result.success(body)
             } else {
-                Result.failure(HttpException(response))
+                val errMessage = parseErrorMessage(response.errorBody()?.string())
+                Result.failure(Exception(errMessage))
             }
         } catch (e: Exception) {
             Result.failure(e)
@@ -83,7 +154,8 @@ class PostRepo(private val apiService: ApiService) {
                 Result.success(stepsList)
                 Result.success(stepsList)
             } else {
-                Result.failure(HttpException(response))
+                val errMessage = parseErrorMessage(response.errorBody()?.string())
+                Result.failure(Exception(errMessage))
             }
         } catch (e: Exception) {
             Result.failure(e)
@@ -98,7 +170,8 @@ class PostRepo(private val apiService: ApiService) {
             if (response.isSuccessful && body != null) {
                 Result.success(body)
             } else {
-                Result.failure(HttpException(response))
+                val errMessage = parseErrorMessage(response.errorBody()?.string())
+                Result.failure(Exception(errMessage))
             }
         } catch (e: Exception) {
             Result.failure(e)
@@ -113,7 +186,8 @@ class PostRepo(private val apiService: ApiService) {
             if (response.isSuccessful && body != null) {
                 Result.success(body)
             } else {
-                Result.failure(HttpException(response))
+                val errMessage = parseErrorMessage(response.errorBody()?.string())
+                Result.failure(Exception(errMessage))
             }
         } catch (e: Exception) {
             Result.failure(e)
@@ -128,7 +202,8 @@ class PostRepo(private val apiService: ApiService) {
             if (response.isSuccessful && body != null) {
                 Result.success(body)
             } else {
-                Result.failure(HttpException(response))
+                val errMessage = parseErrorMessage(response.errorBody()?.string())
+                Result.failure(Exception(errMessage))
             }
         } catch (e: Exception) {
             Result.failure(e)
@@ -143,22 +218,8 @@ class PostRepo(private val apiService: ApiService) {
             if (response.isSuccessful && body != null) {
                 Result.success(body)
             } else {
-                Result.failure(HttpException(response))
-            }
-        } catch (e: Exception) {
-            Result.failure(e)
-        }
-    }
-
-    suspend fun createPost(request: PostCreateRequest): Result<Unit> {
-        return try {
-            val response = apiService.createPost(request).awaitResponse()
-            val body = response.body()
-
-            if (response.isSuccessful && body != null) {
-                Result.success(body)
-            } else {
-                Result.failure(HttpException(response))
+                val errMessage = parseErrorMessage(response.errorBody()?.string())
+                Result.failure(Exception(errMessage))
             }
         } catch (e: Exception) {
             Result.failure(e)

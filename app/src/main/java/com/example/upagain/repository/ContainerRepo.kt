@@ -31,6 +31,7 @@ class ContainerRepo(private val apiService: ApiService) {
             if (!digitCode.isNullOrEmpty()) {
                 codePart = digitCode.toRequestBody("text/plain".toMediaTypeOrNull())
             } else if (barcodeUri != null) {
+                // handle file upload
                 val (mimeType, extension) = getFileExtensionAndMime(context, barcodeUri)
 
                 val localTempFile = File(context.cacheDir, "upload_${UUID.randomUUID()}.$extension")

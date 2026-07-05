@@ -3,14 +3,16 @@ package com.example.upagain.util.ui
 import android.content.Context
 import android.content.res.ColorStateList
 import android.graphics.drawable.Drawable
-import android.os.SystemClock
-import android.view.View
-import com.google.android.material.button.MaterialButton
-import com.google.android.material.progressindicator.CircularProgressIndicator
 import android.os.Handler
 import android.os.Looper
+import android.os.SystemClock
+import android.view.View
 import androidx.activity.findViewTreeOnBackPressedDispatcherOwner
 import androidx.core.content.ContextCompat
+import androidx.core.content.ContextCompat.getString
+import com.google.android.material.button.MaterialButton
+import com.google.android.material.progressindicator.CircularProgressIndicator
+import com.google.android.material.textfield.TextInputLayout
 
 /**
  * Toggle loading state of a button
@@ -110,4 +112,22 @@ fun MaterialButton.setPostCategoryTextAndColor(context: Context, category: Strin
 
     this.backgroundTintList = ColorStateList.valueOf(categoryColor)
     this.text = category.replace('_', ' ')
+}
+
+fun toggleTilError(
+    til: TextInputLayout,
+    errorMessageId: Int,
+    isError: Boolean
+) {
+    if (isError) {
+        til.isErrorEnabled = true
+        til.boxStrokeWidth = dpToPx(1.5f, til.context.resources)
+        til.boxStrokeWidthFocused = dpToPx(1.5f, til.context.resources)
+        til.error = getString(til.context, errorMessageId)
+    } else {
+        til.error = null
+        til.isErrorEnabled = false
+//        til.boxStrokeWidth = 0
+//        til.boxStrokeWidthFocused = 0
+    }
 }

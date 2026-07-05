@@ -20,12 +20,12 @@ import com.example.upagain.model.account.PasswordUpdateRequest
 import com.example.upagain.repository.AccountRepo
 import com.example.upagain.util.auth.SessionManager
 import com.example.upagain.util.ui.SnackbarLevel
-import com.example.upagain.util.ui.dpToPx
 import com.example.upagain.util.ui.hideKeyboard
 import com.example.upagain.util.ui.setOnBackClickListener
 import com.example.upagain.util.ui.setOnClickListenerWithCooldown
 import com.example.upagain.util.ui.showTopSnackbar
 import com.example.upagain.util.ui.toggleBtnLoadingState
+import com.example.upagain.util.ui.toggleTilError
 import com.example.upagain.util.validator.EmailRule
 import com.example.upagain.util.validator.FieldValidator
 import com.example.upagain.util.validator.NotEmptyRule
@@ -34,9 +34,8 @@ import com.example.upagain.util.validator.SameAsRule
 import com.example.upagain.viewmodel.AccountViewModel
 import com.example.upagain.viewmodel.UiState
 import com.example.upagain.viewmodel.ViewModelFactory
-import kotlinx.coroutines.launch
-import kotlin.getValue
 import com.google.android.material.snackbar.Snackbar
+import kotlinx.coroutines.launch
 
 class SecuritySettingFragment : Fragment() {
     // layer dependencies
@@ -58,6 +57,7 @@ class SecuritySettingFragment : Fragment() {
             SameAsRule { binding.etSecurityPassword.text.toString() }
         )
     )
+
     // binding
     private var _binding: FragmentSecuritySettingBinding? = null
     private val binding get() = _binding!!
@@ -112,9 +112,10 @@ class SecuritySettingFragment : Fragment() {
             if (!hasFocus) {
                 val email = binding.etSecurityEmail.text.toString()
                 val isEmailValid = emailValidator.validate(email)
-                toggleEmailErrorState(!isEmailValid)
+                toggleTilError(binding.tilSecurityEmail, R.string.invalid_email, !isEmailValid)
+
             } else {
-                toggleEmailErrorState(false)
+                toggleTilError(binding.tilSecurityEmail, R.string.invalid_email, false)
             }
         }
         // PASSWORD FIELD
@@ -122,9 +123,14 @@ class SecuritySettingFragment : Fragment() {
             if (!hasFocus) {
                 val password = binding.etSecurityPassword.text.toString()
                 val isPasswordValid = passwordValidator.validate(password)
-                togglePasswordErrorState(!isPasswordValid)
+                toggleTilError(
+                    binding.tilSecurityPassword,
+                    R.string.incorrect_password,
+                    !isPasswordValid
+                )
+
             } else {
-                togglePasswordErrorState(false)
+                toggleTilError(binding.tilSecurityPassword, R.string.incorrect_password, false)
             }
         }
         // PASSWORD CONFIRM FIELD
@@ -132,9 +138,18 @@ class SecuritySettingFragment : Fragment() {
             if (!hasFocus) {
                 val password = binding.etSecurityConfirmPassword.text.toString()
                 val isPasswordValid = confirmPasswordValidator.validate(password)
-                togglePasswordConfirmErrorState(!isPasswordValid)
+                toggleTilError(
+                    binding.tilSecurityConfirmPassword,
+                    R.string.password_not_match,
+                    !isPasswordValid
+                )
+
             } else {
-                togglePasswordConfirmErrorState(false)
+                toggleTilError(
+                    binding.tilSecurityConfirmPassword,
+                    R.string.password_not_match,
+                    false
+                )
             }
         }
         // SAVE EMAIL BTN
@@ -142,7 +157,7 @@ class SecuritySettingFragment : Fragment() {
             val email = binding.etSecurityEmail.text.toString()
 
             val isEmailValid = emailValidator.validate(email)
-            toggleEmailErrorState(!isEmailValid)
+            toggleTilError(binding.tilSecurityEmail, R.string.invalid_email, !isEmailValid)
             if (!isEmailValid) {
                 return@setOnClickListenerWithCooldown
             }
@@ -151,14 +166,25 @@ class SecuritySettingFragment : Fragment() {
             val currentId = SessionManager.accountId ?: return@setOnClickListenerWithCooldown
             viewModel.updateAccount(currentId, request)
         }
+        // SAVE PASSWORD
         binding.btnSavePassword.setOnClickListenerWithCooldown {
             val password = binding.etSecurityPassword.text.toString()
             val confirmPassword = binding.etSecurityConfirmPassword.text.toString()
 
             val isPasswordValid = passwordValidator.validate(password)
             val isConfirmPasswordValid = confirmPasswordValidator.validate(confirmPassword)
-            togglePasswordErrorState(!isPasswordValid)
-            togglePasswordConfirmErrorState(!isConfirmPasswordValid)
+
+            toggleTilError(
+                binding.tilSecurityPassword,
+                R.string.incorrect_password,
+                !isPasswordValid
+            )
+            toggleTilError(
+                binding.tilSecurityConfirmPassword,
+                R.string.password_not_match,
+                !isConfirmPasswordValid
+            )
+
             if (!isPasswordValid || !isConfirmPasswordValid) {
                 return@setOnClickListenerWithCooldown
             }
@@ -199,7 +225,11 @@ class SecuritySettingFragment : Fragment() {
                             is UiState.Error -> {
                                 viewModel.resetAccountUpdateState()
                                 toggleEmailBtnLoading(false)
-                                Log.e("SecuritySettingFragment", "Update email failed", state.exception)
+                                Log.e(
+                                    "SecuritySettingFragment",
+                                    "Update email failed",
+                                    state.exception
+                                )
                                 binding.main.showTopSnackbar(
                                     getString(
                                         R.string.snack_email_update_fail,
@@ -235,7 +265,11 @@ class SecuritySettingFragment : Fragment() {
                             is UiState.Error -> {
                                 viewModel.resetAccountPasswordUpdateState()
                                 togglePasswordBtnLoading(false)
-                                Log.e("SecuritySettingFragment", "Update password failed", state.exception)
+                                Log.e(
+                                    "SecuritySettingFragment",
+                                    "Update password failed",
+                                    state.exception
+                                )
                                 binding.main.showTopSnackbar(
                                     getString(
                                         R.string.snack_password_update_fail,
@@ -251,52 +285,19 @@ class SecuritySettingFragment : Fragment() {
     }
 
     private fun toggleEmailBtnLoading(isLoading: Boolean) {
-        toggleBtnLoadingState(binding.btnSaveEmail, binding.emailSaveLoader, isLoading, getString(R.string.btn_save))
+        toggleBtnLoadingState(
+            binding.btnSaveEmail,
+            binding.emailSaveLoader,
+            isLoading,
+            getString(R.string.btn_save)
+        )
     }
+
     private fun togglePasswordBtnLoading(isLoading: Boolean) {
-        toggleBtnLoadingState(binding.btnSavePassword, binding.passwordSaveLoader, isLoading, getString(
-            R.string.btn_save))
-    }
-
-    private fun toggleEmailErrorState(isError: Boolean) {
-        if (isError) {
-            binding.tilSecurityEmail.boxStrokeWidth = dpToPx(1.5f, resources)
-            binding.tilSecurityEmail.boxStrokeWidthFocused = dpToPx(1.5f, resources)
-            binding.tilSecurityEmail.isErrorEnabled = true
-            binding.tilSecurityEmail.error = getString(R.string.invalid_email)
-        } else {
-            binding.tilSecurityEmail.error = null
-            binding.tilSecurityEmail.isErrorEnabled = false
-            binding.tilSecurityEmail.boxStrokeWidth = 0
-            binding.tilSecurityEmail.boxStrokeWidthFocused = 0
-        }
-    }
-
-    private fun togglePasswordErrorState(isError: Boolean) {
-        if (isError) {
-            binding.tilSecurityPassword.boxStrokeWidth = dpToPx(1.5f, resources)
-            binding.tilSecurityPassword.boxStrokeWidthFocused = dpToPx(1.5f, resources)
-            binding.tilSecurityPassword.isErrorEnabled = true
-            binding.tilSecurityPassword.error = getString(R.string.incorrect_password)
-        } else {
-            binding.tilSecurityPassword.error = null
-            binding.tilSecurityPassword.isErrorEnabled = false
-            binding.tilSecurityPassword.boxStrokeWidth = 0
-            binding.tilSecurityPassword.boxStrokeWidthFocused = 0
-        }
-    }
-
-    private fun togglePasswordConfirmErrorState(isError: Boolean) {
-        if (isError) {
-            binding.tilSecurityConfirmPassword.boxStrokeWidth = dpToPx(1.5f, resources)
-            binding.tilSecurityConfirmPassword.boxStrokeWidthFocused = dpToPx(1.5f, resources)
-            binding.tilSecurityConfirmPassword.isErrorEnabled = true
-            binding.tilSecurityConfirmPassword.error = getString(R.string.password_not_match)
-        } else {
-            binding.tilSecurityConfirmPassword.error = null
-            binding.tilSecurityConfirmPassword.isErrorEnabled = false
-            binding.tilSecurityConfirmPassword.boxStrokeWidth = 0
-            binding.tilSecurityConfirmPassword.boxStrokeWidthFocused = 0
-        }
+        toggleBtnLoadingState(
+            binding.btnSavePassword, binding.passwordSaveLoader, isLoading, getString(
+                R.string.btn_save
+            )
+        )
     }
 }

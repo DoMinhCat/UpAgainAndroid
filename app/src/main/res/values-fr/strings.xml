@@ -55,6 +55,13 @@
     <string name="post_me">Mes articles</string>
     <string name="btn_reorder">Réorganiser</string>
     <string name="no_my_posts_description">Vos articles apparaîtront ici.</string>
+    <string name="post_new">Nouvel article</string>
+    <string name="post_title">Titre</string>
+    <string name="post_content">Contenu</string>
+    <string name="image_upload_hint">Appuyez pour télécharger des images</string>
+    <string name="publish">Publier</string>
+    <string name="invalid_content">Contenu invalide</string>
+    <string name="images">Images</string>
     <string name="code">Code à 6 chiffres</string>
     <string name="code_hint">000000</string>
     <string name="barcode">Code-barres</string>
@@ -146,4 +153,6 @@
     <string name="btn_book_ad">Réserver pub</string>
     <string name="err_create_comment_msg">Impossible de publier le commentaire</string>
     <string name="err_like_comment_msg">Impossible d\'aimer le commentaire</string>
+    <string name="snack_create_post_fail">Échec de la création de l\'article : %1$s</string>
+    <string name="invalid_title">Titre invalide</string>
 </resources>

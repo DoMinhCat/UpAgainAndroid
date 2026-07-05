@@ -92,6 +92,15 @@
     <string name="post_me">My posts</string>
     <string name="btn_reorder">Reorder</string>
     <string name="no_my_posts_description">Your posts will appear here.</string>
+    <!-- New post page -->
+    <string name="post_new">New post</string>
+    <string name="post_title">Title</string>
+    <string name="post_content">Content</string>
+    <string name="image_upload_hint">Tap to upload images</string>
+    <string name="publish">Publish</string>
+    <string name="invalid_title">Invalid title</string>
+    <string name="invalid_content">Invalid content</string>
+    <string name="images">Images</string>
 
 
     <!-- Container -->
@@ -190,5 +199,7 @@
     <string name="snack_avatar_update_fail">Avatar update failed: %1$s</string>
     <string name="snack_container_open_success">Container unlocked</string>
     <string name="snack_container_open_fail">Failed to open container: %1$s</string>
+    <string name="snack_create_post_fail">Failed to create post: %1$s</string>
+    <string name="snack_create_post_success">Post created</string>
 
 </resources>

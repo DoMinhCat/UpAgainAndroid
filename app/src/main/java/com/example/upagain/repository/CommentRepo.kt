@@ -6,6 +6,7 @@ import com.example.upagain.model.comment.CommentDetailsResponse
 import com.example.upagain.model.comment.CommentPaginationRequest
 import com.example.upagain.model.comment.CommentPaginationResponse
 import com.example.upagain.model.comment.LikeCommentResponse
+import com.example.upagain.util.json.parseErrorMessage
 import retrofit2.HttpException
 import retrofit2.awaitResponse
 
@@ -21,7 +22,8 @@ class CommentRepo(private val apiService: ApiService) {
             if (response.isSuccessful && body != null) {
                 Result.success(body)
             } else {
-                Result.failure(HttpException(response))
+                val errMessage = parseErrorMessage(response.errorBody()?.string())
+                Result.failure(Exception(errMessage))
             }
         } catch (e: Exception) {
             Result.failure(e)
@@ -36,7 +38,8 @@ class CommentRepo(private val apiService: ApiService) {
             if (response.isSuccessful && body != null) {
                 Result.success(body)
             } else {
-                Result.failure(HttpException(response))
+                val errMessage = parseErrorMessage(response.errorBody()?.string())
+                Result.failure(Exception(errMessage))
             }
         } catch (e: Exception) {
             Result.failure(e)
@@ -51,7 +54,8 @@ class CommentRepo(private val apiService: ApiService) {
             if (response.isSuccessful && body != null) {
                 Result.success(body)
             } else {
-                Result.failure(HttpException(response))
+                val errMessage = parseErrorMessage(response.errorBody()?.string())
+                Result.failure(Exception(errMessage))
             }
         } catch (e: Exception) {
             Result.failure(e)
@@ -65,7 +69,8 @@ class CommentRepo(private val apiService: ApiService) {
             if (response.isSuccessful) {
                 Result.success(Unit)
             } else {
-                Result.failure(HttpException(response))
+                val errMessage = parseErrorMessage(response.errorBody()?.string())
+                Result.failure(Exception(errMessage))
             }
         } catch (e: Exception) {
             Result.failure(e)

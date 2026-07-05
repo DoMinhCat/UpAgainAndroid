@@ -1,5 +1,6 @@
 package com.example.upagain.model.post
 
+import android.net.Uri
 import com.google.gson.annotations.SerializedName
 
 data class PostPaginationRequest(
@@ -31,6 +32,6 @@ data class PostPaginationRequest(
 data class PostCreateRequest(
     @SerializedName("title") val title: String,
     @SerializedName("content") val content: String,
-    @SerializedName("category") val category: PostCategory
-//    TODO: @SerializedName("images") val images: List<String>,
+    @SerializedName("category") val category: PostCategory = PostCategory.PROJECT,
+    @SerializedName("images") val images: List<Uri>? = emptyList()
 )

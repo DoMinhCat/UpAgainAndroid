@@ -3,7 +3,6 @@ package com.example.upagain.feat.profile
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -11,6 +10,7 @@ import android.widget.ArrayAdapter
 import android.widget.Filter
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
@@ -26,12 +26,18 @@ import com.example.upagain.model.account.AccountUpdateRequest
 import com.example.upagain.repository.AccountRepo
 import com.example.upagain.util.auth.SessionManager
 import com.example.upagain.util.bin.ImageType
+import com.example.upagain.util.bin.buildImageUrl
 import com.example.upagain.util.datetime.formatTimestamptz
+import com.example.upagain.util.locale.LocaleManager
 import com.example.upagain.util.ui.DialogUtils
 import com.example.upagain.util.ui.SnackbarLevel
+import com.example.upagain.util.ui.hideKeyboard
 import com.example.upagain.util.ui.setOnClickListenerWithCooldown
 import com.example.upagain.util.ui.showTopSnackbar
 import com.example.upagain.util.ui.toggleBtnLoadingState
+import com.example.upagain.util.ui.toggleFullScreenLoading
+import com.example.upagain.util.ui.toggleIconLoadingState
+import com.example.upagain.util.ui.toggleTilError
 import com.example.upagain.util.validator.FieldValidator
 import com.example.upagain.util.validator.MaxLengthRule
 import com.example.upagain.util.validator.MinLengthRule
@@ -40,16 +46,8 @@ import com.example.upagain.util.validator.PhoneRule
 import com.example.upagain.viewmodel.AccountViewModel
 import com.example.upagain.viewmodel.UiState
 import com.example.upagain.viewmodel.ViewModelFactory
-import kotlinx.coroutines.launch
-import kotlin.getValue
-import com.example.upagain.util.bin.buildImageUrl
-import com.example.upagain.util.locale.LocaleManager
-import com.example.upagain.util.ui.dpToPx
-import com.example.upagain.util.ui.hideKeyboard
-import com.example.upagain.util.ui.toggleFullScreenLoading
-import com.example.upagain.util.ui.toggleIconLoadingState
 import com.google.android.material.snackbar.Snackbar
-import com.google.android.material.textfield.TextInputLayout
+import kotlinx.coroutines.launch
 
 class ProfileFragment : Fragment() {
     // elements binding
@@ -117,8 +115,12 @@ class ProfileFragment : Fragment() {
 
     override fun onDestroyView() {
         super.onDestroyView()
-        toggleErrorState(binding.tilProfilePhone, false)
-        toggleErrorState(binding.tilProfileName, false)
+        toggleTilError(binding.tilProfilePhone, R.string.invalid_phone, false)
+        binding.tilProfilePhone.boxStrokeWidth = 0
+        binding.tilProfilePhone.boxStrokeWidthFocused = 0
+        toggleTilError(binding.tilProfileName, R.string.invalid_username, false)
+        binding.tilProfileName.boxStrokeWidth = 0
+        binding.tilProfileName.boxStrokeWidthFocused = 0
         _binding = null
     }
 
@@ -149,9 +151,15 @@ class ProfileFragment : Fragment() {
             if (!hasFocus) {
                 val username = binding.etProfileName.text.toString()
                 val isUsernameValid = usernameValidator.validate(username)
-                toggleErrorState(binding.tilProfileName, !isUsernameValid)
+                toggleTilError(binding.tilProfileName, R.string.invalid_username, !isUsernameValid)
+                if (isUsernameValid) {
+                    binding.tilProfileName.boxStrokeWidth = 0
+                    binding.tilProfileName.boxStrokeWidthFocused = 0
+                }
             } else {
-                toggleErrorState(binding.tilProfileName, false)
+                toggleTilError(binding.tilProfileName, R.string.invalid_username, false)
+                binding.tilProfileName.boxStrokeWidth = 0
+                binding.tilProfileName.boxStrokeWidthFocused = 0
             }
         }
         // PHONE FIELD
@@ -159,9 +167,15 @@ class ProfileFragment : Fragment() {
             if (!hasFocus) {
                 val phone = binding.etProfilePhone.text.toString()
                 val isPhoneValid = phoneValidator.validate(phone)
-                toggleErrorState(binding.tilProfilePhone, !isPhoneValid)
+                toggleTilError(binding.tilProfilePhone, R.string.invalid_phone, !isPhoneValid)
+                if (isPhoneValid) {
+                    binding.tilProfilePhone.boxStrokeWidth = 0
+                    binding.tilProfilePhone.boxStrokeWidthFocused = 0
+                }
             } else {
-                toggleErrorState(binding.tilProfilePhone, false)
+                toggleTilError(binding.tilProfilePhone, R.string.invalid_phone, false)
+                binding.tilProfilePhone.boxStrokeWidth = 0
+                binding.tilProfilePhone.boxStrokeWidthFocused = 0
             }
         }
 
@@ -170,10 +184,22 @@ class ProfileFragment : Fragment() {
             val email = binding.tvProfileEmail.text.toString()
             val username = binding.etProfileName.text.toString()
             val phone = binding.etProfilePhone.text.toString()
+
             val isUsernameValid = usernameValidator.validate(username)
             val isPhoneValid = phoneValidator.validate(phone)
-            toggleErrorState(binding.tilProfileName, !isUsernameValid)
-            toggleErrorState(binding.tilProfilePhone, !isPhoneValid)
+
+            toggleTilError(binding.tilProfilePhone, R.string.invalid_phone, !isPhoneValid)
+            if (isPhoneValid) {
+                binding.tilProfilePhone.boxStrokeWidth = 0
+                binding.tilProfilePhone.boxStrokeWidthFocused = 0
+            }
+            toggleTilError(binding.tilProfileName, R.string.invalid_username, !isUsernameValid)
+            if (isPhoneValid) {
+                binding.tilProfileName.boxStrokeWidth = 0
+                binding.tilProfileName.boxStrokeWidthFocused = 0
+            }
+
+
             if (!isUsernameValid || !isPhoneValid) {
                 return@setOnClickListenerWithCooldown
             }
@@ -439,8 +465,12 @@ class ProfileFragment : Fragment() {
     }
 
     private fun loadSecurityFragment() {
-        toggleErrorState(binding.tilProfilePhone, false)
-        toggleErrorState(binding.tilProfileName, false)
+        toggleTilError(binding.tilProfilePhone, R.string.invalid_phone, false)
+        toggleTilError(binding.tilProfileName, R.string.invalid_username, false)
+        binding.tilProfilePhone.boxStrokeWidth = 0
+        binding.tilProfilePhone.boxStrokeWidthFocused = 0
+        binding.tilProfileName.boxStrokeWidth = 0
+        binding.tilProfileName.boxStrokeWidthFocused = 0
         val emailToPass = binding.tvProfileEmail.text.toString()
         val securityFragment = SecuritySettingFragment.newInstance(emailToPass)
         parentFragmentManager.beginTransaction()
@@ -465,24 +495,5 @@ class ProfileFragment : Fragment() {
             loader = binding.avatarLoader,
             isLoading = isLoading
         )
-    }
-
-    private fun toggleErrorState(
-        til: TextInputLayout,
-        isError: Boolean
-    ) {
-        val errorString =
-            if (til == binding.tilProfileName) getString(R.string.invalid_username) else getString(R.string.invalid_phone)
-        if (isError) {
-            til.boxStrokeWidth = dpToPx(1.5f, resources)
-            til.boxStrokeWidthFocused = dpToPx(1.5f, resources)
-            til.isErrorEnabled = true
-            til.error = errorString
-        } else {
-            til.error = null
-            til.isErrorEnabled = false
-            til.boxStrokeWidth = 0
-            til.boxStrokeWidthFocused = 0
-        }
     }
 }
