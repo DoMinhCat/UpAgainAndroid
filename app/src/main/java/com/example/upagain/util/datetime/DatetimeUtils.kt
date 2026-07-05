@@ -6,6 +6,7 @@ import java.time.ZonedDateTime
 import java.time.format.DateTimeFormatter
 import java.time.format.FormatStyle
 import java.util.Locale
+import kotlin.time.Clock
 
 /**
  * Return a formatted locale date from a timestamptz string
@@ -42,17 +43,12 @@ fun compareTimestamps(timestamp1: String, timestamp2: String): Int {
 }
 
 /**
- * Compare 2 timestamps
- * @param timestamp1
- * @param timestamp2
- * @return 1 if timestamp1 is more recent, -1 if timestamp2 is more recent, 0 if both are identical
+ * Compare an active clock Instant to a PostgreSQL timestamptz string configuration
+ * @param postgresTimestamptz The string token timestamp retrieved from the Go database layer
+ * @return positive if currentClockTime is earlier, negative if postgresTimestamptz is later, 0 if both are identical
  */
-fun compareTimestamps(timestamp1: kotlin.time.Instant, timestamp2: String): Int {
-    val instant2 = kotlin.time.Instant.parse(timestamp2)
+fun compareNowWithTimestamp(postgresTimestamptz: String): Int {
+    val backendInstant = kotlin.time.Instant.parse(postgresTimestamptz)
 
-    when {
-        timestamp1 > instant2 -> return 1
-        timestamp1 < instant2 -> return -1
-        else -> return 0
-    }
+    return Clock.System.now().compareTo(backendInstant)
 }

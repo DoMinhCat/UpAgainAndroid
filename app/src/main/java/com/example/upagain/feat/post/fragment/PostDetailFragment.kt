@@ -35,6 +35,8 @@ import com.example.upagain.repository.PostRepo
 import com.example.upagain.util.auth.SessionManager
 import com.example.upagain.util.bin.ImageType
 import com.example.upagain.util.bin.buildImageUrl
+import com.example.upagain.util.datetime.compareNowWithTimestamp
+import com.example.upagain.util.datetime.compareTimestamps
 import com.example.upagain.util.datetime.formatTimestamptz
 import com.example.upagain.util.ui.SnackbarLevel
 import com.example.upagain.util.ui.setOnBackClickListener
@@ -50,6 +52,7 @@ import com.example.upagain.viewmodel.ViewModelFactory
 import com.google.android.material.imageview.ShapeableImageView
 import com.google.android.material.tabs.TabLayoutMediator
 import kotlinx.coroutines.launch
+import java.time.Instant
 
 private const val ARG_POST_ID = "arg_post_id"
 
@@ -83,8 +86,7 @@ class PostDetailFragment : Fragment() {
     }
 
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
+        inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View {
         _binding = FragmentPostDetailBinding.inflate(inflater, container, false)
         return binding.root
@@ -118,12 +120,11 @@ class PostDetailFragment : Fragment() {
          * @return A new instance of fragment PostDetailFragment.
          */
         @JvmStatic
-        fun newInstance(idPost: Int) =
-            PostDetailFragment().apply {
-                arguments = Bundle().apply {
-                    putInt(ARG_POST_ID, idPost)
-                }
+        fun newInstance(idPost: Int) = PostDetailFragment().apply {
+            arguments = Bundle().apply {
+                putInt(ARG_POST_ID, idPost)
             }
+        }
     }
 
     // PRIVATE ZONE
@@ -149,8 +150,7 @@ class PostDetailFragment : Fragment() {
                 override fun onLikeClick(position: Int, comment: CommentDetailsResponse) {
                     // optimistic update
                     comment.isLiked = !comment.isLiked
-                    if (comment.isLiked)
-                        comment.likeCount += 1
+                    if (comment.isLiked) comment.likeCount += 1
                     else comment.likeCount -= 1
                     commentAdapter.notifyItemChanged(position)
                     commentViewModel.likeComment(comment.id, position)
@@ -217,11 +217,11 @@ class PostDetailFragment : Fragment() {
                     return@setOnClickListenerWithCooldown
                 }
                 commentViewModel.createComment(
-                    id,
-                    CreateCommentRequest(commentBody)
+                    id, CreateCommentRequest(commentBody)
                 )
             }
         }
+        // TODO: edit post, del post, book ads, remove ads
     }
 
     private fun observeState() {
@@ -246,8 +246,7 @@ class PostDetailFragment : Fragment() {
                                 if (photosList.size > 1) {
                                     binding.tlCarouselIndicator.visibility = View.VISIBLE
                                     TabLayoutMediator(
-                                        binding.tlCarouselIndicator,
-                                        binding.vpCarousel
+                                        binding.tlCarouselIndicator, binding.vpCarousel
                                     ) { _, _ ->
                                     }.attach()
                                 } else {
@@ -257,8 +256,7 @@ class PostDetailFragment : Fragment() {
 
                                 binding.ivAuthorAvatar.load(
                                     buildImageUrl(
-                                        post.creatorAvatar,
-                                        ImageType.AVATAR
+                                        post.creatorAvatar, ImageType.AVATAR
                                     )
                                 ) {
                                     crossfade(true)
@@ -269,20 +267,41 @@ class PostDetailFragment : Fragment() {
                                 // feed text data
                                 binding.tvLikeCount.text = post.likeCount.toString()
                                 binding.postCategory.setPostCategoryTextAndColor(
-                                    requireContext(),
-                                    post.category.toString()
+                                    requireContext(), post.category.toString()
                                 )
                                 binding.tvTitle.text = post.title
                                 binding.tvAuthorName.text = post.creator
                                 binding.tvPostTime.text = formatTimestamptz(post.createdAt)
                                 binding.tvHtmlContentBody.text = HtmlCompat.fromHtml(
-                                    post.content,
-                                    HtmlCompat.FROM_HTML_MODE_LEGACY
+                                    post.content, HtmlCompat.FROM_HTML_MODE_LEGACY
                                 )
                                 binding.tvCommentCount.text =
                                     getString(R.string.comment_count, post.commentCount)
                                 toggleLikeIconAndCount(post.isLiked, null)
                                 toggleSaveIconAndText(post.isSaved)
+
+                                // show action buttons conditionally
+                                if (post.idAccount == SessionManager.accountId) {
+                                    binding.btnRibbonEditPost.visibility = View.VISIBLE
+                                    binding.btnRibbonDeletePost.visibility = View.VISIBLE
+                                    if (post.adsId == null || (!post.adsTo.isNullOrEmpty() && compareNowWithTimestamp(
+                                            post.adsTo
+                                        ) > 0) || (!post.adsFrom.isNullOrEmpty() && compareNowWithTimestamp(
+                                            post.adsFrom
+                                        ) < 0)
+                                    ) {
+                                        binding.btnRibbonBookAd.visibility = View.VISIBLE
+                                        binding.btnRibbonCancelAd.visibility = View.GONE
+                                    } else {
+                                        binding.btnRibbonBookAd.visibility = View.GONE
+                                        binding.btnRibbonCancelAd.visibility = View.VISIBLE
+                                    }
+                                } else {
+                                    binding.btnRibbonEditPost.visibility = View.GONE
+                                    binding.btnRibbonDeletePost.visibility = View.GONE
+                                    binding.btnRibbonBookAd.visibility = View.GONE
+                                    binding.btnRibbonCancelAd.visibility = View.GONE
+                                }
                             }
 
                             is UiState.Error -> {
@@ -345,8 +364,7 @@ class PostDetailFragment : Fragment() {
                             is UiState.Error -> {
                                 commentAdapter.toggleLoadMoreBtnLoadingState(false)
                                 toggleCommentLoadingState(
-                                    false,
-                                    isFirstPage = (currentCommentPage == 1)
+                                    false, isFirstPage = (currentCommentPage == 1)
                                 )
                                 Log.e(
                                     "PostDetailFragment",
@@ -379,8 +397,7 @@ class PostDetailFragment : Fragment() {
                                     )
                                 }
                                 binding.main.showTopSnackbar(
-                                    R.string.err_save_post_msg,
-                                    SnackbarLevel.ERROR
+                                    R.string.err_save_post_msg, SnackbarLevel.ERROR
                                 )
                             }
                         }
@@ -408,8 +425,7 @@ class PostDetailFragment : Fragment() {
                                     )
                                 }
                                 binding.main.showTopSnackbar(
-                                    R.string.err_like_post_msg,
-                                    SnackbarLevel.ERROR
+                                    R.string.err_like_post_msg, SnackbarLevel.ERROR
                                 )
                             }
                         }
@@ -497,8 +513,7 @@ class PostDetailFragment : Fragment() {
                                     state.exception
                                 )
                                 binding.main.showTopSnackbar(
-                                    R.string.err_create_comment_msg,
-                                    SnackbarLevel.ERROR
+                                    R.string.err_create_comment_msg, SnackbarLevel.ERROR
                                 )
                             }
                         }
@@ -528,8 +543,7 @@ class PostDetailFragment : Fragment() {
                                     commentAdapter.notifyItemChanged(failedPosition)
                                 }
                                 binding.main.showTopSnackbar(
-                                    R.string.err_like_comment_msg,
-                                    SnackbarLevel.ERROR
+                                    R.string.err_like_comment_msg, SnackbarLevel.ERROR
                                 )
                                 Log.e(
                                     "PostDetailFragment",
@@ -567,8 +581,7 @@ class PostDetailFragment : Fragment() {
                                     state.exception
                                 )
                                 binding.main.showTopSnackbar(
-                                    R.string.err_delete_comment_msg,
-                                    SnackbarLevel.ERROR
+                                    R.string.err_delete_comment_msg, SnackbarLevel.ERROR
                                 )
                             }
                         }
@@ -617,14 +630,12 @@ class PostDetailFragment : Fragment() {
     private fun toggleSaveIconAndText(isSaved: Boolean) {
         if (isSaved) {
             binding.btnActionSave.icon = AppCompatResources.getDrawable(
-                binding.btnActionSave.context,
-                R.drawable.ic_bookmark_filled
+                binding.btnActionSave.context, R.drawable.ic_bookmark_filled
             )
             binding.tvSaveLabel.text = getString(R.string.btn_saved)
         } else {
             binding.btnActionSave.icon = AppCompatResources.getDrawable(
-                binding.btnActionSave.context,
-                R.drawable.ic_bookmark_outline
+                binding.btnActionSave.context, R.drawable.ic_bookmark_outline
             )
             binding.tvSaveLabel.text = getString(R.string.btn_save)
         }
@@ -633,8 +644,7 @@ class PostDetailFragment : Fragment() {
     private fun toggleLikeIconAndCount(isLiked: Boolean, post: PostDetailsResponse?) {
         if (isLiked) {
             binding.btnActionLike.icon = AppCompatResources.getDrawable(
-                binding.btnActionLike.context,
-                R.drawable.ic_love_filled
+                binding.btnActionLike.context, R.drawable.ic_love_filled
             )
             if (post != null) {
                 post.likeCount += 1
@@ -642,8 +652,7 @@ class PostDetailFragment : Fragment() {
             }
         } else {
             binding.btnActionLike.icon = AppCompatResources.getDrawable(
-                binding.btnActionLike.context,
-                R.drawable.ic_love_outline
+                binding.btnActionLike.context, R.drawable.ic_love_outline
             )
             if (post != null) {
                 post.likeCount -= 1
@@ -654,13 +663,11 @@ class PostDetailFragment : Fragment() {
 
     private fun showFullScreenImageDialog(absoluteImageUrl: String) {
         // Create an unstyled fullscreen dialog wrapper window context
-        val dialog =
-            Dialog(requireContext(), android.R.style.Theme_Black_NoTitleBar_Fullscreen)
+        val dialog = Dialog(requireContext(), android.R.style.Theme_Black_NoTitleBar_Fullscreen)
         dialog.setContentView(R.layout.dialog_fullscreen_image)
         dialog.setCancelable(true)
 
-        val imageView =
-            dialog.findViewById<ShapeableImageView>(R.id.iv_fullscreen_target)
+        val imageView = dialog.findViewById<ShapeableImageView>(R.id.iv_fullscreen_target)
         val btnClose = dialog.findViewById<ImageView>(R.id.btn_close_fullscreen)
 
         // Populate image immediately
