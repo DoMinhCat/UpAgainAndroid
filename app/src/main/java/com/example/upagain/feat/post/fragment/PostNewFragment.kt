@@ -16,10 +16,18 @@ import androidx.lifecycle.repeatOnLifecycle
 import com.example.upagain.R
 import com.example.upagain.api.ApiClient
 import com.example.upagain.databinding.FragmentPostNewBinding
+import com.example.upagain.model.post.PostCreateRequest
 import com.example.upagain.repository.PostRepo
 import com.example.upagain.util.ui.SnackbarLevel
+import com.example.upagain.util.ui.dpToPx
 import com.example.upagain.util.ui.hideKeyboard
+import com.example.upagain.util.ui.setOnClickListenerWithCooldown
 import com.example.upagain.util.ui.showTopSnackbar
+import com.example.upagain.util.ui.toggleTilError
+import com.example.upagain.util.validator.EmailRule
+import com.example.upagain.util.validator.FieldValidator
+import com.example.upagain.util.validator.MinLengthRule
+import com.example.upagain.util.validator.NotEmptyRule
 import com.example.upagain.viewmodel.PostViewModel
 import com.example.upagain.viewmodel.UiState
 import com.example.upagain.viewmodel.ViewModelFactory
@@ -41,6 +49,11 @@ class PostNewFragment : Fragment() {
     private val viewModel: PostViewModel by viewModels {
         ViewModelFactory { PostViewModel(postRepository, appInstance) }
     }
+
+    // validators
+    val titleValidator = FieldValidator(listOf(NotEmptyRule(), MinLengthRule(4)))
+    val contentValidator = FieldValidator(listOf(NotEmptyRule()))
+
 
 //    private lateinit var imagePreviewAdapter: SelectedImagesAdapter
 
@@ -87,7 +100,6 @@ class PostNewFragment : Fragment() {
          *
          * @return A new instance of fragment PostNewFragment.
          */
-        // TODO: Rename and change types and number of parameters
         @JvmStatic
         fun newInstance() =
             PostNewFragment().apply {
@@ -102,11 +114,48 @@ class PostNewFragment : Fragment() {
     }
 
     private fun setupListeners() {
+        // TITLE FIELD
+        binding.etPostTitle.setOnFocusChangeListener { _, hasFocus ->
+            if (!hasFocus) {
+                val title = binding.etPostTitle.text.toString()
+                val isTitleValid = titleValidator.validate(title)
+                toggleTilError(binding.tilTitle, R.string.invalid_title,!isTitleValid)
+            } else {
+                toggleTilError(binding.tilTitle, R.string.invalid_title,false)
+            }
+        }
+        // TITLE FIELD
+        binding.etPostContent.setOnFocusChangeListener { _, hasFocus ->
+            if (!hasFocus) {
+                val content = binding.etPostTitle.text.toString()
+                val isContentValid = contentValidator.validate(content)
+                toggleTilError(binding.tilContent, R.string.invalid_content,!isContentValid)
+            } else {
+                toggleTilError(binding.tilContent, R.string.invalid_content,false)
+            }
+        }
         // CHOOSE IMAGES
         binding.layoutUploadPrompt.setOnClickListener {
             pickImageLauncher.launch(
                 PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly)
             )
+        }
+        // PUBLISH POST
+        binding.btnPublish.setOnClickListenerWithCooldown {
+            val title = binding.etPostTitle.text.toString().trim()
+            val content = binding.etPostContent.text.toString().trim()
+
+            val isTitleValid = titleValidator.validate(title)
+            val isContentValid = contentValidator.validate(content)
+
+            toggleTilError(binding.tilTitle, R.string.invalid_title,!isTitleValid)
+            toggleTilError(binding.tilContent, R.string.invalid_content,!isContentValid)
+
+            if (!isTitleValid || !isContentValid) {
+                return@setOnClickListenerWithCooldown
+            }
+            val request = PostCreateRequest(title = title, content = content, images = chosenImages)
+            viewModel.createPost(request)
         }
     }
 
@@ -114,11 +163,41 @@ class PostNewFragment : Fragment() {
         lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
                 launch {
-                    // colect
+                    viewModel.createPostsState.collect { state ->
+                        when (state) {
+                            is UiState.Idle -> {
+                                // TODO: btn loading false
+                            }
+
+                            is UiState.Loading -> {
+                                // TODO: toggle btn loading
+                                activity?.hideKeyboard()
+                            }
+
+                            is UiState.Success -> {
+                                // TODO: btn loading false
+                                binding.btnPublish.isEnabled = true
+                                binding.btnPublish.text = getString(R.string.publish)
+
+                            }
+
+                            is UiState.Error -> {
+                                viewModel.resetCreatePostState()
+                                // TODO: btn loading false
+                                Log.e("PostNewFragment", "Create post failed", state.exception)
+                                binding.main.showTopSnackbar(
+                                    getString(
+                                        R.string.snack_create_post_fail,
+                                        state.exception.message
+                                    ), SnackbarLevel.ERROR, Snackbar.LENGTH_LONG
+                                )
+                            }
+                        }
+                    }
+
                 }
             }
         }
-
     }
 
     private fun updatePreviewImagesVisibility() {

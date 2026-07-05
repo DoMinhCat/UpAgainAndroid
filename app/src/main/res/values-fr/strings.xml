@@ -60,6 +60,7 @@
     <string name="post_content">Contenu</string>
     <string name="image_upload_hint">Appuyez pour télécharger des images</string>
     <string name="publish">Publier</string>
+    <string name="invalid_content">Contenu invalide</string>
     <string name="code">Code à 6 chiffres</string>
     <string name="code_hint">000000</string>
     <string name="barcode">Code-barres</string>
@@ -152,4 +153,5 @@
     <string name="err_create_comment_msg">Impossible de publier le commentaire</string>
     <string name="err_like_comment_msg">Impossible d\'aimer le commentaire</string>
     <string name="snack_create_post_fail">Échec de la création de l\'article : %1$s</string>
+    <string name="invalid_title">Titre invalide</string>
 </resources>

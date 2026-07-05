@@ -98,6 +98,8 @@
     <string name="post_content">Content</string>
     <string name="image_upload_hint">Tap to upload images</string>
     <string name="publish">Publish</string>
+    <string name="invalid_title">Invalid title</string>
+    <string name="invalid_content">Invalid content</string>
 
 
     <!-- Container -->

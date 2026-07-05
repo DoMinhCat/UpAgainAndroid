@@ -166,6 +166,7 @@ class SecuritySettingFragment : Fragment() {
             val currentId = SessionManager.accountId ?: return@setOnClickListenerWithCooldown
             viewModel.updateAccount(currentId, request)
         }
+        // SAVE PASSWORD
         binding.btnSavePassword.setOnClickListenerWithCooldown {
             val password = binding.etSecurityPassword.text.toString()
             val confirmPassword = binding.etSecurityConfirmPassword.text.toString()
