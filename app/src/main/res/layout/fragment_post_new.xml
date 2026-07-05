@@ -181,7 +181,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
-                android:layout_marginTop="@dimen/space_md">
+                android:layout_marginTop="@dimen/space_xl">
 
                 <com.google.android.material.button.MaterialButton
                     android:id="@+id/btn_publish"

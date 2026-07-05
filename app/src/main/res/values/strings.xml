@@ -200,5 +200,6 @@
     <string name="snack_container_open_success">Container unlocked</string>
     <string name="snack_container_open_fail">Failed to open container: %1$s</string>
     <string name="snack_create_post_fail">Failed to create post: %1$s</string>
+    <string name="snack_create_post_success">Post created</string>
 
 </resources>

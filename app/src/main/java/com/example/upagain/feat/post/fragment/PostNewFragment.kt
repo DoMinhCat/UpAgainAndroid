@@ -62,11 +62,15 @@ class PostNewFragment : Fragment() {
 
     private var chosenImages = mutableListOf<Uri>()
     private val pickImageLauncher = registerForActivityResult(
-        ActivityResultContracts.PickVisualMedia()
-    ) { uri ->
-        if (uri != null && !chosenImages.contains(uri)) {
-            chosenImages.add(uri)
-            // Pass a new instance list slice to ListAdapter for DiffUtil calculations
+        ActivityResultContracts.PickMultipleVisualMedia()
+    ) { uris ->
+        if (uris.isNotEmpty()) {
+            for (uri in uris) {
+                if (!chosenImages.contains(uri)) {
+                    chosenImages.add(uri)
+                }
+            }
+            // Submit the final updated list to the adapter
             imagePreviewAdapter.submitList(chosenImages.toList())
             updatePreviewImagesVisibility()
         }
@@ -86,6 +90,8 @@ class PostNewFragment : Fragment() {
     }
 
     override fun onDestroyView() {
+        toggleTilError(binding.tilTitle, R.string.invalid_title,false)
+        toggleTilError(binding.tilContent, R.string.invalid_content,false)
         super.onDestroyView()
         _binding = null
     }
@@ -190,9 +196,11 @@ class PostNewFragment : Fragment() {
 
                             is UiState.Success -> {
                                 togglePublishLoadingState(false)
-                                binding.btnPublish.isEnabled = true
-                                binding.btnPublish.text = getString(R.string.publish)
-
+                                binding.main.showTopSnackbar(
+                                    R.string.snack_create_post_success,
+                                    SnackbarLevel.SUCCESS
+                                )
+                                viewModel.resetCreatePostState()
                             }
 
                             is UiState.Error -> {
