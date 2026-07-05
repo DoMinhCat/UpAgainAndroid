@@ -127,7 +127,7 @@ fun toggleTilError(
     } else {
         til.error = null
         til.isErrorEnabled = false
-        til.boxStrokeWidth = 0
-        til.boxStrokeWidthFocused = 0
+//        til.boxStrokeWidth = 0
+//        til.boxStrokeWidthFocused = 0
     }
 }

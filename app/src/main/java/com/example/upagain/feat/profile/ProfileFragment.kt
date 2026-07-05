@@ -116,7 +116,11 @@ class ProfileFragment : Fragment() {
     override fun onDestroyView() {
         super.onDestroyView()
         toggleTilError(binding.tilProfilePhone, R.string.invalid_phone, false)
+        binding.tilProfilePhone.boxStrokeWidth = 0
+        binding.tilProfilePhone.boxStrokeWidthFocused = 0
         toggleTilError(binding.tilProfileName, R.string.invalid_username, false)
+        binding.tilProfileName.boxStrokeWidth = 0
+        binding.tilProfileName.boxStrokeWidthFocused = 0
         _binding = null
     }
 
@@ -148,8 +152,14 @@ class ProfileFragment : Fragment() {
                 val username = binding.etProfileName.text.toString()
                 val isUsernameValid = usernameValidator.validate(username)
                 toggleTilError(binding.tilProfileName, R.string.invalid_username, !isUsernameValid)
+                if (isUsernameValid) {
+                    binding.tilProfileName.boxStrokeWidth = 0
+                    binding.tilProfileName.boxStrokeWidthFocused = 0
+                }
             } else {
                 toggleTilError(binding.tilProfileName, R.string.invalid_username, false)
+                binding.tilProfileName.boxStrokeWidth = 0
+                binding.tilProfileName.boxStrokeWidthFocused = 0
             }
         }
         // PHONE FIELD
@@ -158,8 +168,14 @@ class ProfileFragment : Fragment() {
                 val phone = binding.etProfilePhone.text.toString()
                 val isPhoneValid = phoneValidator.validate(phone)
                 toggleTilError(binding.tilProfilePhone, R.string.invalid_phone, !isPhoneValid)
+                if (isPhoneValid) {
+                    binding.tilProfilePhone.boxStrokeWidth = 0
+                    binding.tilProfilePhone.boxStrokeWidthFocused = 0
+                }
             } else {
                 toggleTilError(binding.tilProfilePhone, R.string.invalid_phone, false)
+                binding.tilProfilePhone.boxStrokeWidth = 0
+                binding.tilProfilePhone.boxStrokeWidthFocused = 0
             }
         }
 
@@ -173,7 +189,16 @@ class ProfileFragment : Fragment() {
             val isPhoneValid = phoneValidator.validate(phone)
 
             toggleTilError(binding.tilProfilePhone, R.string.invalid_phone, !isPhoneValid)
+            if (isPhoneValid) {
+                binding.tilProfilePhone.boxStrokeWidth = 0
+                binding.tilProfilePhone.boxStrokeWidthFocused = 0
+            }
             toggleTilError(binding.tilProfileName, R.string.invalid_username, !isUsernameValid)
+            if (isPhoneValid) {
+                binding.tilProfileName.boxStrokeWidth = 0
+                binding.tilProfileName.boxStrokeWidthFocused = 0
+            }
+
 
             if (!isUsernameValid || !isPhoneValid) {
                 return@setOnClickListenerWithCooldown
@@ -442,6 +467,10 @@ class ProfileFragment : Fragment() {
     private fun loadSecurityFragment() {
         toggleTilError(binding.tilProfilePhone, R.string.invalid_phone, false)
         toggleTilError(binding.tilProfileName, R.string.invalid_username, false)
+        binding.tilProfilePhone.boxStrokeWidth = 0
+        binding.tilProfilePhone.boxStrokeWidthFocused = 0
+        binding.tilProfileName.boxStrokeWidth = 0
+        binding.tilProfileName.boxStrokeWidthFocused = 0
         val emailToPass = binding.tvProfileEmail.text.toString()
         val securityFragment = SecuritySettingFragment.newInstance(emailToPass)
         parentFragmentManager.beginTransaction()
