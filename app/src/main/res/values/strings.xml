@@ -189,12 +189,16 @@
     <string name="btn_cancel">Cancel</string>
 
     <!-- Ads Dialogs -->
+    <string name="book_ads_title">Book an ads</string>
     <string name="start_date">Start date</string>
     <string name="duration">Duration</string>
     <string name="base_price">Base price</string>
     <string name="vat">VAT (20%)</string>
     <string name="processing_fee">Processing fee</string>
     <string name="total_price">Total price</string>
+    <string name="invalid_date">Invalid date</string>
+    <string name="select_start_date">Select start date</string>
+    <string name="month">Month(s)</string>
 
     <!-- Snack bar messages -->
     <string name="snack_email_update_success">Email updated</string>
