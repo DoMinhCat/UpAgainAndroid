@@ -182,52 +182,124 @@
                     android:gravity="center_vertical"
                     android:orientation="horizontal">
 
-                    <com.google.android.material.button.MaterialButton
-                        android:id="@+id/btn_ribbon_cancel_ad"
-                        style="@style/TextAppearance.UpAgain.ButtonDelete"
+                    <FrameLayout
+                        android:id="@+id/container_ribbon_cancel_ad"
                         android:layout_width="wrap_content"
-                        android:layout_height="@dimen/min_touch"
+                        android:layout_height="wrap_content"
                         android:layout_marginEnd="@dimen/space_sm"
-                        android:text="@string/btn_cancel_ad"
                         android:visibility="gone"
-                        app:icon="@drawable/ic_ads"
-                        app:iconPadding="@dimen/space_xs"
-                        app:iconSize="@dimen/icon_sm"
-                        tools:visibility="visible" />
+                        tools:visibility="visible">
 
-                    <com.google.android.material.button.MaterialButton
-                        android:id="@+id/btn_ribbon_book_ad"
-                        style="@style/TextAppearance.UpAgain.ButtonPrimary"
+                        <com.google.android.material.button.MaterialButton
+                            android:id="@+id/btn_ribbon_cancel_ad"
+                            style="@style/TextAppearance.UpAgain.ButtonDelete"
+                            android:layout_width="wrap_content"
+                            android:layout_height="@dimen/min_touch"
+                            android:text="@string/btn_cancel_ad"
+                            app:icon="@drawable/ic_ads"
+                            app:iconPadding="@dimen/space_xs"
+                            app:iconSize="@dimen/icon_sm" />
+
+                        <com.google.android.material.progressindicator.CircularProgressIndicator
+                            android:id="@+id/loader_ribbon_cancel_ad"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:indeterminate="true"
+                            app:indicatorSize="@dimen/icon_md"
+                            app:trackThickness="2dp"
+                            app:indicatorColor="@color/white"
+                            android:visibility="gone"
+                            tools:visibility="visible" />
+                    </FrameLayout>
+
+                    <FrameLayout
+                        android:id="@+id/container_ribbon_book_ad"
                         android:layout_width="wrap_content"
-                        android:layout_height="@dimen/min_touch"
+                        android:layout_height="wrap_content"
                         android:layout_marginEnd="@dimen/space_sm"
-                        android:text="@string/btn_book_ad"
                         android:visibility="gone"
-                        app:icon="@drawable/ic_ads"
-                        app:iconPadding="@dimen/space_xs"
-                        app:iconSize="@dimen/icon_sm"
-                        tools:visibility="visible" />
+                        tools:visibility="visible">
 
-                    <com.google.android.material.button.MaterialButton
-                        android:id="@+id/btn_ribbon_edit_post"
-                        style="@style/TextAppearance.UpAgain.ButtonEdit"
-                        android:layout_width="wrap_content"
-                        android:layout_height="@dimen/min_touch"
-                        android:layout_marginEnd="@dimen/space_sm"
-                        android:text="@string/btn_edit"
-                        app:icon="@drawable/ic_edit"
-                        app:iconPadding="@dimen/space_xs"
-                        app:iconSize="@dimen/icon_sm" />
+                        <com.google.android.material.button.MaterialButton
+                            android:id="@+id/btn_ribbon_book_ad"
+                            style="@style/TextAppearance.UpAgain.ButtonPrimary"
+                            android:layout_width="wrap_content"
+                            android:layout_height="@dimen/min_touch"
+                            android:text="@string/btn_book_ad"
+                            app:icon="@drawable/ic_ads"
+                            app:iconPadding="@dimen/space_xs"
+                            app:iconSize="@dimen/icon_sm" />
 
-                    <com.google.android.material.button.MaterialButton
-                        android:id="@+id/btn_ribbon_delete_post"
-                        style="@style/TextAppearance.UpAgain.ButtonDelete"
+                        <com.google.android.material.progressindicator.CircularProgressIndicator
+                            android:id="@+id/loader_ribbon_book_ad"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:indeterminate="true"
+                            app:indicatorSize="@dimen/icon_md"
+                            app:trackThickness="2dp"
+                            app:indicatorColor="@color/color_on_primary"
+                            android:visibility="gone"
+                            tools:visibility="visible" />
+                    </FrameLayout>
+
+                    <FrameLayout
+                        android:id="@+id/container_ribbon_edit_post"
                         android:layout_width="wrap_content"
-                        android:layout_height="@dimen/min_touch"
-                        android:text="@string/btn_delete"
-                        app:icon="@drawable/ic_trash"
-                        app:iconPadding="@dimen/space_xs"
-                        app:iconSize="@dimen/icon_sm" />
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="@dimen/space_sm">
+
+                        <com.google.android.material.button.MaterialButton
+                            android:id="@+id/btn_ribbon_edit_post"
+                            style="@style/TextAppearance.UpAgain.ButtonEdit"
+                            android:layout_width="wrap_content"
+                            android:layout_height="@dimen/min_touch"
+                            android:text="@string/btn_edit"
+                            app:icon="@drawable/ic_edit"
+                            app:iconPadding="@dimen/space_xs"
+                            app:iconSize="@dimen/icon_sm" />
+
+                        <com.google.android.material.progressindicator.CircularProgressIndicator
+                            android:id="@+id/loader_ribbon_edit_post"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:indeterminate="true"
+                            app:indicatorSize="@dimen/icon_md"
+                            app:trackThickness="2dp"
+                            app:indicatorColor="@color/color_on_primary"
+                            android:visibility="gone"
+                            tools:visibility="visible" />
+                    </FrameLayout>
+
+                    <FrameLayout
+                        android:id="@+id/container_ribbon_delete_post"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content">
+
+                        <com.google.android.material.button.MaterialButton
+                            android:id="@+id/btn_ribbon_delete_post"
+                            style="@style/TextAppearance.UpAgain.ButtonDelete"
+                            android:layout_width="wrap_content"
+                            android:layout_height="@dimen/min_touch"
+                            android:text="@string/btn_delete"
+                            app:icon="@drawable/ic_trash"
+                            app:iconPadding="@dimen/space_xs"
+                            app:iconSize="@dimen/icon_sm" />
+
+                        <com.google.android.material.progressindicator.CircularProgressIndicator
+                            android:id="@+id/loader_ribbon_delete_post"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:indeterminate="true"
+                            app:indicatorSize="@dimen/icon_md"
+                            app:trackThickness="2dp"
+                            app:indicatorColor="@color/white"
+                            android:visibility="gone"
+                            tools:visibility="visible" />
+                    </FrameLayout>
 
                 </LinearLayout>
             </HorizontalScrollView>

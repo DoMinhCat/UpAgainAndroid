@@ -88,6 +88,7 @@
     <string name="error_403_msg">Oups ! Vous vous aventurez dans la zone interdite de la forêt.</string>
     <string name="err_like_post_msg">Échec d\'aimer l\'article</string>
     <string name="err_delete_comment_msg">Impossible de supprimer le commentaire</string>
+    <string name="err_delete_post_msg">Impossible de supprimer l\'article</string>
     <string name="btn_home">Retour à l\'accueil</string>
     <string name="error_500_msg">Oups ! Nos serveurs sont actuellement très sollicités. Nous mettons tout en œuvre pour résoudre le problème au plus vite.</string>
     <string name="btn_refresh">Actualiser la page</string>
@@ -127,6 +128,7 @@
     <string name="language">Langue</string>
     <string name="invalid_phone">Numéro de téléphone invalide</string>
     <string name="confirm_del_account">Supprimer définitivement le compte ?</string>
+    <string name="confirm_del_post">Voulez-vous supprimer cet article ?</string>
     <string name="confirm_message">Cette action est irréversible.</string>
     <string name="btn_confirm">Confirmer</string>
     <string name="btn_cancel">Annuler</string>
@@ -155,4 +157,5 @@
     <string name="err_like_comment_msg">Impossible d\'aimer le commentaire</string>
     <string name="snack_create_post_fail">Échec de la création de l\'article : %1$s</string>
     <string name="invalid_title">Titre invalide</string>
+    <string name="snack_create_post_success">Article publié</string>
 </resources>
