@@ -37,7 +37,7 @@ class PostRepo(private val apiService: ApiService) {
             val titlePart = request.title.toRequestBody(textMediaType)
             val contentPart = request.content.toRequestBody(textMediaType)
             val categoryPart =
-                request.category.name.toRequestBody(textMediaType) // Assuming enum name match
+                request.category.value.toRequestBody(textMediaType)
 
             // handle file uploads
             val imageParts = mutableListOf<MultipartBody.Part>()

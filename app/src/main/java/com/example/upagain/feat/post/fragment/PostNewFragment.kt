@@ -17,6 +17,7 @@ import com.example.upagain.R
 import com.example.upagain.api.ApiClient
 import com.example.upagain.databinding.FragmentPostNewBinding
 import com.example.upagain.feat.post.adapter.PreviewImageAdapter
+import com.example.upagain.model.post.PostCategory
 import com.example.upagain.model.post.PostCreateRequest
 import com.example.upagain.repository.PostRepo
 import com.example.upagain.util.ui.SnackbarLevel
@@ -174,7 +175,7 @@ class PostNewFragment : Fragment() {
             if (!isTitleValid || !isContentValid) {
                 return@setOnClickListenerWithCooldown
             }
-            val request = PostCreateRequest(title = title, content = content, images = chosenImages)
+            val request = PostCreateRequest(title = title, content = content, category = PostCategory.PROJECT, images = chosenImages)
             viewModel.createPost(request)
         }
     }
