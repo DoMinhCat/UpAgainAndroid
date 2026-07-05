@@ -5,6 +5,8 @@ import com.example.upagain.model.TokenResponse
 import com.example.upagain.model.account.AccountDetailsResponse
 import com.example.upagain.model.account.AccountUpdateRequest
 import com.example.upagain.model.account.PasswordUpdateRequest
+import com.example.upagain.model.ads.CreateAdsRequest
+import com.example.upagain.model.ads.CreateAdsResponse
 import com.example.upagain.model.comment.CommentDetailsResponse
 import com.example.upagain.model.comment.CommentPaginationResponse
 import com.example.upagain.model.comment.CreateCommentRequest
@@ -113,6 +115,13 @@ interface ApiService {
 
     @DELETE(Endpoints.COMMENTS_DELETE)
     fun deleteComment(@Path("id") id: Int): Call<Unit>
+
+    // ADS
+    @POST(Endpoints.ADS_CREATE)
+    fun createAds(
+        @Path("id") id: Int,
+        @Body request: CreateAdsRequest
+    ): Call<CreateAdsResponse>
 
     // CONTAINER
     @Multipart
