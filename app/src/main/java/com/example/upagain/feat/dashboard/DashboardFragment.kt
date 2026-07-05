@@ -14,7 +14,7 @@ import com.example.upagain.util.ui.showTopSnackbar
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_JUST_LOGGED_IN = "param1"
+private const val ARG_JUST_LOGGED_IN = "key_just_logged_in"
 
 /**
  * A simple [Fragment] subclass.
@@ -51,7 +51,6 @@ class DashboardFragment : Fragment() {
 
     override fun onDestroyView() {
         super.onDestroyView()
-        // clear reference to prevent memory leaks
         _binding = null
     }
     companion object {
@@ -59,10 +58,9 @@ class DashboardFragment : Fragment() {
          * Use this factory method to create a new instance of
          * this fragment using the provided parameters.
          *
-         * @param ARG_JUST_LOGGED_IN Parameter 1.
+         * @param ARG_JUST_LOGGED_IN if the user just logged in or not.
          * @return A new instance of fragment DashboardFragment.
          */
-        private const val ARG_JUST_LOGGED_IN = "key_just_logged_in"
         @JvmStatic
         fun newInstance(justLoggedIn: Boolean) =
             DashboardFragment().apply {

@@ -29,7 +29,10 @@ import com.example.upagain.viewmodel.UiState
 import com.example.upagain.viewmodel.ViewModelFactory
 import kotlinx.coroutines.launch
 
+private const val ARG_JUST_CREATED = "key_just_created"
+
 class PostMeFragment : Fragment() {
+
     // elements binding
     private var _binding: FragmentPostMeBinding? = null
     private val binding get() = _binding!!
@@ -43,15 +46,17 @@ class PostMeFragment : Fragment() {
     private var currentPage = 1
     private var myPosts = mutableListOf<PostDetailsResponse>()
     private lateinit var postAdapter: PostAdapter
+    private var justCreated: Boolean = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        arguments?.let {}
+        arguments?.let {
+            justCreated = it.getBoolean(ARG_JUST_CREATED)
+        }
     }
 
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
+        inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View {
         _binding = FragmentPostMeBinding.inflate(inflater, container, false)
         return binding.root
@@ -64,6 +69,13 @@ class PostMeFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        if (justCreated) {
+            binding.main.showTopSnackbar(
+                R.string.snack_create_post_success, SnackbarLevel.SUCCESS
+            )
+            justCreated = false
+        }
+
         // ! Always set up listeners and observers before API call
         setupRecyclerView()
         setupListeners()
@@ -78,62 +90,61 @@ class PostMeFragment : Fragment() {
          * Use this factory method to create a new instance of
          * this fragment using the provided parameters.
          *
+         * @param ARG_JUST_CREATED if the user just created a post in or not.
          * @return A new instance of fragment PostMeFragment.
          */
         @JvmStatic
-        fun newInstance() =
-            PostMeFragment().apply {
-                arguments = Bundle().apply {
-                }
+        fun newInstance(justCreated: Boolean = false) = PostMeFragment().apply {
+            arguments = Bundle().apply {
+                putBoolean(ARG_JUST_CREATED, justCreated)
             }
+        }
     }
 
     // PRIVATE ZONE
     private fun setupRecyclerView() {
         binding.rvPosts.layoutManager = LinearLayoutManager(requireContext())
         // Attach the adapter
-        postAdapter = PostAdapter(
-            object : PostAdapter.OnClickListener {
-                override fun onPostClick(position: Int, post: PostDetailsResponse) {
-                    val postId = postAdapter.currentList.getOrNull(position)?.id ?: return
-                    val postDetailFragment = PostDetailFragment.Companion.newInstance(postId)
-                    parentFragmentManager.beginTransaction()
-                        .replace(R.id.fragment_container, postDetailFragment)
-                        .addToBackStack(null)
-                        .commit()
+        postAdapter = PostAdapter(object : PostAdapter.OnClickListener {
+            override fun onPostClick(position: Int, post: PostDetailsResponse) {
+                val postId = postAdapter.currentList.getOrNull(position)?.id ?: return
+                val postDetailFragment = PostDetailFragment.newInstance(postId)
+                parentFragmentManager.beginTransaction()
+                    .replace(R.id.fragment_container, postDetailFragment).addToBackStack(null)
+                    .commit()
+            }
+
+            override fun onLikeClick(position: Int, post: PostDetailsResponse) {
+                // optimistic update
+                val updatedPost = post.copy(
+                    isLiked = !post.isLiked,
+                    likeCount = if (!post.isLiked) post.likeCount + 1 else post.likeCount - 1
+                )
+
+                val newList = postAdapter.currentList.toMutableList()
+                if (position in newList.indices) {
+                    newList[position] = updatedPost
+                    postAdapter.submitList(newList)
                 }
+                viewModel.likePost(updatedPost.id, position)
+            }
 
-                override fun onLikeClick(position: Int, post: PostDetailsResponse) {
-                    // optimistic update
-                    val updatedPost = post.copy(
-                        isLiked = !post.isLiked,
-                        likeCount = if (!post.isLiked) post.likeCount + 1 else post.likeCount - 1
-                    )
+            override fun onSaveClick(position: Int, post: PostDetailsResponse) {
+                // optimistic update
+                val updatedPost = post.copy(isSaved = !post.isSaved)
 
-                    val newList = postAdapter.currentList.toMutableList()
-                    if (position in newList.indices) {
-                        newList[position] = updatedPost
-                        postAdapter.submitList(newList)
-                    }
-                    viewModel.likePost(updatedPost.id, position)
+                val newList = postAdapter.currentList.toMutableList()
+                if (position in newList.indices) {
+                    newList[position] = updatedPost
+                    postAdapter.submitList(newList)
                 }
+                viewModel.savePost(updatedPost.id, position)
+            }
 
-                override fun onSaveClick(position: Int, post: PostDetailsResponse) {
-                    // optimistic update
-                    val updatedPost = post.copy(isSaved = !post.isSaved)
-
-                    val newList = postAdapter.currentList.toMutableList()
-                    if (position in newList.indices) {
-                        newList[position] = updatedPost
-                        postAdapter.submitList(newList)
-                    }
-                    viewModel.savePost(updatedPost.id, position)
-                }
-
-                override fun onLoadMoreClick() {
-                    viewModel.loadPageOfMyPosts(currentPage + 1)
-                }
-            })
+            override fun onLoadMoreClick() {
+                viewModel.loadPageOfMyPosts(currentPage + 1)
+            }
+        })
         binding.rvPosts.adapter = postAdapter
     }
 
@@ -158,9 +169,7 @@ class PostMeFragment : Fragment() {
         binding.btnNewPost.setOnClickListener {
             val newPostFragment = PostNewFragment.newInstance()
             parentFragmentManager.beginTransaction()
-                .replace(R.id.fragment_container, newPostFragment)
-                .addToBackStack(null)
-                .commit()
+                .replace(R.id.fragment_container, newPostFragment).addToBackStack(null).commit()
         }
     }
 
@@ -199,8 +208,7 @@ class PostMeFragment : Fragment() {
 
                                 myPosts.addAll(myPostsResponse.posts ?: emptyList())
 
-                                val hasMore =
-                                    myPostsResponse.currentPage < myPostsResponse.lastPage
+                                val hasMore = myPostsResponse.currentPage < myPostsResponse.lastPage
                                 postAdapter.updatePaginationState(hasMore)
                                 postAdapter.submitList(myPosts.toList())
                             }
@@ -212,9 +220,8 @@ class PostMeFragment : Fragment() {
                                     "Load all posts failed. Status code: ${state.statusCode}",
                                     state.exception
                                 )
-                                ErrorActivity.Companion.start(
-                                    requireContext(),
-                                    state.statusCode ?: 0
+                                ErrorActivity.start(
+                                    requireContext(), state.statusCode ?: 0
                                 )
                             }
                         }
@@ -256,8 +263,7 @@ class PostMeFragment : Fragment() {
                                     )
                                 }
                                 binding.main.showTopSnackbar(
-                                    R.string.err_save_post_msg,
-                                    SnackbarLevel.ERROR
+                                    R.string.err_save_post_msg, SnackbarLevel.ERROR
                                 )
                             }
                         }
@@ -300,8 +306,7 @@ class PostMeFragment : Fragment() {
                                     )
                                 }
                                 binding.main.showTopSnackbar(
-                                    R.string.err_like_post_msg,
-                                    SnackbarLevel.ERROR
+                                    R.string.err_like_post_msg, SnackbarLevel.ERROR
                                 )
                             }
                         }

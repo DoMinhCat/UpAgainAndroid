@@ -91,6 +91,7 @@ class PostNewFragment : Fragment() {
     }
 
     override fun onDestroyView() {
+        viewModel.resetCreatePostState()
         toggleTilError(binding.tilTitle, R.string.invalid_title,false)
         toggleTilError(binding.tilContent, R.string.invalid_content,false)
         super.onDestroyView()
@@ -114,8 +115,7 @@ class PostNewFragment : Fragment() {
         @JvmStatic
         fun newInstance() =
             PostNewFragment().apply {
-                arguments = Bundle().apply {
-                }
+                arguments = Bundle().apply {}
             }
     }
 
@@ -197,11 +197,10 @@ class PostNewFragment : Fragment() {
 
                             is UiState.Success -> {
                                 togglePublishLoadingState(false)
-                                binding.main.showTopSnackbar(
-                                    R.string.snack_create_post_success,
-                                    SnackbarLevel.SUCCESS
-                                )
-                                viewModel.resetCreatePostState()
+                                val myPostsFragment = PostMeFragment.newInstance(true)
+                                parentFragmentManager.beginTransaction()
+                                    .replace(R.id.fragment_container, myPostsFragment)
+                                    .commit()
                             }
 
                             is UiState.Error -> {
