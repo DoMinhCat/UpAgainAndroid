@@ -166,14 +166,14 @@ class MainActivity : AppCompatActivity() {
     private fun handleIncomingDeepLink(intent: Intent?) {
         val uri: Uri? = intent?.data
         if (uri != null && uri.scheme == "upagain" && uri.host == "payment") {
-            val paymentStatus = uri.getQueryParameter("payment") // "success" or "cancel"
+            val paymentStatus = uri.getQueryParameter("payment")
 
-            // Find the visible Fragment inside your layout container
+            // Locate the active instance of your fragment
             val fragment = supportFragmentManager.findFragmentById(R.id.fragment_container) as? PostDetailFragment
 
             if (paymentStatus == "success") {
-                // Safely forward the notification to your Fragment
-                fragment?.onPaymentSuccessReturned()
+                // Forward the entire URL string so the fragment can extract query parameters
+                fragment?.onPaymentSuccessReturned(uri.toString())
             }
         }
     }

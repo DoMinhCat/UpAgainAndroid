@@ -1,6 +1,7 @@
 package com.example.upagain.feat.post.fragment
 
 import android.app.Dialog
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -8,6 +9,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import androidx.appcompat.content.res.AppCompatResources
+import androidx.core.net.toUri
 import androidx.core.text.HtmlCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -65,8 +67,8 @@ private const val ARG_POST_ID = "arg_post_id"
 
 class PostDetailFragment : Fragment() {
     private var idPost: Int? = null
-    private var adsDuration: Int? = null
-    private var adsStartDate: String? = null
+    private var adsDuration: Int = 0
+    private var adsStartDate: String = ""
 
     // elements binding
     private var _binding: FragmentPostDetailBinding? = null
@@ -144,9 +146,54 @@ class PostDetailFragment : Fragment() {
         }
     }
 
-    // Triggered automatically when the parent Activity detects a return from Stripe
-    fun onPaymentSuccessReturned() {
-        // TODO
+    // Triggered automatically when the parent Activity detects a return from Stripe with param "success"
+    fun onPaymentSuccessReturned(returnUrlString: String) {
+        lifecycleScope.launch {
+            try {
+                val uri = returnUrlString.toUri()
+
+                // Extract parameters embedded inside the return URL
+                val extractedFrom = uri.getQueryParameter("ads_from")
+                val extractedDuration = uri.getQueryParameter("ads_duration")?.toIntOrNull()
+
+                if (extractedFrom.isNullOrEmpty() || extractedDuration == null) {
+                    // verification failed
+                    binding.main.showTopSnackbar(
+                        R.string.snack_payment_verification_fail,
+                        SnackbarLevel.ERROR
+                    )
+                    return@launch
+                }
+
+                // Sync variables
+                adsStartDate = extractedFrom
+                adsDuration = extractedDuration
+
+                // skip the verify payment step and call 2nd request directly
+                idPost?.let { id ->
+                    adsViewModel.createAds(
+                        CreateAdsRequest(
+                            idPost = id,
+                            from = adsStartDate,
+                            duration = adsDuration,
+                            originUrl = BuildConfig.PAYMENT_DEEPLINK,
+                            isPaid = true
+                        )
+                    )
+                }
+
+            } catch (e: Exception) {
+                Log.e(
+                    "PostDetailFragment",
+                    "Error extracting deep link params from returning stripe checkout or executing 2nd create ads request",
+                    e
+                )
+                binding.main.showTopSnackbar(
+                    R.string.snack_payment_verification_fail,
+                    SnackbarLevel.ERROR
+                )
+            }
+        }
     }
 
     // PRIVATE ZONE
@@ -684,11 +731,17 @@ class PostDetailFragment : Fragment() {
                                     showAdsBookingDialog(
                                         context = requireContext(),
                                         fragmentManager = childFragmentManager,
-                                        postTitle = getPostData()?.title ?: getString(R.string.btn_book_ad),
+                                        postTitle = getPostData()?.title
+                                            ?: getString(R.string.btn_book_ad),
                                         pricePerMonth = price
                                     ) { startDate, duration ->
-                                        val request = CreateAdsRequest(startDate, duration, id,
-                                            BuildConfig.PAYMENT_DEEPLINK, false)
+                                        val request = CreateAdsRequest(
+                                            startDate,
+                                            duration,
+                                            id,
+                                            BuildConfig.PAYMENT_DEEPLINK + "?ads_from=$startDate&ads_duration=${duration}",
+                                            false
+                                        )
                                         adsViewModel.createAds(request)
                                     }
                                 }
@@ -715,16 +768,27 @@ class PostDetailFragment : Fragment() {
                 launch {
                     adsViewModel.createAdsState.collect { state ->
                         when (state) {
-                            is UiState.Idle -> {
-                                // TODO: toggle loading
-                            }
+                            is UiState.Idle -> {}
 
-                            is UiState.Loading -> {
-                                // TODO: toggle loading
-                            }
+                            is UiState.Loading -> {}
 
                             is UiState.Success -> {
-                                // TODO: toggle loading, show snackbar success
+                                val response = state.data
+                                if (response.message == "Ad created successfully.") {
+                                    // 2nd call success
+                                    binding.main.showTopSnackbar(
+                                        R.string.snack_create_ads_success,
+                                        SnackbarLevel.SUCCESS
+                                    )
+                                    idPost?.let { postViewModel.getPostDetails(it) }
+                                } else if (response.checkoutUrl.isNotEmpty()) {
+                                    // 1st call return checkout Url
+                                    val intent = Intent(
+                                        Intent.ACTION_VIEW,
+                                        response.checkoutUrl.toUri()
+                                    )
+                                    startActivity(intent)
+                                }
                             }
 
                             is UiState.Error -> {

@@ -173,4 +173,5 @@
     <string name="snack_get_ads_price_fail">Impossible de récupérer le prix: %1$s</string>
     <string name="snack_create_ads_fail">Impossible de créer une publicité: %1$s</string>
     <string name="snack_create_ads_success">Publicité créée</string>
+    <string name="snack_payment_verification_fail">Impossible de vérifier le paiement</string>
 </resources>

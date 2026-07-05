@@ -4,4 +4,5 @@ import com.google.gson.annotations.SerializedName
 
 data class CreateAdsResponse(
     @SerializedName("checkout_url") val checkoutUrl: String,
+    @SerializedName("message") val message: String,
 )
