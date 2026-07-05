@@ -154,6 +154,14 @@ class PostMeFragment : Fragment() {
                 false
             }
         }
+        // NEW POST
+        binding.btnNewPost.setOnClickListener {
+            val newPostFragment = PostNewFragment.newInstance()
+            parentFragmentManager.beginTransaction()
+                .replace(R.id.fragment_container, newPostFragment)
+                .addToBackStack(null)
+                .commit()
+        }
     }
 
     private fun observePostState() {
