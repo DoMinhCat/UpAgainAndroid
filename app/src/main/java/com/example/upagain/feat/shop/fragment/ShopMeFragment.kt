@@ -22,6 +22,7 @@ import com.example.upagain.api.ApiClient
 import com.example.upagain.databinding.FragmentShopMeBinding
 import com.example.upagain.feat.shop.adapter.ItemAdapter
 import com.example.upagain.model.item.ItemDetailResponse
+import com.example.upagain.model.item.ItemSortOption
 import com.example.upagain.repository.ItemRepo
 import com.example.upagain.util.ui.SnackbarLevel
 import com.example.upagain.util.ui.setOnBackClickListener
@@ -47,7 +48,7 @@ class ShopMeFragment : Fragment() {
     private lateinit var shopAdapter: ItemAdapter
     private var searchQuery = ""
     private var selectedMaterial = ""
-    private var selectedSort = ""
+    private var selectedSort = ItemSortOption.MOST_RECENT_CREATION.value
 
     private var currentPage = 1
     private val loadedItems = mutableListOf<ItemDetailResponse>()
@@ -83,7 +84,11 @@ class ShopMeFragment : Fragment() {
     private fun setupRecyclerView() {
         shopAdapter = ItemAdapter(object : ItemAdapter.OnClickListener {
             override fun onItemClick(item: ItemDetailResponse) {
-                // TODO: navigate to detail page
+                val targetFrag = ShopDetailFragment.newInstance(item.id)
+                parentFragmentManager.beginTransaction()
+                    .replace(R.id.fragment_container, targetFrag)
+                    .addToBackStack(null)
+                    .commit()
             }
 
             override fun onLoadMoreClick() {
@@ -213,6 +218,8 @@ class ShopMeFragment : Fragment() {
         }
         if (selectedSort.isNotEmpty()) {
             options["sort"] = selectedSort
+        } else {
+            options["sort"] = "most_recent_creation"
         }
         itemViewModel.getMyItemsPaginated(options, isFirstPage = (page == 1))
     }

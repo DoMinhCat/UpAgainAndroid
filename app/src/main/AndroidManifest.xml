@@ -19,6 +19,9 @@
         <meta-data
             android:name="androidx.appcompat.app.AppCompatDelegate. some_attribute"
             android:value="true" />
+        <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="${MAPS_API_KEY}" />
         <activity
             android:name=".feat.error.NoConnectionActivity"
             android:exported="false" />

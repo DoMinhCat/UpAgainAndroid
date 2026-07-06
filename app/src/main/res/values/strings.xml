@@ -223,7 +223,7 @@
     <string name="snack_get_ads_price_fail">Failed to get ads price: %1$s</string>
     <string name="snack_create_ads_fail">Failed to create ads: %1$s</string>
     <string name="snack_create_ads_success">Ads created</string>
-    <string name="snack_payment_verification_fail">Failed to verify payment</string>
+    <string name="snack_payment_verification_fail">Failed to verify payment: %1$s</string>
     <string name="edit_post">Edit Post</string>
     <string name="end_date">End Date</string>
     <string name="category">Category</string>
@@ -251,6 +251,7 @@
     <string name="status_pending">Pending</string>
     <string name="status_approved">Approved</string>
     <string name="status_refused">Refused</string>
+    <string name="status_purchased">Purchased</string>
 
     <!-- Item condition/state -->
     <string name="state_brand_new">Brand New</string>
@@ -272,5 +273,32 @@
     <string name="sort_price_high">Price: High to Low</string>
     <string name="sort_price_low">Price: Low to High</string>
     <string name="my_items">My Items</string>
+    <!-- TODO: Remove or change this placeholder text -->
+
+    <!-- Marketplace Detail -->
+    <string name="marketplace_market">Market</string>
+    <string name="marketplace_detail_reserve_action">Reserve</string>
+    <string name="marketplace_detail_buy_action">Buy</string>
+    <string name="marketplace_detail_cancel_reserve">Cancel Reservation</string>
+    <string name="item_info_format">State: %1$s | Weight: %2$s kg</string>
+    <string name="snack_purchase_success">Item purchased successfully</string>
+    <string name="snack_purchase_fail">Purchase failed: %1$s</string>
+    <string name="snack_reserve_success">Item reserved</string>
+    <string name="snack_reserve_fail">Reservation failed: %1$s</string>
+    <string name="snack_cancel_success">Reservation cancelled</string>
+    <string name="snack_cancel_fail">Cancellation failed: %1$s</string>
+    
+    <!-- Access Info Details -->
+    <string name="listing_retrieval_instruction">Give the 6-digit code shown below to the seller to confirm successful retrieval.</string>
+    <string name="barcode_code_label">Code: %1$s</string>
+    <string name="barcode_validity_label">Valid from %1$s to %2$s</string>
+    <string name="barcode_status_label">Status: %1$s</string>
+    <string name="barcode_container_label">Container ID: %1$d</string>
+    <string name="copied">Code copied to clipboard</string>
+    <string name="barcode_saved_success">Barcode saved to Pictures</string>
+    <string name="barcode_saved_fail">Failed to save barcode: %1$s</string>
+    <string name="code_msg">The container access code and barcode will appear here once the seller has dropped the item off.</string>
+    <string name="download_barcode">Download barcode</string>
+    <string name="location">Location</string>
 
 </resources>

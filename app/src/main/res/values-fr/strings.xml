@@ -176,7 +176,7 @@
     <string name="snack_get_ads_price_fail">Impossible de récupérer le prix: %1$s</string>
     <string name="snack_create_ads_fail">Impossible de créer une publicité: %1$s</string>
     <string name="snack_create_ads_success">Publicité créée</string>
-    <string name="snack_payment_verification_fail">Impossible de vérifier le paiement</string>
+    <string name="snack_payment_verification_fail">Impossible de vérifier le paiement : %1$s</string>
     <string name="edit_post">Modifier l\'article</string>
     <string name="end_date">Date de fin</string>
     <string name="category">Catégorie</string>
@@ -204,6 +204,7 @@
     <string name="status_pending">En attente</string>
     <string name="status_approved">Approuvé</string>
     <string name="status_refused">Refusé</string>
+    <string name="status_purchased">Acheté</string>
 
     <!-- Item condition/state -->
     <string name="state_brand_new">Neuf</string>
@@ -225,5 +226,31 @@
     <string name="sort_price_high">Prix : Élevé à Bas</string>
     <string name="sort_price_low">Prix : Bas à Élevé</string>
     <string name="my_items">Mes articles</string>
+
+    <!-- Marketplace Detail -->
+    <string name="marketplace_market">Marché</string>
+    <string name="marketplace_detail_reserve_action">Réserver</string>
+    <string name="marketplace_detail_buy_action">Acheter</string>
+    <string name="marketplace_detail_cancel_reserve">Annuler la réservation</string>
+    <string name="item_info_format">État : %1$s | Poids : %2$s kg</string>
+    <string name="snack_purchase_success">Article acheté avec succès</string>
+    <string name="snack_purchase_fail">Échec de l\'achat : %1$s</string>
+    <string name="snack_reserve_success">Article réservé</string>
+    <string name="snack_reserve_fail">Échec de la réservation : %1$s</string>
+    <string name="snack_cancel_success">Réservation annulée</string>
+    <string name="snack_cancel_fail">Échec de l\'annulation : %1$s</string>
+    
+    <!-- Access Info Details -->
+    <string name="listing_retrieval_instruction">Donnez le code à 6 chiffres ci-dessous au vendeur pour confirmer la récupération réussie.</string>
+    <string name="barcode_code_label">Code : %1$s</string>
+    <string name="barcode_validity_label">Valide du %1$s au %2$s</string>
+    <string name="barcode_status_label">Statut : %1$s</string>
+    <string name="barcode_container_label">ID du conteneur : %1$d</string>
+    <string name="copied">Code copié dans le presse-papiers</string>
+    <string name="barcode_saved_success">Code-barre enregistré dans Photos</string>
+    <string name="barcode_saved_fail">Échec de l\'enregistrement du code-barre : %1$s</string>
+    <string name="code_msg">Le code d\'accès au casier et le code-barres s\'afficheront ici une fois que le vendeur aura déposé l\'objet.</string>
+    <string name="download_barcode">Télécharger le code-barre</string>
+    <string name="location">Localisation</string>
 
 </resources>
