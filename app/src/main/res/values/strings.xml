@@ -251,6 +251,7 @@
     <string name="status_pending">Pending</string>
     <string name="status_approved">Approved</string>
     <string name="status_refused">Refused</string>
+    <string name="status_purchased">Purchased</string>
 
     <!-- Item condition/state -->
     <string name="state_brand_new">Brand New</string>

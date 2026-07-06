@@ -182,7 +182,10 @@ class ShopDetailFragment : Fragment() {
                                 
                                 binding.tvPrice.text = if (item.price != null && item.price > 0) "${item.price} €" else getString(R.string.free)
                                 binding.tvScore.text = (item.score ?: 0).toString()
-                                binding.tvDescription.text = item.description ?: ""
+                                binding.tvDescription.text = androidx.core.text.HtmlCompat.fromHtml(
+                                    item.description ?: "",
+                                    androidx.core.text.HtmlCompat.FROM_HTML_MODE_LEGACY
+                                )
                                 
                                 val photosList = item.images.orEmpty()
                                 carouselAdapter.submitList(photosList)
@@ -244,6 +247,7 @@ class ShopDetailFragment : Fragment() {
                                     binding.btnActionReserve.visibility = View.GONE
                                     binding.btnActionPurchase.visibility = View.GONE
                                     binding.btnActionCancelReserve.visibility = View.GONE
+                                    binding.chipPurchasedStatus.visibility = View.VISIBLE
 
                                     // Display access codes
                                     binding.layoutAccessCodes.visibility = View.VISIBLE
@@ -261,11 +265,13 @@ class ShopDetailFragment : Fragment() {
                                     binding.btnActionReserve.visibility = View.GONE
                                     binding.btnActionPurchase.visibility = View.VISIBLE
                                     binding.btnActionCancelReserve.visibility = View.VISIBLE
+                                    binding.chipPurchasedStatus.visibility = View.GONE
                                     binding.layoutAccessCodes.visibility = View.GONE
                                 } else {
                                     binding.btnActionReserve.visibility = View.VISIBLE
                                     binding.btnActionPurchase.visibility = View.VISIBLE
                                     binding.btnActionCancelReserve.visibility = View.GONE
+                                    binding.chipPurchasedStatus.visibility = View.GONE
                                     binding.layoutAccessCodes.visibility = View.GONE
                                 }
                             }
@@ -275,6 +281,7 @@ class ShopDetailFragment : Fragment() {
                                 binding.btnActionReserve.visibility = View.VISIBLE
                                 binding.btnActionPurchase.visibility = View.VISIBLE
                                 binding.btnActionCancelReserve.visibility = View.GONE
+                                binding.chipPurchasedStatus.visibility = View.GONE
                             }
 
                             else -> {}
