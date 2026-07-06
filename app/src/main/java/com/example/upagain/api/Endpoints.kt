@@ -64,7 +64,7 @@ object Endpoints {
     const val SHOP_ITEM_CANCEL_RESERVE = "items/{id}/cancel"
     const val SHOP_LISTING_DETAILS = "listings/{id}"
     const val SHOP_DEPOSIT_DETAILS = "deposits/{id}"
-    const val SHOP_DEPOSIT_CODES = "deposits/{id}/codes"
+    const val SHOP_DEPOSIT_CODES = "codes/{id}"
 
     // Stripe Endpoints
     const val STRIPE_VERIFY = "payments/verify"

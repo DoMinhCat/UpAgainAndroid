@@ -201,6 +201,10 @@ class ShopDetailFragment : Fragment() {
                                     binding.tlCarouselIndicator.visibility = View.GONE
                                     binding.ivDefaultCarouselPlaceholder.visibility = View.VISIBLE
                                 }
+
+                                val tx = (itemViewModel.latestTransactionState.value as? UiState.Success)?.data
+                                Log.d("ShopDetailFragment", "itemDetailState loaded category=${item.category}. Current tx action=${tx?.action}")
+                                updateAccessCodes(tx, item)
                             }
 
                             is UiState.Error -> {
@@ -240,40 +244,9 @@ class ShopDetailFragment : Fragment() {
                         when (state) {
                             is UiState.Success -> {
                                 val tx = state.data
-                                val itemState = itemViewModel.itemDetailState.value
-                                val item = (itemState as? UiState.Success)?.data
-
-                                if (tx.action == "purchased") {
-                                    binding.btnActionReserve.visibility = View.GONE
-                                    binding.btnActionPurchase.visibility = View.GONE
-                                    binding.btnActionCancelReserve.visibility = View.GONE
-                                    binding.chipPurchasedStatus.visibility = View.VISIBLE
-
-                                    // Display access codes
-                                    binding.layoutAccessCodes.visibility = View.VISIBLE
-                                    if (item != null) {
-                                        if (item.category == "listing") {
-                                            binding.tvConfirmationCode.text = tx.confirmCode ?: ""
-                                            binding.tvConfirmationCode.visibility = View.VISIBLE
-                                            binding.tvWaitingDropoffMessage.visibility = View.GONE
-                                            binding.ivBarcode.visibility = View.GONE
-                                        } else if (item.category == "deposit") {
-                                            idItem?.let { itemViewModel.getDepositCodes(it) }
-                                        }
-                                    }
-                                } else if (tx.action == "reserved") {
-                                    binding.btnActionReserve.visibility = View.GONE
-                                    binding.btnActionPurchase.visibility = View.VISIBLE
-                                    binding.btnActionCancelReserve.visibility = View.VISIBLE
-                                    binding.chipPurchasedStatus.visibility = View.GONE
-                                    binding.layoutAccessCodes.visibility = View.GONE
-                                } else {
-                                    binding.btnActionReserve.visibility = View.VISIBLE
-                                    binding.btnActionPurchase.visibility = View.VISIBLE
-                                    binding.btnActionCancelReserve.visibility = View.GONE
-                                    binding.chipPurchasedStatus.visibility = View.GONE
-                                    binding.layoutAccessCodes.visibility = View.GONE
-                                }
+                                val item = (itemViewModel.itemDetailState.value as? UiState.Success)?.data
+                                Log.d("ShopDetailFragment", "latestTransactionState loaded action=${tx.action}, confirmCode=${tx.confirmCode}. Current item category=${item?.category}")
+                                updateAccessCodes(tx, item)
                             }
 
                             is UiState.Error -> {
@@ -397,6 +370,7 @@ class ShopDetailFragment : Fragment() {
                             is UiState.Loading -> {}
                             is UiState.Success -> {
                                 val codes = state.data
+                                Log.d("ShopDetailFragment", "depositCodesState success: size=${codes.size}, codes=${codes.map { "id=${it.id}, type=${it.userType}, status=${it.status}" }}")
                                 val proCode = codes.find { it.userType == "pro" }
                                 if (proCode != null && proCode.barcodeBase64.isNotEmpty() && proCode.status == "active") {
                                     try {
@@ -429,6 +403,47 @@ class ShopDetailFragment : Fragment() {
                     }
                 }
             }
+        }
+    }
+
+    private fun updateAccessCodes(
+        tx: com.example.upagain.model.transaction.TransactionResponse?,
+        item: com.example.upagain.model.item.ItemDetailResponse?
+    ) {
+        if (tx == null || item == null) {
+            Log.d("ShopDetailFragment", "updateAccessCodes: skipped because tx is null (${tx == null}) or item is null (${item == null})")
+            return
+        }
+        Log.d("ShopDetailFragment", "updateAccessCodes: updating action=${tx.action}, category=${item.category}")
+
+        if (tx.action == "purchased") {
+            binding.btnActionReserve.visibility = View.GONE
+            binding.btnActionPurchase.visibility = View.GONE
+            binding.btnActionCancelReserve.visibility = View.GONE
+            binding.chipPurchasedStatus.visibility = View.VISIBLE
+
+            // Display access codes
+            binding.layoutAccessCodes.visibility = View.VISIBLE
+            if (item.category == "listing") {
+                binding.tvConfirmationCode.text = tx.confirmCode ?: ""
+                binding.tvConfirmationCode.visibility = View.VISIBLE
+                binding.tvWaitingDropoffMessage.visibility = View.GONE
+                binding.ivBarcode.visibility = View.GONE
+            } else if (item.category == "deposit") {
+                idItem?.let { itemViewModel.getDepositCodes(it) }
+            }
+        } else if (tx.action == "reserved") {
+            binding.btnActionReserve.visibility = View.GONE
+            binding.btnActionPurchase.visibility = View.VISIBLE
+            binding.btnActionCancelReserve.visibility = View.VISIBLE
+            binding.chipPurchasedStatus.visibility = View.GONE
+            binding.layoutAccessCodes.visibility = View.GONE
+        } else {
+            binding.btnActionReserve.visibility = View.VISIBLE
+            binding.btnActionPurchase.visibility = View.VISIBLE
+            binding.btnActionCancelReserve.visibility = View.GONE
+            binding.chipPurchasedStatus.visibility = View.GONE
+            binding.layoutAccessCodes.visibility = View.GONE
         }
     }
 }

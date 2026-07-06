@@ -22,6 +22,7 @@ import com.example.upagain.api.ApiClient
 import com.example.upagain.databinding.FragmentShopMeBinding
 import com.example.upagain.feat.shop.adapter.ItemAdapter
 import com.example.upagain.model.item.ItemDetailResponse
+import com.example.upagain.model.item.ItemSortOption
 import com.example.upagain.repository.ItemRepo
 import com.example.upagain.util.ui.SnackbarLevel
 import com.example.upagain.util.ui.setOnBackClickListener
@@ -47,7 +48,7 @@ class ShopMeFragment : Fragment() {
     private lateinit var shopAdapter: ItemAdapter
     private var searchQuery = ""
     private var selectedMaterial = ""
-    private var selectedSort = ""
+    private var selectedSort = ItemSortOption.MOST_RECENT_CREATION.value
 
     private var currentPage = 1
     private val loadedItems = mutableListOf<ItemDetailResponse>()
