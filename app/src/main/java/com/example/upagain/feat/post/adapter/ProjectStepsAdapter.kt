@@ -90,7 +90,7 @@ class ProjectStepsAdapter(
             } else {
                 binding.tvLabelMaterials.visibility = View.VISIBLE
                 binding.tvStepMaterialsList.visibility = View.VISIBLE
-                binding.tvStepMaterialsList.text = materialsList.joinToString("\n") { "• $it" }
+                binding.tvStepMaterialsList.text = materialsList.joinToString("\n") { "• ${it.title}" }
             }
 
             // 3. Handle Nested Image Carousel Layout States
