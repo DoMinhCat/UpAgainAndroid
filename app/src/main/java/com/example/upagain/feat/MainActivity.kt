@@ -208,7 +208,7 @@ class MainActivity : AppCompatActivity() {
                     }
 
                     else -> {
-                        val defaultFrag = DashboardFragment.newInstance(false)
+                        val defaultFrag = ShopFragment.newInstance()
                         supportFragmentManager.beginTransaction()
                             .replace(R.id.fragment_container, defaultFrag)
                             .commit()
