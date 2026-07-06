@@ -1,7 +1,6 @@
 package com.example.upagain.api
 
 import android.content.Context
-import android.content.SharedPreferences
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import okhttp3.Cookie
@@ -9,7 +8,8 @@ import okhttp3.CookieJar
 import okhttp3.HttpUrl
 
 class PersistentCookieJar(context: Context) : CookieJar {
-    private val sharedPreferences = context.getSharedPreferences("app_cookies", Context.MODE_PRIVATE)
+    private val sharedPreferences =
+        context.getSharedPreferences("app_cookies", Context.MODE_PRIVATE)
     private val gson = Gson()
     private val cookieStore = HashMap<String, MutableList<SerializableCookie>>()
 
@@ -60,8 +60,10 @@ class PersistentCookieJar(context: Context) : CookieJar {
     private fun loadCookiesFromPrefs() {
         val json = sharedPreferences.getString("cookies", null) ?: return
         try {
-            val type = object : TypeToken<HashMap<String, MutableList<SerializableCookie>>>() {}.type
-            val loadedStore: HashMap<String, MutableList<SerializableCookie>> = gson.fromJson(json, type)
+            val type =
+                object : TypeToken<HashMap<String, MutableList<SerializableCookie>>>() {}.type
+            val loadedStore: HashMap<String, MutableList<SerializableCookie>> =
+                gson.fromJson(json, type)
             cookieStore.putAll(loadedStore)
         } catch (e: Exception) {
             e.printStackTrace()

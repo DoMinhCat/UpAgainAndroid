@@ -236,7 +236,10 @@ class PostSavedFragment : Fragment() {
                                     "Load saved posts failed. Status code: ${state.statusCode}",
                                     state.exception
                                 )
-                                ErrorActivity.Companion.start(requireContext(), state.statusCode ?: 0)
+                                ErrorActivity.Companion.start(
+                                    requireContext(),
+                                    state.statusCode ?: 0
+                                )
                             }
                         }
                     }

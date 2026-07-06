@@ -81,10 +81,18 @@ class CommentViewModel(private val repository: CommentRepo) : ViewModel() {
                 }
                 .onFailure { exception ->
                     val statusCode = (exception as? HttpException)?.code()
-                    _likeCommentEvent.emit(LikeCommentEvent.Rollback(position, idCmt, statusCode, exception))
+                    _likeCommentEvent.emit(
+                        LikeCommentEvent.Rollback(
+                            position,
+                            idCmt,
+                            statusCode,
+                            exception
+                        )
+                    )
                 }
         }
     }
+
     fun deleteComment(idCmt: Int, position: Int = -1) {
         viewModelScope.launch {
             _deleteCommentState.value = UiState.Loading()

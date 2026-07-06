@@ -24,6 +24,7 @@ class ProjectStepsAdapter(
                 notifyDataSetChanged() // Notifies the layout to update its edit items cleanly
             }
         }
+
     interface OnStepClickListener {
         fun onEditClick(step: ProjectStepResponse)
         fun onDeleteClick(step: ProjectStepResponse)
@@ -90,7 +91,8 @@ class ProjectStepsAdapter(
             } else {
                 binding.tvLabelMaterials.visibility = View.VISIBLE
                 binding.tvStepMaterialsList.visibility = View.VISIBLE
-                binding.tvStepMaterialsList.text = materialsList.joinToString("\n") { "• ${it.title}" }
+                binding.tvStepMaterialsList.text =
+                    materialsList.joinToString("\n") { "• ${it.title}" }
             }
 
             // 3. Handle Nested Image Carousel Layout States

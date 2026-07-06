@@ -114,10 +114,12 @@ object ApiClient {
                             navigateToActivity(ErrorActivity::class.java, statusCode = 404)
                         }
                     }
+
                     500 -> {
                         response.close()
                         navigateToActivity(ErrorActivity::class.java, statusCode = 500)
                     }
+
                     401 -> {
                         if (path != Endpoints.REFRESH && path != Endpoints.LOGIN) {
                             val alreadyRetried = request.header("X-Retry") != null

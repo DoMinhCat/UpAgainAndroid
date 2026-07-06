@@ -6,9 +6,8 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import com.example.upagain.databinding.ItemChosenImagePreviewBinding
-
 import coil.load
+import com.example.upagain.databinding.ItemChosenImagePreviewBinding
 
 class PreviewImageAdapter(
     private val onDeleteClick: (Uri) -> Unit

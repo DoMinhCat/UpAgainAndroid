@@ -1,13 +1,12 @@
 package com.example.upagain.repository
 
 import com.example.upagain.api.ApiService
-import com.example.upagain.model.comment.CreateCommentRequest
 import com.example.upagain.model.comment.CommentDetailsResponse
 import com.example.upagain.model.comment.CommentPaginationRequest
 import com.example.upagain.model.comment.CommentPaginationResponse
+import com.example.upagain.model.comment.CreateCommentRequest
 import com.example.upagain.model.comment.LikeCommentResponse
 import com.example.upagain.util.json.parseErrorMessage
-import retrofit2.HttpException
 import retrofit2.awaitResponse
 
 class CommentRepo(private val apiService: ApiService) {
@@ -30,7 +29,10 @@ class CommentRepo(private val apiService: ApiService) {
         }
     }
 
-    suspend fun createComment(idPost: Int, request: CreateCommentRequest): Result<CommentDetailsResponse> {
+    suspend fun createComment(
+        idPost: Int,
+        request: CreateCommentRequest
+    ): Result<CommentDetailsResponse> {
         return try {
             val response = apiService.createComment(idPost, request).awaitResponse()
             val body = response.body()

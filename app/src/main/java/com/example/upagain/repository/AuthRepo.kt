@@ -4,8 +4,6 @@ import com.example.upagain.api.ApiService
 import com.example.upagain.model.LoginRequest
 import com.example.upagain.model.TokenResponse
 import com.example.upagain.util.json.parseErrorMessage
-import retrofit2.Call
-import retrofit2.HttpException
 import retrofit2.awaitResponse
 
 class AuthRepository(private val apiService: ApiService) {

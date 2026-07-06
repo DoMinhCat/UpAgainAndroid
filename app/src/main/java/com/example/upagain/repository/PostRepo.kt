@@ -110,7 +110,11 @@ class PostRepo(private val apiService: ApiService) {
 
                     val requestFile = localTempFile.asRequestBody(mimeType.toMediaTypeOrNull())
                     val filePart =
-                        MultipartBody.Part.createFormData("new_images", localTempFile.name, requestFile)
+                        MultipartBody.Part.createFormData(
+                            "new_images",
+                            localTempFile.name,
+                            requestFile
+                        )
                     newImageParts.add(filePart)
                 }
             }
@@ -237,7 +241,11 @@ class PostRepo(private val apiService: ApiService) {
 
                     val requestFile = localTempFile.asRequestBody(mimeType.toMediaTypeOrNull())
                     val filePart =
-                        MultipartBody.Part.createFormData("new_images", localTempFile.name, requestFile)
+                        MultipartBody.Part.createFormData(
+                            "new_images",
+                            localTempFile.name,
+                            requestFile
+                        )
                     imageParts.add(filePart)
                 }
             }
@@ -430,5 +438,5 @@ class PostRepo(private val apiService: ApiService) {
         }
     }
 
-    
+
 }

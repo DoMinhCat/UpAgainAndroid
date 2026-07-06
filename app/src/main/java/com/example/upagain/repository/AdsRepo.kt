@@ -24,20 +24,20 @@ class AdsRepo(private val apiService: ApiService) {
         } catch (e: Exception) {
             Result.failure(e)
         }
-     }
+    }
 
-     suspend fun deleteAds(id: Int): Result<Unit> {
-         return try {
-             val response = apiService.deleteAds(id).awaitResponse()
+    suspend fun deleteAds(id: Int): Result<Unit> {
+        return try {
+            val response = apiService.deleteAds(id).awaitResponse()
 
-             if (response.isSuccessful) {
-                 Result.success(Unit)
-             } else {
-                 val errMessage = parseErrorMessage(response.errorBody()?.string())
-                 Result.failure(Exception(errMessage))
-             }
-         } catch (e: Exception) {
-             Result.failure(e)
-         }
-     }
+            if (response.isSuccessful) {
+                Result.success(Unit)
+            } else {
+                val errMessage = parseErrorMessage(response.errorBody()?.string())
+                Result.failure(Exception(errMessage))
+            }
+        } catch (e: Exception) {
+            Result.failure(e)
+        }
+    }
 }

@@ -1,7 +1,6 @@
 package com.example.upagain.repository
 
 import com.example.upagain.api.ApiService
-import com.example.upagain.model.account.AccountDetailsResponse
 import com.example.upagain.model.finance.FinanceKeyEnum
 import com.example.upagain.util.json.parseErrorMessage
 import retrofit2.awaitResponse

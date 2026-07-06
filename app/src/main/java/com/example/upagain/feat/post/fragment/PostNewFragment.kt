@@ -21,14 +21,12 @@ import com.example.upagain.model.post.PostCategory
 import com.example.upagain.model.post.PostCreateRequest
 import com.example.upagain.repository.PostRepo
 import com.example.upagain.util.ui.SnackbarLevel
-import com.example.upagain.util.ui.dpToPx
 import com.example.upagain.util.ui.hideKeyboard
 import com.example.upagain.util.ui.setOnBackClickListener
 import com.example.upagain.util.ui.setOnClickListenerWithCooldown
 import com.example.upagain.util.ui.showTopSnackbar
 import com.example.upagain.util.ui.toggleBtnLoadingState
 import com.example.upagain.util.ui.toggleTilError
-import com.example.upagain.util.validator.EmailRule
 import com.example.upagain.util.validator.FieldValidator
 import com.example.upagain.util.validator.MinLengthRule
 import com.example.upagain.util.validator.NotEmptyRule
@@ -92,8 +90,8 @@ class PostNewFragment : Fragment() {
 
     override fun onDestroyView() {
         viewModel.resetCreatePostState()
-        toggleTilError(binding.tilTitle, R.string.invalid_title,false)
-        toggleTilError(binding.tilContent, R.string.invalid_content,false)
+        toggleTilError(binding.tilTitle, R.string.invalid_title, false)
+        toggleTilError(binding.tilContent, R.string.invalid_content, false)
         super.onDestroyView()
         _binding = null
     }
@@ -140,9 +138,9 @@ class PostNewFragment : Fragment() {
             if (!hasFocus) {
                 val title = binding.etPostTitle.text.toString().trim()
                 val isTitleValid = titleValidator.validate(title)
-                toggleTilError(binding.tilTitle, R.string.invalid_title,!isTitleValid)
+                toggleTilError(binding.tilTitle, R.string.invalid_title, !isTitleValid)
             } else {
-                toggleTilError(binding.tilTitle, R.string.invalid_title,false)
+                toggleTilError(binding.tilTitle, R.string.invalid_title, false)
             }
         }
         // TITLE FIELD
@@ -150,9 +148,9 @@ class PostNewFragment : Fragment() {
             if (!hasFocus) {
                 val content = binding.etPostTitle.text.toString().trim()
                 val isContentValid = contentValidator.validate(content)
-                toggleTilError(binding.tilContent, R.string.invalid_content,!isContentValid)
+                toggleTilError(binding.tilContent, R.string.invalid_content, !isContentValid)
             } else {
-                toggleTilError(binding.tilContent, R.string.invalid_content,false)
+                toggleTilError(binding.tilContent, R.string.invalid_content, false)
             }
         }
         // CHOOSE IMAGES
@@ -169,13 +167,18 @@ class PostNewFragment : Fragment() {
             val isTitleValid = titleValidator.validate(title)
             val isContentValid = contentValidator.validate(content)
 
-            toggleTilError(binding.tilTitle, R.string.invalid_title,!isTitleValid)
-            toggleTilError(binding.tilContent, R.string.invalid_content,!isContentValid)
+            toggleTilError(binding.tilTitle, R.string.invalid_title, !isTitleValid)
+            toggleTilError(binding.tilContent, R.string.invalid_content, !isContentValid)
 
             if (!isTitleValid || !isContentValid) {
                 return@setOnClickListenerWithCooldown
             }
-            val request = PostCreateRequest(title = title, content = content, category = PostCategory.PROJECT, images = chosenImages)
+            val request = PostCreateRequest(
+                title = title,
+                content = content,
+                category = PostCategory.PROJECT,
+                images = chosenImages
+            )
             viewModel.createPost(request)
         }
     }
@@ -231,6 +234,11 @@ class PostNewFragment : Fragment() {
     }
 
     private fun togglePublishLoadingState(isLoading: Boolean) {
-        toggleBtnLoadingState(binding.btnPublish, binding.publishLoader, isLoading, getString(R.string.publish))
+        toggleBtnLoadingState(
+            binding.btnPublish,
+            binding.publishLoader,
+            isLoading,
+            getString(R.string.publish)
+        )
     }
 }

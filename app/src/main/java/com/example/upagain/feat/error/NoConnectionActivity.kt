@@ -7,7 +7,6 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import com.example.upagain.R
-import com.example.upagain.databinding.MainActivityBinding
 import com.example.upagain.databinding.NoConnectionActivityBinding
 import com.example.upagain.feat.MainActivity
 

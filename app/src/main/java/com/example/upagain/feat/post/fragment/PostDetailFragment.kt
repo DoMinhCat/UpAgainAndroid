@@ -611,9 +611,11 @@ class PostDetailFragment : Fragment() {
                             is UiState.Idle -> {
                                 binding.loadingOverlay.root.toggleFullScreenLoading(false)
                             }
+
                             is UiState.Loading -> {
                                 binding.loadingOverlay.root.toggleFullScreenLoading(true)
                             }
+
                             is UiState.Success -> {
                                 postViewModel.resetUpdateStepState()
                                 binding.loadingOverlay.root.toggleFullScreenLoading(false)
@@ -625,6 +627,7 @@ class PostDetailFragment : Fragment() {
                                     postViewModel.getPostDetails(id)
                                 }
                             }
+
                             is UiState.Error -> {
                                 postViewModel.resetUpdateStepState()
                                 binding.loadingOverlay.root.toggleFullScreenLoading(false)
@@ -649,6 +652,7 @@ class PostDetailFragment : Fragment() {
                             is UiState.Success -> {
                                 myItemsList = state.data.items
                             }
+
                             is UiState.Error -> {
                                 Log.e("PostDetailFragment", "Load my items failed", state.exception)
                             }
@@ -663,6 +667,7 @@ class PostDetailFragment : Fragment() {
                             is UiState.Loading -> {
                                 binding.loadingOverlay.root.toggleFullScreenLoading(true)
                             }
+
                             is UiState.Success -> {
                                 adsViewModel.resetDeleteAdsState()
                                 binding.loadingOverlay.root.toggleFullScreenLoading(false)
@@ -674,6 +679,7 @@ class PostDetailFragment : Fragment() {
                                     postViewModel.getPostDetails(id)
                                 }
                             }
+
                             is UiState.Error -> {
                                 adsViewModel.resetDeleteAdsState()
                                 binding.loadingOverlay.root.toggleFullScreenLoading(false)

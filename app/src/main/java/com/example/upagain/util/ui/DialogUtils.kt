@@ -44,7 +44,10 @@ object DialogUtils {
         cancelButtonText: String = context.getString(R.string.btn_cancel),
         onConfirm: () -> Unit
     ) {
-        MaterialAlertDialogBuilder(context, R.style.ThemeOverlay_UpAgain_MaterialAlertDialog_Destructive)
+        MaterialAlertDialogBuilder(
+            context,
+            R.style.ThemeOverlay_UpAgain_MaterialAlertDialog_Destructive
+        )
             .setTitle(title)
             .setMessage(message)
             .setPositiveButton(confirmButtonText) { dialog, _ ->
@@ -119,10 +122,16 @@ object DialogUtils {
         }
 
         // 4. Construct the Standard Styled Dialog Frame Wrapper
-        val alertDialog = MaterialAlertDialogBuilder(context, R.style.ThemeOverlay_UpAgain_MaterialAlertDialog_Standard)
+        val alertDialog = MaterialAlertDialogBuilder(
+            context,
+            R.style.ThemeOverlay_UpAgain_MaterialAlertDialog_Standard
+        )
             .setTitle(getString(context, R.string.book_ads_title))
             .setView(binding.root)
-            .setPositiveButton(context.getString(R.string.btn_confirm), null) // Intercepted below for valid checks
+            .setPositiveButton(
+                context.getString(R.string.btn_confirm),
+                null
+            ) // Intercepted below for valid checks
             .setNegativeButton(context.getString(R.string.btn_cancel)) { dialog, _ ->
                 dialog.dismiss()
             }
@@ -211,7 +220,10 @@ object DialogUtils {
             }
         }
 
-        val alertDialog = MaterialAlertDialogBuilder(context, R.style.ThemeOverlay_UpAgain_MaterialAlertDialog_Standard)
+        val alertDialog = MaterialAlertDialogBuilder(
+            context,
+            R.style.ThemeOverlay_UpAgain_MaterialAlertDialog_Standard
+        )
             .setTitle(context.getString(R.string.edit_post))
             .setView(binding.root)
             .setPositiveButton(context.getString(R.string.btn_confirm), null)
@@ -325,7 +337,11 @@ object DialogUtils {
                         results.count = items.size
                         return results
                     }
-                    override fun publishResults(constraint: CharSequence?, results: FilterResults?) {
+
+                    override fun publishResults(
+                        constraint: CharSequence?,
+                        results: FilterResults?
+                    ) {
                         notifyDataSetChanged()
                     }
                 }
@@ -383,8 +399,15 @@ object DialogUtils {
             }
         }
 
-        val alertDialog = MaterialAlertDialogBuilder(context, R.style.ThemeOverlay_UpAgain_MaterialAlertDialog_Standard)
-            .setTitle(if (step == null) context.getString(R.string.add_step) else context.getString(R.string.edit_post))
+        val alertDialog = MaterialAlertDialogBuilder(
+            context,
+            R.style.ThemeOverlay_UpAgain_MaterialAlertDialog_Standard
+        )
+            .setTitle(
+                if (step == null) context.getString(R.string.add_step) else context.getString(
+                    R.string.edit_post
+                )
+            )
             .setView(binding.root)
             .setPositiveButton(context.getString(R.string.btn_confirm), null)
             .setNegativeButton(context.getString(R.string.btn_cancel)) { dialog, _ ->
