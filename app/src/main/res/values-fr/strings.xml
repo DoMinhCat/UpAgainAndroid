@@ -197,4 +197,24 @@
     <string name="ads_cancel_text">Êtes-vous sûr de vouloir retirer le statut de sponsor de cet article ? Attention : aucun remboursement n\'est possible pour les publicités annulées.</string>
     <string name="snack_cancel_ads_success">Statut de sponsor retiré avec succès</string>
     <string name="snack_cancel_ads_fail">Échec du retrait du statut de sponsor : %1$s</string>
+
+    <!-- Item status -->
+    <string name="status_pending">En attente</string>
+    <string name="status_approved">Approuvé</string>
+    <string name="status_refused">Refusé</string>
+
+    <!-- Item condition/state -->
+    <string name="state_brand_new">Neuf</string>
+    <string name="state_very_good">Très bon état</string>
+    <string name="state_good">Bon état</string>
+    <string name="state_fair">Satisfaisant</string>
+    <string name="state_poor">Mauvais état</string>
+
+    <!-- Item labels -->
+    <string name="label_status">Statut : %1$s</string>
+    <string name="label_condition">État : %1$s</string>
+    <string name="error_load_shop_items">Échec du chargement des articles de la boutique : %1$s</string>
+    <string name="no_items_found">Aucun article trouvé</string>
+    <string name="no_items_description">Nous n\'avons trouvé aucun article correspondant à vos filtres.</string>
+
 </resources>

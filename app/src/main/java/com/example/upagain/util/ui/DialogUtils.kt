@@ -15,6 +15,7 @@ import com.example.upagain.databinding.DialogAdsBookingBinding
 import com.example.upagain.databinding.DialogCreateStepBinding
 import com.example.upagain.databinding.DialogEditPostBinding
 import com.example.upagain.feat.post.adapter.PreviewImageAdapter
+import com.example.upagain.model.item.ItemDetailResponse
 import com.example.upagain.model.post.PostDetailsResponse
 import com.example.upagain.model.post.ProjectStepResponse
 import com.example.upagain.model.post.StepItem
@@ -277,7 +278,7 @@ object DialogUtils {
     fun showStepDialog(
         context: Context,
         step: ProjectStepResponse? = null,
-        allAvailableItems: List<StepItem> = emptyList(),
+        allAvailableItems: List<ItemDetailResponse> = emptyList(),
         onAddImageClick: (onUrisPicked: (List<Uri>) -> Unit) -> Unit,
         onConfirmStep: (title: String, description: String, newImages: List<Uri>, existingImages: List<String>, itemIds: List<Int>) -> Unit
     ) {
@@ -318,9 +319,9 @@ object DialogUtils {
 
         class DropdownAdapter(
             context: Context,
-            private val items: List<StepItem>,
+            private val items: List<ItemDetailResponse>,
             private val selectedIds: List<Int>
-        ) : ArrayAdapter<StepItem>(context, R.layout.item_dropdown_multiselect, items) {
+        ) : ArrayAdapter<ItemDetailResponse>(context, R.layout.item_dropdown_multiselect, items) {
             override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
                 val view = super.getView(position, convertView, parent) as CheckedTextView
                 val item = items[position]
