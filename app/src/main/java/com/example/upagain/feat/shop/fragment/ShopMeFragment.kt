@@ -83,7 +83,11 @@ class ShopMeFragment : Fragment() {
     private fun setupRecyclerView() {
         shopAdapter = ItemAdapter(object : ItemAdapter.OnClickListener {
             override fun onItemClick(item: ItemDetailResponse) {
-                // TODO: navigate to detail page
+                val targetFrag = ShopDetailFragment.newInstance(item.id)
+                parentFragmentManager.beginTransaction()
+                    .replace(R.id.fragment_container, targetFrag)
+                    .addToBackStack(null)
+                    .commit()
             }
 
             override fun onLoadMoreClick() {
