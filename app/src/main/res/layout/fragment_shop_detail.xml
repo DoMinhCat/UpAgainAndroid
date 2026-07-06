@@ -408,11 +408,21 @@
                         </LinearLayout>
 
                         <TextView
-                            android:id="@+id/tv_barcode_status"
+                            android:id="@+id/tv_barcode_container"
                             style="@style/TextAppearance.Material3.BodySmall"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="@dimen/space_sm"
+                            android:textColor="@color/color_secondary"
+                            android:gravity="center"
+                            tools:text="Container ID: 5" />
+
+                        <TextView
+                            android:id="@+id/tv_barcode_status"
+                            style="@style/TextAppearance.Material3.BodySmall"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="2dp"
                             android:textColor="@color/color_secondary"
                             android:gravity="center"
                             tools:text="Status: Active" />

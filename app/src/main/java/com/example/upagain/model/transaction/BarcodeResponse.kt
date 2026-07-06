@@ -10,5 +10,6 @@ data class BarcodeResponse(
     @SerializedName("user_type") val userType: String,
     val status: String,
     @SerializedName("valid_from") val validFrom: String?,
-    @SerializedName("valid_to") val validTo: String?
+    @SerializedName("valid_to") val validTo: String?,
+    @SerializedName("id_container") val idContainer: Int
 )
