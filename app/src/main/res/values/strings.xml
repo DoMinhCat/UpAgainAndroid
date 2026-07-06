@@ -265,4 +265,10 @@
     <string name="no_items_found">No items found</string>
     <string name="no_items_description">We couldn\'t find any items matching your filters.</string>
 
+    <!-- Sorting options -->
+    <string name="sort_recent">Recent</string>
+    <string name="sort_oldest">Oldest</string>
+    <string name="sort_price_high">Price: High to Low</string>
+    <string name="sort_price_low">Price: Low to High</string>
+
 </resources>

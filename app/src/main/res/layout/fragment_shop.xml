@@ -87,84 +87,148 @@
             android:paddingBottom="@dimen/space_sm"
             android:scrollbars="none">
 
-            <com.google.android.material.chip.ChipGroup
-                android:id="@+id/chip_group_materials"
+            <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                app:selectionRequired="false"
-                app:singleLine="true"
-                app:singleSelection="true">
+                android:orientation="horizontal"
+                android:gravity="center_vertical">
 
-                <com.google.android.material.chip.Chip
-                    android:id="@+id/chip_wood"
-                    style="@style/Widget.Material3.Chip.Filter"
+                <com.google.android.material.chip.ChipGroup
+                    android:id="@+id/chip_group_sort"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/material_wood"
-                    app:chipBackgroundColor="@color/color_surface"
-                    app:chipStrokeWidth="0dp"
-                    android:textColor="@color/color_on_background" />
+                    android:layout_marginEnd="@dimen/space_md"
+                    app:selectionRequired="false"
+                    app:singleLine="true"
+                    app:singleSelection="true">
 
-                <com.google.android.material.chip.Chip
-                    android:id="@+id/chip_textile"
-                    style="@style/Widget.Material3.Chip.Filter"
+                    <com.google.android.material.chip.Chip
+                        android:id="@+id/chip_sort_recent"
+                        style="@style/Widget.Material3.Chip.Filter"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/sort_recent"
+                        app:chipBackgroundColor="@color/color_surface"
+                        app:chipStrokeWidth="0dp"
+                        android:textColor="@color/color_on_background" />
+
+                    <com.google.android.material.chip.Chip
+                        android:id="@+id/chip_sort_oldest"
+                        style="@style/Widget.Material3.Chip.Filter"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/sort_oldest"
+                        app:chipBackgroundColor="@color/color_surface"
+                        app:chipStrokeWidth="0dp"
+                        android:textColor="@color/color_on_background" />
+
+                    <com.google.android.material.chip.Chip
+                        android:id="@+id/chip_sort_price_desc"
+                        style="@style/Widget.Material3.Chip.Filter"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/sort_price_high"
+                        app:chipBackgroundColor="@color/color_surface"
+                        app:chipStrokeWidth="0dp"
+                        android:textColor="@color/color_on_background" />
+
+                    <com.google.android.material.chip.Chip
+                        android:id="@+id/chip_sort_price_asc"
+                        style="@style/Widget.Material3.Chip.Filter"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/sort_price_low"
+                        app:chipBackgroundColor="@color/color_surface"
+                        app:chipStrokeWidth="0dp"
+                        android:textColor="@color/color_on_background" />
+                </com.google.android.material.chip.ChipGroup>
+
+                <View
+                    android:layout_width="1dp"
+                    android:layout_height="24dp"
+                    android:background="@color/color_secondary"
+                    android:layout_marginEnd="@dimen/space_md"
+                    android:alpha="0.3" />
+
+                <com.google.android.material.chip.ChipGroup
+                    android:id="@+id/chip_group_materials"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/material_textile"
-                    app:chipBackgroundColor="@color/color_surface"
-                    app:chipStrokeWidth="0dp"
-                    android:textColor="@color/color_on_background" />
+                    app:selectionRequired="false"
+                    app:singleLine="true"
+                    app:singleSelection="true">
 
-                <com.google.android.material.chip.Chip
-                    android:id="@+id/chip_glass"
-                    style="@style/Widget.Material3.Chip.Filter"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/material_glass"
-                    app:chipBackgroundColor="@color/color_surface"
-                    app:chipStrokeWidth="0dp"
-                    android:textColor="@color/color_on_background" />
+                    <com.google.android.material.chip.Chip
+                        android:id="@+id/chip_wood"
+                        style="@style/Widget.Material3.Chip.Filter"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/material_wood"
+                        app:chipBackgroundColor="@color/color_surface"
+                        app:chipStrokeWidth="0dp"
+                        android:textColor="@color/color_on_background" />
 
-                <com.google.android.material.chip.Chip
-                    android:id="@+id/chip_metal"
-                    style="@style/Widget.Material3.Chip.Filter"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/material_metal"
-                    app:chipBackgroundColor="@color/color_surface"
-                    app:chipStrokeWidth="0dp"
-                    android:textColor="@color/color_on_background" />
+                    <com.google.android.material.chip.Chip
+                        android:id="@+id/chip_textile"
+                        style="@style/Widget.Material3.Chip.Filter"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/material_textile"
+                        app:chipBackgroundColor="@color/color_surface"
+                        app:chipStrokeWidth="0dp"
+                        android:textColor="@color/color_on_background" />
 
-                <com.google.android.material.chip.Chip
-                    android:id="@+id/chip_plastic"
-                    style="@style/Widget.Material3.Chip.Filter"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/material_plastic"
-                    app:chipBackgroundColor="@color/color_surface"
-                    app:chipStrokeWidth="0dp"
-                    android:textColor="@color/color_on_background" />
+                    <com.google.android.material.chip.Chip
+                        android:id="@+id/chip_glass"
+                        style="@style/Widget.Material3.Chip.Filter"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/material_glass"
+                        app:chipBackgroundColor="@color/color_surface"
+                        app:chipStrokeWidth="0dp"
+                        android:textColor="@color/color_on_background" />
 
-                <com.google.android.material.chip.Chip
-                    android:id="@+id/chip_mixed"
-                    style="@style/Widget.Material3.Chip.Filter"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/material_mixed"
-                    app:chipBackgroundColor="@color/color_surface"
-                    app:chipStrokeWidth="0dp"
-                    android:textColor="@color/color_on_background" />
+                    <com.google.android.material.chip.Chip
+                        android:id="@+id/chip_metal"
+                        style="@style/Widget.Material3.Chip.Filter"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/material_metal"
+                        app:chipBackgroundColor="@color/color_surface"
+                        app:chipStrokeWidth="0dp"
+                        android:textColor="@color/color_on_background" />
 
-                <com.google.android.material.chip.Chip
-                    android:id="@+id/chip_other"
-                    style="@style/Widget.Material3.Chip.Filter"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/material_other"
-                    app:chipBackgroundColor="@color/color_surface"
-                    app:chipStrokeWidth="0dp"
-                    android:textColor="@color/color_on_background" />
-            </com.google.android.material.chip.ChipGroup>
+                    <com.google.android.material.chip.Chip
+                        android:id="@+id/chip_plastic"
+                        style="@style/Widget.Material3.Chip.Filter"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/material_plastic"
+                        app:chipBackgroundColor="@color/color_surface"
+                        app:chipStrokeWidth="0dp"
+                        android:textColor="@color/color_on_background" />
+
+                    <com.google.android.material.chip.Chip
+                        android:id="@+id/chip_mixed"
+                        style="@style/Widget.Material3.Chip.Filter"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/material_mixed"
+                        app:chipBackgroundColor="@color/color_surface"
+                        app:chipStrokeWidth="0dp"
+                        android:textColor="@color/color_on_background" />
+
+                    <com.google.android.material.chip.Chip
+                        android:id="@+id/chip_other"
+                        style="@style/Widget.Material3.Chip.Filter"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/material_other"
+                        app:chipBackgroundColor="@color/color_surface"
+                        app:chipStrokeWidth="0dp"
+                        android:textColor="@color/color_on_background" />
+                </com.google.android.material.chip.ChipGroup>
+            </LinearLayout>
         </HorizontalScrollView>
     </com.google.android.material.appbar.AppBarLayout>
 

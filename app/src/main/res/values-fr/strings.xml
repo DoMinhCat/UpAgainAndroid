@@ -217,4 +217,10 @@
     <string name="no_items_found">Aucun article trouvé</string>
     <string name="no_items_description">Nous n\'avons trouvé aucun article correspondant à vos filtres.</string>
 
+    <!-- Sorting options -->
+    <string name="sort_recent">Récent</string>
+    <string name="sort_oldest">Plus ancien</string>
+    <string name="sort_price_high">Prix : Élevé à Bas</string>
+    <string name="sort_price_low">Prix : Bas à Élevé</string>
+
 </resources>
