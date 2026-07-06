@@ -178,9 +178,9 @@ class ShopDetailFragment : Fragment() {
                                 binding.tvTitle.text = item.title
                                 binding.chipMaterial.text = item.material.uppercase()
                                 binding.chipMaterial.setChipBackgroundColorResource(com.example.upagain.util.ui.getItemMaterialColor(item.material))
-                                binding.tvItemInfo.text = getString(R.string.item_info_format, item.state, item.weight.toString())
+                                binding.tvItemInfo.text = getString(R.string.item_info_format, item.state.replace("_", ""), item.weight.toString())
                                 
-                                binding.tvPrice.text = if (item.price != null && item.price > 0) "${item.price} €" else getString(R.string.free)
+                                binding.tvPrice.text = if (item.price > 0) "${item.price} €" else getString(R.string.free)
                                 binding.tvScore.text = (item.score ?: 0).toString()
                                 binding.tvDescription.text = androidx.core.text.HtmlCompat.fromHtml(
                                     item.description ?: "",
@@ -253,7 +253,7 @@ class ShopDetailFragment : Fragment() {
                                     binding.layoutAccessCodes.visibility = View.VISIBLE
                                     if (item != null) {
                                         if (item.category == "listing") {
-                                            binding.tvConfirmationCode.text = tx.confirm_code ?: ""
+                                            binding.tvConfirmationCode.text = tx.confirmCode ?: ""
                                             binding.tvConfirmationCode.visibility = View.VISIBLE
                                             binding.tvWaitingDropoffMessage.visibility = View.GONE
                                             binding.ivBarcode.visibility = View.GONE

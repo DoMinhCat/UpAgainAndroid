@@ -188,7 +188,7 @@
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
-                    android:layout_marginVertical="@dimen/space_md"
+                    android:layout_marginVertical="@dimen/space_xl"
                     android:background="@color/color_outline" />
 
                 <!-- PRICE & SCORE -->
@@ -247,7 +247,7 @@
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
-                    android:layout_marginVertical="@dimen/space_md"
+                    android:layout_marginVertical="@dimen/space_xl"
                     android:background="@color/color_outline" />
 
                 <!-- ABOUT / DESCRIPTION -->
@@ -271,7 +271,7 @@
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
-                    android:layout_marginVertical="@dimen/space_md"
+                    android:layout_marginVertical="@dimen/space_xl"
                     android:background="@color/color_outline" />
 
                 <LinearLayout
@@ -340,7 +340,7 @@
                     <View
                         android:layout_width="match_parent"
                         android:layout_height="1dp"
-                        android:layout_marginVertical="@dimen/space_md"
+                        android:layout_marginVertical="@dimen/space_xl"
                         android:background="@color/color_outline" />
                 </LinearLayout>
 
