@@ -71,6 +71,16 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent" />
 
+                <ImageView
+                    android:id="@+id/iv_default_carousel_placeholder"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:contentDescription="@string/img_thumbnail_description"
+                    android:scaleType="centerCrop"
+                    android:src="@drawable/fall_back_image"
+                    android:visibility="gone"
+                    tools:visibility="visible" />
+
                 <com.google.android.material.tabs.TabLayout
                     android:id="@+id/tl_carousel_indicator"
                     android:layout_width="wrap_content"
@@ -108,8 +118,8 @@
                         style="@style/Widget.Material3.Button.IconButton"
                         android:layout_width="@dimen/min_touch"
                         android:layout_height="@dimen/min_touch"
-                        app:iconGravity="textStart"
                         app:icon="@drawable/ic_love_outline"
+                        app:iconGravity="textStart"
                         app:iconSize="@dimen/icon_md"
                         app:iconTint="@color/red" />
 
@@ -206,10 +216,10 @@
                             android:layout_height="wrap_content"
                             android:layout_gravity="center"
                             android:indeterminate="true"
+                            android:visibility="gone"
+                            app:indicatorColor="@color/white"
                             app:indicatorSize="@dimen/icon_md"
                             app:trackThickness="2dp"
-                            app:indicatorColor="@color/white"
-                            android:visibility="gone"
                             tools:visibility="visible" />
                     </FrameLayout>
 
@@ -237,10 +247,10 @@
                             android:layout_height="wrap_content"
                             android:layout_gravity="center"
                             android:indeterminate="true"
+                            android:visibility="gone"
+                            app:indicatorColor="@color/color_on_primary"
                             app:indicatorSize="@dimen/icon_md"
                             app:trackThickness="2dp"
-                            app:indicatorColor="@color/color_on_primary"
-                            android:visibility="gone"
                             tools:visibility="visible" />
                     </FrameLayout>
 
@@ -266,10 +276,10 @@
                             android:layout_height="wrap_content"
                             android:layout_gravity="center"
                             android:indeterminate="true"
+                            android:visibility="gone"
+                            app:indicatorColor="@color/color_on_primary"
                             app:indicatorSize="@dimen/icon_md"
                             app:trackThickness="2dp"
-                            app:indicatorColor="@color/color_on_primary"
-                            android:visibility="gone"
                             tools:visibility="visible" />
                     </FrameLayout>
 
@@ -294,10 +304,10 @@
                             android:layout_height="wrap_content"
                             android:layout_gravity="center"
                             android:indeterminate="true"
+                            android:visibility="gone"
+                            app:indicatorColor="@color/white"
                             app:indicatorSize="@dimen/icon_md"
                             app:trackThickness="2dp"
-                            app:indicatorColor="@color/white"
-                            android:visibility="gone"
                             tools:visibility="visible" />
                     </FrameLayout>
 
@@ -553,8 +563,8 @@
                             style="@style/Widget.Material3.Button.IconButton"
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
-                            app:iconGravity="textStart"
                             app:icon="@drawable/ic_send"
+                            app:iconGravity="textStart"
                             app:iconSize="@dimen/icon_md"
                             app:iconTint="@color/color_primary" />
 
@@ -564,10 +574,10 @@
                             android:layout_height="wrap_content"
                             android:layout_gravity="center"
                             android:indeterminate="true"
+                            android:visibility="gone"
+                            app:indicatorColor="@color/color_primary"
                             app:indicatorSize="24dp"
                             app:trackThickness="2.5dp"
-                            app:indicatorColor="@color/color_primary"
-                            android:visibility="gone"
                             tools:visibility="visible" />
 
                     </FrameLayout>

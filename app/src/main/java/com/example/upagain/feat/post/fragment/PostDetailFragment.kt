@@ -332,14 +332,16 @@ class PostDetailFragment : Fragment() {
                                 val photosList = post.photos.orEmpty()
                                 carouselAdapter.submitList(photosList)
                                 if (photosList.size > 1) {
+                                    binding.ivDefaultCarouselPlaceholder.visibility = View.GONE
                                     binding.tlCarouselIndicator.visibility = View.VISIBLE
                                     TabLayoutMediator(
                                         binding.tlCarouselIndicator, binding.vpCarousel
                                     ) { _, _ ->
                                     }.attach()
                                 } else {
-                                    // Hide indicator entirely if there is only 1 or 0 images
+                                    binding.vpCarousel.visibility = View.GONE
                                     binding.tlCarouselIndicator.visibility = View.GONE
+                                    binding.ivDefaultCarouselPlaceholder.visibility = View.VISIBLE
                                 }
 
                                 binding.ivAuthorAvatar.load(
@@ -744,6 +746,7 @@ class PostDetailFragment : Fragment() {
                                             BuildConfig.PAYMENT_DEEPLINK + "?ads_from=$startDate&ads_duration=${duration}",
                                             false
                                         )
+                                        Log.d("CreateAdsRequest", request.toString())
                                         adsViewModel.createAds(request)
                                     }
                                 }
