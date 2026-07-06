@@ -36,13 +36,13 @@ import com.example.upagain.model.ads.CreateAdsRequest
 import com.example.upagain.model.comment.CommentDetailsResponse
 import com.example.upagain.model.comment.CreateCommentRequest
 import com.example.upagain.model.finance.FinanceKeyEnum
+import com.example.upagain.model.item.ItemDetailResponse
 import com.example.upagain.model.post.PostCategory
 import com.example.upagain.model.post.PostDetailsResponse
 import com.example.upagain.model.post.PostStepCreateRequest
 import com.example.upagain.model.post.PostStepUpdateRequest
 import com.example.upagain.model.post.PostUpdateRequest
 import com.example.upagain.model.post.ProjectStepResponse
-import com.example.upagain.model.post.StepItem
 import com.example.upagain.repository.AdsRepo
 import com.example.upagain.repository.CommentRepo
 import com.example.upagain.repository.FinanceRepo
@@ -90,7 +90,7 @@ class PostDetailFragment : Fragment() {
     private var stripeUrl: String? = null
     private var adsDuration: Int = 0
     private var adsStartDate: String = ""
-    private var myItemsList = listOf<StepItem>()
+    private var myItemsList = listOf<ItemDetailResponse>()
 
     // elements binding
     private var _binding: FragmentPostDetailBinding? = null
