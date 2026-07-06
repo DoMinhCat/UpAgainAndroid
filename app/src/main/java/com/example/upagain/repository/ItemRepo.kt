@@ -21,4 +21,20 @@ class ItemRepo(private val apiService: ApiService) {
             Result.failure(e)
         }
     }
+
+    suspend fun getAllItems(options: Map<String, String>): Result<MyItemsResponse> {
+        return try {
+            val response = apiService.getAllItems(options).awaitResponse()
+            val body = response.body()
+
+            if (response.isSuccessful && body != null) {
+                Result.success(body)
+            } else {
+                val errMessage = parseErrorMessage(response.errorBody()?.string())
+                Result.failure(Exception(errMessage))
+            }
+        } catch (e: Exception) {
+            Result.failure(e)
+        }
+    }
 }

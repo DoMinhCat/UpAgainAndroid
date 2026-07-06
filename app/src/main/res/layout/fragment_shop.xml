@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/color_background"
-    tools:context=".feat.shop.ShopFragment">
+    tools:context=".feat.shop.fragment.ShopFragment">
 
     <com.google.android.material.appbar.AppBarLayout
         android:layout_width="match_parent"
@@ -90,11 +90,12 @@
                 android:id="@+id/chip_group_materials"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                app:selectionRequired="true"
+                app:selectionRequired="false"
                 app:singleLine="true"
                 app:singleSelection="true">
 
                 <com.google.android.material.chip.Chip
+                    android:id="@+id/chip_wood"
                     style="@style/Widget.Material3.Chip.Filter"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -104,6 +105,7 @@
                     android:textColor="@color/color_on_background" />
 
                 <com.google.android.material.chip.Chip
+                    android:id="@+id/chip_textile"
                     style="@style/Widget.Material3.Chip.Filter"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -113,6 +115,7 @@
                     android:textColor="@color/color_on_background" />
 
                 <com.google.android.material.chip.Chip
+                    android:id="@+id/chip_glass"
                     style="@style/Widget.Material3.Chip.Filter"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -122,6 +125,7 @@
                     android:textColor="@color/color_on_background" />
 
                 <com.google.android.material.chip.Chip
+                    android:id="@+id/chip_metal"
                     style="@style/Widget.Material3.Chip.Filter"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -131,6 +135,7 @@
                     android:textColor="@color/color_on_background" />
 
                 <com.google.android.material.chip.Chip
+                    android:id="@+id/chip_plastic"
                     style="@style/Widget.Material3.Chip.Filter"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -140,6 +145,7 @@
                     android:textColor="@color/color_on_background" />
 
                 <com.google.android.material.chip.Chip
+                    android:id="@+id/chip_mixed"
                     style="@style/Widget.Material3.Chip.Filter"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -149,6 +155,7 @@
                     android:textColor="@color/color_on_background" />
 
                 <com.google.android.material.chip.Chip
+                    android:id="@+id/chip_other"
                     style="@style/Widget.Material3.Chip.Filter"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -170,5 +177,12 @@
         app:layout_behavior="@string/appbar_scrolling_view_behavior"
         tools:listitem="@layout/item_shop_card"
         tools:layoutManager="androidx.recyclerview.widget.GridLayoutManager"/>
+
+    <ProgressBar
+        android:id="@+id/progress_bar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:visibility="gone" />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

@@ -26,7 +26,7 @@ import com.example.upagain.feat.error.NoConnectionActivity
 import com.example.upagain.feat.post.fragment.PostDetailFragment
 import com.example.upagain.feat.post.fragment.PostFragment
 import com.example.upagain.feat.profile.ProfileFragment
-import com.example.upagain.feat.shop.ShopFragment
+import com.example.upagain.feat.shop.fragment.ShopFragment
 import com.example.upagain.util.auth.SessionManager
 import com.example.upagain.util.network.NetworkMonitor
 import kotlinx.coroutines.launch

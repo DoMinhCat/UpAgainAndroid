@@ -108,13 +108,6 @@ interface ApiService {
     @GET(Endpoints.STEPS_GET)
     fun getProjectSteps(@Path("id") id: Int): Call<List<ProjectStepResponse>>
 
-    @GET(Endpoints.SHOP_ITEM_ME)
-    fun getMyItems(
-        @Query("page") page: Int? = 1,
-        @Query("limit") limit: Int? = 100,
-        @Query("status") status: String? = "bought"
-    ): Call<MyItemsResponse>
-
     @Multipart
     @POST(Endpoints.STEPS_CREATE)
     fun createProjectStep(
@@ -181,4 +174,18 @@ interface ApiService {
     // FINANCIAL SETTINGS
     @GET(Endpoints.FINANCE_SETTING)
     fun getFinanceSetting(@Path("key") key: FinanceKeyEnum): Call<ResponseBody>
+
+
+    // SHOP
+    @GET(Endpoints.SHOP_ITEM_ME)
+    fun getMyItems(
+        @Query("page") page: Int? = 1,
+        @Query("limit") limit: Int? = 100,
+        @Query("status") status: String? = "bought"
+    ): Call<MyItemsResponse>
+
+    @GET(Endpoints.SHOP_ITEM_ALL)
+    fun getAllItems(
+        @QueryMap options: Map<String, String>
+    ): Call<MyItemsResponse>
 }

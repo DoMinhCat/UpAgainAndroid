@@ -319,9 +319,9 @@ object DialogUtils {
 
         class DropdownAdapter(
             context: Context,
-            private val items: List<StepItem>,
+            private val items: List<ItemDetailResponse>,
             private val selectedIds: List<Int>
-        ) : ArrayAdapter<StepItem>(context, R.layout.item_dropdown_multiselect, items) {
+        ) : ArrayAdapter<ItemDetailResponse>(context, R.layout.item_dropdown_multiselect, items) {
             override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
                 val view = super.getView(position, convertView, parent) as CheckedTextView
                 val item = items[position]
