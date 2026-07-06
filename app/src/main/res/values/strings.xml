@@ -49,6 +49,7 @@
     <string name="material_plastic">Plastic</string>
     <string name="material_mixed">Mixed</string>
     <string name="material_other">Other</string>
+    <string name="free">Free</string>
 
     <!-- Community & Categories -->
     <string name="filter_most_like">Most liked</string>
