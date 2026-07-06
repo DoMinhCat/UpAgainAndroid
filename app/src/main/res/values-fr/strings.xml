@@ -226,4 +226,17 @@
     <string name="sort_price_low">Prix : Bas à Élevé</string>
     <string name="my_items">Mes articles</string>
 
+    <!-- Marketplace Detail -->
+    <string name="marketplace_market">Marché</string>
+    <string name="marketplace_detail_reserve_action">Réserver</string>
+    <string name="marketplace_detail_buy_action">Acheter</string>
+    <string name="marketplace_detail_cancel_reserve">Annuler la réservation</string>
+    <string name="item_info_format">État : %1$s | Poids : %2$s kg</string>
+    <string name="snack_purchase_success">Article acheté avec succès</string>
+    <string name="snack_purchase_fail">Échec de l\'achat</string>
+    <string name="snack_reserve_success">Article réservé</string>
+    <string name="snack_reserve_fail">Échec de la réservation</string>
+    <string name="snack_cancel_success">Réservation annulée</string>
+    <string name="snack_cancel_fail">Échec de l\'annulation</string>
+
 </resources>

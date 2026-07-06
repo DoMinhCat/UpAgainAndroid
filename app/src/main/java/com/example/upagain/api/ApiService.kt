@@ -194,4 +194,39 @@ interface ApiService {
     fun getAllItems(
         @QueryMap options: Map<String, String>
     ): Call<MyItemsResponse>
+
+    @GET(Endpoints.SHOP_ITEM_DETAILS)
+    fun getItemDetails(@Path("id") id: Int): Call<com.example.upagain.model.item.ItemDetailResponse>
+
+    @GET(Endpoints.SHOP_LISTING_DETAILS)
+    fun getListingDetails(@Path("id") id: Int): Call<com.example.upagain.model.item.ListingDetailResponse>
+
+    @GET(Endpoints.SHOP_DEPOSIT_DETAILS)
+    fun getDepositDetails(@Path("id") id: Int): Call<com.example.upagain.model.item.DepositDetailResponse>
+
+    @DELETE(Endpoints.SHOP_ITEM_DELETE)
+    fun deleteItem(@Path("id") id: Int): Call<ResponseBody>
+
+    // TRANSACTIONS
+    @GET(Endpoints.SHOP_ITEM_TRANSACTIONS)
+    fun getItemTransactions(
+        @Path("id") id: Int,
+        @Query("page") page: Int? = null,
+        @Query("limit") limit: Int? = null
+    ): Call<com.example.upagain.model.transaction.TransactionsPaginationResponse>
+
+    @GET(Endpoints.SHOP_ITEM_LATEST_TRANSACTION)
+    fun getLatestTransactionOfPro(@Path("id") id: Int): Call<com.example.upagain.model.transaction.TransactionResponse>
+
+    @POST(Endpoints.SHOP_ITEM_RESERVE)
+    fun reserveItem(@Path("id") id: Int): Call<ResponseBody>
+
+    @POST(Endpoints.SHOP_ITEM_CANCEL_RESERVE)
+    fun cancelItemReservation(@Path("id") id: Int): Call<ResponseBody>
+
+    @POST(Endpoints.SHOP_ITEM_PURCHASE)
+    fun purchaseItem(
+        @Path("id") id: Int,
+        @Body payload: com.example.upagain.model.transaction.ItemPurchaseRequest
+    ): Call<ResponseBody>
 }

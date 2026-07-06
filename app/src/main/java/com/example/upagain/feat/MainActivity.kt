@@ -200,6 +200,22 @@ class MainActivity : AppCompatActivity() {
                         return true // Handled PostDetailFragment routing successfully
                     }
 
+                    "ShopDetailFragment" -> {
+                        val activeFragment =
+                            supportFragmentManager.findFragmentById(R.id.fragment_container) as? com.example.upagain.feat.shop.fragment.ShopDetailFragment
+
+                        if (activeFragment != null && activeFragment.isAdded) {
+                            activeFragment.onPaymentSuccessReturned(fullUriString)
+                        } else {
+                            val itemId = uri.getQueryParameter("id_item")?.toIntOrNull() ?: -1
+                            val freshFragment = com.example.upagain.feat.shop.fragment.ShopDetailFragment.newInstance(itemId, fullUriString)
+                            supportFragmentManager.beginTransaction()
+                                .replace(R.id.fragment_container, freshFragment)
+                                .commit()
+                        }
+                        return true
+                    }
+
                     "SomeOtherFragment" -> {
                         // TODO: Handle redirection to other fragments in the future here
                         // val otherId = uri.getQueryParameter("someId")

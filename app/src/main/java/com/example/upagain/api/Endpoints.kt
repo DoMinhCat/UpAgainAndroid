@@ -56,10 +56,14 @@ object Endpoints {
     const val SHOP_ITEM_ALL = "items"
     const val SHOP_ITEM_ME = "items/me"
     const val SHOP_ITEM_DETAILS = "items/{id}"
+    const val SHOP_ITEM_DELETE = "items/{id}"
     const val SHOP_ITEM_TRANSACTIONS = "items/{id}/transactions"
+    const val SHOP_ITEM_LATEST_TRANSACTION = "items/{id}/transactions/latest"
     const val SHOP_ITEM_RESERVE = "items/{id}/reserve"
     const val SHOP_ITEM_PURCHASE = "items/{id}/purchase"
     const val SHOP_ITEM_CANCEL_RESERVE = "items/{id}/cancel"
+    const val SHOP_LISTING_DETAILS = "listings/{id}"
+    const val SHOP_DEPOSIT_DETAILS = "deposits/{id}"
 
     // Stripe Endpoints
     const val STRIPE_VERIFY = "payments/verify"

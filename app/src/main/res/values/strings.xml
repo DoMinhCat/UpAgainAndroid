@@ -275,4 +275,17 @@
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
 
+    <!-- Marketplace Detail -->
+    <string name="marketplace_market">Market</string>
+    <string name="marketplace_detail_reserve_action">Reserve</string>
+    <string name="marketplace_detail_buy_action">Buy</string>
+    <string name="marketplace_detail_cancel_reserve">Cancel Reservation</string>
+    <string name="item_info_format">State: %1$s | Weight: %2$s kg</string>
+    <string name="snack_purchase_success">Item purchased successfully</string>
+    <string name="snack_purchase_fail">Purchase failed</string>
+    <string name="snack_reserve_success">Item reserved</string>
+    <string name="snack_reserve_fail">Reservation failed</string>
+    <string name="snack_cancel_success">Reservation cancelled</string>
+    <string name="snack_cancel_fail">Cancellation failed</string>
+
 </resources>
