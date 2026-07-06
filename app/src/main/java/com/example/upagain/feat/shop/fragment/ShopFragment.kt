@@ -22,7 +22,6 @@ import com.example.upagain.api.ApiClient
 import com.example.upagain.databinding.FragmentShopBinding
 import com.example.upagain.feat.shop.adapter.ItemAdapter
 import com.example.upagain.model.item.ItemDetailResponse
-import com.example.upagain.model.item.ItemStatus
 import com.example.upagain.repository.ItemRepo
 import com.example.upagain.util.ui.SnackbarLevel
 import com.example.upagain.util.ui.showTopSnackbar
@@ -47,6 +46,7 @@ class ShopFragment : Fragment() {
     private lateinit var shopAdapter: ItemAdapter
     private var searchQuery = ""
     private var selectedMaterial = ""
+    private var selectedSort = ""
 
     private var currentPage = 1
     private val loadedItems = mutableListOf<ItemDetailResponse>()
@@ -79,6 +79,21 @@ class ShopFragment : Fragment() {
         loadItems(1)
     }
 
+    // !DO NOT DELETE
+    companion object {
+        /**
+         * Use this factory method to create a new instance of
+         * this fragment using the provided parameters.
+         *
+         * @return A new instance of fragment ShopFragment.
+         */
+        @JvmStatic
+        fun newInstance() = ShopFragment().apply {
+            arguments = Bundle().apply {
+            }
+        }
+    }
+
     private fun setupRecyclerView() {
         shopAdapter = ItemAdapter(object : ItemAdapter.OnClickListener {
             override fun onItemClick(item: ItemDetailResponse) {
@@ -108,6 +123,48 @@ class ShopFragment : Fragment() {
                 handler.postDelayed(searchRunnable!!, 300)
             }
         })
+
+        binding.chipGroupSort.setOnCheckedStateChangeListener { group, checkedIds ->
+            val checkedId = checkedIds.firstOrNull()
+
+            // Reset all sort chips to default background surface and on-background text
+            val allSortChips = listOf(
+                binding.chipSortRecent,
+                binding.chipSortOldest,
+                binding.chipSortPriceDesc,
+                binding.chipSortPriceAsc
+            )
+            for (chip in allSortChips) {
+                chip.chipBackgroundColor = ColorStateList.valueOf(
+                    ContextCompat.getColor(requireContext(), R.color.color_surface)
+                )
+                chip.setTextColor(
+                    ContextCompat.getColor(requireContext(), R.color.color_on_background)
+                )
+            }
+
+            selectedSort = if (checkedId != null) {
+                val checkedChip =
+                    group.findViewById<com.google.android.material.chip.Chip>(checkedId)
+                checkedChip.chipBackgroundColor = ColorStateList.valueOf(
+                    ContextCompat.getColor(requireContext(), R.color.color_primary)
+                )
+                checkedChip.setTextColor(
+                    ContextCompat.getColor(requireContext(), R.color.color_on_primary)
+                )
+
+                when (checkedId) {
+                    binding.chipSortRecent.id -> "most_recent_creation"
+                    binding.chipSortOldest.id -> "oldest_creation"
+                    binding.chipSortPriceDesc.id -> "highest_price"
+                    binding.chipSortPriceAsc.id -> "lowest_price"
+                    else -> ""
+                }
+            } else {
+                ""
+            }
+            loadItems(1)
+        }
 
         binding.chipGroupMaterials.setOnCheckedStateChangeListener { group, checkedIds ->
             val checkedId = checkedIds.firstOrNull()
@@ -162,12 +219,15 @@ class ShopFragment : Fragment() {
         val options = mutableMapOf<String, String>()
         options["page"] = page.toString()
         options["limit"] = "10"
-        options["status"] = ItemStatus.APPROVED.value
+        options["status"] = "approved"
         if (searchQuery.isNotEmpty()) {
             options["search"] = searchQuery
         }
         if (selectedMaterial.isNotEmpty()) {
             options["material"] = selectedMaterial
+        }
+        if (selectedSort.isNotEmpty()) {
+            options["sort"] = selectedSort
         }
         itemViewModel.getAllItems(options, isFirstPage = (page == 1))
     }
@@ -197,7 +257,7 @@ class ShopFragment : Fragment() {
                             }
 
                             // Empty state UI display check
-                            if (itemsResponse.items.isNullOrEmpty() && loadedItems.isNullOrEmpty()) {
+                            if (itemsResponse.items.isNullOrEmpty() && loadedItems.isEmpty()) {
                                 binding.layoutItemsEmpty.visibility = View.VISIBLE
                                 binding.rvShopItems.visibility = View.GONE
                             } else {

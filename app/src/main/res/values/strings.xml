@@ -49,6 +49,7 @@
     <string name="material_plastic">Plastic</string>
     <string name="material_mixed">Mixed</string>
     <string name="material_other">Other</string>
+    <string name="free">Free</string>
 
     <!-- Community & Categories -->
     <string name="filter_most_like">Most liked</string>
@@ -264,5 +265,11 @@
     <string name="error_load_shop_items">Failed to load shop items: %1$s</string>
     <string name="no_items_found">No items found</string>
     <string name="no_items_description">We couldn\'t find any items matching your filters.</string>
+
+    <!-- Sorting options -->
+    <string name="sort_recent">Recent</string>
+    <string name="sort_oldest">Oldest</string>
+    <string name="sort_price_high">Price: High to Low</string>
+    <string name="sort_price_low">Price: Low to High</string>
 
 </resources>

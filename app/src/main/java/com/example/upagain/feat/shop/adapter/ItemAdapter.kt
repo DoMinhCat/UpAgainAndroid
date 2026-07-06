@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.content.res.AppCompatResources
 import androidx.core.content.ContextCompat
+import androidx.core.content.ContextCompat.getString
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
@@ -117,6 +118,10 @@ class ItemAdapter(
             } catch (e: Exception) {
                 item.createdAt
             }
+            if (item.price.compareTo(0.0) == 0) {
+                binding.itemPrice.text = getString(context, R.string.free)
+                binding.itemPrice.setTextColor(ContextCompat.getColor(context, R.color.color_primary))
+            } else
             binding.itemPrice.text = String.format(Locale.getDefault(), "%.2f €", item.price)
 
             // Capitalize category

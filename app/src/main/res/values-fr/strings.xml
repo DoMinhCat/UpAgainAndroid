@@ -28,6 +28,7 @@
     <string name="material_plastic">Plastique</string>
     <string name="material_mixed">Mixte</string>
     <string name="material_other">Autre</string>
+    <string name="free">Gratuit</string>
     <string name="filter_most_like">Les plus aimés</string>
     <string name="filter_most_view">Les plus vus</string>
     <string name="category_tutorial">Tutoriels</string>
@@ -130,6 +131,7 @@
     <string name="confirm_del_account">Supprimer définitivement le compte ?</string>
     <string name="confirm_del_post">Voulez-vous supprimer cet article ?</string>
     <string name="confirm_message">Cette action est irréversible.</string>
+    <string name="confirm_del_step">Supprimer définitivement cette étape ?</string>
     <string name="btn_confirm">Confirmer</string>
     <string name="btn_cancel">Annuler</string>
     <string name="total_price">Prix total</string>
@@ -216,5 +218,11 @@
     <string name="error_load_shop_items">Échec du chargement des articles de la boutique : %1$s</string>
     <string name="no_items_found">Aucun article trouvé</string>
     <string name="no_items_description">Nous n\'avons trouvé aucun article correspondant à vos filtres.</string>
+
+    <!-- Sorting options -->
+    <string name="sort_recent">Récent</string>
+    <string name="sort_oldest">Plus ancien</string>
+    <string name="sort_price_high">Prix : Élevé à Bas</string>
+    <string name="sort_price_low">Prix : Bas à Élevé</string>
 
 </resources>
