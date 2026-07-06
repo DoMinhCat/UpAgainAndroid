@@ -1,14 +1,12 @@
 package com.example.upagain.feat.dashboard
 
-import android.database.sqlite.SQLiteBindOrColumnIndexOutOfRangeException
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.Fragment
 import com.example.upagain.R
 import com.example.upagain.databinding.FragmentDashboardBinding
-import com.example.upagain.databinding.FragmentProfileBinding
 import com.example.upagain.util.ui.SnackbarLevel
 import com.example.upagain.util.ui.showTopSnackbar
 
@@ -53,6 +51,7 @@ class DashboardFragment : Fragment() {
         super.onDestroyView()
         _binding = null
     }
+
     companion object {
         /**
          * Use this factory method to create a new instance of

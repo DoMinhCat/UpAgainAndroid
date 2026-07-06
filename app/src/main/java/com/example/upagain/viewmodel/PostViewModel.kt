@@ -11,6 +11,9 @@ import com.example.upagain.model.post.PostDetailsResponse
 import com.example.upagain.model.post.PostPaginationRequest
 import com.example.upagain.model.post.PostPaginationResponse
 import com.example.upagain.model.post.PostSortOption
+import com.example.upagain.model.post.PostStepCreateRequest
+import com.example.upagain.model.post.PostStepUpdateRequest
+import com.example.upagain.model.post.PostUpdateRequest
 import com.example.upagain.model.post.ProjectStepResponse
 import com.example.upagain.repository.PostRepo
 import kotlinx.coroutines.flow.MutableSharedFlow
@@ -28,6 +31,21 @@ class PostViewModel(private val repository: PostRepo, application: Application) 
     private val _createPostsState =
         MutableStateFlow<UiState<Unit>>(UiState.Idle)
     val createPostsState: StateFlow<UiState<Unit>> = _createPostsState
+    private val _updatePostState =
+        MutableStateFlow<UiState<Unit>>(UiState.Idle)
+    val updatePostState: StateFlow<UiState<Unit>> = _updatePostState
+    private val _deletePostsState =
+        MutableStateFlow<UiState<Unit>>(UiState.Idle)
+    val deletePostsState: StateFlow<UiState<Unit>> = _deletePostsState
+    private val _deleteStepState =
+        MutableStateFlow<UiState<Unit>>(UiState.Idle)
+    val deleteStepState: StateFlow<UiState<Unit>> = _deleteStepState
+    private val _createStepState =
+        MutableStateFlow<UiState<Unit>>(UiState.Idle)
+    val createStepState: StateFlow<UiState<Unit>> = _createStepState
+    private val _updateStepState =
+        MutableStateFlow<UiState<Unit>>(UiState.Idle)
+    val updateStepState: StateFlow<UiState<Unit>> = _updateStepState
     private val _allPostsState =
         MutableStateFlow<UiState<PostPaginationResponse>>(UiState.Loading())
     val allPostsState: StateFlow<UiState<PostPaginationResponse>> = _allPostsState
@@ -211,5 +229,90 @@ class PostViewModel(private val repository: PostRepo, application: Application) 
 
     fun resetCreatePostState() {
         _createPostsState.value = UiState.Idle
+    }
+
+    fun updatePost(id: Int, request: PostUpdateRequest) {
+        viewModelScope.launch {
+            _updatePostState.value = UiState.Loading()
+
+            repository.updatePost(context, id, request).onSuccess { response ->
+                _updatePostState.value = UiState.Success(response)
+            }.onFailure { exception ->
+                val statusCode = (exception as? HttpException)?.code()
+                _updatePostState.value = UiState.Error(statusCode, exception)
+            }
+        }
+    }
+
+    fun resetUpdatePostState() {
+        _updatePostState.value = UiState.Idle
+    }
+
+    fun createProjectStep(idPost: Int, request: PostStepCreateRequest) {
+        viewModelScope.launch {
+            _createStepState.value = UiState.Loading()
+
+            repository.createProjectStep(context, idPost, request).onSuccess { response ->
+                _createStepState.value = UiState.Success(response)
+            }.onFailure { exception ->
+                val statusCode = (exception as? HttpException)?.code()
+                _createStepState.value = UiState.Error(statusCode, exception)
+            }
+        }
+    }
+
+    fun resetCreateStepState() {
+        _createStepState.value = UiState.Idle
+    }
+
+    fun updateProjectStep(idStep: Int, request: PostStepUpdateRequest) {
+        viewModelScope.launch {
+            _updateStepState.value = UiState.Loading()
+
+            repository.updateProjectStep(context, idStep, request).onSuccess { response ->
+                _updateStepState.value = UiState.Success(response)
+            }.onFailure { exception ->
+                val statusCode = (exception as? HttpException)?.code()
+                _updateStepState.value = UiState.Error(statusCode, exception)
+            }
+        }
+    }
+
+    fun resetUpdateStepState() {
+        _updateStepState.value = UiState.Idle
+    }
+
+    fun deletePost(idPost: Int) {
+        viewModelScope.launch {
+            _deletePostsState.value = UiState.Loading()
+
+            repository.deletePost(idPost).onSuccess { response ->
+                _deletePostsState.value = UiState.Success(response)
+            }.onFailure { exception ->
+                val statusCode = (exception as? HttpException)?.code()
+                _deletePostsState.value = UiState.Error(statusCode, exception)
+            }
+        }
+    }
+
+    fun resetDeletePostState() {
+        _deletePostsState.value = UiState.Idle
+    }
+
+    fun deleteProjectStep(idStep: Int) {
+        viewModelScope.launch {
+            _deleteStepState.value = UiState.Loading()
+
+            repository.deleteProjectStep(idStep).onSuccess { response ->
+                _deleteStepState.value = UiState.Success(response)
+            }.onFailure { exception ->
+                val statusCode = (exception as? HttpException)?.code()
+                _deleteStepState.value = UiState.Error(statusCode, exception)
+            }
+        }
+    }
+
+    fun resetDeleteStepState() {
+        _deleteStepState.value = UiState.Idle
     }
 }

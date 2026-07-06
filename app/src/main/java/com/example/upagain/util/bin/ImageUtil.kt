@@ -1,6 +1,5 @@
 package com.example.upagain.util.bin
 
-import android.util.Log
 import androidx.core.net.toUri
 import com.example.upagain.BuildConfig
 import com.example.upagain.api.Endpoints
@@ -11,6 +10,7 @@ enum class ImageType() {
     AVATAR,
     MEDIA
 }
+
 fun buildImageUrl(imagePath: String?, type: ImageType): String {
     if (imagePath == null) {
         if (type == ImageType.MEDIA) {

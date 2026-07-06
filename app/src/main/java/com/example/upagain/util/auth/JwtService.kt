@@ -9,7 +9,8 @@ data class ParseJwtResponse(
     val email: String,
     val role: String
 )
-fun parseJwt(token: String): ParseJwtResponse{
+
+fun parseJwt(token: String): ParseJwtResponse {
     try {
         val jwt = JWT(token)
 

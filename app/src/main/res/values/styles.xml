@@ -44,7 +44,6 @@
 
     <!-- Button -->
     <style name="TextAppearance.UpAgain.ButtonPrimary">
-        <item name="cornerRadius">@dimen/button_radius</item>
         <item name="android:textSize">14sp</item>
         <item name="android:textColor">@color/color_on_primary</item>
         <item name="android:iconTint">@color/color_on_primary</item>

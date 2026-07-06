@@ -71,6 +71,16 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent" />
 
+                <ImageView
+                    android:id="@+id/iv_default_carousel_placeholder"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:contentDescription="@string/img_thumbnail_description"
+                    android:scaleType="centerCrop"
+                    android:src="@drawable/fall_back_image"
+                    android:visibility="gone"
+                    tools:visibility="visible" />
+
                 <com.google.android.material.tabs.TabLayout
                     android:id="@+id/tl_carousel_indicator"
                     android:layout_width="wrap_content"
@@ -108,8 +118,8 @@
                         style="@style/Widget.Material3.Button.IconButton"
                         android:layout_width="@dimen/min_touch"
                         android:layout_height="@dimen/min_touch"
-                        app:iconGravity="textStart"
                         app:icon="@drawable/ic_love_outline"
+                        app:iconGravity="textStart"
                         app:iconSize="@dimen/icon_md"
                         app:iconTint="@color/red" />
 
@@ -182,52 +192,124 @@
                     android:gravity="center_vertical"
                     android:orientation="horizontal">
 
-                    <com.google.android.material.button.MaterialButton
-                        android:id="@+id/btn_ribbon_cancel_ad"
-                        style="@style/TextAppearance.UpAgain.ButtonDelete"
+                    <FrameLayout
+                        android:id="@+id/container_ribbon_cancel_ad"
                         android:layout_width="wrap_content"
-                        android:layout_height="@dimen/min_touch"
+                        android:layout_height="wrap_content"
                         android:layout_marginEnd="@dimen/space_sm"
-                        android:text="@string/btn_cancel_ad"
                         android:visibility="gone"
-                        app:icon="@drawable/ic_ads"
-                        app:iconPadding="@dimen/space_xs"
-                        app:iconSize="@dimen/icon_sm"
-                        tools:visibility="visible" />
+                        tools:visibility="visible">
 
-                    <com.google.android.material.button.MaterialButton
-                        android:id="@+id/btn_ribbon_book_ad"
-                        style="@style/TextAppearance.UpAgain.ButtonPrimary"
+                        <com.google.android.material.button.MaterialButton
+                            android:id="@+id/btn_ribbon_cancel_ad"
+                            style="@style/TextAppearance.UpAgain.ButtonDelete"
+                            android:layout_width="wrap_content"
+                            android:layout_height="@dimen/min_touch"
+                            android:text="@string/btn_cancel_ad"
+                            app:icon="@drawable/ic_ads"
+                            app:iconPadding="@dimen/space_xs"
+                            app:iconSize="@dimen/icon_sm" />
+
+                        <com.google.android.material.progressindicator.CircularProgressIndicator
+                            android:id="@+id/loader_ribbon_cancel_ad"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:indeterminate="true"
+                            android:visibility="gone"
+                            app:indicatorColor="@color/white"
+                            app:indicatorSize="@dimen/icon_md"
+                            app:trackThickness="2dp"
+                            tools:visibility="visible" />
+                    </FrameLayout>
+
+                    <FrameLayout
+                        android:id="@+id/container_ribbon_book_ad"
                         android:layout_width="wrap_content"
-                        android:layout_height="@dimen/min_touch"
+                        android:layout_height="wrap_content"
                         android:layout_marginEnd="@dimen/space_sm"
-                        android:text="@string/btn_book_ad"
                         android:visibility="gone"
-                        app:icon="@drawable/ic_ads"
-                        app:iconPadding="@dimen/space_xs"
-                        app:iconSize="@dimen/icon_sm"
-                        tools:visibility="visible" />
+                        tools:visibility="visible">
 
-                    <com.google.android.material.button.MaterialButton
-                        android:id="@+id/btn_ribbon_edit_post"
-                        style="@style/TextAppearance.UpAgain.ButtonEdit"
-                        android:layout_width="wrap_content"
-                        android:layout_height="@dimen/min_touch"
-                        android:layout_marginEnd="@dimen/space_sm"
-                        android:text="@string/btn_edit"
-                        app:icon="@drawable/ic_edit"
-                        app:iconPadding="@dimen/space_xs"
-                        app:iconSize="@dimen/icon_sm" />
+                        <com.google.android.material.button.MaterialButton
+                            android:id="@+id/btn_ribbon_book_ad"
+                            style="@style/TextAppearance.UpAgain.ButtonPrimary"
+                            android:layout_width="wrap_content"
+                            android:layout_height="@dimen/min_touch"
+                            android:text="@string/btn_book_ad"
+                            app:icon="@drawable/ic_ads"
+                            app:iconPadding="@dimen/space_xs"
+                            app:iconSize="@dimen/icon_sm" />
 
-                    <com.google.android.material.button.MaterialButton
-                        android:id="@+id/btn_ribbon_delete_post"
-                        style="@style/TextAppearance.UpAgain.ButtonDelete"
+                        <com.google.android.material.progressindicator.CircularProgressIndicator
+                            android:id="@+id/loader_ribbon_book_ad"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:indeterminate="true"
+                            android:visibility="gone"
+                            app:indicatorColor="@color/color_on_primary"
+                            app:indicatorSize="@dimen/icon_md"
+                            app:trackThickness="2dp"
+                            tools:visibility="visible" />
+                    </FrameLayout>
+
+                    <FrameLayout
+                        android:id="@+id/container_ribbon_edit_post"
                         android:layout_width="wrap_content"
-                        android:layout_height="@dimen/min_touch"
-                        android:text="@string/btn_delete"
-                        app:icon="@drawable/ic_trash"
-                        app:iconPadding="@dimen/space_xs"
-                        app:iconSize="@dimen/icon_sm" />
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="@dimen/space_sm">
+
+                        <com.google.android.material.button.MaterialButton
+                            android:id="@+id/btn_ribbon_edit_post"
+                            style="@style/TextAppearance.UpAgain.ButtonEdit"
+                            android:layout_width="wrap_content"
+                            android:layout_height="@dimen/min_touch"
+                            android:text="@string/btn_edit"
+                            app:icon="@drawable/ic_edit"
+                            app:iconPadding="@dimen/space_xs"
+                            app:iconSize="@dimen/icon_sm" />
+
+                        <com.google.android.material.progressindicator.CircularProgressIndicator
+                            android:id="@+id/loader_ribbon_edit_post"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:indeterminate="true"
+                            android:visibility="gone"
+                            app:indicatorColor="@color/color_on_primary"
+                            app:indicatorSize="@dimen/icon_md"
+                            app:trackThickness="2dp"
+                            tools:visibility="visible" />
+                    </FrameLayout>
+
+                    <FrameLayout
+                        android:id="@+id/container_ribbon_delete_post"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content">
+
+                        <com.google.android.material.button.MaterialButton
+                            android:id="@+id/btn_ribbon_delete_post"
+                            style="@style/TextAppearance.UpAgain.ButtonDelete"
+                            android:layout_width="wrap_content"
+                            android:layout_height="@dimen/min_touch"
+                            android:text="@string/btn_delete"
+                            app:icon="@drawable/ic_trash"
+                            app:iconPadding="@dimen/space_xs"
+                            app:iconSize="@dimen/icon_sm" />
+
+                        <com.google.android.material.progressindicator.CircularProgressIndicator
+                            android:id="@+id/loader_ribbon_delete_post"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:indeterminate="true"
+                            android:visibility="gone"
+                            app:indicatorColor="@color/white"
+                            app:indicatorSize="@dimen/icon_md"
+                            app:trackThickness="2dp"
+                            tools:visibility="visible" />
+                    </FrameLayout>
 
                 </LinearLayout>
             </HorizontalScrollView>
@@ -318,14 +400,35 @@
                     android:visibility="gone"
                     tools:visibility="visible">
 
-                    <TextView
-                        android:id="@+id/tv_steps_header"
-                        style="@style/TextAppearance.UpAgain.H3"
-                        android:layout_width="wrap_content"
+                    <RelativeLayout
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginBottom="@dimen/space_md"
-                        android:text="@string/project_steps"
-                        android:textColor="@color/color_on_background" />
+                        android:layout_marginBottom="@dimen/space_md">
+
+                        <TextView
+                            android:id="@+id/tv_steps_header"
+                            style="@style/TextAppearance.UpAgain.H3"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentStart="true"
+                            android:layout_centerVertical="true"
+                            android:text="@string/project_steps"
+                            android:textColor="@color/color_on_background" />
+
+                        <com.google.android.material.button.MaterialButton
+                            android:id="@+id/btn_add_step"
+                            style="@style/Widget.Material3.Button.TextButton"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentEnd="true"
+                            android:layout_centerVertical="true"
+                            android:text="@string/add_step"
+                            android:textColor="@color/color_primary"
+                            app:icon="@drawable/ic_new_post"
+                            app:iconTint="@color/color_primary"
+                            android:visibility="gone"
+                            tools:visibility="visible" />
+                    </RelativeLayout>
 
                     <FrameLayout
                         android:layout_width="match_parent"
@@ -481,8 +584,8 @@
                             style="@style/Widget.Material3.Button.IconButton"
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
-                            app:iconGravity="textStart"
                             app:icon="@drawable/ic_send"
+                            app:iconGravity="textStart"
                             app:iconSize="@dimen/icon_md"
                             app:iconTint="@color/color_primary" />
 
@@ -492,10 +595,10 @@
                             android:layout_height="wrap_content"
                             android:layout_gravity="center"
                             android:indeterminate="true"
+                            android:visibility="gone"
+                            app:indicatorColor="@color/color_primary"
                             app:indicatorSize="24dp"
                             app:trackThickness="2.5dp"
-                            app:indicatorColor="@color/color_primary"
-                            android:visibility="gone"
                             tools:visibility="visible" />
 
                     </FrameLayout>

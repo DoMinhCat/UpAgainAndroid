@@ -45,18 +45,22 @@ class ErrorActivity : AppCompatActivity() {
                 binding.tvErrorTitle.text = getString(R.string.error_401_description)
                 binding.tvErrorMessage.text = getString(R.string.error_401_msg)
             }
+
             403 -> {
                 binding.tvErrorTitle.text = getString(R.string.error_403_description)
                 binding.tvErrorMessage.text = getString(R.string.error_403_msg)
             }
+
             404 -> {
                 binding.tvErrorTitle.text = getString(R.string.error_404_description)
                 binding.tvErrorMessage.text = getString(R.string.error_404_msg)
             }
+
             500 -> {
                 binding.tvErrorTitle.text = getString(R.string.error_500_description)
                 binding.tvErrorMessage.text = getString(R.string.error_500_msg)
             }
+
             else -> {
                 binding.tvErrorTitle.text = getString(R.string.error_generic_title)
                 binding.tvErrorMessage.text = getString(R.string.exception_message)

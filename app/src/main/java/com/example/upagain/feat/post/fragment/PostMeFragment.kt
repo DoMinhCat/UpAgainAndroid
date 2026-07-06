@@ -30,6 +30,7 @@ import com.example.upagain.viewmodel.ViewModelFactory
 import kotlinx.coroutines.launch
 
 private const val ARG_JUST_CREATED = "key_just_created"
+private const val ARG_JUST_DELETED = "key_just_deleted"
 
 class PostMeFragment : Fragment() {
 
@@ -47,11 +48,13 @@ class PostMeFragment : Fragment() {
     private var myPosts = mutableListOf<PostDetailsResponse>()
     private lateinit var postAdapter: PostAdapter
     private var justCreated: Boolean = false
+    private var justDeleted: Boolean = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
             justCreated = it.getBoolean(ARG_JUST_CREATED)
+            justDeleted = it.getBoolean(ARG_JUST_DELETED)
         }
     }
 
@@ -75,6 +78,12 @@ class PostMeFragment : Fragment() {
             )
             justCreated = false
         }
+        if (justDeleted) {
+            binding.main.showTopSnackbar(
+                R.string.snack_delete_post_success, SnackbarLevel.SUCCESS
+            )
+            justDeleted = false
+        }
 
         // ! Always set up listeners and observers before API call
         setupRecyclerView()
@@ -91,14 +100,17 @@ class PostMeFragment : Fragment() {
          * this fragment using the provided parameters.
          *
          * @param ARG_JUST_CREATED if the user just created a post in or not.
+         * @param ARG_JUST_DELETED if the user just deleted a post in or not.
          * @return A new instance of fragment PostMeFragment.
          */
         @JvmStatic
-        fun newInstance(justCreated: Boolean = false) = PostMeFragment().apply {
-            arguments = Bundle().apply {
-                putBoolean(ARG_JUST_CREATED, justCreated)
+        fun newInstance(justCreated: Boolean = false, justDeleted: Boolean = false) =
+            PostMeFragment().apply {
+                arguments = Bundle().apply {
+                    putBoolean(ARG_JUST_CREATED, justCreated)
+                    putBoolean(ARG_JUST_DELETED, justDeleted)
+                }
             }
-        }
     }
 
     // PRIVATE ZONE

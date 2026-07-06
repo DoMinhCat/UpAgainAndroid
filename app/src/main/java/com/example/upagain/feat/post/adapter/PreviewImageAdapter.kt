@@ -6,6 +6,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import coil.load
 import com.example.upagain.databinding.ItemChosenImagePreviewBinding
 
 class PreviewImageAdapter(
@@ -31,8 +32,10 @@ class PreviewImageAdapter(
     ) : RecyclerView.ViewHolder(binding.root) {
 
         fun bind(uri: Uri) {
-            // Display the image thumbnail
-            binding.ivPreviewImage.setImageURI(uri)
+            // Display the image thumbnail using Coil to support both remote and local Uris
+            binding.ivPreviewImage.load(uri) {
+                crossfade(true)
+            }
 
             // Handle the floating delete button click
             binding.btnRemovePreview.setOnClickListener {

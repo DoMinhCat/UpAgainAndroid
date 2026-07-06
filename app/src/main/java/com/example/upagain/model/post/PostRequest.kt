@@ -35,3 +35,27 @@ data class PostCreateRequest(
     @SerializedName("category") val category: PostCategory = PostCategory.PROJECT,
     @SerializedName("images") val images: List<Uri>? = emptyList()
 )
+
+data class PostUpdateRequest(
+    val title: String,
+    val content: String,
+    val category: PostCategory,
+    val endDate: String? = null,
+    val newImages: List<Uri>? = emptyList(),
+    val existingImages: List<String>? = emptyList()
+)
+
+data class PostStepCreateRequest(
+    val title: String,
+    val description: String,
+    val images: List<Uri>? = emptyList(),
+    val itemIds: List<Int>? = emptyList()
+)
+
+data class PostStepUpdateRequest(
+    val title: String,
+    val description: String,
+    val newImages: List<Uri>? = emptyList(),
+    val existingImages: List<String>? = emptyList(),
+    val itemIds: List<Int>? = emptyList()
+)

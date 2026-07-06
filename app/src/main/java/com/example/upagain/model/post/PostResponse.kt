@@ -20,6 +20,7 @@ data class PostDetailsResponse(
     @SerializedName("ads_id") val adsId: Int?,
     @SerializedName("ads_from") val adsFrom: String?,
     @SerializedName("ads_to") val adsTo: String?,
+    @SerializedName("end_date") val endDate: String?,
     @SerializedName("is_liked") var isLiked: Boolean,
     @SerializedName("is_saved") var isSaved: Boolean
 )
@@ -59,3 +60,4 @@ data class ProjectStepResponse(
     @SerializedName("order") val order: Float,
     @SerializedName("items") val items: List<StepItem>? = emptyList(),
 )
+

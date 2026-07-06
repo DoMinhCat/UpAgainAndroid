@@ -6,7 +6,9 @@ class EmailRule : ValidationRule<String> {
 }
 
 class PasswordRule : ValidationRule<String> {
-    private val passwordRegex = Regex("^(?=.*[A-Z])(?=.*\\d)(?=.*[@$!%*?&])[A-Za-z\\d@$!%*?&]{12,}$")
+    private val passwordRegex =
+        Regex("^(?=.*[A-Z])(?=.*\\d)(?=.*[@$!%*?&])[A-Za-z\\d@$!%*?&]{12,}$")
+
     override fun validate(value: String): Boolean = value.matches(passwordRegex)
 }
 

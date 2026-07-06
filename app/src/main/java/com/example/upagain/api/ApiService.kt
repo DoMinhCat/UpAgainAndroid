@@ -5,12 +5,15 @@ import com.example.upagain.model.TokenResponse
 import com.example.upagain.model.account.AccountDetailsResponse
 import com.example.upagain.model.account.AccountUpdateRequest
 import com.example.upagain.model.account.PasswordUpdateRequest
-import com.example.upagain.model.comment.CreateCommentRequest
+import com.example.upagain.model.ads.CreateAdsRequest
+import com.example.upagain.model.ads.CreateAdsResponse
 import com.example.upagain.model.comment.CommentDetailsResponse
 import com.example.upagain.model.comment.CommentPaginationResponse
+import com.example.upagain.model.comment.CreateCommentRequest
 import com.example.upagain.model.comment.LikeCommentResponse
+import com.example.upagain.model.finance.FinanceKeyEnum
+import com.example.upagain.model.item.MyItemsResponse
 import com.example.upagain.model.post.LikePostResponse
-import com.example.upagain.model.post.PostCreateRequest
 import com.example.upagain.model.post.PostDetailsResponse
 import com.example.upagain.model.post.PostPaginationResponse
 import com.example.upagain.model.post.ProjectStepResponse
@@ -18,6 +21,7 @@ import com.example.upagain.model.post.SavePostResponse
 import com.example.upagain.model.post.ViewPostResponse
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
+import okhttp3.ResponseBody
 import retrofit2.Call
 import retrofit2.http.Body
 import retrofit2.http.DELETE
@@ -25,8 +29,10 @@ import retrofit2.http.GET
 import retrofit2.http.Multipart
 import retrofit2.http.PATCH
 import retrofit2.http.POST
+import retrofit2.http.PUT
 import retrofit2.http.Part
 import retrofit2.http.Path
+import retrofit2.http.Query
 import retrofit2.http.QueryMap
 
 interface ApiService {
@@ -44,8 +50,7 @@ interface ApiService {
     @Multipart
     @POST(Endpoints.AVATAR_UPDATE)
     fun uploadAvatar(
-        @Path("id") idAccount: Int,
-        @Part avatar: MultipartBody.Part
+        @Path("id") idAccount: Int, @Part avatar: MultipartBody.Part
     ): Call<Unit>
 
     @PATCH(Endpoints.ACCOUNT_UPDATE)
@@ -65,6 +70,18 @@ interface ApiService {
         @Part("content") content: RequestBody,
         @Part("category") category: RequestBody,
         @Part images: List<MultipartBody.Part>
+    ): Call<Unit>
+
+    @Multipart
+    @PUT(Endpoints.POST_UPDATE)
+    fun updatePost(
+        @Path("id") id: Int,
+        @Part("title") title: RequestBody,
+        @Part("content") content: RequestBody,
+        @Part("category") category: RequestBody,
+        @Part("end_date") endDate: RequestBody?,
+        @Part newImages: List<MultipartBody.Part>,
+        @Part existingImages: List<MultipartBody.Part>
     ): Call<Unit>
 
     @POST(Endpoints.POST_VIEW)
@@ -91,14 +108,45 @@ interface ApiService {
     @GET(Endpoints.STEPS_GET)
     fun getProjectSteps(@Path("id") id: Int): Call<List<ProjectStepResponse>>
 
+    @GET(Endpoints.SHOP_ITEM_ME)
+    fun getMyItems(
+        @Query("page") page: Int? = 1,
+        @Query("limit") limit: Int? = 100,
+        @Query("status") status: String? = "bought"
+    ): Call<MyItemsResponse>
+
+    @Multipart
+    @POST(Endpoints.STEPS_CREATE)
+    fun createProjectStep(
+        @Path("id") idPost: Int,
+        @Part("title") title: RequestBody,
+        @Part("description") description: RequestBody,
+        @Part itemIds: List<MultipartBody.Part>,
+        @Part images: List<MultipartBody.Part>
+    ): Call<Unit>
+
+    @Multipart
+    @PUT(Endpoints.STEPS_EDIT)
+    fun updateProjectStep(
+        @Path("id") idStep: Int,
+        @Part("title") title: RequestBody,
+        @Part("description") description: RequestBody,
+        @Part existingImages: List<MultipartBody.Part>,
+        @Part newImages: List<MultipartBody.Part>,
+        @Part itemIds: List<MultipartBody.Part>
+    ): Call<Unit>
+
     @DELETE(Endpoints.POST_DELETE)
     fun deletePost(@Path("id") id: Int): Call<Unit>
+
+    // STEP
+    @DELETE(Endpoints.STEPS_DELETE)
+    fun deleteProjectStep(@Path("id") id: Int): Call<Unit>
 
     // COMMENTS
     @POST(Endpoints.COMMENTS_NEW)
     fun createComment(
-        @Path("id") id: Int,
-        @Body request: CreateCommentRequest
+        @Path("id") id: Int, @Body request: CreateCommentRequest
     ): Call<CommentDetailsResponse>
 
     @POST(Endpoints.COMMENTS_LIKE)
@@ -106,12 +154,20 @@ interface ApiService {
 
     @GET(Endpoints.COMMENTS_ALL)
     fun getPostComments(
-        @Path("id") id: Int,
-        @QueryMap options: Map<String, String>
+        @Path("id") id: Int, @QueryMap options: Map<String, String>
     ): Call<CommentPaginationResponse>
 
     @DELETE(Endpoints.COMMENTS_DELETE)
     fun deleteComment(@Path("id") id: Int): Call<Unit>
+
+    // ADS
+    @POST(Endpoints.ADS_CREATE)
+    fun createAds(
+        @Body request: CreateAdsRequest
+    ): Call<CreateAdsResponse>
+
+    @DELETE(Endpoints.ADS_DELETE)
+    fun deleteAds(@Path("id") id: Int): Call<Unit>
 
     // CONTAINER
     @Multipart
@@ -121,4 +177,8 @@ interface ApiService {
         @Part barcode: MultipartBody.Part?,
         @Part("code6digit") digitCode: RequestBody?
     ): Call<Unit>
+
+    // FINANCIAL SETTINGS
+    @GET(Endpoints.FINANCE_SETTING)
+    fun getFinanceSetting(@Path("key") key: FinanceKeyEnum): Call<ResponseBody>
 }

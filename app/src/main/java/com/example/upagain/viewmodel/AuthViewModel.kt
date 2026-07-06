@@ -9,7 +9,6 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import retrofit2.HttpException
-import kotlin.onFailure
 
 class AuthViewModel(private val repository: AuthRepository) : ViewModel() {
     private val _loginState = MutableStateFlow<UiState<TokenResponse>>(UiState.Idle)

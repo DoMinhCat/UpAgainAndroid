@@ -1,6 +1,5 @@
 package com.example.upagain.repository
 
-import android.R.attr.mimeType
 import android.content.Context
 import android.net.Uri
 import com.example.upagain.api.ApiService
@@ -13,7 +12,6 @@ import com.example.upagain.util.json.parseErrorMessage
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
 import okhttp3.RequestBody.Companion.asRequestBody
-import retrofit2.HttpException
 import retrofit2.awaitResponse
 import java.io.File
 import java.util.UUID

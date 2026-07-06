@@ -74,12 +74,25 @@ class CommentRecyclerViewAdapter(
         } else if (holder is LoadMoreViewHolder) {
             val context = holder.btnLoadMore.context
             val defaultText = context.getString(R.string.btn_load_more)
-            val defaultIcon = AppCompatResources.getDrawable(context, R.drawable.ic_chevron_double_down)
+            val defaultIcon =
+                AppCompatResources.getDrawable(context, R.drawable.ic_chevron_double_down)
 
             if (isLoadMoreBtnLoading) {
-                toggleBtnLoadingState(holder.btnLoadMore, holder.spinnerIndicator, true, defaultText, defaultIcon)
+                toggleBtnLoadingState(
+                    holder.btnLoadMore,
+                    holder.spinnerIndicator,
+                    true,
+                    defaultText,
+                    defaultIcon
+                )
             } else {
-                toggleBtnLoadingState(holder.btnLoadMore, holder.spinnerIndicator, false, defaultText, defaultIcon)
+                toggleBtnLoadingState(
+                    holder.btnLoadMore,
+                    holder.spinnerIndicator,
+                    false,
+                    defaultText,
+                    defaultIcon
+                )
                 holder.btnLoadMore.setOnClickListener {
                     onClickListener.onLoadMoreClick()
                 }
@@ -106,7 +119,8 @@ class CommentRecyclerViewAdapter(
         }
     }
 
-    class CommentViewHolder(view: View, private val listener: OnClickListener) : RecyclerView.ViewHolder(view) {
+    class CommentViewHolder(view: View, private val listener: OnClickListener) :
+        RecyclerView.ViewHolder(view) {
         val avatar: ShapeableImageView = view.findViewById(R.id.iv_cmt_avatar)
         val username: TextView = view.findViewById(R.id.tv_cmt_user_name)
         val createdAt: TextView = view.findViewById(R.id.tv_cmt_time)
@@ -123,9 +137,11 @@ class CommentRecyclerViewAdapter(
             likeNb.text = comment.likeCount.toString()
 
             // change like icon
-            likeBtn.icon = AppCompatResources.getDrawable(likeBtn.context, R.drawable.ic_love_outline)
+            likeBtn.icon =
+                AppCompatResources.getDrawable(likeBtn.context, R.drawable.ic_love_outline)
             if (comment.isLiked) {
-                likeBtn.icon = AppCompatResources.getDrawable(likeBtn.context, R.drawable.ic_love_filled)
+                likeBtn.icon =
+                    AppCompatResources.getDrawable(likeBtn.context, R.drawable.ic_love_filled)
             }
 
             val avatarUrl = buildImageUrl(comment.userAvatar, ImageType.AVATAR)

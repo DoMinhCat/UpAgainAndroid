@@ -1,9 +1,7 @@
 package com.example.upagain.viewmodel
 
 import android.app.Application
-import android.content.Context
 import androidx.lifecycle.AndroidViewModel
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.upagain.model.account.AccountDetailsResponse
 import com.example.upagain.model.account.AccountUpdateRequest
@@ -14,7 +12,8 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import retrofit2.HttpException
 
-class AccountViewModel(private val repository: AccountRepo, application: Application) : AndroidViewModel(application) {
+class AccountViewModel(private val repository: AccountRepo, application: Application) :
+    AndroidViewModel(application) {
     private val context get() = getApplication<Application>().applicationContext
     private val _accountDetailsState =
         MutableStateFlow<UiState<AccountDetailsResponse>>(UiState.Loading())
@@ -58,6 +57,7 @@ class AccountViewModel(private val repository: AccountRepo, application: Applica
                 }
         }
     }
+
     fun resetAccountUpdateState() {
         _accountUpdateState.value = UiState.Idle
     }
@@ -76,6 +76,7 @@ class AccountViewModel(private val repository: AccountRepo, application: Applica
                 }
         }
     }
+
     fun resetAccountDeleteState() {
         _accountDeleteState.value = UiState.Idle
     }
@@ -94,6 +95,7 @@ class AccountViewModel(private val repository: AccountRepo, application: Applica
                 }
         }
     }
+
     fun resetAccountPasswordUpdateState() {
         _accountPasswordUpdateState.value = UiState.Idle
     }
@@ -110,6 +112,7 @@ class AccountViewModel(private val repository: AccountRepo, application: Applica
                 }
         }
     }
+
     fun resetAccountAvatarUploadState() {
         _accountAvatarUploadState.value = UiState.Idle
     }

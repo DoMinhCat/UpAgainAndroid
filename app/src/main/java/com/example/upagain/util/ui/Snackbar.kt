@@ -5,8 +5,8 @@ import android.view.Gravity
 import android.view.View
 import android.view.animation.LinearInterpolator
 import android.widget.FrameLayout
-import android.widget.LinearLayout
 import android.widget.ImageView
+import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.annotation.StringRes
 import androidx.coordinatorlayout.widget.CoordinatorLayout
@@ -20,6 +20,7 @@ enum class SnackbarLevel {
     ERROR,
     INFO
 }
+
 private data class Quadruple<out A, out B, out C, out D>(
     val first: A,
     val second: B,
@@ -52,12 +53,14 @@ fun View.showTopSnackbar(
             ContextCompat.getColor(context, R.color.color_success),
             R.drawable.ic_check_circle
         )
+
         SnackbarLevel.ERROR -> Quadruple(
             ContextCompat.getColor(context, R.color.color_surface),
             ContextCompat.getColor(context, R.color.color_error),
             ContextCompat.getColor(context, R.color.color_error),
             R.drawable.ic_error_circle
         )
+
         SnackbarLevel.INFO -> Quadruple(
             ContextCompat.getColor(context, R.color.color_surface),
             ContextCompat.getColor(context, R.color.color_on_surface),
@@ -67,7 +70,8 @@ fun View.showTopSnackbar(
     }
 
     // 2. Locate internal layout and map structures
-    val snackbarText = snackbarView.findViewById<TextView>(com.google.android.material.R.id.snackbar_text)
+    val snackbarText =
+        snackbarView.findViewById<TextView>(com.google.android.material.R.id.snackbar_text)
     val defaultTextParent = snackbarText.parent as LinearLayout
 
     // Set root structure to vertical to support lower progress bar integration

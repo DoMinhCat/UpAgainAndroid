@@ -31,6 +31,7 @@ android {
         buildConfigField("String", "API_BASE_URL", properties.getProperty("API_BASE_URL"))
         buildConfigField("String", "MAP_API_KEY", properties.getProperty("MAP_API_KEY"))
         buildConfigField("String", "FRONTEND_BASE_URL", properties.getProperty("FRONTEND_BASE_URL"))
+        buildConfigField("String", "PAYMENT_DEEPLINK", properties.getProperty("PAYMENT_DEEPLINK"))
     }
 
     buildTypes {

@@ -14,6 +14,7 @@ import com.example.upagain.R
 import com.example.upagain.model.post.PostDetailsResponse
 import com.example.upagain.util.bin.ImageType
 import com.example.upagain.util.bin.buildImageUrl
+import com.example.upagain.util.datetime.compareNowWithTimestamp
 import com.example.upagain.util.datetime.formatTimestamptz
 import com.example.upagain.util.ui.setOnClickListenerWithCooldown
 import com.example.upagain.util.ui.setPostCategoryTextAndColor
@@ -99,11 +100,17 @@ class PostAdapter(
                 post.category.toString()
             )
 
-            holder.sponsorStatus.visibility = if (post.adsId != null && post.adsId > 0) {
-                View.VISIBLE
-            } else {
-                View.INVISIBLE
-            }
+            holder.sponsorStatus.visibility =
+                if (post.adsId != null && (!post.adsTo.isNullOrEmpty() && compareNowWithTimestamp(
+                        post.adsTo
+                    ) < 0) && (!post.adsFrom.isNullOrEmpty() && compareNowWithTimestamp(
+                        post.adsFrom
+                    ) > 0)
+                ) {
+                    View.VISIBLE
+                } else {
+                    View.INVISIBLE
+                }
 
             // Thumbnail image
             val thumbnailUrl = buildImageUrl(post.photos?.firstOrNull(), ImageType.MEDIA)

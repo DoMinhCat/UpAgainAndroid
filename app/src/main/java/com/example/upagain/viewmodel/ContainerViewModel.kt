@@ -9,7 +9,8 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 
-class ContainerViewModel(private val repository: ContainerRepo, application: Application) : AndroidViewModel(application) {
+class ContainerViewModel(private val repository: ContainerRepo, application: Application) :
+    AndroidViewModel(application) {
     private val context get() = getApplication<Application>().applicationContext
 
     private val _openContainerState = MutableStateFlow<UiState<Unit>>(UiState.Idle)
@@ -27,6 +28,7 @@ class ContainerViewModel(private val repository: ContainerRepo, application: App
                 }
         }
     }
+
     fun resetOpenContainerState() {
         _openContainerState.value = UiState.Idle
     }
