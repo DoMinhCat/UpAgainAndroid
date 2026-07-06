@@ -185,6 +185,11 @@ interface ApiService {
         @Query("status") status: String? = ItemStatus.APPROVED.value
     ): Call<MyItemsResponse>
 
+    @GET(Endpoints.SHOP_ITEM_ME)
+    fun getMyItemsPaginated(
+        @QueryMap options: Map<String, String>
+    ): Call<MyItemsResponse>
+
     @GET(Endpoints.SHOP_ITEM_ALL)
     fun getAllItems(
         @QueryMap options: Map<String, String>

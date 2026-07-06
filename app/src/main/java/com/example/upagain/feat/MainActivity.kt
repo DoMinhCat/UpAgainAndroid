@@ -72,7 +72,8 @@ class MainActivity : AppCompatActivity() {
             ) == null
         ) {
             val justLoggedIn = intent.getBooleanExtra("EXTRA_JUST_LOGGED_IN", false)
-            replaceFragment(DashboardFragment.newInstance(justLoggedIn))
+            binding.bottomNav.selectedItemId = R.id.nav_shop
+            replaceFragment(ShopFragment.newInstance(justLoggedIn))
         }
 
         // 2. Set the listener for clicks

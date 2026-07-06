@@ -271,5 +271,6 @@
     <string name="sort_oldest">Oldest</string>
     <string name="sort_price_high">Price: High to Low</string>
     <string name="sort_price_low">Price: Low to High</string>
+    <string name="my_items">My Items</string>
 
 </resources>
