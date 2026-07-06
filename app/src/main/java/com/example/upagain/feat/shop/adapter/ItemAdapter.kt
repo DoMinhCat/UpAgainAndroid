@@ -4,9 +4,10 @@ import android.content.res.ColorStateList
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
+import android.widget.TextView
 import androidx.appcompat.content.res.AppCompatResources
 import androidx.core.content.ContextCompat
-import androidx.core.content.ContextCompat.getString
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
@@ -87,8 +88,7 @@ class ItemAdapter(
         } else if (holder is LoadMoreViewHolder) {
             val context = holder.btnLoadMore.context
             val defaultText = context.getString(R.string.btn_load_more)
-            val defaultIcon =
-                AppCompatResources.getDrawable(context, R.drawable.ic_chevron_double_down)
+            val defaultIcon = AppCompatResources.getDrawable(context, R.drawable.ic_chevron_double_down)
 
             toggleBtnLoadingState(
                 holder.btnLoadMore,
@@ -111,55 +111,54 @@ class ItemAdapter(
         fun bind(item: ItemDetailResponse, listener: OnClickListener) {
             val context = binding.root.context
 
-            binding.itemTitle.text = item.title
-            binding.itemAuthor.text = item.username
+            binding.itemTitle.text = item.title ?: ""
+            binding.itemAuthor.text = item.username ?: ""
             binding.itemDate.text = try {
-                formatTimestamptz(item.createdAt)
+                formatTimestamptz(item.createdAt ?: "")
             } catch (e: Exception) {
-                item.createdAt
+                item.createdAt ?: ""
             }
-            if (item.price.compareTo(0.0) == 0) {
-                binding.itemPrice.text = getString(context, R.string.free)
-                binding.itemPrice.setTextColor(ContextCompat.getColor(context, R.color.color_primary))
-            } else
-            binding.itemPrice.text = String.format(Locale.getDefault(), "%.2f €", item.price)
+            binding.itemPrice.text = String.format(Locale.getDefault(), "%.2f €", item.price ?: 0f)
 
-            // Capitalize category
-            binding.itemCategory1.text = item.category.replaceFirstChar {
+            // Capitalize category safely
+            val categoryText = item.category ?: ""
+            binding.itemCategory1.text = categoryText.replaceFirstChar {
                 if (it.isLowerCase()) it.titlecase(Locale.ROOT) else it.toString()
             }
 
-            // Material Text & Dynamic Background Color
-            binding.itemCategory2.text = item.material.uppercase(Locale.getDefault())
-            val materialColorRes = getItemMaterialColor(item.material)
+            // Material Text & Dynamic Background Color safely
+            val materialText = item.material ?: "other"
+            binding.itemCategory2.text = materialText.uppercase(Locale.getDefault())
+            val materialColorRes = getItemMaterialColor(materialText)
             binding.itemCategory2.backgroundTintList = ColorStateList.valueOf(
                 ContextCompat.getColor(context, materialColorRes)
             )
 
-            // Condition Translation
-            val conditionRes = when (item.state.lowercase(Locale.ROOT)) {
-                "brand_new" -> R.string.state_brand_new
+            // Condition Translation safely
+            val conditionStr = item.state ?: "good"
+            val conditionRes = when (conditionStr.lowercase(Locale.ROOT)) {
+                "brand_new", "new" -> R.string.state_brand_new
                 "very_good" -> R.string.state_very_good
                 "good" -> R.string.state_good
                 "fair" -> R.string.state_fair
-                "poor" -> R.string.state_poor
+                "poor", "need_repair" -> R.string.state_poor
                 else -> null
             }
-            val conditionText =
-                if (conditionRes != null) context.getString(conditionRes) else item.state
+            val conditionText = if (conditionRes != null) context.getString(conditionRes) else conditionStr
             binding.itemState.text = context.getString(R.string.label_condition, conditionText)
 
-            // Status Translation
-            val statusRes = when (item.status.lowercase(Locale.ROOT)) {
+            // Status Translation safely
+            val statusStr = item.status ?: "approved"
+            val statusRes = when (statusStr.lowercase(Locale.ROOT)) {
                 "pending" -> R.string.status_pending
                 "approved" -> R.string.status_approved
                 "refused" -> R.string.status_refused
                 else -> null
             }
-            val statusText = if (statusRes != null) context.getString(statusRes) else item.status
+            val statusText = if (statusRes != null) context.getString(statusRes) else statusStr
             binding.itemStatus.text = context.getString(R.string.label_status, statusText)
 
-            val firstImage = item.images.firstOrNull()
+            val firstImage = item.images?.firstOrNull()
             if (firstImage != null) {
                 binding.itemImage.load(buildImageUrl(firstImage, ImageType.MEDIA)) {
                     crossfade(true)
@@ -182,17 +181,11 @@ class ItemAdapter(
     }
 
     class ItemDiffCallback : DiffUtil.ItemCallback<ItemDetailResponse>() {
-        override fun areItemsTheSame(
-            oldItem: ItemDetailResponse,
-            newItem: ItemDetailResponse
-        ): Boolean {
+        override fun areItemsTheSame(oldItem: ItemDetailResponse, newItem: ItemDetailResponse): Boolean {
             return oldItem.id == newItem.id
         }
 
-        override fun areContentsTheSame(
-            oldItem: ItemDetailResponse,
-            newItem: ItemDetailResponse
-        ): Boolean {
+        override fun areContentsTheSame(oldItem: ItemDetailResponse, newItem: ItemDetailResponse): Boolean {
             return oldItem == newItem
         }
     }

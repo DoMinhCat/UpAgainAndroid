@@ -224,5 +224,6 @@
     <string name="sort_oldest">Plus ancien</string>
     <string name="sort_price_high">Prix : Élevé à Bas</string>
     <string name="sort_price_low">Prix : Bas à Élevé</string>
+    <string name="my_items">Mes articles</string>
 
 </resources>

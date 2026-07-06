@@ -19,20 +19,21 @@ import androidx.lifecycle.repeatOnLifecycle
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.upagain.R
 import com.example.upagain.api.ApiClient
-import com.example.upagain.databinding.FragmentShopBinding
+import com.example.upagain.databinding.FragmentShopMeBinding
 import com.example.upagain.feat.shop.adapter.ItemAdapter
 import com.example.upagain.model.item.ItemDetailResponse
 import com.example.upagain.repository.ItemRepo
 import com.example.upagain.util.ui.SnackbarLevel
+import com.example.upagain.util.ui.setOnBackClickListener
 import com.example.upagain.util.ui.showTopSnackbar
 import com.example.upagain.viewmodel.ItemViewModel
 import com.example.upagain.viewmodel.UiState
 import com.example.upagain.viewmodel.ViewModelFactory
 import kotlinx.coroutines.launch
 
-class ShopFragment : Fragment() {
+class ShopMeFragment : Fragment() {
 
-    private var _binding: FragmentShopBinding? = null
+    private var _binding: FragmentShopMeBinding? = null
     private val binding get() = _binding!!
 
     private val apiService by lazy { ApiClient.apiService }
@@ -59,7 +60,7 @@ class ShopFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        _binding = FragmentShopBinding.inflate(inflater, container, false)
+        _binding = FragmentShopMeBinding.inflate(inflater, container, false)
         return binding.root
     }
 
@@ -79,21 +80,6 @@ class ShopFragment : Fragment() {
         loadItems(1)
     }
 
-    // !DO NOT DELETE
-    companion object {
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
-         * @return A new instance of fragment ShopFragment.
-         */
-        @JvmStatic
-        fun newInstance() = ShopFragment().apply {
-            arguments = Bundle().apply {
-            }
-        }
-    }
-
     private fun setupRecyclerView() {
         shopAdapter = ItemAdapter(object : ItemAdapter.OnClickListener {
             override fun onItemClick(item: ItemDetailResponse) {
@@ -111,13 +97,8 @@ class ShopFragment : Fragment() {
     }
 
     private fun setupListeners() {
-        // MY ITEMS
-        binding.shopHistory.setOnClickListener {
-            val targetFrag = ShopMeFragment.newInstance()
-            parentFragmentManager.beginTransaction()
-                .replace(R.id.fragment_container, targetFrag).addToBackStack(null)
-                .commit()
-        }
+        // BACK
+        binding.btnBack.setOnBackClickListener()
         binding.etSearch.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
@@ -151,8 +132,7 @@ class ShopFragment : Fragment() {
             }
 
             selectedSort = if (checkedId != null) {
-                val checkedChip =
-                    group.findViewById<com.google.android.material.chip.Chip>(checkedId)
+                val checkedChip = group.findViewById<com.google.android.material.chip.Chip>(checkedId)
                 checkedChip.chipBackgroundColor = ColorStateList.valueOf(
                     ContextCompat.getColor(requireContext(), R.color.color_primary)
                 )
@@ -196,8 +176,7 @@ class ShopFragment : Fragment() {
             }
 
             selectedMaterial = if (checkedId != null) {
-                val checkedChip =
-                    group.findViewById<com.google.android.material.chip.Chip>(checkedId)
+                val checkedChip = group.findViewById<com.google.android.material.chip.Chip>(checkedId)
                 checkedChip.chipBackgroundColor = ColorStateList.valueOf(
                     ContextCompat.getColor(requireContext(), R.color.color_primary)
                 )
@@ -226,7 +205,6 @@ class ShopFragment : Fragment() {
         val options = mutableMapOf<String, String>()
         options["page"] = page.toString()
         options["limit"] = "10"
-        options["status"] = "approved"
         if (searchQuery.isNotEmpty()) {
             options["search"] = searchQuery
         }
@@ -236,22 +214,20 @@ class ShopFragment : Fragment() {
         if (selectedSort.isNotEmpty()) {
             options["sort"] = selectedSort
         }
-        itemViewModel.getAllItems(options, isFirstPage = (page == 1))
+        itemViewModel.getMyItemsPaginated(options, isFirstPage = (page == 1))
     }
 
     private fun observeState() {
         lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
-                itemViewModel.allItemsState.collect { state ->
+                itemViewModel.myItemsState.collect { state ->
                     when (state) {
                         is UiState.Idle -> {
                             toggleAllItemsLoading(false, true)
                         }
-
                         is UiState.Loading -> {
                             toggleAllItemsLoading(true, state.isFirstPage)
                         }
-
                         is UiState.Success -> {
                             val itemsResponse = state.data
                             currentPage = itemsResponse.currentPage
@@ -278,10 +254,9 @@ class ShopFragment : Fragment() {
                             shopAdapter.updatePaginationState(hasMore)
                             shopAdapter.submitList(loadedItems.toList())
                         }
-
                         is UiState.Error -> {
                             toggleAllItemsLoading(false, isFirstPage = (currentPage == 1))
-                            Log.e("ShopFragment", "Failed to load shop items", state.exception)
+                            Log.e("ShopMeFragment", "Failed to load my items", state.exception)
                             binding.main.showTopSnackbar(
                                 getString(R.string.error_load_shop_items, state.exception.message),
                                 SnackbarLevel.ERROR
@@ -309,6 +284,13 @@ class ShopFragment : Fragment() {
         } else {
             binding.progressBar.visibility = View.GONE
             binding.rvShopItems.visibility = View.VISIBLE
+        }
+    }
+
+    companion object {
+        @JvmStatic
+        fun newInstance() = ShopMeFragment().apply {
+            arguments = Bundle().apply {}
         }
     }
 }

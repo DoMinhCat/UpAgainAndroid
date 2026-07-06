@@ -35,6 +35,19 @@ class ItemViewModel(private val repository: ItemRepo, application: Application) 
         }
     }
 
+    fun getMyItemsPaginated(options: Map<String, String>, isFirstPage: Boolean = true) {
+        viewModelScope.launch {
+            _myItemsState.value = UiState.Loading(isFirstPage)
+
+            repository.getMyItemsPaginated(options).onSuccess { response ->
+                _myItemsState.value = UiState.Success(response)
+            }.onFailure { exception ->
+                val statusCode = (exception as? HttpException)?.code()
+                _myItemsState.value = UiState.Error(statusCode, exception)
+            }
+        }
+    }
+
     fun resetMyItemsState() {
         _myItemsState.value = UiState.Idle
     }
