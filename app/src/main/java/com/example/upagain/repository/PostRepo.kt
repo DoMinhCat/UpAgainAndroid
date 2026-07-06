@@ -4,6 +4,7 @@ import android.content.Context
 import com.example.upagain.api.ApiService
 import com.example.upagain.model.post.LikePostResponse
 import com.example.upagain.model.post.PostCreateRequest
+import com.example.upagain.model.post.PostUpdateRequest
 import com.example.upagain.model.post.PostDetailsResponse
 import com.example.upagain.model.post.PostPaginationRequest
 import com.example.upagain.model.post.PostPaginationResponse
@@ -63,6 +64,73 @@ class PostRepo(private val apiService: ApiService) {
                 content = contentPart,
                 category = categoryPart,
                 images = imageParts
+            ).awaitResponse()
+
+            if (response.isSuccessful) {
+                Result.success(Unit)
+            } else {
+                val errMessage = parseErrorMessage(response.errorBody()?.string())
+                Result.failure(Exception(errMessage))
+            }
+        } catch (e: Exception) {
+            Result.failure(e)
+        } finally {
+            trackedTempFiles.forEach { file ->
+                if (file.exists()) file.delete()
+            }
+        }
+    }
+
+    suspend fun updatePost(
+        context: Context,
+        id: Int,
+        request: PostUpdateRequest
+    ): Result<Unit> {
+        val trackedTempFiles = mutableListOf<File>()
+
+        return try {
+            val textMediaType = "text/plain".toMediaTypeOrNull()
+            val titlePart = request.title.toRequestBody(textMediaType)
+            val contentPart = request.content.toRequestBody(textMediaType)
+            val categoryPart = request.category.value.toRequestBody(textMediaType)
+            val endDatePart = request.endDate?.toRequestBody(textMediaType)
+
+            // handle new file uploads
+            val newImageParts = mutableListOf<MultipartBody.Part>()
+            if (!request.newImages.isNullOrEmpty()) {
+                request.newImages.forEach { imageUri ->
+                    val (mimeType, extension) = getFileExtensionAndMime(context, imageUri)
+                    val localTempFile =
+                        File(context.cacheDir, "post_update_${UUID.randomUUID()}.$extension")
+                    trackedTempFiles.add(localTempFile)
+
+                    val streamSuccess = streamUriToTempFile(context, imageUri, localTempFile)
+                    if (!streamSuccess) throw Exception("Failed to stream URI data")
+
+                    val requestFile = localTempFile.asRequestBody(mimeType.toMediaTypeOrNull())
+                    val filePart =
+                        MultipartBody.Part.createFormData("new_images", localTempFile.name, requestFile)
+                    newImageParts.add(filePart)
+                }
+            }
+
+            // handle existing images
+            val existingImageParts = mutableListOf<MultipartBody.Part>()
+            if (!request.existingImages.isNullOrEmpty()) {
+                request.existingImages.forEach { path ->
+                    val filePart = MultipartBody.Part.createFormData("existing_images", path)
+                    existingImageParts.add(filePart)
+                }
+            }
+
+            val response = apiService.updatePost(
+                id = id,
+                title = titlePart,
+                content = contentPart,
+                category = categoryPart,
+                endDate = endDatePart,
+                newImages = newImageParts,
+                existingImages = existingImageParts
             ).awaitResponse()
 
             if (response.isSuccessful) {

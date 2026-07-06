@@ -7,6 +7,10 @@ import androidx.core.content.ContextCompat.getString
 import androidx.fragment.app.FragmentManager
 import com.example.upagain.R
 import com.example.upagain.databinding.DialogAdsBookingBinding
+import com.example.upagain.databinding.DialogEditPostBinding
+import com.example.upagain.model.post.PostCategory
+import com.example.upagain.model.post.PostDetailsResponse
+import android.view.View
 import com.google.android.material.datepicker.MaterialDatePicker
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import java.text.SimpleDateFormat
@@ -141,6 +145,55 @@ object DialogUtils {
             val formattedPayloadDate = datePayloadFormat.format(selectedDateMs)
 
             onConfirmBooking(formattedPayloadDate, selectedDuration)
+            alertDialog.dismiss()
+        }
+    }
+
+    fun showEditPostDialog(
+        context: Context,
+        post: PostDetailsResponse,
+        onConfirmEdit: (title: String, content: String) -> Unit
+    ) {
+        val binding = DialogEditPostBinding.inflate(LayoutInflater.from(context))
+
+        // Prepopulate text fields
+        binding.etEditTitle.setText(post.title)
+        binding.etEditContent.setText(post.content)
+
+        val alertDialog = MaterialAlertDialogBuilder(context, R.style.ThemeOverlay_UpAgain_MaterialAlertDialog_Standard)
+            .setTitle(context.getString(R.string.edit_post))
+            .setView(binding.root)
+            .setPositiveButton(context.getString(R.string.btn_confirm), null)
+            .setNegativeButton(context.getString(R.string.btn_cancel)) { dialog, _ ->
+                dialog.dismiss()
+            }
+            .create()
+
+        alertDialog.show()
+
+        alertDialog.getButton(android.content.DialogInterface.BUTTON_POSITIVE).setOnClickListener {
+            val title = binding.etEditTitle.text.toString().trim()
+            val content = binding.etEditContent.text.toString().trim()
+
+            var isValid = true
+
+            if (title.isEmpty()) {
+                binding.tilEditTitle.error = context.getString(R.string.invalid_title)
+                isValid = false
+            } else {
+                binding.tilEditTitle.error = null
+            }
+
+            if (content.isEmpty()) {
+                binding.tilEditContent.error = context.getString(R.string.invalid_content)
+                isValid = false
+            } else {
+                binding.tilEditContent.error = null
+            }
+
+            if (!isValid) return@setOnClickListener
+
+            onConfirmEdit(title, content)
             alertDialog.dismiss()
         }
     }

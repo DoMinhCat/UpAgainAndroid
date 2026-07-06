@@ -223,5 +223,12 @@
     <string name="snack_create_ads_fail">Failed to create ads: %1$s</string>
     <string name="snack_create_ads_success">Ads created</string>
     <string name="snack_payment_verification_fail">Failed to verify payment</string>
+    <string name="edit_post">Edit Post</string>
+    <string name="end_date">End Date</string>
+    <string name="category">Category</string>
+    <string name="invalid_end_date">Invalid end date. Must be in the future.</string>
+    <string name="invalid_category">Category is required</string>
+    <string name="snack_update_post_success">Post updated successfully</string>
+    <string name="snack_update_post_fail">Failed to update post: %1$s</string>
 
 </resources>

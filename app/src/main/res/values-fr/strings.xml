@@ -175,4 +175,11 @@
     <string name="snack_create_ads_fail">Impossible de créer une publicité: %1$s</string>
     <string name="snack_create_ads_success">Publicité créée</string>
     <string name="snack_payment_verification_fail">Impossible de vérifier le paiement</string>
+    <string name="edit_post">Modifier l\'article</string>
+    <string name="end_date">Date de fin</string>
+    <string name="category">Catégorie</string>
+    <string name="invalid_end_date">Date de fin invalide. Doit être dans le futur.</string>
+    <string name="invalid_category">La catégorie est requise</string>
+    <string name="snack_update_post_success">Article modifié avec succès</string>
+    <string name="snack_update_post_fail">Échec de la modification : %1$s</string>
 </resources>

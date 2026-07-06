@@ -28,6 +28,7 @@ import retrofit2.http.GET
 import retrofit2.http.Multipart
 import retrofit2.http.PATCH
 import retrofit2.http.POST
+import retrofit2.http.PUT
 import retrofit2.http.Part
 import retrofit2.http.Path
 import retrofit2.http.QueryMap
@@ -67,6 +68,18 @@ interface ApiService {
         @Part("content") content: RequestBody,
         @Part("category") category: RequestBody,
         @Part images: List<MultipartBody.Part>
+    ): Call<Unit>
+
+    @Multipart
+    @PUT(Endpoints.POST_UPDATE)
+    fun updatePost(
+        @Path("id") id: Int,
+        @Part("title") title: RequestBody,
+        @Part("content") content: RequestBody,
+        @Part("category") category: RequestBody,
+        @Part("end_date") endDate: RequestBody?,
+        @Part newImages: List<MultipartBody.Part>,
+        @Part existingImages: List<MultipartBody.Part>
     ): Call<Unit>
 
     @POST(Endpoints.POST_VIEW)

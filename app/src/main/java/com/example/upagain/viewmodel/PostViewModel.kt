@@ -7,6 +7,7 @@ import com.example.upagain.event.LikePostEvent
 import com.example.upagain.event.SavePostEvent
 import com.example.upagain.model.post.PostCategory
 import com.example.upagain.model.post.PostCreateRequest
+import com.example.upagain.model.post.PostUpdateRequest
 import com.example.upagain.model.post.PostDetailsResponse
 import com.example.upagain.model.post.PostPaginationRequest
 import com.example.upagain.model.post.PostPaginationResponse
@@ -28,6 +29,9 @@ class PostViewModel(private val repository: PostRepo, application: Application) 
     private val _createPostsState =
         MutableStateFlow<UiState<Unit>>(UiState.Idle)
     val createPostsState: StateFlow<UiState<Unit>> = _createPostsState
+    private val _updatePostState =
+        MutableStateFlow<UiState<Unit>>(UiState.Idle)
+    val updatePostState: StateFlow<UiState<Unit>> = _updatePostState
     private val _deletePostsState =
         MutableStateFlow<UiState<Unit>>(UiState.Idle)
     val deletePostsState: StateFlow<UiState<Unit>> = _deletePostsState
@@ -217,6 +221,23 @@ class PostViewModel(private val repository: PostRepo, application: Application) 
 
     fun resetCreatePostState() {
         _createPostsState.value = UiState.Idle
+    }
+
+    fun updatePost(id: Int, request: PostUpdateRequest) {
+        viewModelScope.launch {
+            _updatePostState.value = UiState.Loading()
+
+            repository.updatePost(context, id, request).onSuccess { response ->
+                _updatePostState.value = UiState.Success(response)
+            }.onFailure { exception ->
+                val statusCode = (exception as? HttpException)?.code()
+                _updatePostState.value = UiState.Error(statusCode, exception)
+            }
+        }
+    }
+
+    fun resetUpdatePostState() {
+        _updatePostState.value = UiState.Idle
     }
 
     fun deletePost(idPost: Int) {

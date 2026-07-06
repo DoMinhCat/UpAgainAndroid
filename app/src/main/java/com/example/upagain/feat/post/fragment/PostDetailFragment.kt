@@ -34,6 +34,7 @@ import com.example.upagain.model.comment.CommentDetailsResponse
 import com.example.upagain.model.comment.CreateCommentRequest
 import com.example.upagain.model.finance.FinanceKeyEnum
 import com.example.upagain.model.post.PostDetailsResponse
+import com.example.upagain.model.post.PostUpdateRequest
 import com.example.upagain.model.post.ProjectStepResponse
 import com.example.upagain.repository.AdsRepo
 import com.example.upagain.repository.CommentRepo
@@ -307,7 +308,23 @@ class PostDetailFragment : Fragment() {
         }
         // EDIT POST
         binding.btnRibbonEditPost.setOnClickListener {
-            // TODO
+            val post = getPostData() ?: return@setOnClickListener
+            DialogUtils.showEditPostDialog(
+                context = requireContext(),
+                post = post
+            ) { title, content ->
+                idPost?.let { id ->
+                    val request = PostUpdateRequest(
+                        title = title,
+                        content = content,
+                        category = PostCategory.PROJECT,
+                        endDate = null,
+                        newImages = emptyList(),
+                        existingImages = post.photos ?: emptyList()
+                    )
+                    postViewModel.updatePost(id, request)
+                }
+            }
         }
         binding.btnRibbonDeletePost.setOnClickListener {
             showDestructiveConfirmationDialog(
@@ -420,6 +437,39 @@ class PostDetailFragment : Fragment() {
                         }
                     }
 
+                }
+                // UPDATE POST
+                launch {
+                    postViewModel.updatePostState.collect { state ->
+                        when (state) {
+                            is UiState.Idle -> {
+                                toggleEditPostLoading(false)
+                            }
+                            is UiState.Loading -> {
+                                toggleEditPostLoading(true)
+                            }
+                            is UiState.Success -> {
+                                postViewModel.resetUpdatePostState()
+                                toggleEditPostLoading(false)
+                                binding.main.showTopSnackbar(
+                                    getString(R.string.snack_update_post_success),
+                                    SnackbarLevel.SUCCESS
+                                )
+                                idPost?.let { id ->
+                                    postViewModel.getPostDetails(id)
+                                }
+                            }
+                            is UiState.Error -> {
+                                postViewModel.resetUpdatePostState()
+                                toggleEditPostLoading(false)
+                                Log.e("PostDetailFragment", "Update post failed", state.exception)
+                                binding.main.showTopSnackbar(
+                                    getString(R.string.snack_update_post_fail, state.exception.message),
+                                    SnackbarLevel.ERROR
+                                )
+                            }
+                        }
+                    }
                 }
                 // GET COMMENTS
                 launch {
@@ -908,6 +958,16 @@ class PostDetailFragment : Fragment() {
             isLoading,
             getString(R.string.btn_delete),
             AppCompatResources.getDrawable(requireContext(), R.drawable.ic_trash)
+        )
+    }
+
+    private fun toggleEditPostLoading(isLoading: Boolean) {
+        toggleBtnLoadingState(
+            binding.btnRibbonEditPost,
+            binding.loaderRibbonEditPost,
+            isLoading,
+            getString(R.string.btn_edit),
+            AppCompatResources.getDrawable(requireContext(), R.drawable.ic_edit)
         )
     }
 
