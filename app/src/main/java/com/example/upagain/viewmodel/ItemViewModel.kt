@@ -90,6 +90,20 @@ class ItemViewModel(private val repository: ItemRepo, application: Application) 
     private val _cancelReserveState = MutableStateFlow<UiState<Unit>>(UiState.Idle)
     val cancelReserveState: StateFlow<UiState<Unit>> = _cancelReserveState
 
+    private val _depositCodesState = MutableStateFlow<UiState<List<com.example.upagain.model.transaction.BarcodeResponse>>>(UiState.Idle)
+    val depositCodesState: StateFlow<UiState<List<com.example.upagain.model.transaction.BarcodeResponse>>> = _depositCodesState
+
+    fun getDepositCodes(id: Int) {
+        viewModelScope.launch {
+            _depositCodesState.value = UiState.Loading()
+            repository.getDepositCodes(id).onSuccess { response ->
+                _depositCodesState.value = UiState.Success(response)
+            }.onFailure { exception ->
+                _depositCodesState.value = UiState.Error((exception as? HttpException)?.code(), exception)
+            }
+        }
+    }
+
     fun fetchItemDetailsComplete(id: Int) {
         viewModelScope.launch {
             _itemDetailState.value = UiState.Loading()

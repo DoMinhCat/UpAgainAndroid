@@ -237,18 +237,36 @@ class ShopDetailFragment : Fragment() {
                         when (state) {
                             is UiState.Success -> {
                                 val tx = state.data
+                                val itemState = itemViewModel.itemDetailState.value
+                                val item = (itemState as? UiState.Success)?.data
+
                                 if (tx.action == "purchased") {
                                     binding.btnActionReserve.visibility = View.GONE
                                     binding.btnActionPurchase.visibility = View.GONE
                                     binding.btnActionCancelReserve.visibility = View.GONE
+
+                                    // Display access codes
+                                    binding.layoutAccessCodes.visibility = View.VISIBLE
+                                    if (item != null) {
+                                        if (item.category == "listing") {
+                                            binding.tvConfirmationCode.text = tx.confirm_code ?: ""
+                                            binding.tvConfirmationCode.visibility = View.VISIBLE
+                                            binding.tvWaitingDropoffMessage.visibility = View.GONE
+                                            binding.ivBarcode.visibility = View.GONE
+                                        } else if (item.category == "deposit") {
+                                            idItem?.let { itemViewModel.getDepositCodes(it) }
+                                        }
+                                    }
                                 } else if (tx.action == "reserved") {
                                     binding.btnActionReserve.visibility = View.GONE
                                     binding.btnActionPurchase.visibility = View.VISIBLE
                                     binding.btnActionCancelReserve.visibility = View.VISIBLE
+                                    binding.layoutAccessCodes.visibility = View.GONE
                                 } else {
                                     binding.btnActionReserve.visibility = View.VISIBLE
                                     binding.btnActionPurchase.visibility = View.VISIBLE
                                     binding.btnActionCancelReserve.visibility = View.GONE
+                                    binding.layoutAccessCodes.visibility = View.GONE
                                 }
                             }
 
@@ -361,6 +379,44 @@ class ShopDetailFragment : Fragment() {
                                 )
                             }
 
+                            else -> {}
+                        }
+                    }
+                }
+
+                launch {
+                    itemViewModel.depositCodesState.collect { state ->
+                        when (state) {
+                            is UiState.Loading -> {}
+                            is UiState.Success -> {
+                                val codes = state.data
+                                val proCode = codes.find { it.userType == "pro" }
+                                if (proCode != null && proCode.barcodeBase64.isNotEmpty() && proCode.status == "active") {
+                                    try {
+                                        val base64Str = proCode.barcodeBase64.substringAfter("base64,")
+                                        val decodedString = android.util.Base64.decode(base64Str, android.util.Base64.DEFAULT)
+                                        val decodedByte = android.graphics.BitmapFactory.decodeByteArray(decodedString, 0, decodedString.size)
+                                        binding.ivBarcode.setImageBitmap(decodedByte)
+                                        binding.ivBarcode.visibility = View.VISIBLE
+                                        binding.tvConfirmationCode.visibility = View.GONE
+                                        binding.tvWaitingDropoffMessage.visibility = View.GONE
+                                    } catch (e: Exception) {
+                                        Log.e("ShopDetailFragment", "Failed to decode barcode", e)
+                                        binding.tvWaitingDropoffMessage.visibility = View.VISIBLE
+                                        binding.ivBarcode.visibility = View.GONE
+                                    }
+                                } else {
+                                    binding.tvWaitingDropoffMessage.visibility = View.VISIBLE
+                                    binding.ivBarcode.visibility = View.GONE
+                                    binding.tvConfirmationCode.visibility = View.GONE
+                                }
+                            }
+                            is UiState.Error -> {
+                                Log.e("ShopDetailFragment", "Failed to load deposit codes", state.exception)
+                                binding.tvWaitingDropoffMessage.visibility = View.VISIBLE
+                                binding.ivBarcode.visibility = View.GONE
+                                binding.tvConfirmationCode.visibility = View.GONE
+                            }
                             else -> {}
                         }
                     }

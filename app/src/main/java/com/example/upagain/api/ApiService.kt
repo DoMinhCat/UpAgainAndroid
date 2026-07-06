@@ -204,6 +204,9 @@ interface ApiService {
     @GET(Endpoints.SHOP_DEPOSIT_DETAILS)
     fun getDepositDetails(@Path("id") id: Int): Call<com.example.upagain.model.item.DepositDetailResponse>
 
+    @GET(Endpoints.SHOP_DEPOSIT_CODES)
+    fun getDepositCodes(@Path("id") id: Int): Call<List<com.example.upagain.model.transaction.BarcodeResponse>>
+
     @DELETE(Endpoints.SHOP_ITEM_DELETE)
     fun deleteItem(@Path("id") id: Int): Call<ResponseBody>
 

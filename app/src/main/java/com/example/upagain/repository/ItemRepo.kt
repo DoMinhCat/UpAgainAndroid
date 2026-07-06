@@ -176,4 +176,18 @@ class ItemRepo(private val apiService: ApiService) {
             Result.failure(e)
         }
     }
+
+    suspend fun getDepositCodes(id: Int): Result<List<com.example.upagain.model.transaction.BarcodeResponse>> {
+        return try {
+            val response = apiService.getDepositCodes(id).awaitResponse()
+            val body = response.body()
+            if (response.isSuccessful && body != null) {
+                Result.success(body)
+            } else {
+                Result.failure(Exception(parseErrorMessage(response.errorBody()?.string())))
+            }
+        } catch (e: Exception) {
+            Result.failure(e)
+        }
+    }
 }
