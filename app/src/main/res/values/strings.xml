@@ -274,7 +274,6 @@
     <string name="sort_price_low">Price: Low to High</string>
     <string name="my_items">My Items</string>
     <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
 
     <!-- Marketplace Detail -->
     <string name="marketplace_market">Market</string>
@@ -288,5 +287,14 @@
     <string name="snack_reserve_fail">Reservation failed: %1$s</string>
     <string name="snack_cancel_success">Reservation cancelled</string>
     <string name="snack_cancel_fail">Cancellation failed: %1$s</string>
+    
+    <!-- Access Info Details -->
+    <string name="listing_retrieval_instruction">Give the 6-digit code shown below to the seller to confirm successful retrieval.</string>
+    <string name="barcode_code_label">Code: %1$s</string>
+    <string name="barcode_validity_label">Valid from %1$s to %2$s</string>
+    <string name="barcode_status_label">Status: %1$s</string>
+    <string name="code_msg">The container access code and barcode will appear here once the seller has dropped the item off.</string>
+    <string name="download_barcode">Download barcode</string>
+    <string name="location">Location</string>
 
 </resources>

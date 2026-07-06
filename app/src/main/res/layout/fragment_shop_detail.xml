@@ -274,6 +274,7 @@
                     android:layout_marginVertical="@dimen/space_xl"
                     android:background="@color/color_outline" />
 
+                <!-- ACCESS CODES / BARCODES SECTION -->
                 <LinearLayout
                     android:id="@+id/layout_access_codes"
                     android:layout_width="match_parent"
@@ -305,6 +306,17 @@
                     </LinearLayout>
 
                     <TextView
+                        android:id="@+id/tv_confirmation_instruction"
+                        style="@style/TextAppearance.Material3.BodyMedium"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/space_sm"
+                        android:textColor="@color/color_secondary"
+                        android:text="@string/listing_retrieval_instruction"
+                        android:visibility="gone"
+                        tools:visibility="visible" />
+
+                    <TextView
                         android:id="@+id/tv_confirmation_code"
                         style="@style/TextAppearance.Material3.HeadlineLarge"
                         android:layout_width="match_parent"
@@ -324,18 +336,62 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/space_sm"
                         android:textColor="@color/color_secondary"
-                        android:text="The container access code and barcode will appear here once the seller has dropped the item off."
+                        android:text="@string/code_msg"
                         android:visibility="gone"
                         tools:visibility="visible" />
 
-                    <ImageView
-                        android:id="@+id/iv_barcode"
+                    <LinearLayout
+                        android:id="@+id/layout_barcode_details"
                         android:layout_width="match_parent"
-                        android:layout_height="120dp"
-                        android:layout_marginTop="@dimen/space_sm"
-                        android:scaleType="fitCenter"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
                         android:visibility="gone"
-                        tools:visibility="visible" />
+                        tools:visibility="visible">
+
+                        <ImageView
+                            android:id="@+id/iv_barcode"
+                            android:layout_width="match_parent"
+                            android:layout_height="120dp"
+                            android:layout_marginTop="@dimen/space_sm"
+                            android:scaleType="fitCenter" />
+
+                        <TextView
+                            android:id="@+id/tv_barcode_code"
+                            style="@style/TextAppearance.Material3.BodyMedium"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/space_xs"
+                            android:textColor="@color/color_on_background"
+                            android:textStyle="bold"
+                            tools:text="Code: 123456" />
+
+                        <TextView
+                            android:id="@+id/tv_barcode_validity"
+                            style="@style/TextAppearance.Material3.BodySmall"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="2dp"
+                            android:textColor="@color/color_secondary"
+                            tools:text="Valid from 2026-07-06 to 2026-07-11" />
+
+                        <TextView
+                            android:id="@+id/tv_barcode_status"
+                            style="@style/TextAppearance.Material3.BodySmall"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="2dp"
+                            android:textColor="@color/color_secondary"
+                            tools:text="Status: Active" />
+
+                        <com.google.android.material.button.MaterialButton
+                            android:id="@+id/btn_download_barcode"
+                            style="@style/Widget.Material3.Button.TextButton"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/space_xs"
+                            android:text="@string/download_barcode"
+                            app:icon="@drawable/ic_upload" />
+                    </LinearLayout>
 
                     <View
                         android:layout_width="match_parent"
@@ -349,7 +405,7 @@
                     style="@style/TextAppearance.Material3.TitleMedium"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Location"
+                    android:text="@string/location"
                     android:textStyle="bold"
                     android:textColor="@color/color_on_background" />
 

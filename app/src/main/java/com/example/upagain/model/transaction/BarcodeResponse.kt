@@ -8,5 +8,7 @@ data class BarcodeResponse(
     val path: String,
     @SerializedName("barcode_base64") val barcodeBase64: String,
     @SerializedName("user_type") val userType: String,
-    val status: String
+    val status: String,
+    @SerializedName("valid_from") val validFrom: String?,
+    @SerializedName("valid_to") val validTo: String?
 )

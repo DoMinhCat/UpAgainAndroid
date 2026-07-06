@@ -203,7 +203,6 @@ class ShopDetailFragment : Fragment() {
                                 }
 
                                 val tx = (itemViewModel.latestTransactionState.value as? UiState.Success)?.data
-                                Log.d("ShopDetailFragment", "itemDetailState loaded category=${item.category}. Current tx action=${tx?.action}")
                                 updateAccessCodes(tx, item)
                             }
 
@@ -245,7 +244,6 @@ class ShopDetailFragment : Fragment() {
                             is UiState.Success -> {
                                 val tx = state.data
                                 val item = (itemViewModel.itemDetailState.value as? UiState.Success)?.data
-                                Log.d("ShopDetailFragment", "latestTransactionState loaded action=${tx.action}, confirmCode=${tx.confirmCode}. Current item category=${item?.category}")
                                 updateAccessCodes(tx, item)
                             }
 
@@ -370,7 +368,6 @@ class ShopDetailFragment : Fragment() {
                             is UiState.Loading -> {}
                             is UiState.Success -> {
                                 val codes = state.data
-                                Log.d("ShopDetailFragment", "depositCodesState success: size=${codes.size}, codes=${codes.map { "id=${it.id}, type=${it.userType}, status=${it.status}" }}")
                                 val proCode = codes.find { it.userType == "pro" }
                                 if (proCode != null && proCode.barcodeBase64.isNotEmpty() && proCode.status == "active") {
                                     try {
@@ -378,25 +375,39 @@ class ShopDetailFragment : Fragment() {
                                         val decodedString = android.util.Base64.decode(base64Str, android.util.Base64.DEFAULT)
                                         val decodedByte = android.graphics.BitmapFactory.decodeByteArray(decodedString, 0, decodedString.size)
                                         binding.ivBarcode.setImageBitmap(decodedByte)
-                                        binding.ivBarcode.visibility = View.VISIBLE
+                                        
+                                        binding.tvBarcodeCode.text = getString(R.string.barcode_code_label, proCode.code)
+                                        val fromDate = try { com.example.upagain.util.datetime.formatTimestamptz(proCode.validFrom ?: "") } catch (e: Exception) { proCode.validFrom ?: "" }
+                                        val toDate = try { com.example.upagain.util.datetime.formatTimestamptz(proCode.validTo ?: "") } catch (e: Exception) { proCode.validTo ?: "" }
+                                        binding.tvBarcodeValidity.text = getString(R.string.barcode_validity_label, fromDate, toDate)
+                                        binding.tvBarcodeStatus.text = getString(R.string.barcode_status_label, proCode.status)
+                                        
+                                        binding.btnDownloadBarcode.setOnClickListener {
+                                            binding.main.showTopSnackbar("Downloading barcode...", SnackbarLevel.SUCCESS)
+                                        }
+
+                                        binding.layoutBarcodeDetails.visibility = View.VISIBLE
                                         binding.tvConfirmationCode.visibility = View.GONE
+                                        binding.tvConfirmationInstruction.visibility = View.GONE
                                         binding.tvWaitingDropoffMessage.visibility = View.GONE
                                     } catch (e: Exception) {
                                         Log.e("ShopDetailFragment", "Failed to decode barcode", e)
                                         binding.tvWaitingDropoffMessage.visibility = View.VISIBLE
-                                        binding.ivBarcode.visibility = View.GONE
+                                        binding.layoutBarcodeDetails.visibility = View.GONE
                                     }
                                 } else {
                                     binding.tvWaitingDropoffMessage.visibility = View.VISIBLE
-                                    binding.ivBarcode.visibility = View.GONE
+                                    binding.layoutBarcodeDetails.visibility = View.GONE
                                     binding.tvConfirmationCode.visibility = View.GONE
+                                    binding.tvConfirmationInstruction.visibility = View.GONE
                                 }
                             }
                             is UiState.Error -> {
                                 Log.e("ShopDetailFragment", "Failed to load deposit codes", state.exception)
                                 binding.tvWaitingDropoffMessage.visibility = View.VISIBLE
-                                binding.ivBarcode.visibility = View.GONE
+                                binding.layoutBarcodeDetails.visibility = View.GONE
                                 binding.tvConfirmationCode.visibility = View.GONE
+                                binding.tvConfirmationInstruction.visibility = View.GONE
                             }
                             else -> {}
                         }
@@ -411,10 +422,8 @@ class ShopDetailFragment : Fragment() {
         item: com.example.upagain.model.item.ItemDetailResponse?
     ) {
         if (tx == null || item == null) {
-            Log.d("ShopDetailFragment", "updateAccessCodes: skipped because tx is null (${tx == null}) or item is null (${item == null})")
             return
         }
-        Log.d("ShopDetailFragment", "updateAccessCodes: updating action=${tx.action}, category=${item.category}")
 
         if (tx.action == "purchased") {
             binding.btnActionReserve.visibility = View.GONE
@@ -422,13 +431,13 @@ class ShopDetailFragment : Fragment() {
             binding.btnActionCancelReserve.visibility = View.GONE
             binding.chipPurchasedStatus.visibility = View.VISIBLE
 
-            // Display access codes
             binding.layoutAccessCodes.visibility = View.VISIBLE
             if (item.category == "listing") {
+                binding.tvConfirmationInstruction.visibility = View.VISIBLE
                 binding.tvConfirmationCode.text = tx.confirmCode ?: ""
                 binding.tvConfirmationCode.visibility = View.VISIBLE
                 binding.tvWaitingDropoffMessage.visibility = View.GONE
-                binding.ivBarcode.visibility = View.GONE
+                binding.layoutBarcodeDetails.visibility = View.GONE
             } else if (item.category == "deposit") {
                 idItem?.let { itemViewModel.getDepositCodes(it) }
             }
