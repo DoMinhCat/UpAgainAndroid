@@ -12,3 +12,16 @@ fun getPostCategoryColor(category: String): Int {
         else -> R.color.category_other
     }
 }
+
+fun getItemMaterialColor(material: String): Int {
+    return when (material.lowercase()) {
+        // TODO: define color resources as you wish
+        "plastic" -> R.color.material_plastic
+        "metal" -> R.color.material_metal
+        "glass" -> R.color.material_glass
+        "wood" -> R.color.material_wood
+        "textile" -> R.color.material_textile
+        "other" -> R.color.material_other
+        else -> R.color.material_other
+    }
+}

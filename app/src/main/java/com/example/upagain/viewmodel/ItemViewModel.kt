@@ -39,9 +39,9 @@ class ItemViewModel(private val repository: ItemRepo, application: Application) 
         _myItemsState.value = UiState.Idle
     }
 
-    fun getAllItems(options: Map<String, String>) {
+    fun getAllItems(options: Map<String, String>, isFirstPage: Boolean = true) {
         viewModelScope.launch {
-            _allItemsState.value = UiState.Loading()
+            _allItemsState.value = UiState.Loading(isFirstPage)
 
             repository.getAllItems(options).onSuccess { response ->
                 _allItemsState.value = UiState.Success(response)

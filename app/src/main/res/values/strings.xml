@@ -246,4 +246,23 @@
     <string name="snack_cancel_ads_success">Sponsor status removed successfully</string>
     <string name="snack_cancel_ads_fail">Failed to remove sponsor status: %1$s</string>
 
+    <!-- Item status -->
+    <string name="status_pending">Pending</string>
+    <string name="status_approved">Approved</string>
+    <string name="status_refused">Refused</string>
+
+    <!-- Item condition/state -->
+    <string name="state_brand_new">Brand New</string>
+    <string name="state_very_good">Very Good</string>
+    <string name="state_good">Good</string>
+    <string name="state_fair">Fair</string>
+    <string name="state_poor">Poor</string>
+
+    <!-- Item labels -->
+    <string name="label_status">Status: %1$s</string>
+    <string name="label_condition">Condition: %1$s</string>
+    <string name="error_load_shop_items">Failed to load shop items: %1$s</string>
+    <string name="no_items_found">No items found</string>
+    <string name="no_items_description">We couldn\'t find any items matching your filters.</string>
+
 </resources>

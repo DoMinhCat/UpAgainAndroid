@@ -44,4 +44,12 @@
     <color name="category_case_study">#8B5FBF</color>
     <color name="category_other">#7A7A7A</color>
 
+    <!-- Material Colors -->
+    <color name="material_plastic">#4A90E2</color>
+    <color name="material_metal">#7F8C8D</color>
+    <color name="material_glass">#50E3C2</color>
+    <color name="material_wood">#8E5D38</color>
+    <color name="material_textile">#F5A623</color>
+    <color name="material_other">#9B9B9B</color>
+
 </resources>

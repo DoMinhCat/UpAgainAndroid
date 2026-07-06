@@ -650,7 +650,7 @@ class PostDetailFragment : Fragment() {
                             is UiState.Idle -> {}
                             is UiState.Loading -> {}
                             is UiState.Success -> {
-                                myItemsList = state.data.items
+                                myItemsList = state.data.items ?: emptyList()
                             }
 
                             is UiState.Error -> {

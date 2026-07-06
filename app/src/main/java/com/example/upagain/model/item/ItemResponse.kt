@@ -23,7 +23,7 @@ data class ItemDetailResponse (
 )
 
 data class MyItemsResponse(
-    @SerializedName("items") val items: List<ItemDetailResponse>,
+    @SerializedName("items") val items: List<ItemDetailResponse>? = emptyList(),
     @SerializedName("current_page") val currentPage: Int,
     @SerializedName("last_page") val lastPage: Int,
     @SerializedName("limit") val limit: Int,
