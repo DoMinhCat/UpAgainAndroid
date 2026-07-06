@@ -28,11 +28,21 @@ import com.example.upagain.viewmodel.ItemViewModel
 import com.example.upagain.viewmodel.UiState
 import com.example.upagain.viewmodel.ViewModelFactory
 import kotlinx.coroutines.launch
+import com.google.android.gms.maps.GoogleMap
+import com.google.android.gms.maps.OnMapReadyCallback
+import com.google.android.gms.maps.SupportMapFragment
+import com.google.android.gms.maps.model.LatLng
+import com.google.android.gms.maps.model.MarkerOptions
+import com.google.android.gms.maps.CameraUpdateFactory
 
 private const val ARG_ITEM_ID = "arg_item_id"
 private const val ARG_STRIPE_URL = "arg_stripe_url"
 
-class ShopDetailFragment : Fragment() {
+class ShopDetailFragment : Fragment(), OnMapReadyCallback {
+    private var googleMap: GoogleMap? = null
+    private var currentLatLng: LatLng? = null
+    private var itemTitle: String? = null
+
     private var idItem: Int? = null
     private var stripeUrl: String? = null
 
@@ -71,6 +81,9 @@ class ShopDetailFragment : Fragment() {
 
         setupListeners()
         observeState()
+
+        val mapFragment = childFragmentManager.findFragmentById(R.id.map_fragment) as? SupportMapFragment
+        mapFragment?.getMapAsync(this)
 
         idItem?.let { id ->
             itemViewModel.fetchItemDetailsComplete(id)
@@ -177,6 +190,7 @@ class ShopDetailFragment : Fragment() {
                                 binding.loadingOverlay.root.toggleFullScreenLoading(false)
                                 val item = state.data
                                 binding.tvTitle.text = item.title
+                                itemTitle = item.title
                                 binding.chipMaterial.text = item.material.uppercase()
                                 binding.chipMaterial.setChipBackgroundColorResource(com.example.upagain.util.ui.getItemMaterialColor(item.material))
                                 binding.tvItemInfo.text = getString(R.string.item_info_format, item.state.replace("_", ""), item.weight.toString())
@@ -221,6 +235,10 @@ class ShopDetailFragment : Fragment() {
                         if (state is UiState.Success) {
                             val listing = state.data
                             binding.tvLocation.text = "${listing.city ?: ""}, ${listing.postal_code ?: ""}"
+                            if (listing.lat != null && listing.lng != null) {
+                                currentLatLng = LatLng(listing.lat, listing.lng)
+                                updateMapLocation()
+                            }
                         } else if (state is UiState.Error) {
                             Log.e("ShopDetailFragment", "Failed to load listing details", state.exception)
                         }
@@ -233,6 +251,10 @@ class ShopDetailFragment : Fragment() {
                         if (state is UiState.Success) {
                             val deposit = state.data
                             binding.tvLocation.text = "${deposit.street ?: ""}, ${deposit.postal_code ?: ""} ${deposit.city ?: ""}"
+                            if (deposit.lat != null && deposit.lng != null) {
+                                currentLatLng = LatLng(deposit.lat, deposit.lng)
+                                updateMapLocation()
+                            }
                         } else if (state is UiState.Error) {
                             Log.e("ShopDetailFragment", "Failed to load deposit details", state.exception)
                         }
@@ -474,5 +496,25 @@ class ShopDetailFragment : Fragment() {
             binding.chipPurchasedStatus.visibility = View.GONE
             binding.layoutAccessCodes.visibility = View.GONE
         }
+    }
+
+    override fun onMapReady(map: GoogleMap) {
+        googleMap = map
+        googleMap?.uiSettings?.isScrollGesturesEnabled = false
+        updateMapLocation()
+    }
+
+    private fun updateMapLocation() {
+        val map = googleMap ?: return
+        val latLng = currentLatLng ?: return
+        map.clear()
+        map.addMarker(
+            MarkerOptions()
+                .position(latLng)
+                .title(itemTitle ?: "Location")
+        )
+        map.moveCamera(
+            CameraUpdateFactory.newLatLngZoom(latLng, 15f)
+        )
     }
 }

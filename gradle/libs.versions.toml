@@ -17,8 +17,10 @@ retrofit = "3.0.0"
 coil = "2.7.0"
 okhttp = "5.3.2"
 securityCrypto = "1.1.0"
+playServicesMaps = "18.2.0"
 
 [libraries]
+play-services-maps = { group = "com.google.android.gms", name = "play-services-maps", version.ref = "playServicesMaps" }
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
 androidx-appcompat = { group = "androidx.appcompat", name = "appcompat", version.ref = "appcompat" }
 junit = { group = "junit", name = "junit", version.ref = "junit" }
