@@ -213,7 +213,21 @@ class PostRepo(private val apiService: ApiService) {
     suspend fun deletePost(id: Int): Result<Unit> {
         return try {
             val response = apiService.deletePost(id).awaitResponse()
-            val body = response.body()
+
+            if (response.isSuccessful) {
+                Result.success(Unit)
+            } else {
+                val errMessage = parseErrorMessage(response.errorBody()?.string())
+                Result.failure(Exception(errMessage))
+            }
+        } catch (e: Exception) {
+            Result.failure(e)
+        }
+    }
+
+    suspend fun deleteProjectStep(idStep: Int): Result<Unit> {
+        return try {
+            val response = apiService.deleteProjectStep(idStep).awaitResponse()
 
             if (response.isSuccessful) {
                 Result.success(Unit)

@@ -185,6 +185,7 @@
     <string name="confirm_del_account">Delete account permanently?</string>
     <string name="confirm_del_post">Delete post permanently?</string>
     <string name="confirm_message">This action is permanent and cannot be undone.</string>
+    <string name="confirm_del_step">Delete step permanently?</string>
     <string name="btn_confirm">Confirm</string>
     <string name="btn_cancel">Cancel</string>
 
@@ -217,6 +218,7 @@
     <string name="snack_create_post_success">Post created</string>
     <string name="snack_delete_post_success">Post deleted</string>
     <string name="snack_delete_post_fail">Failed to delete post: %1$s</string>
+    <string name="snack_delete_step_fail">Failed to delete step: %1$s</string>
     <string name="snack_get_ads_price_fail">Failed to get ads price: %1$s</string>
     <string name="snack_create_ads_fail">Failed to create ads: %1$s</string>
     <string name="snack_create_ads_success">Ads created</string>

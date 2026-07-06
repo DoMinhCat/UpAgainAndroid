@@ -31,6 +31,9 @@ class PostViewModel(private val repository: PostRepo, application: Application) 
     private val _deletePostsState =
         MutableStateFlow<UiState<Unit>>(UiState.Idle)
     val deletePostsState: StateFlow<UiState<Unit>> = _deletePostsState
+    private val _deleteStepState =
+        MutableStateFlow<UiState<Unit>>(UiState.Idle)
+    val deleteStepState: StateFlow<UiState<Unit>> = _deleteStepState
     private val _allPostsState =
         MutableStateFlow<UiState<PostPaginationResponse>>(UiState.Loading())
     val allPostsState: StateFlow<UiState<PostPaginationResponse>> = _allPostsState
@@ -231,5 +234,22 @@ class PostViewModel(private val repository: PostRepo, application: Application) 
 
     fun resetDeletePostState() {
         _deletePostsState.value = UiState.Idle
+    }
+
+    fun deleteProjectStep(idStep: Int) {
+        viewModelScope.launch {
+            _deleteStepState.value = UiState.Loading()
+
+            repository.deleteProjectStep(idStep).onSuccess { response ->
+                _deleteStepState.value = UiState.Success(response)
+            }.onFailure { exception ->
+                val statusCode = (exception as? HttpException)?.code()
+                _deleteStepState.value = UiState.Error(statusCode, exception)
+            }
+        }
+    }
+
+    fun resetDeleteStepState() {
+        _deleteStepState.value = UiState.Idle
     }
 }

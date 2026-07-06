@@ -46,6 +46,7 @@ import com.example.upagain.util.datetime.compareNowWithTimestamp
 import com.example.upagain.util.datetime.formatTimestamptz
 import com.example.upagain.util.ui.DialogUtils
 import com.example.upagain.util.ui.DialogUtils.showAdsBookingDialog
+import com.example.upagain.util.ui.DialogUtils.showDestructiveConfirmationDialog
 import com.example.upagain.util.ui.SnackbarLevel
 import com.example.upagain.util.ui.setOnBackClickListener
 import com.example.upagain.util.ui.setOnClickListenerWithCooldown
@@ -250,8 +251,9 @@ class PostDetailFragment : Fragment() {
                 }
 
                 override fun onDeleteClick(step: ProjectStepResponse) {
-                    // TODO
-                    // Trigger verification dialog or network delete routine
+                    showDestructiveConfirmationDialog(requireContext(), getString(R.string.confirm_del_step)) {
+                        postViewModel.deleteProjectStep(step.id)
+                    }
                 }
             },
         )
@@ -308,7 +310,7 @@ class PostDetailFragment : Fragment() {
             // TODO
         }
         binding.btnRibbonDeletePost.setOnClickListener {
-            DialogUtils.showDestructiveConfirmationDialog(
+            showDestructiveConfirmationDialog(
                 context = requireContext(),
                 title = getString(R.string.confirm_del_post),
             ) {
@@ -707,10 +709,12 @@ class PostDetailFragment : Fragment() {
                                 parentFragmentManager.beginTransaction()
                                     .replace(R.id.fragment_container, myPostsFrag)
                                     .commit()
+                                postViewModel.resetDeletePostState()
                             }
 
                             is UiState.Error -> {
                                 toggleDeletePostBtnLoading(false)
+                                postViewModel.resetDeletePostState()
                                 Log.e(
                                     "PostDetailFragment",
                                     "Failed to delete post. Status code: ${state.statusCode}",
@@ -719,6 +723,38 @@ class PostDetailFragment : Fragment() {
                                 binding.main.showTopSnackbar(
                                     getString(
                                         R.string.snack_delete_post_fail,
+                                        state.exception.message
+                                    ), SnackbarLevel.ERROR
+                                )
+                            }
+                        }
+                    }
+                }
+                // DELETE STEP
+                launch {
+                    postViewModel.deleteStepState.collect { state ->
+                        when (state) {
+                            is UiState.Idle -> {}
+
+                            is UiState.Loading -> {                            }
+
+                            is UiState.Success -> {
+                                val myPostsFrag = PostMeFragment.newInstance(justDeleted = true)
+                                idPost?.let { id ->
+                                    postViewModel.getProjectSteps(id)
+                                }
+                            }
+
+                            is UiState.Error -> {
+                                postViewModel.resetDeleteStepState()
+                                Log.e(
+                                    "PostDetailFragment",
+                                    "Failed to delete step. Status code: ${state.statusCode}",
+                                    state.exception
+                                )
+                                binding.main.showTopSnackbar(
+                                    getString(
+                                        R.string.snack_delete_step_fail,
                                         state.exception.message
                                     ), SnackbarLevel.ERROR
                                 )

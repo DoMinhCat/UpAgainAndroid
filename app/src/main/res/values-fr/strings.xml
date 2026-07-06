@@ -170,6 +170,7 @@
     <string name="snack_delete_post_fail">Impossible de supprimer l\'article: %1$s</string>
     <string name="invalid_date">Date invalide</string>
     <string name="select_start_date">Choisir la date de début</string>
+    <string name="snack_delete_step_fail">Impossible de supprimer l\'étape: %1$s</string>
     <string name="snack_get_ads_price_fail">Impossible de récupérer le prix: %1$s</string>
     <string name="snack_create_ads_fail">Impossible de créer une publicité: %1$s</string>
     <string name="snack_create_ads_success">Publicité créée</string>

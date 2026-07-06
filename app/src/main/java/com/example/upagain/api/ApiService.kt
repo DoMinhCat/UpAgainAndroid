@@ -96,6 +96,10 @@ interface ApiService {
     @DELETE(Endpoints.POST_DELETE)
     fun deletePost(@Path("id") id: Int): Call<Unit>
 
+    // STEP
+    @DELETE(Endpoints.STEPS_DELETE)
+    fun deleteProjectStep(@Path("id") id: Int): Call<Unit>
+
     // COMMENTS
     @POST(Endpoints.COMMENTS_NEW)
     fun createComment(
