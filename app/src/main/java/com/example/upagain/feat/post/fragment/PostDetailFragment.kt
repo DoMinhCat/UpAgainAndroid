@@ -2,12 +2,15 @@ package com.example.upagain.feat.post.fragment
 
 import android.app.Dialog
 import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
+import androidx.activity.result.PickVisualMediaRequest
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.content.res.AppCompatResources
 import androidx.core.net.toUri
 import androidx.core.text.HtmlCompat
@@ -33,17 +36,21 @@ import com.example.upagain.model.ads.CreateAdsRequest
 import com.example.upagain.model.comment.CommentDetailsResponse
 import com.example.upagain.model.comment.CreateCommentRequest
 import com.example.upagain.model.finance.FinanceKeyEnum
+import com.example.upagain.model.post.PostCategory
 import com.example.upagain.model.post.PostDetailsResponse
+import com.example.upagain.model.post.PostStepCreateRequest
+import com.example.upagain.model.post.PostStepUpdateRequest
 import com.example.upagain.model.post.PostUpdateRequest
 import com.example.upagain.model.post.ProjectStepResponse
+import com.example.upagain.model.post.StepItem
 import com.example.upagain.repository.AdsRepo
 import com.example.upagain.repository.CommentRepo
 import com.example.upagain.repository.FinanceRepo
+import com.example.upagain.repository.ItemRepo
 import com.example.upagain.repository.PostRepo
 import com.example.upagain.util.auth.SessionManager
 import com.example.upagain.util.bin.ImageType
 import com.example.upagain.util.bin.buildImageUrl
-import com.example.upagain.util.datetime.compareNowWithTimestamp
 import com.example.upagain.util.datetime.formatTimestamptz
 import com.example.upagain.util.ui.DialogUtils
 import com.example.upagain.util.ui.DialogUtils.showAdsBookingDialog
@@ -58,6 +65,7 @@ import com.example.upagain.util.ui.toggleFullScreenLoading
 import com.example.upagain.viewmodel.AdsViewModel
 import com.example.upagain.viewmodel.CommentViewModel
 import com.example.upagain.viewmodel.FinanceViewModel
+import com.example.upagain.viewmodel.ItemViewModel
 import com.example.upagain.viewmodel.PostViewModel
 import com.example.upagain.viewmodel.UiState
 import com.example.upagain.viewmodel.ViewModelFactory
@@ -69,10 +77,20 @@ private const val ARG_POST_ID = "arg_post_id"
 private const val ARG_STRIPE_URL = "arg_stripe_url"
 
 class PostDetailFragment : Fragment() {
+    private var onImagesPickedCallback: ((List<Uri>) -> Unit)? = null
+    private val pickEditImageLauncher = registerForActivityResult(
+        ActivityResultContracts.PickMultipleVisualMedia()
+    ) { uris ->
+        if (uris.isNotEmpty()) {
+            onImagesPickedCallback?.invoke(uris)
+        }
+    }
+
     private var idPost: Int? = null
     private var stripeUrl: String? = null
     private var adsDuration: Int = 0
     private var adsStartDate: String = ""
+    private var myItemsList = listOf<StepItem>()
 
     // elements binding
     private var _binding: FragmentPostDetailBinding? = null
@@ -85,6 +103,9 @@ class PostDetailFragment : Fragment() {
     private val appInstance by lazy { requireActivity().application }
     private val postViewModel: PostViewModel by viewModels {
         ViewModelFactory { PostViewModel(postRepository, appInstance) }
+    }
+    private val itemViewModel: ItemViewModel by viewModels {
+        ViewModelFactory { ItemViewModel(ItemRepo(apiService), appInstance) }
     }
     private val adsViewModel: AdsViewModel by viewModels {
         ViewModelFactory { AdsViewModel(adsRepository) }
@@ -131,6 +152,7 @@ class PostDetailFragment : Fragment() {
         // API call
         idPost?.let { id ->
             postViewModel.getPostDetails(id)
+            itemViewModel.getMyItems()
             commentViewModel.loadPageOfComments(id, 1)
         }
 
@@ -247,12 +269,35 @@ class PostDetailFragment : Fragment() {
             },
             listener = object : ProjectStepsAdapter.OnStepClickListener {
                 override fun onEditClick(step: ProjectStepResponse) {
-                    // TODO
-                    // Handle step edit navigation or action dialog sheet
+                    DialogUtils.showStepDialog(
+                        context = requireContext(),
+                        step = step,
+                        allAvailableItems = myItemsList,
+                        onAddImageClick = { onUrisPicked ->
+                            onImagesPickedCallback = { uris ->
+                                onUrisPicked(uris)
+                            }
+                            pickEditImageLauncher.launch(
+                                PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly)
+                            )
+                        }
+                    ) { title, description, newImages, existingImages, itemIds ->
+                        val request = PostStepUpdateRequest(
+                            title = title,
+                            description = description,
+                            newImages = newImages,
+                            existingImages = existingImages,
+                            itemIds = itemIds
+                        )
+                        postViewModel.updateProjectStep(step.id, request)
+                    }
                 }
 
                 override fun onDeleteClick(step: ProjectStepResponse) {
-                    showDestructiveConfirmationDialog(requireContext(), getString(R.string.confirm_del_step)) {
+                    showDestructiveConfirmationDialog(
+                        requireContext(),
+                        getString(R.string.confirm_del_step)
+                    ) {
                         postViewModel.deleteProjectStep(step.id)
                     }
                 }
@@ -311,16 +356,24 @@ class PostDetailFragment : Fragment() {
             val post = getPostData() ?: return@setOnClickListener
             DialogUtils.showEditPostDialog(
                 context = requireContext(),
-                post = post
-            ) { title, content ->
+                post = post,
+                onAddImageClick = { onUrisPicked ->
+                    onImagesPickedCallback = { uris ->
+                        onUrisPicked(uris)
+                    }
+                    pickEditImageLauncher.launch(
+                        PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly)
+                    )
+                }
+            ) { title, content, newImages, existingImages ->
                 idPost?.let { id ->
                     val request = PostUpdateRequest(
                         title = title,
                         content = content,
                         category = PostCategory.PROJECT,
                         endDate = null,
-                        newImages = emptyList(),
-                        existingImages = post.photos ?: emptyList()
+                        newImages = newImages,
+                        existingImages = existingImages
                     )
                     postViewModel.updatePost(id, request)
                 }
@@ -333,6 +386,30 @@ class PostDetailFragment : Fragment() {
             ) {
                 idPost?.let { id ->
                     postViewModel.deletePost(id)
+                }
+            }
+        }
+        binding.btnAddStep.setOnClickListener {
+            DialogUtils.showStepDialog(
+                context = requireContext(),
+                allAvailableItems = myItemsList,
+                onAddImageClick = { onUrisPicked ->
+                    onImagesPickedCallback = { uris ->
+                        onUrisPicked(uris)
+                    }
+                    pickEditImageLauncher.launch(
+                        PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly)
+                    )
+                }
+            ) { title, description, newImages, _, itemIds ->
+                idPost?.let { id ->
+                    val request = PostStepCreateRequest(
+                        title = title,
+                        description = description,
+                        images = newImages,
+                        itemIds = itemIds
+                    )
+                    postViewModel.createProjectStep(id, request)
                 }
             }
         }
@@ -410,6 +487,7 @@ class PostDetailFragment : Fragment() {
                                 if (post.idAccount == SessionManager.accountId) {
                                     binding.btnRibbonEditPost.visibility = View.VISIBLE
                                     binding.btnRibbonDeletePost.visibility = View.VISIBLE
+                                    binding.btnAddStep.visibility = View.VISIBLE
                                     if (post.adsId == null) {
                                         binding.containerRibbonBookAd.visibility = View.VISIBLE
                                         binding.containerRibbonCancelAd.visibility = View.GONE
@@ -420,6 +498,7 @@ class PostDetailFragment : Fragment() {
                                 } else {
                                     binding.btnRibbonEditPost.visibility = View.GONE
                                     binding.btnRibbonDeletePost.visibility = View.GONE
+                                    binding.btnAddStep.visibility = View.GONE
                                     binding.btnRibbonBookAd.visibility = View.GONE
                                     binding.btnRibbonCancelAd.visibility = View.GONE
                                 }
@@ -445,9 +524,11 @@ class PostDetailFragment : Fragment() {
                             is UiState.Idle -> {
                                 toggleEditPostLoading(false)
                             }
+
                             is UiState.Loading -> {
                                 toggleEditPostLoading(true)
                             }
+
                             is UiState.Success -> {
                                 postViewModel.resetUpdatePostState()
                                 toggleEditPostLoading(false)
@@ -459,14 +540,108 @@ class PostDetailFragment : Fragment() {
                                     postViewModel.getPostDetails(id)
                                 }
                             }
+
                             is UiState.Error -> {
                                 postViewModel.resetUpdatePostState()
                                 toggleEditPostLoading(false)
                                 Log.e("PostDetailFragment", "Update post failed", state.exception)
                                 binding.main.showTopSnackbar(
-                                    getString(R.string.snack_update_post_fail, state.exception.message),
+                                    getString(
+                                        R.string.snack_update_post_fail,
+                                        state.exception.message
+                                    ),
                                     SnackbarLevel.ERROR
                                 )
+                            }
+                        }
+                    }
+                }
+                // CREATE STEP
+                launch {
+                    postViewModel.createStepState.collect { state ->
+                        when (state) {
+                            is UiState.Idle -> {
+                                binding.loadingOverlay.root.toggleFullScreenLoading(false)
+                            }
+
+                            is UiState.Loading -> {
+                                binding.loadingOverlay.root.toggleFullScreenLoading(true)
+                            }
+
+                            is UiState.Success -> {
+                                postViewModel.resetCreateStepState()
+                                binding.loadingOverlay.root.toggleFullScreenLoading(false)
+                                binding.main.showTopSnackbar(
+                                    getString(R.string.snack_create_step_success),
+                                    SnackbarLevel.SUCCESS
+                                )
+                                idPost?.let { id ->
+                                    postViewModel.getPostDetails(id)
+                                }
+                            }
+
+                            is UiState.Error -> {
+                                postViewModel.resetCreateStepState()
+                                binding.loadingOverlay.root.toggleFullScreenLoading(false)
+                                Log.e("PostDetailFragment", "Create step failed", state.exception)
+                                binding.main.showTopSnackbar(
+                                    getString(
+                                        R.string.snack_create_step_fail,
+                                        state.exception.message
+                                    ),
+                                    SnackbarLevel.ERROR
+                                )
+                            }
+                        }
+                    }
+                }
+                // UPDATE STEP
+                launch {
+                    postViewModel.updateStepState.collect { state ->
+                        when (state) {
+                            is UiState.Idle -> {
+                                binding.loadingOverlay.root.toggleFullScreenLoading(false)
+                            }
+                            is UiState.Loading -> {
+                                binding.loadingOverlay.root.toggleFullScreenLoading(true)
+                            }
+                            is UiState.Success -> {
+                                postViewModel.resetUpdateStepState()
+                                binding.loadingOverlay.root.toggleFullScreenLoading(false)
+                                binding.main.showTopSnackbar(
+                                    getString(R.string.snack_update_post_success),
+                                    SnackbarLevel.SUCCESS
+                                )
+                                idPost?.let { id ->
+                                    postViewModel.getPostDetails(id)
+                                }
+                            }
+                            is UiState.Error -> {
+                                postViewModel.resetUpdateStepState()
+                                binding.loadingOverlay.root.toggleFullScreenLoading(false)
+                                Log.e("PostDetailFragment", "Update step failed", state.exception)
+                                binding.main.showTopSnackbar(
+                                    getString(
+                                        R.string.snack_update_post_fail,
+                                        state.exception.message
+                                    ),
+                                    SnackbarLevel.ERROR
+                                )
+                            }
+                        }
+                    }
+                }
+                // GET MY ITEMS
+                launch {
+                    itemViewModel.myItemsState.collect { state ->
+                        when (state) {
+                            is UiState.Idle -> {}
+                            is UiState.Loading -> {}
+                            is UiState.Success -> {
+                                myItemsList = state.data.items
+                            }
+                            is UiState.Error -> {
+                                Log.e("PostDetailFragment", "Load my items failed", state.exception)
                             }
                         }
                     }
@@ -786,7 +961,7 @@ class PostDetailFragment : Fragment() {
                         when (state) {
                             is UiState.Idle -> {}
 
-                            is UiState.Loading -> {                            }
+                            is UiState.Loading -> {}
 
                             is UiState.Success -> {
                                 val myPostsFrag = PostMeFragment.newInstance(justDeleted = true)

@@ -12,6 +12,7 @@ import com.example.upagain.model.comment.CommentPaginationResponse
 import com.example.upagain.model.comment.CreateCommentRequest
 import com.example.upagain.model.comment.LikeCommentResponse
 import com.example.upagain.model.finance.FinanceKeyEnum
+import com.example.upagain.model.item.MyItemsResponse
 import com.example.upagain.model.post.LikePostResponse
 import com.example.upagain.model.post.PostDetailsResponse
 import com.example.upagain.model.post.PostPaginationResponse
@@ -31,6 +32,7 @@ import retrofit2.http.POST
 import retrofit2.http.PUT
 import retrofit2.http.Part
 import retrofit2.http.Path
+import retrofit2.http.Query
 import retrofit2.http.QueryMap
 
 interface ApiService {
@@ -105,6 +107,34 @@ interface ApiService {
 
     @GET(Endpoints.STEPS_GET)
     fun getProjectSteps(@Path("id") id: Int): Call<List<ProjectStepResponse>>
+
+    @GET(Endpoints.SHOP_ITEM_ME)
+    fun getMyItems(
+        @Query("page") page: Int? = 1,
+        @Query("limit") limit: Int? = 100,
+        @Query("status") status: String? = "bought"
+    ): Call<MyItemsResponse>
+
+    @Multipart
+    @POST(Endpoints.STEPS_CREATE)
+    fun createProjectStep(
+        @Path("id") idPost: Int,
+        @Part("title") title: RequestBody,
+        @Part("description") description: RequestBody,
+        @Part itemIds: List<MultipartBody.Part>,
+        @Part images: List<MultipartBody.Part>
+    ): Call<Unit>
+
+    @Multipart
+    @PUT(Endpoints.STEPS_EDIT)
+    fun updateProjectStep(
+        @Path("id") idStep: Int,
+        @Part("title") title: RequestBody,
+        @Part("description") description: RequestBody,
+        @Part existingImages: List<MultipartBody.Part>,
+        @Part newImages: List<MultipartBody.Part>,
+        @Part itemIds: List<MultipartBody.Part>
+    ): Call<Unit>
 
     @DELETE(Endpoints.POST_DELETE)
     fun deletePost(@Path("id") id: Int): Call<Unit>

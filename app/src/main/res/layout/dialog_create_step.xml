@@ -14,38 +14,72 @@
 
         <!-- Title Field -->
         <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/til_edit_title"
+            android:id="@+id/til_step_title"
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="@dimen/space_md"
-            android:hint="@string/post_title">
+            android:hint="@string/step_title">
 
             <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/et_edit_title"
+                android:id="@+id/et_step_title"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:inputType="textAutoCorrect|textCapSentences"
                 android:maxLines="2" />
         </com.google.android.material.textfield.TextInputLayout>
 
-        <!-- Content Field -->
+        <!-- Description Field -->
         <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/til_edit_content"
+            android:id="@+id/til_step_desc"
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="@dimen/space_md"
-            android:hint="@string/post_content">
+            android:hint="@string/step_description">
 
             <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/et_edit_content"
+                android:id="@+id/et_step_desc"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="top|start"
                 android:inputType="textMultiLine"
                 android:minLines="5" />
         </com.google.android.material.textfield.TextInputLayout>
+
+        <!-- Items Section -->
+        <TextView
+            style="@style/TextAppearance.UpAgain.H3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/space_xs"
+            android:text="@string/associated_items"
+            android:textColor="@color/color_on_background" />
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/til_select_items"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/space_xs"
+            android:hint="@string/select_items">
+
+            <AutoCompleteTextView
+                android:id="@+id/actv_select_items"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="none"
+                android:textColor="@color/color_on_background" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <TextView
+            android:id="@+id/tv_selected_items_summary"
+            style="@style/TextAppearance.UpAgain.BodyMedium"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/space_md"
+            android:textColor="@color/color_primary"
+            android:text="@string/none_selected" />
 
         <!-- Images Section -->
         <TextView
@@ -71,7 +105,7 @@
                 android:orientation="vertical">
 
                 <LinearLayout
-                    android:id="@+id/layout_edit_upload_prompt"
+                    android:id="@+id/layout_step_upload_prompt"
                     android:layout_width="match_parent"
                     android:layout_height="100dp"
                     android:background="?attr/selectableItemBackground"
@@ -98,7 +132,7 @@
                 </LinearLayout>
 
                 <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/rv_edit_chosen_images"
+                    android:id="@+id/rv_step_chosen_images"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:clipToPadding="false"

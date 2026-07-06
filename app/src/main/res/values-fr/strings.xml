@@ -182,4 +182,15 @@
     <string name="invalid_category">La catégorie est requise</string>
     <string name="snack_update_post_success">Article modifié avec succès</string>
     <string name="snack_update_post_fail">Échec de la modification : %1$s</string>
+    <string name="add_step">Ajouter une étape</string>
+    <string name="step_title">Titre de l\'étape</string>
+    <string name="step_description">Description de l\'étape</string>
+    <string name="invalid_step_title">Le titre est requis</string>
+    <string name="invalid_step_description">La description est requise</string>
+    <string name="snack_create_step_success">Étape ajoutée avec succès</string>
+    <string name="snack_create_step_fail">Échec de l\'ajout de l\'étape : %1$s</string>
+    <string name="associated_items">Articles associés</string>
+    <string name="select_items">Sélectionner des articles</string>
+    <string name="none_selected">Aucun article sélectionné</string>
+    <string name="loading_items">Chargement des articles...</string>
 </resources>

@@ -44,3 +44,18 @@ data class PostUpdateRequest(
     val newImages: List<Uri>? = emptyList(),
     val existingImages: List<String>? = emptyList()
 )
+
+data class PostStepCreateRequest(
+    val title: String,
+    val description: String,
+    val images: List<Uri>? = emptyList(),
+    val itemIds: List<Int>? = emptyList()
+)
+
+data class PostStepUpdateRequest(
+    val title: String,
+    val description: String,
+    val newImages: List<Uri>? = emptyList(),
+    val existingImages: List<String>? = emptyList(),
+    val itemIds: List<Int>? = emptyList()
+)

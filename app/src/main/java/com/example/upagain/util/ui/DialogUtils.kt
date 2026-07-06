@@ -1,16 +1,25 @@
 package com.example.upagain.util.ui
 
 import android.content.Context
+import android.net.Uri
 import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
 import android.widget.ArrayAdapter
+import android.widget.CheckedTextView
 import androidx.core.content.ContextCompat.getString
+import androidx.core.net.toUri
 import androidx.fragment.app.FragmentManager
 import com.example.upagain.R
 import com.example.upagain.databinding.DialogAdsBookingBinding
+import com.example.upagain.databinding.DialogCreateStepBinding
 import com.example.upagain.databinding.DialogEditPostBinding
-import com.example.upagain.model.post.PostCategory
+import com.example.upagain.feat.post.adapter.PreviewImageAdapter
 import com.example.upagain.model.post.PostDetailsResponse
-import android.view.View
+import com.example.upagain.model.post.ProjectStepResponse
+import com.example.upagain.model.post.StepItem
+import com.example.upagain.util.bin.ImageType
+import com.example.upagain.util.bin.buildImageUrl
 import com.google.android.material.datepicker.MaterialDatePicker
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import java.text.SimpleDateFormat
@@ -152,13 +161,55 @@ object DialogUtils {
     fun showEditPostDialog(
         context: Context,
         post: PostDetailsResponse,
-        onConfirmEdit: (title: String, content: String) -> Unit
+        onAddImageClick: (onUrisPicked: (List<Uri>) -> Unit) -> Unit,
+        onConfirmEdit: (title: String, content: String, newImages: List<Uri>, existingImages: List<String>) -> Unit
     ) {
         val binding = DialogEditPostBinding.inflate(LayoutInflater.from(context))
 
         // Prepopulate text fields
         binding.etEditTitle.setText(post.title)
         binding.etEditContent.setText(post.content)
+
+        // Initialize chosen images list with remote image paths parsed as Uris
+        val chosenImages = mutableListOf<Uri>()
+        post.photos?.forEach { path ->
+            val remoteUri = buildImageUrl(path, ImageType.MEDIA).toUri()
+            chosenImages.add(remoteUri)
+        }
+
+        lateinit var imagePreviewAdapter: PreviewImageAdapter
+        imagePreviewAdapter = PreviewImageAdapter { deletedUri ->
+            chosenImages.remove(deletedUri)
+            imagePreviewAdapter.submitList(chosenImages.toList())
+            if (chosenImages.isEmpty()) {
+                binding.rvEditChosenImages.visibility = View.GONE
+            } else {
+                binding.rvEditChosenImages.visibility = View.VISIBLE
+            }
+        }
+        binding.rvEditChosenImages.adapter = imagePreviewAdapter
+        imagePreviewAdapter.submitList(chosenImages.toList())
+
+        fun updatePreviewImagesVisibility() {
+            if (chosenImages.isEmpty()) {
+                binding.rvEditChosenImages.visibility = View.GONE
+            } else {
+                binding.rvEditChosenImages.visibility = View.VISIBLE
+            }
+        }
+        updatePreviewImagesVisibility()
+
+        binding.layoutEditUploadPrompt.setOnClickListener {
+            onAddImageClick { newUris ->
+                newUris.forEach { uri ->
+                    if (!chosenImages.contains(uri)) {
+                        chosenImages.add(uri)
+                    }
+                }
+                imagePreviewAdapter.submitList(chosenImages.toList())
+                updatePreviewImagesVisibility()
+            }
+        }
 
         val alertDialog = MaterialAlertDialogBuilder(context, R.style.ThemeOverlay_UpAgain_MaterialAlertDialog_Standard)
             .setTitle(context.getString(R.string.edit_post))
@@ -193,7 +244,192 @@ object DialogUtils {
 
             if (!isValid) return@setOnClickListener
 
-            onConfirmEdit(title, content)
+            // Differentiate local Uris from remaining remote image paths using query parameter "path"
+            val existingImages = mutableListOf<String>()
+            val newImages = mutableListOf<Uri>()
+
+            chosenImages.forEach { uri ->
+                val path = uri.getQueryParameter("path")
+                if (path != null) {
+                    existingImages.add(path)
+                } else {
+                    newImages.add(uri)
+                }
+            }
+
+            onConfirmEdit(title, content, newImages, existingImages)
+            alertDialog.dismiss()
+        }
+    }
+
+    fun showStepDialog(
+        context: Context,
+        step: ProjectStepResponse? = null,
+        allAvailableItems: List<StepItem> = emptyList(),
+        onAddImageClick: (onUrisPicked: (List<Uri>) -> Unit) -> Unit,
+        onConfirmStep: (title: String, description: String, newImages: List<Uri>, existingImages: List<String>, itemIds: List<Int>) -> Unit
+    ) {
+        val binding = DialogCreateStepBinding.inflate(LayoutInflater.from(context))
+
+        // Prepopulate text fields if editing
+        if (step != null) {
+            binding.etStepTitle.setText(step.title)
+            binding.etStepDesc.setText(step.description)
+        }
+
+        // Initialize chosen images list with remote image paths parsed as Uris if editing
+        val chosenImages = mutableListOf<Uri>()
+        step?.photos?.forEach { path ->
+            val remoteUri = Uri.parse(buildImageUrl(path, ImageType.MEDIA))
+            chosenImages.add(remoteUri)
+        }
+
+        // Initialize associated items list
+        val selectedItemIds = mutableListOf<Int>()
+        step?.items?.forEach { item ->
+            selectedItemIds.add(item.id)
+        }
+
+        // Summary updater for associated items
+        fun updateItemsSummary() {
+            val selectedItemTitles = allAvailableItems
+                .filter { selectedItemIds.contains(it.id) }
+                .map { it.title }
+
+            if (selectedItemTitles.isEmpty()) {
+                binding.tvSelectedItemsSummary.text = context.getString(R.string.none_selected)
+            } else {
+                binding.tvSelectedItemsSummary.text = selectedItemTitles.joinToString(", ")
+            }
+        }
+        updateItemsSummary()
+
+        class DropdownAdapter(
+            context: Context,
+            private val items: List<StepItem>,
+            private val selectedIds: List<Int>
+        ) : ArrayAdapter<StepItem>(context, R.layout.item_dropdown_multiselect, items) {
+            override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
+                val view = super.getView(position, convertView, parent) as CheckedTextView
+                val item = items[position]
+                view.text = item.title
+                view.isChecked = selectedIds.contains(item.id)
+                return view
+            }
+
+            override fun getFilter(): android.widget.Filter {
+                return object : android.widget.Filter() {
+                    override fun performFiltering(constraint: CharSequence?): FilterResults {
+                        val results = FilterResults()
+                        results.values = items
+                        results.count = items.size
+                        return results
+                    }
+                    override fun publishResults(constraint: CharSequence?, results: FilterResults?) {
+                        notifyDataSetChanged()
+                    }
+                }
+            }
+        }
+
+        val dropdownAdapter = DropdownAdapter(context, allAvailableItems, selectedItemIds)
+        binding.actvSelectItems.setAdapter(dropdownAdapter)
+
+        binding.actvSelectItems.setOnItemClickListener { _, _, position, _ ->
+            val itemId = allAvailableItems[position].id
+            if (selectedItemIds.contains(itemId)) {
+                selectedItemIds.remove(itemId)
+            } else {
+                selectedItemIds.add(itemId)
+            }
+            dropdownAdapter.notifyDataSetChanged()
+            binding.actvSelectItems.post {
+                binding.actvSelectItems.showDropDown()
+            }
+            updateItemsSummary()
+        }
+
+        lateinit var imagePreviewAdapter: PreviewImageAdapter
+        imagePreviewAdapter = PreviewImageAdapter { deletedUri ->
+            chosenImages.remove(deletedUri)
+            imagePreviewAdapter.submitList(chosenImages.toList())
+            if (chosenImages.isEmpty()) {
+                binding.rvStepChosenImages.visibility = View.GONE
+            } else {
+                binding.rvStepChosenImages.visibility = View.VISIBLE
+            }
+        }
+        binding.rvStepChosenImages.adapter = imagePreviewAdapter
+        imagePreviewAdapter.submitList(chosenImages.toList())
+
+        fun updatePreviewImagesVisibility() {
+            if (chosenImages.isEmpty()) {
+                binding.rvStepChosenImages.visibility = View.GONE
+            } else {
+                binding.rvStepChosenImages.visibility = View.VISIBLE
+            }
+        }
+        updatePreviewImagesVisibility()
+
+        binding.layoutStepUploadPrompt.setOnClickListener {
+            onAddImageClick { newUris ->
+                newUris.forEach { uri ->
+                    if (!chosenImages.contains(uri)) {
+                        chosenImages.add(uri)
+                    }
+                }
+                imagePreviewAdapter.submitList(chosenImages.toList())
+                updatePreviewImagesVisibility()
+            }
+        }
+
+        val alertDialog = MaterialAlertDialogBuilder(context, R.style.ThemeOverlay_UpAgain_MaterialAlertDialog_Standard)
+            .setTitle(if (step == null) context.getString(R.string.add_step) else context.getString(R.string.edit_post))
+            .setView(binding.root)
+            .setPositiveButton(context.getString(R.string.btn_confirm), null)
+            .setNegativeButton(context.getString(R.string.btn_cancel)) { dialog, _ ->
+                dialog.dismiss()
+            }
+            .create()
+
+        alertDialog.show()
+
+        alertDialog.getButton(android.content.DialogInterface.BUTTON_POSITIVE).setOnClickListener {
+            val title = binding.etStepTitle.text.toString().trim()
+            val description = binding.etStepDesc.text.toString().trim()
+
+            var isValid = true
+
+            if (title.isEmpty()) {
+                binding.tilStepTitle.error = context.getString(R.string.invalid_step_title)
+                isValid = false
+            } else {
+                binding.tilStepTitle.error = null
+            }
+
+            if (description.isEmpty()) {
+                binding.tilStepDesc.error = context.getString(R.string.invalid_step_description)
+                isValid = false
+            } else {
+                binding.tilStepDesc.error = null
+            }
+
+            if (!isValid) return@setOnClickListener
+
+            // Differentiate local Uris from remaining remote image paths using query parameter "path"
+            val existingImages = mutableListOf<String>()
+            val newImages = mutableListOf<Uri>()
+
+            chosenImages.forEach { uri ->
+                val path = uri.getQueryParameter("path")
+                if (path != null) {
+                    existingImages.add(path)
+                } else {
+                    newImages.add(uri)
+                }
+            }
+
+            onConfirmStep(title, description, newImages, existingImages, selectedItemIds)
             alertDialog.dismiss()
         }
     }

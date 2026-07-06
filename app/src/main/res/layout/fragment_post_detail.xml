@@ -400,14 +400,35 @@
                     android:visibility="gone"
                     tools:visibility="visible">
 
-                    <TextView
-                        android:id="@+id/tv_steps_header"
-                        style="@style/TextAppearance.UpAgain.H3"
-                        android:layout_width="wrap_content"
+                    <RelativeLayout
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginBottom="@dimen/space_md"
-                        android:text="@string/project_steps"
-                        android:textColor="@color/color_on_background" />
+                        android:layout_marginBottom="@dimen/space_md">
+
+                        <TextView
+                            android:id="@+id/tv_steps_header"
+                            style="@style/TextAppearance.UpAgain.H3"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentStart="true"
+                            android:layout_centerVertical="true"
+                            android:text="@string/project_steps"
+                            android:textColor="@color/color_on_background" />
+
+                        <com.google.android.material.button.MaterialButton
+                            android:id="@+id/btn_add_step"
+                            style="@style/Widget.Material3.Button.TextButton"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentEnd="true"
+                            android:layout_centerVertical="true"
+                            android:text="@string/add_step"
+                            android:textColor="@color/color_primary"
+                            app:icon="@drawable/ic_new_post"
+                            app:iconTint="@color/color_primary"
+                            android:visibility="gone"
+                            tools:visibility="visible" />
+                    </RelativeLayout>
 
                     <FrameLayout
                         android:layout_width="match_parent"

@@ -230,5 +230,16 @@
     <string name="invalid_category">Category is required</string>
     <string name="snack_update_post_success">Post updated successfully</string>
     <string name="snack_update_post_fail">Failed to update post: %1$s</string>
+    <string name="add_step">Add Step</string>
+    <string name="step_title">Step Title</string>
+    <string name="step_description">Step Description</string>
+    <string name="invalid_step_title">Title is required</string>
+    <string name="invalid_step_description">Description is required</string>
+    <string name="snack_create_step_success">Step added successfully</string>
+    <string name="snack_create_step_fail">Failed to add step: %1$s</string>
+    <string name="associated_items">Associated Items</string>
+    <string name="select_items">Select Items</string>
+    <string name="none_selected">None selected</string>
+    <string name="loading_items">Loading items...</string>
 
 </resources>
