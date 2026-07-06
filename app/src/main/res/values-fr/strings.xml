@@ -245,7 +245,10 @@
     <string name="barcode_code_label">Code : %1$s</string>
     <string name="barcode_validity_label">Valide du %1$s au %2$s</string>
     <string name="barcode_status_label">Statut : %1$s</string>
+    <string name="barcode_container_label">ID du conteneur : %1$d</string>
     <string name="copied">Code copié dans le presse-papiers</string>
+    <string name="barcode_saved_success">Code-barre enregistré dans Photos</string>
+    <string name="barcode_saved_fail">Échec de l\'enregistrement du code-barre : %1$s</string>
     <string name="code_msg">Le code d\'accès au casier et le code-barres s\'afficheront ici une fois que le vendeur aura déposé l\'objet.</string>
     <string name="download_barcode">Télécharger le code-barre</string>
     <string name="location">Localisation</string>

@@ -18,6 +18,7 @@ import com.example.upagain.api.ApiClient
 import com.example.upagain.databinding.FragmentShopDetailBinding
 import com.example.upagain.model.transaction.ItemPurchaseRequest
 import com.example.upagain.repository.ItemRepo
+import com.example.upagain.util.bin.saveBarcodeImage
 import com.example.upagain.util.ui.SnackbarLevel
 import com.example.upagain.util.ui.setOnBackClickListener
 import com.example.upagain.util.ui.setOnClickListenerWithCooldown
@@ -387,13 +388,14 @@ class ShopDetailFragment : Fragment() {
                                         
                                         val fromDate = try { com.example.upagain.util.datetime.formatTimestamptz(proCode.validFrom ?: "") } catch (e: Exception) { proCode.validFrom ?: "" }
                                         val toDate = try { com.example.upagain.util.datetime.formatTimestamptz(proCode.validTo ?: "") } catch (e: Exception) { proCode.validTo ?: "" }
+                                        binding.tvBarcodeContainer.text = getString(R.string.barcode_container_label, proCode.idContainer)
                                         binding.tvBarcodeValidity.text = getString(R.string.barcode_validity_label, fromDate, toDate)
                                         binding.tvBarcodeStatus.text = getString(R.string.barcode_status_label, proCode.status.uppercase())
                                         
                                         binding.btnDownloadBarcode.setOnClickListener {
-                                            // TODO: extract resource
-                                            binding.main.showTopSnackbar("Downloading barcode...", SnackbarLevel.SUCCESS)
-                                            // TODO: actually download the barcode
+                                            val tx = (itemViewModel.latestTransactionState.value as? UiState.Success)?.data
+                                            val txId = tx?.idTransaction ?: "unknown"
+                                            saveBarcodeImage(requireContext(), proCode.barcodeBase64, txId, binding.main)
                                         }
 
                                         binding.layoutBarcodeDetails.visibility = View.VISIBLE
