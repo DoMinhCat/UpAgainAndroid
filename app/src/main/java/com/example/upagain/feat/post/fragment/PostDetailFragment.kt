@@ -237,8 +237,9 @@ class PostDetailFragment : Fragment() {
                     commentViewModel.likeComment(comment.id, position)
                 }
             })
+        val isMyPost = SessionManager.accountId == getPostData()?.idAccount
+        Log.d("isMyPost", isMyPost.toString())
         stepsAdapter = ProjectStepsAdapter(
-            isEditable = false,
             onStepImageClick = { absoluteUrl ->
                 showFullScreenImageDialog(absoluteUrl) // Both adapters open the exact same fullscreen viewer!
             },
@@ -381,6 +382,10 @@ class PostDetailFragment : Fragment() {
                                     getString(R.string.comment_count, post.commentCount)
                                 toggleLikeIconAndCount(post.isLiked, null)
                                 toggleSaveIconAndText(post.isSaved)
+
+                                // update adapter when data arrives
+                                val isMyPost = post.idAccount == SessionManager.accountId
+                                stepsAdapter.isEditable = isMyPost
 
                                 // show action buttons conditionally
                                 if (post.idAccount == SessionManager.accountId) {

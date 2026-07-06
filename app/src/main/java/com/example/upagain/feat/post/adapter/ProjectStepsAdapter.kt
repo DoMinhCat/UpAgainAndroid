@@ -13,11 +13,17 @@ import com.example.upagain.util.datetime.formatTimestamptz
 import com.google.android.material.tabs.TabLayoutMediator
 
 class ProjectStepsAdapter(
-    private val isEditable: Boolean,
     private val onStepImageClick: (String) -> Unit,
     private val listener: OnStepClickListener
 ) : ListAdapter<ProjectStepResponse, ProjectStepsAdapter.StepViewHolder>(DiffCallback) {
 
+    var isEditable: Boolean = false
+        set(value) {
+            if (field != value) {
+                field = value
+                notifyDataSetChanged() // Notifies the layout to update its edit items cleanly
+            }
+        }
     interface OnStepClickListener {
         fun onEditClick(step: ProjectStepResponse)
         fun onDeleteClick(step: ProjectStepResponse)
