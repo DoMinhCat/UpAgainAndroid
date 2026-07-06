@@ -4,8 +4,6 @@ import android.content.res.ColorStateList
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
-import android.widget.TextView
 import androidx.appcompat.content.res.AppCompatResources
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.DiffUtil
@@ -88,7 +86,8 @@ class ItemAdapter(
         } else if (holder is LoadMoreViewHolder) {
             val context = holder.btnLoadMore.context
             val defaultText = context.getString(R.string.btn_load_more)
-            val defaultIcon = AppCompatResources.getDrawable(context, R.drawable.ic_chevron_double_down)
+            val defaultIcon =
+                AppCompatResources.getDrawable(context, R.drawable.ic_chevron_double_down)
 
             toggleBtnLoadingState(
                 holder.btnLoadMore,
@@ -141,7 +140,8 @@ class ItemAdapter(
                 "poor" -> R.string.state_poor
                 else -> null
             }
-            val conditionText = if (conditionRes != null) context.getString(conditionRes) else item.state
+            val conditionText =
+                if (conditionRes != null) context.getString(conditionRes) else item.state
             binding.itemState.text = context.getString(R.string.label_condition, conditionText)
 
             // Status Translation
@@ -156,7 +156,11 @@ class ItemAdapter(
 
             val firstImage = item.images.firstOrNull()
             if (firstImage != null) {
-                binding.itemImage.load(buildImageUrl(firstImage, ImageType.MEDIA))
+                binding.itemImage.load(buildImageUrl(firstImage, ImageType.MEDIA)) {
+                    crossfade(true)
+                    placeholder(R.color.color_surface)
+                    error(R.drawable.fall_back_image)
+                }
             } else {
                 binding.itemImage.setImageDrawable(null)
             }
@@ -173,11 +177,17 @@ class ItemAdapter(
     }
 
     class ItemDiffCallback : DiffUtil.ItemCallback<ItemDetailResponse>() {
-        override fun areItemsTheSame(oldItem: ItemDetailResponse, newItem: ItemDetailResponse): Boolean {
+        override fun areItemsTheSame(
+            oldItem: ItemDetailResponse,
+            newItem: ItemDetailResponse
+        ): Boolean {
             return oldItem.id == newItem.id
         }
 
-        override fun areContentsTheSame(oldItem: ItemDetailResponse, newItem: ItemDetailResponse): Boolean {
+        override fun areContentsTheSame(
+            oldItem: ItemDetailResponse,
+            newItem: ItemDetailResponse
+        ): Boolean {
             return oldItem == newItem
         }
     }

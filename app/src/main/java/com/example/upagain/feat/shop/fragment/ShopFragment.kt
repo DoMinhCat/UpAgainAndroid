@@ -161,7 +161,7 @@ class ShopFragment : Fragment() {
     private fun loadItems(page: Int = 1) {
         val options = mutableMapOf<String, String>()
         options["page"] = page.toString()
-        options["limit"] = "1"
+        options["limit"] = "10"
         options["status"] = ItemStatus.APPROVED.value
         if (searchQuery.isNotEmpty()) {
             options["search"] = searchQuery
