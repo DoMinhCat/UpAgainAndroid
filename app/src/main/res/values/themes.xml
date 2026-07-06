@@ -49,8 +49,8 @@
     <style name="Widget.UpAgain.Button.TextButton.Error" parent="Widget.Material3.Button.TextButton">
         <item name="android:textSize">14sp</item>
         <item name="android:textStyle">bold</item>
-        <item name="android:iconTint">@color/color_on_primary</item>
-        <item name="android:textColor">@color/color_on_primary</item>
+        <item name="android:iconTint">@color/color_on_background</item>
+        <item name="android:textColor">@color/color_on_background</item>
         <item name="android:backgroundTint">@color/red</item>
         <item name="android:layout_marginEnd">@dimen/space_sm</item>
     </style>
@@ -73,9 +73,18 @@
     </style>
 
 
+    <style name="Widget.UpAgain.AlertDialog.BodyText.Standard" parent="MaterialAlertDialog.Material3.Body.Text">
+        <item name="android:textColor">@color/color_on_background</item>
+        <item name="android:textSize">16sp</item>
+    </style>
+
+
     <style name="ThemeOverlay.UpAgain.MaterialAlertDialog.Destructive" parent="ThemeOverlay.Material3.MaterialAlertDialog">
         <item name="alertDialogStyle">@style/Style.UpAgain.AlertDialog</item>
         <item name="buttonBarPositiveButtonStyle">@style/Widget.UpAgain.Button.TextButton.Error
+        </item>
+        <item name="materialAlertDialogBodyTextStyle">
+            @style/Widget.UpAgain.AlertDialog.BodyText.Standard
         </item>
         <item name="buttonBarNegativeButtonStyle">@style/Widget.UpAgain.Button.TextButton.Cancel
         </item>
@@ -83,6 +92,9 @@
 
     <style name="ThemeOverlay.UpAgain.MaterialAlertDialog.Standard" parent="ThemeOverlay.Material3.MaterialAlertDialog">
         <item name="alertDialogStyle">@style/Style.UpAgain.AlertDialog</item>
+        <item name="materialAlertDialogBodyTextStyle">
+            @style/Widget.UpAgain.AlertDialog.BodyText.Standard
+        </item>
         <item name="buttonBarPositiveButtonStyle">@style/Widget.UpAgain.Button.TextButton.Primary
         </item>
         <item name="buttonBarNegativeButtonStyle">@style/Widget.UpAgain.Button.TextButton.Cancel

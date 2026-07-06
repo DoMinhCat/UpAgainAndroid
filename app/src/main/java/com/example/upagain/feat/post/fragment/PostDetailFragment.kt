@@ -417,7 +417,16 @@ class PostDetailFragment : Fragment() {
             financeViewModel.getFinanceSetting(FinanceKeyEnum.ADS_PRICE_PER_MONTH)
         }
         binding.btnRibbonCancelAd.setOnClickListener {
-            // TODO
+            showDestructiveConfirmationDialog(
+                context = requireContext(),
+                message = getString(R.string.ads_cancel_text),
+                title = getString(R.string.ads_cancel_title)
+            ) {
+                val adsId = getPostData()?.adsId
+                if (adsId != null) {
+                    adsViewModel.deleteAds(adsId)
+                }
+            }
         }
     }
 
@@ -642,6 +651,40 @@ class PostDetailFragment : Fragment() {
                             }
                             is UiState.Error -> {
                                 Log.e("PostDetailFragment", "Load my items failed", state.exception)
+                            }
+                        }
+                    }
+                }
+                // DELETE ADS
+                launch {
+                    adsViewModel.deleteAdsState.collect { state ->
+                        when (state) {
+                            is UiState.Idle -> {}
+                            is UiState.Loading -> {
+                                binding.loadingOverlay.root.toggleFullScreenLoading(true)
+                            }
+                            is UiState.Success -> {
+                                adsViewModel.resetDeleteAdsState()
+                                binding.loadingOverlay.root.toggleFullScreenLoading(false)
+                                binding.main.showTopSnackbar(
+                                    getString(R.string.snack_cancel_ads_success),
+                                    SnackbarLevel.SUCCESS
+                                )
+                                idPost?.let { id ->
+                                    postViewModel.getPostDetails(id)
+                                }
+                            }
+                            is UiState.Error -> {
+                                adsViewModel.resetDeleteAdsState()
+                                binding.loadingOverlay.root.toggleFullScreenLoading(false)
+                                Log.e("PostDetailFragment", "Cancel ads failed", state.exception)
+                                binding.main.showTopSnackbar(
+                                    getString(
+                                        R.string.snack_cancel_ads_fail,
+                                        state.exception.message
+                                    ),
+                                    SnackbarLevel.ERROR
+                                )
                             }
                         }
                     }

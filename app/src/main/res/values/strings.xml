@@ -241,5 +241,9 @@
     <string name="select_items">Select Items</string>
     <string name="none_selected">None selected</string>
     <string name="loading_items">Loading items...</string>
+    <string name="ads_cancel_title">Remove Sponsor Status</string>
+    <string name="ads_cancel_text">Are you sure you want to remove the sponsor status from this post? Warning: No refund is possible for cancelled advertisements.</string>
+    <string name="snack_cancel_ads_success">Sponsor status removed successfully</string>
+    <string name="snack_cancel_ads_fail">Failed to remove sponsor status: %1$s</string>
 
 </resources>

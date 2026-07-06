@@ -193,4 +193,8 @@
     <string name="select_items">Sélectionner des articles</string>
     <string name="none_selected">Aucun article sélectionné</string>
     <string name="loading_items">Chargement des articles...</string>
+    <string name="ads_cancel_title">Retirer le statut de sponsor</string>
+    <string name="ads_cancel_text">Êtes-vous sûr de vouloir retirer le statut de sponsor de cet article ? Attention : aucun remboursement n\'est possible pour les publicités annulées.</string>
+    <string name="snack_cancel_ads_success">Statut de sponsor retiré avec succès</string>
+    <string name="snack_cancel_ads_fail">Échec du retrait du statut de sponsor : %1$s</string>
 </resources>

@@ -166,6 +166,9 @@ interface ApiService {
         @Body request: CreateAdsRequest
     ): Call<CreateAdsResponse>
 
+    @DELETE(Endpoints.ADS_DELETE)
+    fun deleteAds(@Path("id") id: Int): Call<Unit>
+
     // CONTAINER
     @Multipart
     @POST(Endpoints.CONTAINER_OPEN)

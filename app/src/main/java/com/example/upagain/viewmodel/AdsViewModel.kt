@@ -15,6 +15,10 @@ class AdsViewModel(private val repository: AdsRepo) : ViewModel() {
         MutableStateFlow<UiState<CreateAdsResponse>>(UiState.Idle)
     val createAdsState: StateFlow<UiState<CreateAdsResponse>> = _createAdsState
 
+    private val _deleteAdsState =
+        MutableStateFlow<UiState<Unit>>(UiState.Idle)
+    val deleteAdsState: StateFlow<UiState<Unit>> = _deleteAdsState
+
     fun createAds(request: CreateAdsRequest) {
         viewModelScope.launch {
             _createAdsState.value = UiState.Loading()
@@ -34,4 +38,22 @@ class AdsViewModel(private val repository: AdsRepo) : ViewModel() {
         _createAdsState.value = UiState.Idle
     }
 
+    fun deleteAds(id: Int) {
+        viewModelScope.launch {
+            _deleteAdsState.value = UiState.Loading()
+
+            repository.deleteAds(id)
+                .onSuccess {
+                    _deleteAdsState.value = UiState.Success(Unit)
+                }
+                .onFailure { exception ->
+                    val statusCode = (exception as? HttpException)?.code()
+                    _deleteAdsState.value = UiState.Error(statusCode, exception)
+                }
+        }
+    }
+
+    fun resetDeleteAdsState() {
+        _deleteAdsState.value = UiState.Idle
+    }
 }
