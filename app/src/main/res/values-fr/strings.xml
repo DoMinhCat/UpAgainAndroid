@@ -253,4 +253,9 @@
     <string name="download_barcode">Télécharger le code-barre</string>
     <string name="location">Localisation</string>
 
+    <!-- Dashboard Premium Gate -->
+    <string name="premium_gate_title">Passer à Premium</string>
+    <string name="premium_gate_message">Le tableau de bord est une fonctionnalité Premium. Mettez à niveau votre forfait pour accéder aux analyses détaillées, aux informations d\'inventaire et aux rapports financiers.</string>
+    <string name="premium_gate_cta">S\'abonner sur upcycleconnect.org</string>
+
 </resources>

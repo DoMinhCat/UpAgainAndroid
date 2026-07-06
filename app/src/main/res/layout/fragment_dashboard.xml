@@ -9,6 +9,7 @@
     android:background="@color/color_background">
 
     <com.google.android.material.appbar.AppBarLayout
+        android:id="@+id/app_bar_dashboard"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/color_background"
@@ -78,6 +79,7 @@
     </com.google.android.material.appbar.AppBarLayout>
 
     <androidx.core.widget.NestedScrollView
+        android:id="@+id/scroll_dashboard_content"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:clipToPadding="false"
@@ -507,5 +509,55 @@
 
         </LinearLayout>
     </androidx.core.widget.NestedScrollView>
+
+    <!-- PREMIUM GATE -->
+    <LinearLayout
+        android:id="@+id/layout_premium_gate"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:gravity="center"
+        android:padding="@dimen/space_xxl"
+        android:visibility="gone">
+
+        <ImageView
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:src="@drawable/ic_crown"
+            app:tint="@color/color_accent"
+            android:contentDescription="@string/premium_gate_title" />
+
+        <TextView
+            style="@style/TextAppearance.UpAgain.H1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/space_lg"
+            android:text="@string/premium_gate_title"
+            android:gravity="center" />
+
+        <TextView
+            style="@style/TextAppearance.Material3.BodyMedium"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/space_md"
+            android:text="@string/premium_gate_message"
+            android:textColor="@color/color_secondary"
+            android:gravity="center" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btn_upgrade_premium"
+            style="@style/Widget.Material3.Button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/space_xl"
+            android:text="@string/premium_gate_cta"
+            app:backgroundTint="@color/color_primary" />
+
+    </LinearLayout>
+
+    <include
+        android:id="@+id/loading_overlay"
+        layout="@layout/layout_fullscreen_loading"
+        android:visibility="gone" />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

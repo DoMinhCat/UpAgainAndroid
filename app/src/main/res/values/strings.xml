@@ -301,4 +301,9 @@
     <string name="download_barcode">Download barcode</string>
     <string name="location">Location</string>
 
+    <!-- Dashboard Premium Gate -->
+    <string name="premium_gate_title">Upgrade to Premium</string>
+    <string name="premium_gate_message">The dashboard is a Premium feature. Upgrade your plan to access detailed analytics, inventory insights and financial reports.</string>
+    <string name="premium_gate_cta">Upgrade on upcycleconnect.org</string>
+
 </resources>
