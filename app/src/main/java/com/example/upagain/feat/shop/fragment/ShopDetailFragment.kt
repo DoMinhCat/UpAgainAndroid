@@ -35,6 +35,8 @@ class ShopDetailFragment : Fragment() {
     private var idItem: Int? = null
     private var stripeUrl: String? = null
 
+    private lateinit var carouselAdapter: com.example.upagain.feat.post.adapter.CarouselImageAdapter
+
     private var _binding: FragmentShopDetailBinding? = null
     private val binding get() = _binding!!
 
@@ -60,6 +62,12 @@ class ShopDetailFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        
+        carouselAdapter = com.example.upagain.feat.post.adapter.CarouselImageAdapter {
+            // Handle image click
+        }
+        binding.vpCarousel.adapter = carouselAdapter
+
         setupListeners()
         observeState()
 
@@ -98,7 +106,7 @@ class ShopDetailFragment : Fragment() {
 
                 if (paymentStatus != "success") {
                     binding.main.showTopSnackbar(
-                        getString(R.string.snack_payment_verification_fail),
+                        getString(R.string.snack_payment_verification_fail, "Payment status not success"),
                         SnackbarLevel.ERROR
                     )
                     return@launch
@@ -121,7 +129,7 @@ class ShopDetailFragment : Fragment() {
                     e
                 )
                 binding.main.showTopSnackbar(
-                    getString(R.string.snack_payment_verification_fail),
+                    getString(R.string.snack_payment_verification_fail, e.message ?: ""),
                     SnackbarLevel.ERROR
                 )
             }
@@ -155,6 +163,7 @@ class ShopDetailFragment : Fragment() {
     private fun observeState() {
         lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
+                // GET ITEM DETAIL
                 launch {
                     itemViewModel.itemDetailState.collect { state ->
                         when (state) {
@@ -168,12 +177,57 @@ class ShopDetailFragment : Fragment() {
                                 val item = state.data
                                 binding.tvTitle.text = item.title
                                 binding.chipMaterial.text = item.material.uppercase()
+                                binding.chipMaterial.setChipBackgroundColorResource(com.example.upagain.util.ui.getItemMaterialColor(item.material))
                                 binding.tvItemInfo.text = getString(R.string.item_info_format, item.state, item.weight.toString())
+                                
+                                binding.tvPrice.text = if (item.price != null && item.price > 0) "${item.price} €" else getString(R.string.free)
+                                binding.tvScore.text = (item.score ?: 0).toString()
+                                binding.tvDescription.text = item.description ?: ""
+                                
+                                val photosList = item.images.orEmpty()
+                                carouselAdapter.submitList(photosList)
+                                if (photosList.size > 1) {
+                                    binding.ivDefaultCarouselPlaceholder.visibility = View.GONE
+                                    binding.tlCarouselIndicator.visibility = View.VISIBLE
+                                    com.google.android.material.tabs.TabLayoutMediator(
+                                        binding.tlCarouselIndicator, binding.vpCarousel
+                                    ) { _, _ ->
+                                    }.attach()
+                                } else {
+                                    binding.vpCarousel.visibility = View.GONE
+                                    binding.tlCarouselIndicator.visibility = View.GONE
+                                    binding.ivDefaultCarouselPlaceholder.visibility = View.VISIBLE
+                                }
                             }
 
                             is UiState.Error -> {
                                 binding.loadingOverlay.root.toggleFullScreenLoading(false)
+                                Log.e("ShopDetailFragment", "Failed to load item detail", state.exception)
                             }
+                        }
+                    }
+                }
+
+                // GET LISTING DETAILS
+                launch {
+                    itemViewModel.listingDetailState.collect { state ->
+                        if (state is UiState.Success) {
+                            val listing = state.data
+                            binding.tvLocation.text = "${listing.city ?: ""}, ${listing.postal_code ?: ""}"
+                        } else if (state is UiState.Error) {
+                            Log.e("ShopDetailFragment", "Failed to load listing details", state.exception)
+                        }
+                    }
+                }
+
+                // GET DEPOSIT DETAILS
+                launch {
+                    itemViewModel.depositDetailState.collect { state ->
+                        if (state is UiState.Success) {
+                            val deposit = state.data
+                            binding.tvLocation.text = "${deposit.street ?: ""}, ${deposit.postal_code ?: ""} ${deposit.city ?: ""}"
+                        } else if (state is UiState.Error) {
+                            Log.e("ShopDetailFragment", "Failed to load deposit details", state.exception)
                         }
                     }
                 }
@@ -195,6 +249,7 @@ class ShopDetailFragment : Fragment() {
                             }
 
                             is UiState.Error -> {
+                                Log.e("ShopDetailFragment", "Failed to load transaction state", state.exception)
                                 binding.btnActionReserve.visibility = View.VISIBLE
                                 binding.btnActionPurchase.visibility = View.VISIBLE
                                 binding.btnActionCancelReserve.visibility = View.GONE
@@ -234,8 +289,9 @@ class ShopDetailFragment : Fragment() {
                             is UiState.Error -> {
                                 itemViewModel.resetPurchaseState()
                                 binding.loadingOverlay.root.toggleFullScreenLoading(false)
+                                Log.e("ShopDetailFragment", "Purchase action failed", state.exception)
                                 binding.main.showTopSnackbar(
-                                    getString(R.string.snack_purchase_fail),
+                                    getString(R.string.snack_purchase_fail, state.exception.message ?: ""),
                                     SnackbarLevel.ERROR
                                 )
                             }
@@ -262,8 +318,9 @@ class ShopDetailFragment : Fragment() {
                             is UiState.Error -> {
                                 itemViewModel.resetReserveState()
                                 binding.loadingOverlay.root.toggleFullScreenLoading(false)
+                                Log.e("ShopDetailFragment", "Reservation action failed", state.exception)
                                 binding.main.showTopSnackbar(
-                                    getString(R.string.snack_reserve_fail),
+                                    getString(R.string.snack_reserve_fail, state.exception.message ?: ""),
                                     SnackbarLevel.ERROR
                                 )
                             }
@@ -293,8 +350,9 @@ class ShopDetailFragment : Fragment() {
                             is UiState.Error -> {
                                 itemViewModel.resetCancelReservationState()
                                 binding.loadingOverlay.root.toggleFullScreenLoading(false)
+                                Log.e("ShopDetailFragment", "Cancel reservation action failed", state.exception)
                                 binding.main.showTopSnackbar(
-                                    getString(R.string.snack_cancel_fail),
+                                    getString(R.string.snack_cancel_fail, state.exception.message ?: ""),
                                     SnackbarLevel.ERROR
                                 )
                             }

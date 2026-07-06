@@ -223,7 +223,7 @@
     <string name="snack_get_ads_price_fail">Failed to get ads price: %1$s</string>
     <string name="snack_create_ads_fail">Failed to create ads: %1$s</string>
     <string name="snack_create_ads_success">Ads created</string>
-    <string name="snack_payment_verification_fail">Failed to verify payment</string>
+    <string name="snack_payment_verification_fail">Failed to verify payment: %1$s</string>
     <string name="edit_post">Edit Post</string>
     <string name="end_date">End Date</string>
     <string name="category">Category</string>
@@ -282,10 +282,10 @@
     <string name="marketplace_detail_cancel_reserve">Cancel Reservation</string>
     <string name="item_info_format">State: %1$s | Weight: %2$s kg</string>
     <string name="snack_purchase_success">Item purchased successfully</string>
-    <string name="snack_purchase_fail">Purchase failed</string>
+    <string name="snack_purchase_fail">Purchase failed: %1$s</string>
     <string name="snack_reserve_success">Item reserved</string>
-    <string name="snack_reserve_fail">Reservation failed</string>
+    <string name="snack_reserve_fail">Reservation failed: %1$s</string>
     <string name="snack_cancel_success">Reservation cancelled</string>
-    <string name="snack_cancel_fail">Cancellation failed</string>
+    <string name="snack_cancel_fail">Cancellation failed: %1$s</string>
 
 </resources>

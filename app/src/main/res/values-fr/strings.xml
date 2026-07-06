@@ -176,7 +176,7 @@
     <string name="snack_get_ads_price_fail">Impossible de récupérer le prix: %1$s</string>
     <string name="snack_create_ads_fail">Impossible de créer une publicité: %1$s</string>
     <string name="snack_create_ads_success">Publicité créée</string>
-    <string name="snack_payment_verification_fail">Impossible de vérifier le paiement</string>
+    <string name="snack_payment_verification_fail">Impossible de vérifier le paiement : %1$s</string>
     <string name="edit_post">Modifier l\'article</string>
     <string name="end_date">Date de fin</string>
     <string name="category">Catégorie</string>
@@ -233,10 +233,10 @@
     <string name="marketplace_detail_cancel_reserve">Annuler la réservation</string>
     <string name="item_info_format">État : %1$s | Poids : %2$s kg</string>
     <string name="snack_purchase_success">Article acheté avec succès</string>
-    <string name="snack_purchase_fail">Échec de l\'achat</string>
+    <string name="snack_purchase_fail">Échec de l\'achat : %1$s</string>
     <string name="snack_reserve_success">Article réservé</string>
-    <string name="snack_reserve_fail">Échec de la réservation</string>
+    <string name="snack_reserve_fail">Échec de la réservation : %1$s</string>
     <string name="snack_cancel_success">Réservation annulée</string>
-    <string name="snack_cancel_fail">Échec de l\'annulation</string>
+    <string name="snack_cancel_fail">Échec de l\'annulation : %1$s</string>
 
 </resources>
