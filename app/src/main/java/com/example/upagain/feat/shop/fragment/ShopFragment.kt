@@ -30,7 +30,18 @@ import com.example.upagain.viewmodel.UiState
 import com.example.upagain.viewmodel.ViewModelFactory
 import kotlinx.coroutines.launch
 
+private const val ARG_JUST_LOGGED_IN = "key_just_logged_in"
+
 class ShopFragment : Fragment() {
+
+    private var justLoggedIn: Boolean = false
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        arguments?.let {
+            justLoggedIn = it.getBoolean(ARG_JUST_LOGGED_IN, false)
+        }
+    }
 
     private var _binding: FragmentShopBinding? = null
     private val binding get() = _binding!!
@@ -77,6 +88,15 @@ class ShopFragment : Fragment() {
         observeState()
 
         loadItems(1)
+
+        if (justLoggedIn) {
+            binding.main.showTopSnackbar(
+                getString(R.string.login_success),
+                SnackbarLevel.SUCCESS
+            )
+            justLoggedIn = false
+            arguments?.putBoolean(ARG_JUST_LOGGED_IN, false)
+        }
     }
 
     // !DO NOT DELETE
@@ -88,8 +108,9 @@ class ShopFragment : Fragment() {
          * @return A new instance of fragment ShopFragment.
          */
         @JvmStatic
-        fun newInstance() = ShopFragment().apply {
+        fun newInstance(justLoggedIn: Boolean = false) = ShopFragment().apply {
             arguments = Bundle().apply {
+                putBoolean(ARG_JUST_LOGGED_IN, justLoggedIn)
             }
         }
     }
