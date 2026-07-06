@@ -237,7 +237,11 @@ class ShopDetailFragment : Fragment() {
                         when (state) {
                             is UiState.Success -> {
                                 val tx = state.data
-                                if (tx.action == "reserved") {
+                                if (tx.action == "purchased") {
+                                    binding.btnActionReserve.visibility = View.GONE
+                                    binding.btnActionPurchase.visibility = View.GONE
+                                    binding.btnActionCancelReserve.visibility = View.GONE
+                                } else if (tx.action == "reserved") {
                                     binding.btnActionReserve.visibility = View.GONE
                                     binding.btnActionPurchase.visibility = View.VISIBLE
                                     binding.btnActionCancelReserve.visibility = View.VISIBLE
