@@ -376,18 +376,28 @@ class ShopDetailFragment : Fragment() {
                                         val decodedByte = android.graphics.BitmapFactory.decodeByteArray(decodedString, 0, decodedString.size)
                                         binding.ivBarcode.setImageBitmap(decodedByte)
                                         
-                                        binding.tvBarcodeCode.text = getString(R.string.barcode_code_label, proCode.code)
+                                        binding.tvBarcodeCode.text = proCode.code
+                                        
+                                        binding.btnCopyBarcodeCode.setOnClickListener {
+                                            val clipboard = requireContext().getSystemService(android.content.Context.CLIPBOARD_SERVICE) as android.content.ClipboardManager
+                                            val clip = android.content.ClipData.newPlainText("Barcode Code", proCode.code)
+                                            clipboard.setPrimaryClip(clip)
+                                            binding.main.showTopSnackbar(getString(R.string.copied), SnackbarLevel.SUCCESS)
+                                        }
+                                        
                                         val fromDate = try { com.example.upagain.util.datetime.formatTimestamptz(proCode.validFrom ?: "") } catch (e: Exception) { proCode.validFrom ?: "" }
                                         val toDate = try { com.example.upagain.util.datetime.formatTimestamptz(proCode.validTo ?: "") } catch (e: Exception) { proCode.validTo ?: "" }
                                         binding.tvBarcodeValidity.text = getString(R.string.barcode_validity_label, fromDate, toDate)
-                                        binding.tvBarcodeStatus.text = getString(R.string.barcode_status_label, proCode.status)
+                                        binding.tvBarcodeStatus.text = getString(R.string.barcode_status_label, proCode.status.uppercase())
                                         
                                         binding.btnDownloadBarcode.setOnClickListener {
+                                            // TODO: extract resource
                                             binding.main.showTopSnackbar("Downloading barcode...", SnackbarLevel.SUCCESS)
+                                            // TODO: actually download the barcode
                                         }
 
                                         binding.layoutBarcodeDetails.visibility = View.VISIBLE
-                                        binding.tvConfirmationCode.visibility = View.GONE
+                                        binding.layoutConfirmCodeContainer.visibility = View.GONE
                                         binding.tvConfirmationInstruction.visibility = View.GONE
                                         binding.tvWaitingDropoffMessage.visibility = View.GONE
                                     } catch (e: Exception) {
@@ -398,7 +408,7 @@ class ShopDetailFragment : Fragment() {
                                 } else {
                                     binding.tvWaitingDropoffMessage.visibility = View.VISIBLE
                                     binding.layoutBarcodeDetails.visibility = View.GONE
-                                    binding.tvConfirmationCode.visibility = View.GONE
+                                    binding.layoutConfirmCodeContainer.visibility = View.GONE
                                     binding.tvConfirmationInstruction.visibility = View.GONE
                                 }
                             }
@@ -406,7 +416,7 @@ class ShopDetailFragment : Fragment() {
                                 Log.e("ShopDetailFragment", "Failed to load deposit codes", state.exception)
                                 binding.tvWaitingDropoffMessage.visibility = View.VISIBLE
                                 binding.layoutBarcodeDetails.visibility = View.GONE
-                                binding.tvConfirmationCode.visibility = View.GONE
+                                binding.layoutConfirmCodeContainer.visibility = View.GONE
                                 binding.tvConfirmationInstruction.visibility = View.GONE
                             }
                             else -> {}
@@ -435,7 +445,15 @@ class ShopDetailFragment : Fragment() {
             if (item.category == "listing") {
                 binding.tvConfirmationInstruction.visibility = View.VISIBLE
                 binding.tvConfirmationCode.text = tx.confirmCode ?: ""
-                binding.tvConfirmationCode.visibility = View.VISIBLE
+                binding.layoutConfirmCodeContainer.visibility = View.VISIBLE
+                
+                binding.btnCopyConfirmationCode.setOnClickListener {
+                    val clipboard = requireContext().getSystemService(android.content.Context.CLIPBOARD_SERVICE) as android.content.ClipboardManager
+                    val clip = android.content.ClipData.newPlainText("Confirmation Code", tx.confirmCode ?: "")
+                    clipboard.setPrimaryClip(clip)
+                    binding.main.showTopSnackbar(getString(R.string.copied), SnackbarLevel.SUCCESS)
+                }
+                
                 binding.tvWaitingDropoffMessage.visibility = View.GONE
                 binding.layoutBarcodeDetails.visibility = View.GONE
             } else if (item.category == "deposit") {

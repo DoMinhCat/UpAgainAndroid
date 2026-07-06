@@ -316,18 +316,34 @@
                         android:visibility="gone"
                         tools:visibility="visible" />
 
-                    <TextView
-                        android:id="@+id/tv_confirmation_code"
-                        style="@style/TextAppearance.Material3.HeadlineLarge"
+                    <LinearLayout
+                        android:id="@+id/layout_confirm_code_container"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/space_sm"
+                        android:orientation="horizontal"
                         android:gravity="center"
-                        android:textColor="@color/color_primary"
-                        android:textStyle="bold"
+                        android:layout_marginTop="@dimen/space_sm"
                         android:visibility="gone"
-                        tools:text="ABCDEF"
-                        tools:visibility="visible" />
+                        tools:visibility="visible">
+
+                        <TextView
+                            android:id="@+id/tv_confirmation_code"
+                            style="@style/TextAppearance.Material3.HeadlineLarge"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textColor="@color/color_primary"
+                            android:textStyle="bold"
+                            tools:text="ABCDEF" />
+
+                        <com.google.android.material.button.MaterialButton
+                            android:id="@+id/btn_copy_confirmation_code"
+                            style="@style/Widget.Material3.Button.IconButton"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="@dimen/space_xs"
+                            app:icon="@drawable/ic_copy"
+                            android:contentDescription="Copy code" />
+                    </LinearLayout>
 
                     <TextView
                         android:id="@+id/tv_waiting_dropoff_message"
@@ -336,7 +352,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/space_sm"
                         android:textColor="@color/color_secondary"
-                        android:text="@string/code_msg"
+                        android:text="The container access code and barcode will appear here once the seller has dropped the item off."
                         android:visibility="gone"
                         tools:visibility="visible" />
 
@@ -345,6 +361,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="vertical"
+                        android:gravity="center_horizontal"
                         android:visibility="gone"
                         tools:visibility="visible">
 
@@ -355,42 +372,60 @@
                             android:layout_marginTop="@dimen/space_sm"
                             android:scaleType="fitCenter" />
 
-                        <TextView
-                            android:id="@+id/tv_barcode_code"
-                            style="@style/TextAppearance.Material3.BodyMedium"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="@dimen/space_xs"
-                            android:textColor="@color/color_on_background"
-                            android:textStyle="bold"
-                            tools:text="Code: 123456" />
-
-                        <TextView
-                            android:id="@+id/tv_barcode_validity"
-                            style="@style/TextAppearance.Material3.BodySmall"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="2dp"
-                            android:textColor="@color/color_secondary"
-                            tools:text="Valid from 2026-07-06 to 2026-07-11" />
-
-                        <TextView
-                            android:id="@+id/tv_barcode_status"
-                            style="@style/TextAppearance.Material3.BodySmall"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="2dp"
-                            android:textColor="@color/color_secondary"
-                            tools:text="Status: Active" />
-
                         <com.google.android.material.button.MaterialButton
                             android:id="@+id/btn_download_barcode"
                             style="@style/Widget.Material3.Button.TextButton"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="@dimen/space_xs"
-                            android:text="@string/download_barcode"
-                            app:icon="@drawable/ic_upload" />
+                            android:text="Download Barcode"
+                            app:icon="@drawable/ic_download" />
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal"
+                            android:gravity="center"
+                            android:layout_marginTop="@dimen/space_sm">
+
+                            <TextView
+                                android:id="@+id/tv_barcode_code"
+                                style="@style/TextAppearance.Material3.HeadlineLarge"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:textColor="@color/color_primary"
+                                android:textStyle="bold"
+                                tools:text="123456" />
+
+                            <com.google.android.material.button.MaterialButton
+                                android:id="@+id/btn_copy_barcode_code"
+                                style="@style/Widget.Material3.Button.IconButton"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="@dimen/space_xs"
+                                app:icon="@drawable/ic_copy"
+                                android:contentDescription="Copy code" />
+                        </LinearLayout>
+
+                        <TextView
+                            android:id="@+id/tv_barcode_status"
+                            style="@style/TextAppearance.Material3.BodySmall"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/space_sm"
+                            android:textColor="@color/color_secondary"
+                            android:gravity="center"
+                            tools:text="Status: Active" />
+
+                        <TextView
+                            android:id="@+id/tv_barcode_validity"
+                            style="@style/TextAppearance.Material3.BodySmall"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="2dp"
+                            android:textColor="@color/color_secondary"
+                            android:gravity="center"
+                            tools:text="Valid from 2026-07-06 to 2026-07-11" />
                     </LinearLayout>
 
                     <View

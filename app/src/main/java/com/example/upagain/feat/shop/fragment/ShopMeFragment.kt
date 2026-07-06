@@ -218,6 +218,8 @@ class ShopMeFragment : Fragment() {
         }
         if (selectedSort.isNotEmpty()) {
             options["sort"] = selectedSort
+        } else {
+            options["sort"] = "most_recent_creation"
         }
         itemViewModel.getMyItemsPaginated(options, isFirstPage = (page == 1))
     }

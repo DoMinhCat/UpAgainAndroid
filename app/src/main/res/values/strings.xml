@@ -293,6 +293,7 @@
     <string name="barcode_code_label">Code: %1$s</string>
     <string name="barcode_validity_label">Valid from %1$s to %2$s</string>
     <string name="barcode_status_label">Status: %1$s</string>
+    <string name="copied">Code copied to clipboard</string>
     <string name="code_msg">The container access code and barcode will appear here once the seller has dropped the item off.</string>
     <string name="download_barcode">Download barcode</string>
     <string name="location">Location</string>
