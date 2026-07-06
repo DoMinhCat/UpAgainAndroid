@@ -64,9 +64,11 @@ import com.google.android.material.tabs.TabLayoutMediator
 import kotlinx.coroutines.launch
 
 private const val ARG_POST_ID = "arg_post_id"
+private const val ARG_STRIPE_URL = "arg_stripe_url"
 
 class PostDetailFragment : Fragment() {
     private var idPost: Int? = null
+    private var stripeUrl: String? = null
     private var adsDuration: Int = 0
     private var adsStartDate: String = ""
 
@@ -101,6 +103,7 @@ class PostDetailFragment : Fragment() {
         super.onCreate(savedInstanceState)
         arguments?.let {
             idPost = it.getInt(ARG_POST_ID)
+            stripeUrl = it.getString(ARG_STRIPE_URL)
         }
     }
 
@@ -128,6 +131,14 @@ class PostDetailFragment : Fragment() {
             postViewModel.getPostDetails(id)
             commentViewModel.loadPageOfComments(id, 1)
         }
+
+        if (!stripeUrl.isNullOrEmpty()) {
+            // Views are securely initialized—it is safe to reuse your logic!
+            onPaymentSuccessReturned(stripeUrl!!)
+
+            arguments?.remove(ARG_STRIPE_URL)
+            stripeUrl = null
+        }
     }
 
     companion object {
@@ -139,9 +150,10 @@ class PostDetailFragment : Fragment() {
          * @return A new instance of fragment PostDetailFragment.
          */
         @JvmStatic
-        fun newInstance(idPost: Int) = PostDetailFragment().apply {
+        fun newInstance(idPost: Int, stripeUrl: String = "") = PostDetailFragment().apply {
             arguments = Bundle().apply {
                 putInt(ARG_POST_ID, idPost)
+                putString(ARG_STRIPE_URL, stripeUrl)
             }
         }
     }
@@ -374,12 +386,7 @@ class PostDetailFragment : Fragment() {
                                 if (post.idAccount == SessionManager.accountId) {
                                     binding.btnRibbonEditPost.visibility = View.VISIBLE
                                     binding.btnRibbonDeletePost.visibility = View.VISIBLE
-                                    if (post.adsId == null || (!post.adsTo.isNullOrEmpty() && compareNowWithTimestamp(
-                                            post.adsTo
-                                        ) > 0) || (!post.adsFrom.isNullOrEmpty() && compareNowWithTimestamp(
-                                            post.adsFrom
-                                        ) < 0)
-                                    ) {
+                                    if (post.adsId == null) {
                                         binding.containerRibbonBookAd.visibility = View.VISIBLE
                                         binding.containerRibbonCancelAd.visibility = View.GONE
                                     } else {
@@ -743,7 +750,7 @@ class PostDetailFragment : Fragment() {
                                             startDate,
                                             duration,
                                             id,
-                                            BuildConfig.PAYMENT_DEEPLINK + "?ads_from=$startDate&ads_duration=${duration}",
+                                            BuildConfig.PAYMENT_DEEPLINK + "?ads_from=$startDate&ads_duration=${duration}&idPost=$id&frag=PostDetailFragment",
                                             false
                                         )
                                         Log.d("CreateAdsRequest", request.toString())

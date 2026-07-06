@@ -53,8 +53,8 @@ class MainActivity : AppCompatActivity() {
             return
         }
 
-        // DEEPLINK
-        handleIncomingDeepLink(intent)
+        // DEEPLINK - Returns true if a payment deep link successfully mounted a fragment
+        val isDeepLinkHandled = handleIncomingDeepLink(intent)
 
         // STYLING
         binding.bottomNav.itemIconTintList =
@@ -66,8 +66,11 @@ class MainActivity : AppCompatActivity() {
             insets
         }
 
-        // 1. Set the default fragment on first load
-        if (savedInstanceState == null) {
+        // 1. Set the default fragment on first load (ONLY if a deep link didn't handle navigation already)
+        if (savedInstanceState == null && !isDeepLinkHandled && supportFragmentManager.findFragmentById(
+                R.id.fragment_container
+            ) == null
+        ) {
             val justLoggedIn = intent.getBooleanExtra("EXTRA_JUST_LOGGED_IN", false)
             replaceFragment(DashboardFragment.newInstance(justLoggedIn))
         }
@@ -103,13 +106,13 @@ class MainActivity : AppCompatActivity() {
                 else -> false
             }
         }
-
     }
-
 
     override fun onNewIntent(intent: Intent) {
         super.onNewIntent(intent)
-        // Catch the deep link if the activity was already open in the background
+        // CRUCIAL: Overwrite the Activity intent reference context so old initial intent data isn't evaluated
+        setIntent(intent)
+        // Catch deep link if the activity was already alive in the background stack
         handleIncomingDeepLink(intent)
     }
 
@@ -128,11 +131,8 @@ class MainActivity : AppCompatActivity() {
                 val outRect = Rect()
                 v.getGlobalVisibleRect(outRect)
 
-                // If the user tapped outside the bounding box of the active EditText
                 if (!outRect.contains(event.rawX.toInt(), event.rawY.toInt())) {
                     v.clearFocus()
-
-                    // Hide the soft keyboard safely
                     WindowCompat.getInsetsController(window, v).hide(
                         WindowInsetsCompat.Type.ime()
                     )
@@ -156,25 +156,67 @@ class MainActivity : AppCompatActivity() {
 
     private fun navigateToErrorPage() {
         val intent = Intent(this, NoConnectionActivity::class.java).apply {
-            // Prevent multiple instances of ErrorActivity from piling up
             flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
         }
         startActivity(intent)
         finish()
     }
 
-    private fun handleIncomingDeepLink(intent: Intent?) {
+    /**
+     * Parse deep links and returns a Boolean indicating if an ad-booking redirection occurred.
+     */
+    private fun handleIncomingDeepLink(intent: Intent?): Boolean {
         val uri: Uri? = intent?.data
         if (uri != null && uri.scheme == "upagain" && uri.host == "payment") {
             val paymentStatus = uri.getQueryParameter("payment")
 
-            // Locate the active instance of your fragment
-            val fragment = supportFragmentManager.findFragmentById(R.id.fragment_container) as? PostDetailFragment
-
             if (paymentStatus == "success") {
-                // Forward the entire URL string so the fragment can extract query parameters
-                fragment?.onPaymentSuccessReturned(uri.toString())
+                val fullUriString = uri.toString()
+
+                // Read the destination fragment identifier from the URL parameter
+                val targetFragName = uri.getQueryParameter("frag")
+
+                when (targetFragName) {
+                    "PostDetailFragment" -> {
+                        // Locate the active instance of the detail fragment if it is already visible
+                        val activeFragment =
+                            supportFragmentManager.findFragmentById(R.id.fragment_container) as? PostDetailFragment
+
+                        if (activeFragment != null && activeFragment.isAdded) {
+                            // Scenario A: Fragment is present, push data directly
+                            activeFragment.onPaymentSuccessReturned(fullUriString)
+                        } else {
+                            // Scenario B: Fragment doesn't exist yet (App was closed/recreated/cold start).
+                            val postId = uri.getQueryParameter("idPost")?.toIntOrNull() ?: -1
+                            val freshFragment =
+                                PostDetailFragment.newInstance(postId, fullUriString)
+
+                            // Mount the fragment directly onto the main frame view container
+                            supportFragmentManager.beginTransaction()
+                                .replace(R.id.fragment_container, freshFragment)
+                                .commit()
+                        }
+                        return true // Handled PostDetailFragment routing successfully
+                    }
+
+                    "SomeOtherFragment" -> {
+                        // TODO: Handle redirection to other fragments in the future here
+                        // val otherId = uri.getQueryParameter("someId")
+                        // replaceFragment(SomeOtherFragment.newInstance(otherId))
+                        // return true
+                        return false
+                    }
+
+                    else -> {
+                        val defaultFrag = DashboardFragment.newInstance(false)
+                        supportFragmentManager.beginTransaction()
+                            .replace(R.id.fragment_container, defaultFrag)
+                            .commit()
+                        return false
+                    }
+                }
             }
         }
+        return false
     }
 }

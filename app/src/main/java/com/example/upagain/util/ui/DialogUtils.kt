@@ -59,7 +59,7 @@ object DialogUtils {
         // 2. Set Up Date Picker Handling
         var selectedDateMs: Long? = null
         val dateDisplayFormat = SimpleDateFormat("dd/MM/yyyy", Locale.FRANCE)
-        val datePayloadFormat = SimpleDateFormat("yyyy-MM-dd", Locale.FRANCE)
+        val datePayloadFormat = SimpleDateFormat("yyyy-MM-dd'T00:00:00Z'", Locale.FRANCE)
 
         binding.etStartDate.setOnClickListener {
             val datePicker = MaterialDatePicker.Builder.datePicker()
