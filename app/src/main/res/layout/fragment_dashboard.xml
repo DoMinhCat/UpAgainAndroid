@@ -153,6 +153,7 @@
                             android:orientation="vertical">
 
                             <TextView
+                                android:id="@+id/tv_legend_wood"
                                 style="@style/TextAppearance.UpAgain.BodySmall"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
@@ -161,6 +162,7 @@
                                 tools:text="● Wood (45%)" />
 
                             <TextView
+                                android:id="@+id/tv_legend_metal"
                                 style="@style/TextAppearance.UpAgain.BodySmall"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
@@ -169,6 +171,7 @@
                                 tools:text="● Metal (15%)" />
 
                             <TextView
+                                android:id="@+id/tv_legend_textile"
                                 style="@style/TextAppearance.UpAgain.BodySmall"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
@@ -177,6 +180,7 @@
                                 tools:text="● Textile (10%)" />
 
                             <TextView
+                                android:id="@+id/tv_legend_glass"
                                 style="@style/TextAppearance.UpAgain.BodySmall"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
@@ -185,6 +189,7 @@
                                 tools:text="● Glass (10%)" />
 
                             <TextView
+                                android:id="@+id/tv_legend_plastic"
                                 style="@style/TextAppearance.UpAgain.BodySmall"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
@@ -193,6 +198,7 @@
                                 tools:text="● Plastic (10%)" />
 
                             <TextView
+                                android:id="@+id/tv_legend_mixed"
                                 style="@style/TextAppearance.UpAgain.BodySmall"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
@@ -201,6 +207,7 @@
                                 tools:text="● Mixed (5%)" />
 
                             <TextView
+                                android:id="@+id/tv_legend_other"
                                 style="@style/TextAppearance.UpAgain.BodySmall"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
@@ -234,12 +241,14 @@
                             android:orientation="horizontal">
 
                             <View
+                                android:id="@+id/v_bar_wood_available"
                                 android:layout_width="6dp"
                                 android:layout_height="80dp"
                                 android:layout_marginEnd="2dp"
                                 android:background="@color/color_primary" />
 
                             <View
+                                android:id="@+id/v_bar_wood_other"
                                 android:layout_width="6dp"
                                 android:layout_height="50dp"
                                 android:background="@color/color_bar_chart_background" />
@@ -253,12 +262,14 @@
                             android:orientation="horizontal">
 
                             <View
+                                android:id="@+id/v_bar_metal_available"
                                 android:layout_width="6dp"
                                 android:layout_height="60dp"
                                 android:layout_marginEnd="2dp"
                                 android:background="@color/color_primary" />
 
                             <View
+                                android:id="@+id/v_bar_metal_other"
                                 android:layout_width="6dp"
                                 android:layout_height="70dp"
                                 android:background="@color/color_bar_chart_background" />
@@ -272,12 +283,14 @@
                             android:orientation="horizontal">
 
                             <View
+                                android:id="@+id/v_bar_textile_available"
                                 android:layout_width="6dp"
                                 android:layout_height="40dp"
                                 android:layout_marginEnd="2dp"
                                 android:background="@color/color_primary" />
 
                             <View
+                                android:id="@+id/v_bar_textile_other"
                                 android:layout_width="6dp"
                                 android:layout_height="30dp"
                                 android:background="@color/color_bar_chart_background" />
@@ -291,12 +304,14 @@
                             android:orientation="horizontal">
 
                             <View
+                                android:id="@+id/v_bar_glass_available"
                                 android:layout_width="6dp"
                                 android:layout_height="90dp"
                                 android:layout_marginEnd="2dp"
                                 android:background="@color/color_primary" />
 
                             <View
+                                android:id="@+id/v_bar_glass_other"
                                 android:layout_width="6dp"
                                 android:layout_height="40dp"
                                 android:background="@color/color_bar_chart_background" />
@@ -310,12 +325,14 @@
                             android:orientation="horizontal">
 
                             <View
+                                android:id="@+id/v_bar_plastic_available"
                                 android:layout_width="6dp"
                                 android:layout_height="55dp"
                                 android:layout_marginEnd="2dp"
                                 android:background="@color/color_primary" />
 
                             <View
+                                android:id="@+id/v_bar_plastic_other"
                                 android:layout_width="6dp"
                                 android:layout_height="25dp"
                                 android:background="@color/color_bar_chart_background" />
@@ -329,12 +346,14 @@
                             android:orientation="horizontal">
 
                             <View
+                                android:id="@+id/v_bar_mixed_available"
                                 android:layout_width="6dp"
                                 android:layout_height="30dp"
                                 android:layout_marginEnd="2dp"
                                 android:background="@color/color_primary" />
 
                             <View
+                                android:id="@+id/v_bar_mixed_other"
                                 android:layout_width="6dp"
                                 android:layout_height="45dp"
                                 android:background="@color/color_bar_chart_background" />
@@ -348,12 +367,14 @@
                             android:orientation="horizontal">
 
                             <View
+                                android:id="@+id/v_bar_other_available"
                                 android:layout_width="6dp"
                                 android:layout_height="20dp"
                                 android:layout_marginEnd="2dp"
                                 android:background="@color/color_primary" />
 
                             <View
+                                android:id="@+id/v_bar_other_other"
                                 android:layout_width="6dp"
                                 android:layout_height="15dp"
                                 android:background="@color/color_bar_chart_background" />
@@ -543,10 +564,11 @@
                                     android:text="@string/total_spent" />
 
                                 <TextView
+                                    android:id="@+id/tv_total_spent_val"
                                     style="@style/TextAppearance.UpAgain.H2"
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
-                                    tools:text="$1.2k" />
+                                    tools:text="0.00 €" />
                             </LinearLayout>
                         </com.google.android.material.card.MaterialCardView>
 
@@ -573,13 +595,14 @@
                                     android:alpha="0.5"
                                     android:ellipsize="end"
                                     android:maxLines="1"
-                                    android:text="@string/items_bought" />
+                                    android:text="@string/total_purchases" />
 
                                 <TextView
+                                    android:id="@+id/tv_total_purchases_val"
                                     style="@style/TextAppearance.UpAgain.H2"
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
-                                    android:text="42" />
+                                    tools:text="0" />
                             </LinearLayout>
                         </com.google.android.material.card.MaterialCardView>
 
@@ -606,13 +629,14 @@
                                     android:alpha="0.5"
                                     android:ellipsize="end"
                                     android:maxLines="1"
-                                    android:text="@string/event_fees" />
+                                    android:text="@string/paid_purchases" />
 
                                 <TextView
+                                    android:id="@+id/tv_paid_purchases_val"
                                     style="@style/TextAppearance.UpAgain.H2"
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
-                                    tools:text="$150" />
+                                    tools:text="0" />
                             </LinearLayout>
                         </com.google.android.material.card.MaterialCardView>
 
@@ -639,13 +663,14 @@
                                     android:alpha="0.5"
                                     android:ellipsize="end"
                                     android:maxLines="1"
-                                    android:text="@string/total_projects" />
+                                    android:text="@string/free_purchases" />
 
                                 <TextView
+                                    android:id="@+id/tv_free_purchases_val"
                                     style="@style/TextAppearance.UpAgain.H2"
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
-                                    android:text="12" />
+                                    tools:text="0" />
                             </LinearLayout>
                         </com.google.android.material.card.MaterialCardView>
                     </GridLayout>
@@ -679,6 +704,7 @@
                                 android:text="@string/material_wood" />
 
                             <com.google.android.material.progressindicator.LinearProgressIndicator
+                                android:id="@+id/progress_material_wood"
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
                                 android:layout_weight="1"
@@ -688,13 +714,14 @@
                                 app:trackCornerRadius="4dp" />
 
                             <TextView
+                                android:id="@+id/tv_material_wood_val"
                                 style="@style/TextAppearance.UpAgain.BodySmall"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_marginStart="@dimen/space_md"
                                 android:gravity="end"
                                 android:minWidth="80dp"
-                                android:text="$840"
+                                tools:text="0.00 kg"
                                 android:textStyle="bold" />
                         </LinearLayout>
 
@@ -714,6 +741,7 @@
                                 android:text="@string/material_metal" />
 
                             <com.google.android.material.progressindicator.LinearProgressIndicator
+                                android:id="@+id/progress_material_metal"
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
                                 android:layout_weight="1"
@@ -723,13 +751,14 @@
                                 app:trackCornerRadius="4dp" />
 
                             <TextView
+                                android:id="@+id/tv_material_metal_val"
                                 style="@style/TextAppearance.UpAgain.BodySmall"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_marginStart="@dimen/space_md"
                                 android:gravity="end"
                                 android:minWidth="80dp"
-                                android:text="$320"
+                                tools:text="0.00 kg"
                                 android:textStyle="bold" />
                         </LinearLayout>
 
@@ -749,6 +778,7 @@
                                 android:text="@string/material_textile" />
 
                             <com.google.android.material.progressindicator.LinearProgressIndicator
+                                android:id="@+id/progress_material_textile"
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
                                 android:layout_weight="1"
@@ -758,13 +788,14 @@
                                 app:trackCornerRadius="4dp" />
 
                             <TextView
+                                android:id="@+id/tv_material_textile_val"
                                 style="@style/TextAppearance.UpAgain.BodySmall"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_marginStart="@dimen/space_md"
                                 android:gravity="end"
                                 android:minWidth="80dp"
-                                android:text="$120"
+                                tools:text="0.00 kg"
                                 android:textStyle="bold" />
                         </LinearLayout>
 
@@ -784,6 +815,7 @@
                                 android:text="@string/material_glass" />
 
                             <com.google.android.material.progressindicator.LinearProgressIndicator
+                                android:id="@+id/progress_material_glass"
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
                                 android:layout_weight="1"
@@ -793,13 +825,14 @@
                                 app:trackCornerRadius="4dp" />
 
                             <TextView
+                                android:id="@+id/tv_material_glass_val"
                                 style="@style/TextAppearance.UpAgain.BodySmall"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_marginStart="@dimen/space_md"
                                 android:gravity="end"
                                 android:minWidth="80dp"
-                                android:text="$80"
+                                tools:text="0.00 kg"
                                 android:textStyle="bold" />
                         </LinearLayout>
 
@@ -819,6 +852,7 @@
                                 android:text="@string/material_plastic" />
 
                             <com.google.android.material.progressindicator.LinearProgressIndicator
+                                android:id="@+id/progress_material_plastic"
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
                                 android:layout_weight="1"
@@ -828,13 +862,14 @@
                                 app:trackCornerRadius="4dp" />
 
                             <TextView
+                                android:id="@+id/tv_material_plastic_val"
                                 style="@style/TextAppearance.UpAgain.BodySmall"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_marginStart="@dimen/space_md"
                                 android:gravity="end"
                                 android:minWidth="80dp"
-                                android:text="$45"
+                                tools:text="0.00 kg"
                                 android:textStyle="bold" />
                         </LinearLayout>
 
@@ -854,6 +889,7 @@
                                 android:text="@string/material_mixed" />
 
                             <com.google.android.material.progressindicator.LinearProgressIndicator
+                                android:id="@+id/progress_material_mixed"
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
                                 android:layout_weight="1"
@@ -863,13 +899,14 @@
                                 app:trackCornerRadius="4dp" />
 
                             <TextView
+                                android:id="@+id/tv_material_mixed_val"
                                 style="@style/TextAppearance.UpAgain.BodySmall"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_marginStart="@dimen/space_md"
                                 android:gravity="end"
                                 android:minWidth="80dp"
-                                android:text="$30"
+                                tools:text="0.00 kg"
                                 android:textStyle="bold" />
                         </LinearLayout>
 
@@ -889,6 +926,7 @@
                                 android:text="@string/material_other" />
 
                             <com.google.android.material.progressindicator.LinearProgressIndicator
+                                android:id="@+id/progress_material_other"
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
                                 android:layout_weight="1"
@@ -898,13 +936,14 @@
                                 app:trackCornerRadius="4dp" />
 
                             <TextView
+                                android:id="@+id/tv_material_other_val"
                                 style="@style/TextAppearance.UpAgain.BodySmall"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_marginStart="@dimen/space_md"
                                 android:gravity="end"
                                 android:minWidth="80dp"
-                                android:text="$15"
+                                tools:text="0.00 kg"
                                 android:textStyle="bold" />
                         </LinearLayout>
                     </LinearLayout>

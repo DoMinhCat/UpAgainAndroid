@@ -33,9 +33,9 @@
     <string name="stock" translatable="false">Stock</string>
     <string name="sold">Sold</string>
     <string name="total_spent">TOTAL SPENT</string>
-    <string name="items_bought">ITEMS BOUGHT</string>
-    <string name="event_fees">EVENT FEES</string>
-    <string name="total_projects">TOTAL PROJECTS</string>
+    <string name="total_purchases">TOTAL PURCHASES</string>
+    <string name="paid_purchases">PAID PURCHASES</string>
+    <string name="free_purchases">FREE PURCHASES</string>
     <string name="spending_by_material">Spending by material</string>
     <string name="time_24h">24h</string>
     <string name="time_7d">7d</string>

@@ -18,7 +18,6 @@ import com.example.upagain.feat.post.adapter.PreviewImageAdapter
 import com.example.upagain.model.item.ItemDetailResponse
 import com.example.upagain.model.post.PostDetailsResponse
 import com.example.upagain.model.post.ProjectStepResponse
-import com.example.upagain.model.post.StepItem
 import com.example.upagain.util.bin.ImageType
 import com.example.upagain.util.bin.buildImageUrl
 import com.google.android.material.datepicker.MaterialDatePicker

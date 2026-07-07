@@ -109,7 +109,11 @@ class ItemRepo(private val apiService: ApiService) {
         }
     }
 
-    suspend fun getItemTransactions(id: Int, page: Int? = null, limit: Int? = null): Result<com.example.upagain.model.transaction.TransactionsPaginationResponse> {
+    suspend fun getItemTransactions(
+        id: Int,
+        page: Int? = null,
+        limit: Int? = null
+    ): Result<com.example.upagain.model.transaction.TransactionsPaginationResponse> {
         return try {
             val response = apiService.getItemTransactions(id, page, limit).awaitResponse()
             val body = response.body()
@@ -163,7 +167,10 @@ class ItemRepo(private val apiService: ApiService) {
         }
     }
 
-    suspend fun purchaseItem(id: Int, payload: com.example.upagain.model.transaction.ItemPurchaseRequest): Result<String> {
+    suspend fun purchaseItem(
+        id: Int,
+        payload: com.example.upagain.model.transaction.ItemPurchaseRequest
+    ): Result<String> {
         return try {
             val response = apiService.purchaseItem(id, payload).awaitResponse()
             if (response.isSuccessful) {

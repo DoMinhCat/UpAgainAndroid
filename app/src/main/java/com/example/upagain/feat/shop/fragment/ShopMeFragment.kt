@@ -137,7 +137,8 @@ class ShopMeFragment : Fragment() {
             }
 
             selectedSort = if (checkedId != null) {
-                val checkedChip = group.findViewById<com.google.android.material.chip.Chip>(checkedId)
+                val checkedChip =
+                    group.findViewById<com.google.android.material.chip.Chip>(checkedId)
                 checkedChip.chipBackgroundColor = ColorStateList.valueOf(
                     ContextCompat.getColor(requireContext(), R.color.color_primary)
                 )
@@ -181,7 +182,8 @@ class ShopMeFragment : Fragment() {
             }
 
             selectedMaterial = if (checkedId != null) {
-                val checkedChip = group.findViewById<com.google.android.material.chip.Chip>(checkedId)
+                val checkedChip =
+                    group.findViewById<com.google.android.material.chip.Chip>(checkedId)
                 checkedChip.chipBackgroundColor = ColorStateList.valueOf(
                     ContextCompat.getColor(requireContext(), R.color.color_primary)
                 )
@@ -232,9 +234,11 @@ class ShopMeFragment : Fragment() {
                         is UiState.Idle -> {
                             toggleAllItemsLoading(false, true)
                         }
+
                         is UiState.Loading -> {
                             toggleAllItemsLoading(true, state.isFirstPage)
                         }
+
                         is UiState.Success -> {
                             val itemsResponse = state.data
                             currentPage = itemsResponse.currentPage
@@ -261,6 +265,7 @@ class ShopMeFragment : Fragment() {
                             shopAdapter.updatePaginationState(hasMore)
                             shopAdapter.submitList(loadedItems.toList())
                         }
+
                         is UiState.Error -> {
                             toggleAllItemsLoading(false, isFirstPage = (currentPage == 1))
                             Log.e("ShopMeFragment", "Failed to load my items", state.exception)

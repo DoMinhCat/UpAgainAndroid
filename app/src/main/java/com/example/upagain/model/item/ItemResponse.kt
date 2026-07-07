@@ -2,7 +2,7 @@ package com.example.upagain.model.item
 
 import com.google.gson.annotations.SerializedName
 
-data class ItemDetailResponse (
+data class ItemDetailResponse(
     @SerializedName("created_at") val createdAt: String,
     @SerializedName("id") val id: Int,
     @SerializedName("title") val title: String,

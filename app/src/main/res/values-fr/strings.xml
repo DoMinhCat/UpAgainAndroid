@@ -118,9 +118,9 @@
     <string name="financial_overview">Aperçu financier</string>
     <string name="sold">Vendu</string>
     <string name="total_spent">TOTAL DÉPENSÉ</string>
-    <string name="items_bought">ARTICLES ACHETÉS</string>
-    <string name="event_fees">FRAIS D\'ÉVÉNEMENT</string>
-    <string name="total_projects">PROJETS TOTAL</string>
+    <string name="total_purchases">TOTAL ACHATS</string>
+    <string name="paid_purchases">ACHATS PAYÉS</string>
+    <string name="free_purchases">ACHATS GRATUITS</string>
     <string name="confirm_password">Confirmer votre mot de passe</string>
     <string name="invalid_username">Nom d\'utilisateur invalide</string>
     <string name="security_description">Mettre à jour vos informations d\'identification</string>
