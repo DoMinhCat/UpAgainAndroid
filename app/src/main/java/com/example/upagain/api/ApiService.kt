@@ -11,6 +11,7 @@ import com.example.upagain.model.comment.CommentDetailsResponse
 import com.example.upagain.model.comment.CommentPaginationResponse
 import com.example.upagain.model.comment.CreateCommentRequest
 import com.example.upagain.model.comment.LikeCommentResponse
+import com.example.upagain.model.dashboard.ProAnalyticsResponse
 import com.example.upagain.model.finance.FinanceKeyEnum
 import com.example.upagain.model.item.ItemStatus
 import com.example.upagain.model.item.MyItemsResponse
@@ -232,4 +233,10 @@ interface ApiService {
         @Path("id") id: Int,
         @Body payload: com.example.upagain.model.transaction.ItemPurchaseRequest
     ): Call<ResponseBody>
+
+    @GET(Endpoints.PRO_ANALYTICS)
+    fun getProAnalytics(
+        @Path("id") id: Int,
+        @Query("timeframe") timeframe: String?
+    ): Call<ProAnalyticsResponse>
 }

@@ -208,7 +208,11 @@ class MainActivity : AppCompatActivity() {
                             activeFragment.onPaymentSuccessReturned(fullUriString)
                         } else {
                             val itemId = uri.getQueryParameter("id_item")?.toIntOrNull() ?: -1
-                            val freshFragment = com.example.upagain.feat.shop.fragment.ShopDetailFragment.newInstance(itemId, fullUriString)
+                            val freshFragment =
+                                com.example.upagain.feat.shop.fragment.ShopDetailFragment.newInstance(
+                                    itemId,
+                                    fullUriString
+                                )
                             supportFragmentManager.beginTransaction()
                                 .replace(R.id.fragment_container, freshFragment)
                                 .commit()

@@ -20,6 +20,7 @@
     <string name="error_not_pro">Aucun compte professionnel trouvé avec les identifiants fournis</string>
     <string name="placeholder_search">Rechercher</string>
     <string name="spending_by_material">Dépenses par matière</string>
+    <string name="time_year">Année</string>
     <string name="my_transactions">Mes Transactions</string>
     <string name="material_wood">Bois</string>
     <string name="material_metal">Métal</string>
@@ -117,9 +118,9 @@
     <string name="financial_overview">Aperçu financier</string>
     <string name="sold">Vendu</string>
     <string name="total_spent">TOTAL DÉPENSÉ</string>
-    <string name="items_bought">ARTICLES ACHETÉS</string>
-    <string name="event_fees">FRAIS D\'ÉVÉNEMENT</string>
-    <string name="total_projects">PROJETS TOTAL</string>
+    <string name="total_purchases">TOTAL ACHATS</string>
+    <string name="paid_purchases">ACHATS PAYÉS</string>
+    <string name="free_purchases">ACHATS GRATUITS</string>
     <string name="confirm_password">Confirmer votre mot de passe</string>
     <string name="invalid_username">Nom d\'utilisateur invalide</string>
     <string name="security_description">Mettre à jour vos informations d\'identification</string>
@@ -252,5 +253,13 @@
     <string name="code_msg">Le code d\'accès au casier et le code-barres s\'afficheront ici une fois que le vendeur aura déposé l\'objet.</string>
     <string name="download_barcode">Télécharger le code-barre</string>
     <string name="location">Localisation</string>
+
+    <!-- Dashboard Premium Gate -->
+    <string name="premium_gate_title">Passer à Premium</string>
+    <string name="premium_gate_message">Le tableau de bord est une fonctionnalité Premium. Mettez à niveau votre forfait pour accéder aux analyses détaillées, aux informations d\'inventaire et aux rapports financiers.</string>
+    <string name="premium_gate_cta">S\'abonner sur upcycleconnect.org</string>
+    <string name="time_24h">24h</string>
+    <string name="time_7d">7j</string>
+    <string name="time_30d">30j</string>
 
 </resources>

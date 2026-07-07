@@ -27,13 +27,13 @@ import com.example.upagain.util.ui.toggleFullScreenLoading
 import com.example.upagain.viewmodel.ItemViewModel
 import com.example.upagain.viewmodel.UiState
 import com.example.upagain.viewmodel.ViewModelFactory
-import kotlinx.coroutines.launch
+import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
-import com.google.android.gms.maps.CameraUpdateFactory
+import kotlinx.coroutines.launch
 
 private const val ARG_ITEM_ID = "arg_item_id"
 private const val ARG_STRIPE_URL = "arg_stripe_url"
@@ -73,7 +73,7 @@ class ShopDetailFragment : Fragment(), OnMapReadyCallback {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        
+
         carouselAdapter = com.example.upagain.feat.post.adapter.CarouselImageAdapter {
             // Handle image click
         }
@@ -82,7 +82,8 @@ class ShopDetailFragment : Fragment(), OnMapReadyCallback {
         setupListeners()
         observeState()
 
-        val mapFragment = childFragmentManager.findFragmentById(R.id.map_fragment) as? SupportMapFragment
+        val mapFragment =
+            childFragmentManager.findFragmentById(R.id.map_fragment) as? SupportMapFragment
         mapFragment?.getMapAsync(this)
 
         idItem?.let { id ->
@@ -120,7 +121,10 @@ class ShopDetailFragment : Fragment(), OnMapReadyCallback {
 
                 if (paymentStatus != "success") {
                     binding.main.showTopSnackbar(
-                        getString(R.string.snack_payment_verification_fail, "Payment status not success"),
+                        getString(
+                            R.string.snack_payment_verification_fail,
+                            "Payment status not success"
+                        ),
                         SnackbarLevel.ERROR
                     )
                     return@launch
@@ -192,16 +196,25 @@ class ShopDetailFragment : Fragment(), OnMapReadyCallback {
                                 binding.tvTitle.text = item.title
                                 itemTitle = item.title
                                 binding.chipMaterial.text = item.material.uppercase()
-                                binding.chipMaterial.setChipBackgroundColorResource(com.example.upagain.util.ui.getItemMaterialColor(item.material))
-                                binding.tvItemInfo.text = getString(R.string.item_info_format, item.state.replace("_", ""), item.weight.toString())
-                                
-                                binding.tvPrice.text = if (item.price > 0) "${item.price} €" else getString(R.string.free)
+                                binding.chipMaterial.setChipBackgroundColorResource(
+                                    com.example.upagain.util.ui.getItemMaterialColor(
+                                        item.material
+                                    )
+                                )
+                                binding.tvItemInfo.text = getString(
+                                    R.string.item_info_format,
+                                    item.state.replace("_", ""),
+                                    item.weight.toString()
+                                )
+
+                                binding.tvPrice.text =
+                                    if (item.price > 0) "${item.price} €" else getString(R.string.free)
                                 binding.tvScore.text = (item.score ?: 0).toString()
                                 binding.tvDescription.text = androidx.core.text.HtmlCompat.fromHtml(
                                     item.description ?: "",
                                     androidx.core.text.HtmlCompat.FROM_HTML_MODE_LEGACY
                                 )
-                                
+
                                 val photosList = item.images.orEmpty()
                                 carouselAdapter.submitList(photosList)
                                 if (photosList.size > 1) {
@@ -217,13 +230,18 @@ class ShopDetailFragment : Fragment(), OnMapReadyCallback {
                                     binding.ivDefaultCarouselPlaceholder.visibility = View.VISIBLE
                                 }
 
-                                val tx = (itemViewModel.latestTransactionState.value as? UiState.Success)?.data
+                                val tx =
+                                    (itemViewModel.latestTransactionState.value as? UiState.Success)?.data
                                 updateAccessCodes(tx, item)
                             }
 
                             is UiState.Error -> {
                                 binding.loadingOverlay.root.toggleFullScreenLoading(false)
-                                Log.e("ShopDetailFragment", "Failed to load item detail", state.exception)
+                                Log.e(
+                                    "ShopDetailFragment",
+                                    "Failed to load item detail",
+                                    state.exception
+                                )
                             }
                         }
                     }
@@ -234,13 +252,18 @@ class ShopDetailFragment : Fragment(), OnMapReadyCallback {
                     itemViewModel.listingDetailState.collect { state ->
                         if (state is UiState.Success) {
                             val listing = state.data
-                            binding.tvLocation.text = "${listing.city ?: ""}, ${listing.postal_code ?: ""}"
+                            binding.tvLocation.text =
+                                "${listing.city ?: ""}, ${listing.postal_code ?: ""}"
                             if (listing.lat != null && listing.lng != null) {
                                 currentLatLng = LatLng(listing.lat, listing.lng)
                                 updateMapLocation()
                             }
                         } else if (state is UiState.Error) {
-                            Log.e("ShopDetailFragment", "Failed to load listing details", state.exception)
+                            Log.e(
+                                "ShopDetailFragment",
+                                "Failed to load listing details",
+                                state.exception
+                            )
                         }
                     }
                 }
@@ -250,13 +273,18 @@ class ShopDetailFragment : Fragment(), OnMapReadyCallback {
                     itemViewModel.depositDetailState.collect { state ->
                         if (state is UiState.Success) {
                             val deposit = state.data
-                            binding.tvLocation.text = "${deposit.street ?: ""}, ${deposit.postal_code ?: ""} ${deposit.city ?: ""}"
+                            binding.tvLocation.text =
+                                "${deposit.street ?: ""}, ${deposit.postal_code ?: ""} ${deposit.city ?: ""}"
                             if (deposit.lat != null && deposit.lng != null) {
                                 currentLatLng = LatLng(deposit.lat, deposit.lng)
                                 updateMapLocation()
                             }
                         } else if (state is UiState.Error) {
-                            Log.e("ShopDetailFragment", "Failed to load deposit details", state.exception)
+                            Log.e(
+                                "ShopDetailFragment",
+                                "Failed to load deposit details",
+                                state.exception
+                            )
                         }
                     }
                 }
@@ -266,12 +294,17 @@ class ShopDetailFragment : Fragment(), OnMapReadyCallback {
                         when (state) {
                             is UiState.Success -> {
                                 val tx = state.data
-                                val item = (itemViewModel.itemDetailState.value as? UiState.Success)?.data
+                                val item =
+                                    (itemViewModel.itemDetailState.value as? UiState.Success)?.data
                                 updateAccessCodes(tx, item)
                             }
 
                             is UiState.Error -> {
-                                Log.e("ShopDetailFragment", "Failed to load transaction state", state.exception)
+                                Log.e(
+                                    "ShopDetailFragment",
+                                    "Failed to load transaction state",
+                                    state.exception
+                                )
                                 binding.btnActionReserve.visibility = View.VISIBLE
                                 binding.btnActionPurchase.visibility = View.VISIBLE
                                 binding.btnActionCancelReserve.visibility = View.GONE
@@ -312,9 +345,16 @@ class ShopDetailFragment : Fragment(), OnMapReadyCallback {
                             is UiState.Error -> {
                                 itemViewModel.resetPurchaseState()
                                 binding.loadingOverlay.root.toggleFullScreenLoading(false)
-                                Log.e("ShopDetailFragment", "Purchase action failed", state.exception)
+                                Log.e(
+                                    "ShopDetailFragment",
+                                    "Purchase action failed",
+                                    state.exception
+                                )
                                 binding.main.showTopSnackbar(
-                                    getString(R.string.snack_purchase_fail, state.exception.message ?: ""),
+                                    getString(
+                                        R.string.snack_purchase_fail,
+                                        state.exception.message ?: ""
+                                    ),
                                     SnackbarLevel.ERROR
                                 )
                             }
@@ -334,16 +374,26 @@ class ShopDetailFragment : Fragment(), OnMapReadyCallback {
                             is UiState.Success -> {
                                 itemViewModel.resetReserveState()
                                 binding.loadingOverlay.root.toggleFullScreenLoading(false)
-                                binding.main.showTopSnackbar(getString(R.string.snack_reserve_success), SnackbarLevel.SUCCESS)
+                                binding.main.showTopSnackbar(
+                                    getString(R.string.snack_reserve_success),
+                                    SnackbarLevel.SUCCESS
+                                )
                                 idItem?.let { itemViewModel.getLatestTransactionOfPro(it) }
                             }
 
                             is UiState.Error -> {
                                 itemViewModel.resetReserveState()
                                 binding.loadingOverlay.root.toggleFullScreenLoading(false)
-                                Log.e("ShopDetailFragment", "Reservation action failed", state.exception)
+                                Log.e(
+                                    "ShopDetailFragment",
+                                    "Reservation action failed",
+                                    state.exception
+                                )
                                 binding.main.showTopSnackbar(
-                                    getString(R.string.snack_reserve_fail, state.exception.message ?: ""),
+                                    getString(
+                                        R.string.snack_reserve_fail,
+                                        state.exception.message ?: ""
+                                    ),
                                     SnackbarLevel.ERROR
                                 )
                             }
@@ -373,9 +423,16 @@ class ShopDetailFragment : Fragment(), OnMapReadyCallback {
                             is UiState.Error -> {
                                 itemViewModel.resetCancelReservationState()
                                 binding.loadingOverlay.root.toggleFullScreenLoading(false)
-                                Log.e("ShopDetailFragment", "Cancel reservation action failed", state.exception)
+                                Log.e(
+                                    "ShopDetailFragment",
+                                    "Cancel reservation action failed",
+                                    state.exception
+                                )
                                 binding.main.showTopSnackbar(
-                                    getString(R.string.snack_cancel_fail, state.exception.message ?: ""),
+                                    getString(
+                                        R.string.snack_cancel_fail,
+                                        state.exception.message ?: ""
+                                    ),
                                     SnackbarLevel.ERROR
                                 )
                             }
@@ -394,30 +451,74 @@ class ShopDetailFragment : Fragment(), OnMapReadyCallback {
                                 val proCode = codes.find { it.userType == "pro" }
                                 if (proCode != null && proCode.barcodeBase64.isNotEmpty() && proCode.status == "active") {
                                     try {
-                                        val base64Str = proCode.barcodeBase64.substringAfter("base64,")
-                                        val decodedString = android.util.Base64.decode(base64Str, android.util.Base64.DEFAULT)
-                                        val decodedByte = android.graphics.BitmapFactory.decodeByteArray(decodedString, 0, decodedString.size)
+                                        val base64Str =
+                                            proCode.barcodeBase64.substringAfter("base64,")
+                                        val decodedString = android.util.Base64.decode(
+                                            base64Str,
+                                            android.util.Base64.DEFAULT
+                                        )
+                                        val decodedByte =
+                                            android.graphics.BitmapFactory.decodeByteArray(
+                                                decodedString,
+                                                0,
+                                                decodedString.size
+                                            )
                                         binding.ivBarcode.setImageBitmap(decodedByte)
-                                        
+
                                         binding.tvBarcodeCode.text = proCode.code
-                                        
+
                                         binding.btnCopyBarcodeCode.setOnClickListener {
-                                            val clipboard = requireContext().getSystemService(android.content.Context.CLIPBOARD_SERVICE) as android.content.ClipboardManager
-                                            val clip = android.content.ClipData.newPlainText("Barcode Code", proCode.code)
+                                            val clipboard =
+                                                requireContext().getSystemService(android.content.Context.CLIPBOARD_SERVICE) as android.content.ClipboardManager
+                                            val clip = android.content.ClipData.newPlainText(
+                                                "Barcode Code",
+                                                proCode.code
+                                            )
                                             clipboard.setPrimaryClip(clip)
-                                            binding.main.showTopSnackbar(getString(R.string.copied), SnackbarLevel.SUCCESS)
+                                            binding.main.showTopSnackbar(
+                                                getString(R.string.copied),
+                                                SnackbarLevel.SUCCESS
+                                            )
                                         }
-                                        
-                                        val fromDate = try { com.example.upagain.util.datetime.formatTimestamptz(proCode.validFrom ?: "") } catch (e: Exception) { proCode.validFrom ?: "" }
-                                        val toDate = try { com.example.upagain.util.datetime.formatTimestamptz(proCode.validTo ?: "") } catch (e: Exception) { proCode.validTo ?: "" }
-                                        binding.tvBarcodeContainer.text = getString(R.string.barcode_container_label, proCode.idContainer)
-                                        binding.tvBarcodeValidity.text = getString(R.string.barcode_validity_label, fromDate, toDate)
-                                        binding.tvBarcodeStatus.text = getString(R.string.barcode_status_label, proCode.status.uppercase())
-                                        
+
+                                        val fromDate = try {
+                                            com.example.upagain.util.datetime.formatTimestamptz(
+                                                proCode.validFrom ?: ""
+                                            )
+                                        } catch (e: Exception) {
+                                            proCode.validFrom ?: ""
+                                        }
+                                        val toDate = try {
+                                            com.example.upagain.util.datetime.formatTimestamptz(
+                                                proCode.validTo ?: ""
+                                            )
+                                        } catch (e: Exception) {
+                                            proCode.validTo ?: ""
+                                        }
+                                        binding.tvBarcodeContainer.text = getString(
+                                            R.string.barcode_container_label,
+                                            proCode.idContainer
+                                        )
+                                        binding.tvBarcodeValidity.text = getString(
+                                            R.string.barcode_validity_label,
+                                            fromDate,
+                                            toDate
+                                        )
+                                        binding.tvBarcodeStatus.text = getString(
+                                            R.string.barcode_status_label,
+                                            proCode.status.uppercase()
+                                        )
+
                                         binding.btnDownloadBarcode.setOnClickListener {
-                                            val tx = (itemViewModel.latestTransactionState.value as? UiState.Success)?.data
+                                            val tx =
+                                                (itemViewModel.latestTransactionState.value as? UiState.Success)?.data
                                             val txId = tx?.idTransaction ?: "unknown"
-                                            saveBarcodeImage(requireContext(), proCode.barcodeBase64, txId, binding.main)
+                                            saveBarcodeImage(
+                                                requireContext(),
+                                                proCode.barcodeBase64,
+                                                txId,
+                                                binding.main
+                                            )
                                         }
 
                                         binding.layoutBarcodeDetails.visibility = View.VISIBLE
@@ -436,13 +537,19 @@ class ShopDetailFragment : Fragment(), OnMapReadyCallback {
                                     binding.tvConfirmationInstruction.visibility = View.GONE
                                 }
                             }
+
                             is UiState.Error -> {
-                                Log.e("ShopDetailFragment", "Failed to load deposit codes", state.exception)
+                                Log.e(
+                                    "ShopDetailFragment",
+                                    "Failed to load deposit codes",
+                                    state.exception
+                                )
                                 binding.tvWaitingDropoffMessage.visibility = View.VISIBLE
                                 binding.layoutBarcodeDetails.visibility = View.GONE
                                 binding.layoutConfirmCodeContainer.visibility = View.GONE
                                 binding.tvConfirmationInstruction.visibility = View.GONE
                             }
+
                             else -> {}
                         }
                     }
@@ -470,14 +577,18 @@ class ShopDetailFragment : Fragment(), OnMapReadyCallback {
                 binding.tvConfirmationInstruction.visibility = View.VISIBLE
                 binding.tvConfirmationCode.text = tx.confirmCode ?: ""
                 binding.layoutConfirmCodeContainer.visibility = View.VISIBLE
-                
+
                 binding.btnCopyConfirmationCode.setOnClickListener {
-                    val clipboard = requireContext().getSystemService(android.content.Context.CLIPBOARD_SERVICE) as android.content.ClipboardManager
-                    val clip = android.content.ClipData.newPlainText("Confirmation Code", tx.confirmCode ?: "")
+                    val clipboard =
+                        requireContext().getSystemService(android.content.Context.CLIPBOARD_SERVICE) as android.content.ClipboardManager
+                    val clip = android.content.ClipData.newPlainText(
+                        "Confirmation Code",
+                        tx.confirmCode ?: ""
+                    )
                     clipboard.setPrimaryClip(clip)
                     binding.main.showTopSnackbar(getString(R.string.copied), SnackbarLevel.SUCCESS)
                 }
-                
+
                 binding.tvWaitingDropoffMessage.visibility = View.GONE
                 binding.layoutBarcodeDetails.visibility = View.GONE
             } else if (item.category == "deposit") {
