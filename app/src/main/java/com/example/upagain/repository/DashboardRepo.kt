@@ -7,9 +7,9 @@ import retrofit2.awaitResponse
 
 class DashboardRepo(private val apiService: ApiService) {
 
-    suspend fun getProAnalytics(idAccount: Int): Result<ProAnalyticsResponse> {
+    suspend fun getProAnalytics(idAccount: Int, timeframe: String?): Result<ProAnalyticsResponse> {
         return try {
-            val response = apiService.getProAnalytics(idAccount).awaitResponse()
+            val response = apiService.getProAnalytics(idAccount, timeframe).awaitResponse()
             val body = response.body()
 
             if (response.isSuccessful && body != null) {

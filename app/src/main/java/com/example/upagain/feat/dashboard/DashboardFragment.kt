@@ -102,6 +102,23 @@ class DashboardFragment : Fragment() {
             val intent = Intent(Intent.ACTION_VIEW, url.toUri())
             startActivity(intent)
         }
+
+        binding.toggleTime.addOnButtonCheckedListener { _, checkedId, isChecked ->
+            if (isChecked) {
+                val currentId = SessionManager.accountId ?: return@addOnButtonCheckedListener
+                dashboardViewModel.getProAnalytics(currentId, getSelectedTimeframeCode())
+            }
+        }
+    }
+
+    private fun getSelectedTimeframeCode(): String {
+        return when (binding.toggleTime.checkedButtonId) {
+            R.id.btn_24h -> "24h"
+            R.id.btn_7d -> "7d"
+            R.id.btn_30d -> "30d"
+            R.id.btn_year -> "year"
+            else -> "7d"
+        }
     }
 
     private fun observeState() {
@@ -122,7 +139,7 @@ class DashboardFragment : Fragment() {
                                     showDashboardContent()
                                     // Sourced live pro analytics on verification
                                     SessionManager.accountId?.let { id ->
-                                        dashboardViewModel.getProAnalytics(id)
+                                        dashboardViewModel.getProAnalytics(id, getSelectedTimeframeCode())
                                     }
                                 } else {
                                     binding.loadingOverlay.root.toggleFullScreenLoading(false)

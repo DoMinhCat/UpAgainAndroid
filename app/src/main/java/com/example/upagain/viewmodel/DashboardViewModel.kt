@@ -17,11 +17,11 @@ class DashboardViewModel(private val repository: DashboardRepo, application: App
         MutableStateFlow<UiState<ProAnalyticsResponse>>(UiState.Idle)
     val proAnalyticsState: StateFlow<UiState<ProAnalyticsResponse>> = _proAnalyticsState
 
-    fun getProAnalytics(idAccount: Int) {
+    fun getProAnalytics(idAccount: Int, timeframe: String?) {
         viewModelScope.launch {
             _proAnalyticsState.value = UiState.Loading()
 
-            repository.getProAnalytics(idAccount)
+            repository.getProAnalytics(idAccount, timeframe)
                 .onSuccess { analytics ->
                     _proAnalyticsState.value = UiState.Success(analytics)
                 }

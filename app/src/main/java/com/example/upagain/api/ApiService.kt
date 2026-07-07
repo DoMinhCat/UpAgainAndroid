@@ -235,5 +235,8 @@ interface ApiService {
     ): Call<ResponseBody>
 
     @GET(Endpoints.PRO_ANALYTICS)
-    fun getProAnalytics(@Path("id") id: Int): Call<ProAnalyticsResponse>
+    fun getProAnalytics(
+        @Path("id") id: Int,
+        @Query("timeframe") timeframe: String?
+    ): Call<ProAnalyticsResponse>
 }
