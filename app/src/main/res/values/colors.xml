@@ -51,5 +51,10 @@
     <color name="material_wood">#8E5D38</color>
     <color name="material_textile">#F5A623</color>
     <color name="material_other">#9B9B9B</color>
+    
+    <!-- Semantic Greys -->
+    <color name="color_divider">#F0F0F0</color>
+    <color name="color_progress_track">#F0F0F0</color>
+    <color name="color_bar_chart_background">#E0E0E0</color>
 
 </resources>

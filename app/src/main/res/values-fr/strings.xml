@@ -20,6 +20,7 @@
     <string name="error_not_pro">Aucun compte professionnel trouvé avec les identifiants fournis</string>
     <string name="placeholder_search">Rechercher</string>
     <string name="spending_by_material">Dépenses par matière</string>
+    <string name="time_year">Année</string>
     <string name="my_transactions">Mes Transactions</string>
     <string name="material_wood">Bois</string>
     <string name="material_metal">Métal</string>
@@ -257,5 +258,8 @@
     <string name="premium_gate_title">Passer à Premium</string>
     <string name="premium_gate_message">Le tableau de bord est une fonctionnalité Premium. Mettez à niveau votre forfait pour accéder aux analyses détaillées, aux informations d\'inventaire et aux rapports financiers.</string>
     <string name="premium_gate_cta">S\'abonner sur upcycleconnect.org</string>
+    <string name="time_24h">24h</string>
+    <string name="time_7d">7j</string>
+    <string name="time_30d">30j</string>
 
 </resources>

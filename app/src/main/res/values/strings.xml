@@ -37,6 +37,10 @@
     <string name="event_fees">EVENT FEES</string>
     <string name="total_projects">TOTAL PROJECTS</string>
     <string name="spending_by_material">Spending by material</string>
+    <string name="time_24h">24h</string>
+    <string name="time_7d">7d</string>
+    <string name="time_30d">30d</string>
+    <string name="time_year">Year</string>
 
     <!-- Shop -->
     <string name="my_transactions">My Transactions</string>

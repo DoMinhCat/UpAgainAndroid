@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.coordinatorlayout.widget.CoordinatorLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/main"
@@ -43,7 +42,7 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="24h"
+                    android:text="@string/time_24h"
                     android:textColor="@color/color_secondary" />
 
                 <com.google.android.material.button.MaterialButton
@@ -52,9 +51,9 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="7d"
-                    app:backgroundTint="@color/color_primary"
-                    android:textColor="@color/white" />
+                    android:text="@string/time_7d"
+                    android:textColor="@color/white"
+                    app:backgroundTint="@color/color_primary" />
 
                 <com.google.android.material.button.MaterialButton
                     android:id="@+id/btn_30d"
@@ -62,7 +61,7 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="30d"
+                    android:text="@string/time_30d"
                     android:textColor="@color/color_secondary" />
 
                 <com.google.android.material.button.MaterialButton
@@ -71,7 +70,7 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="Year"
+                    android:text="@string/time_year"
                     android:textColor="@color/color_secondary" />
             </com.google.android.material.button.MaterialButtonToggleGroup>
 
@@ -109,6 +108,7 @@
                     <androidx.constraintlayout.widget.ConstraintLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content">
+
                         <TextView
                             style="@style/TextAppearance.UpAgain.H3"
                             android:layout_width="wrap_content"
@@ -116,6 +116,7 @@
                             android:text="@string/inventory_summary"
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintTop_toTopOf="parent" />
+
                         <ImageView
                             android:layout_width="@dimen/icon_md"
                             android:layout_height="@dimen/icon_md"
@@ -130,86 +131,90 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/space_xl"
+                        android:baselineAligned="false"
                         android:gravity="center_vertical"
-                        android:orientation="horizontal"
-                        android:baselineAligned="false">
+                        android:orientation="horizontal">
 
                         <!-- Mock Pie Chart -->
                         <com.google.android.material.card.MaterialCardView
                             android:layout_width="120dp"
                             android:layout_height="120dp"
-                            app:cardCornerRadius="60dp"
+                            android:alpha="0.2"
                             app:cardBackgroundColor="@color/color_primary"
+                            app:cardCornerRadius="60dp"
                             app:cardElevation="0dp"
-                            app:strokeWidth="0dp"
-                            android:alpha="0.2" />
+                            app:strokeWidth="0dp" />
 
                         <LinearLayout
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
-                            android:layout_weight="1"
                             android:layout_marginStart="@dimen/space_lg"
+                            android:layout_weight="1"
                             android:orientation="vertical">
 
                             <TextView
+                                style="@style/TextAppearance.UpAgain.BodySmall"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                style="@style/TextAppearance.UpAgain.BodySmall"
-                                android:text="● Wood (45%)"
-                                android:textColor="#7A5C3E"
-                                android:paddingVertical="1dp" />
+                                android:paddingVertical="1dp"
+                                android:textColor="@color/material_wood"
+                                tools:text="● Wood (45%)" />
 
                             <TextView
+                                style="@style/TextAppearance.UpAgain.BodySmall"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                style="@style/TextAppearance.UpAgain.BodySmall"
-                                android:text="● Metal (15%)"
-                                android:textColor="#8E8E8E"
-                                android:paddingVertical="1dp" />
+                                android:paddingVertical="1dp"
+                                android:textColor="@color/material_metal"
+                                tools:text="● Metal (15%)" />
 
                             <TextView
+                                style="@style/TextAppearance.UpAgain.BodySmall"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                style="@style/TextAppearance.UpAgain.BodySmall"
-                                android:text="● Textile (10%)"
-                                android:textColor="@color/color_primary"
-                                android:paddingVertical="1dp" />
+                                android:paddingVertical="1dp"
+                                android:textColor="@color/material_textile"
+                                tools:text="● Textile (10%)" />
 
                             <TextView
+                                style="@style/TextAppearance.UpAgain.BodySmall"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                style="@style/TextAppearance.UpAgain.BodySmall"
-                                android:text="● Glass (10%)"
-                                android:textColor="#4A90E2"
-                                android:paddingVertical="1dp" />
+                                android:paddingVertical="1dp"
+                                android:textColor="@color/material_glass"
+                                tools:text="● Glass (10%)" />
 
                             <TextView
+                                style="@style/TextAppearance.UpAgain.BodySmall"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                style="@style/TextAppearance.UpAgain.BodySmall"
-                                android:text="● Plastic (10%)"
-                                android:textColor="@color/color_accent"
-                                android:paddingVertical="1dp" />
+                                android:paddingVertical="1dp"
+                                android:textColor="@color/material_plastic"
+                                tools:text="● Plastic (10%)" />
 
                             <TextView
+                                style="@style/TextAppearance.UpAgain.BodySmall"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                style="@style/TextAppearance.UpAgain.BodySmall"
-                                android:text="● Mixed (5%)"
+                                android:paddingVertical="1dp"
                                 android:textColor="@color/color_on_background"
-                                android:paddingVertical="1dp" />
+                                tools:text="● Mixed (5%)" />
 
                             <TextView
+                                style="@style/TextAppearance.UpAgain.BodySmall"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                style="@style/TextAppearance.UpAgain.BodySmall"
-                                android:text="● Other (5%)"
-                                android:textColor="@color/color_outline"
-                                android:paddingVertical="1dp" />
+                                android:paddingVertical="1dp"
+                                android:textColor="@color/material_other"
+                                tools:text="● Other (5%)" />
                         </LinearLayout>
                     </LinearLayout>
 
-                    <View android:layout_width="match_parent" android:layout_height="1dp" android:background="#F0F0F0" android:layout_marginVertical="@dimen/space_xl" />
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:layout_marginVertical="@dimen/space_xl"
+                        android:background="@color/color_divider" />
 
                     <!-- Bar Chart Area (7 double columns) -->
                     <LinearLayout
@@ -221,33 +226,137 @@
                         android:weightSum="7">
 
                         <!-- Material Columns -->
-                        <LinearLayout android:layout_width="0dp" android:layout_height="match_parent" android:layout_weight="1" android:gravity="bottom|center_horizontal" android:orientation="horizontal">
-                            <View android:layout_width="6dp" android:layout_height="80dp" android:background="@color/color_primary" android:layout_marginEnd="2dp" />
-                            <View android:layout_width="6dp" android:layout_height="50dp" android:background="#E0E0E0" />
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1"
+                            android:gravity="bottom|center_horizontal"
+                            android:orientation="horizontal">
+
+                            <View
+                                android:layout_width="6dp"
+                                android:layout_height="80dp"
+                                android:layout_marginEnd="2dp"
+                                android:background="@color/color_primary" />
+
+                            <View
+                                android:layout_width="6dp"
+                                android:layout_height="50dp"
+                                android:background="@color/color_bar_chart_background" />
                         </LinearLayout>
-                        <LinearLayout android:layout_width="0dp" android:layout_height="match_parent" android:layout_weight="1" android:gravity="bottom|center_horizontal" android:orientation="horizontal">
-                            <View android:layout_width="6dp" android:layout_height="60dp" android:background="@color/color_primary" android:layout_marginEnd="2dp" />
-                            <View android:layout_width="6dp" android:layout_height="70dp" android:background="#E0E0E0" />
+
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1"
+                            android:gravity="bottom|center_horizontal"
+                            android:orientation="horizontal">
+
+                            <View
+                                android:layout_width="6dp"
+                                android:layout_height="60dp"
+                                android:layout_marginEnd="2dp"
+                                android:background="@color/color_primary" />
+
+                            <View
+                                android:layout_width="6dp"
+                                android:layout_height="70dp"
+                                android:background="@color/color_bar_chart_background" />
                         </LinearLayout>
-                        <LinearLayout android:layout_width="0dp" android:layout_height="match_parent" android:layout_weight="1" android:gravity="bottom|center_horizontal" android:orientation="horizontal">
-                            <View android:layout_width="6dp" android:layout_height="40dp" android:background="@color/color_primary" android:layout_marginEnd="2dp" />
-                            <View android:layout_width="6dp" android:layout_height="30dp" android:background="#E0E0E0" />
+
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1"
+                            android:gravity="bottom|center_horizontal"
+                            android:orientation="horizontal">
+
+                            <View
+                                android:layout_width="6dp"
+                                android:layout_height="40dp"
+                                android:layout_marginEnd="2dp"
+                                android:background="@color/color_primary" />
+
+                            <View
+                                android:layout_width="6dp"
+                                android:layout_height="30dp"
+                                android:background="@color/color_bar_chart_background" />
                         </LinearLayout>
-                        <LinearLayout android:layout_width="0dp" android:layout_height="match_parent" android:layout_weight="1" android:gravity="bottom|center_horizontal" android:orientation="horizontal">
-                            <View android:layout_width="6dp" android:layout_height="90dp" android:background="@color/color_primary" android:layout_marginEnd="2dp" />
-                            <View android:layout_width="6dp" android:layout_height="40dp" android:background="#E0E0E0" />
+
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1"
+                            android:gravity="bottom|center_horizontal"
+                            android:orientation="horizontal">
+
+                            <View
+                                android:layout_width="6dp"
+                                android:layout_height="90dp"
+                                android:layout_marginEnd="2dp"
+                                android:background="@color/color_primary" />
+
+                            <View
+                                android:layout_width="6dp"
+                                android:layout_height="40dp"
+                                android:background="@color/color_bar_chart_background" />
                         </LinearLayout>
-                        <LinearLayout android:layout_width="0dp" android:layout_height="match_parent" android:layout_weight="1" android:gravity="bottom|center_horizontal" android:orientation="horizontal">
-                            <View android:layout_width="6dp" android:layout_height="55dp" android:background="@color/color_primary" android:layout_marginEnd="2dp" />
-                            <View android:layout_width="6dp" android:layout_height="25dp" android:background="#E0E0E0" />
+
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1"
+                            android:gravity="bottom|center_horizontal"
+                            android:orientation="horizontal">
+
+                            <View
+                                android:layout_width="6dp"
+                                android:layout_height="55dp"
+                                android:layout_marginEnd="2dp"
+                                android:background="@color/color_primary" />
+
+                            <View
+                                android:layout_width="6dp"
+                                android:layout_height="25dp"
+                                android:background="@color/color_bar_chart_background" />
                         </LinearLayout>
-                        <LinearLayout android:layout_width="0dp" android:layout_height="match_parent" android:layout_weight="1" android:gravity="bottom|center_horizontal" android:orientation="horizontal">
-                            <View android:layout_width="6dp" android:layout_height="30dp" android:background="@color/color_primary" android:layout_marginEnd="2dp" />
-                            <View android:layout_width="6dp" android:layout_height="45dp" android:background="#E0E0E0" />
+
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1"
+                            android:gravity="bottom|center_horizontal"
+                            android:orientation="horizontal">
+
+                            <View
+                                android:layout_width="6dp"
+                                android:layout_height="30dp"
+                                android:layout_marginEnd="2dp"
+                                android:background="@color/color_primary" />
+
+                            <View
+                                android:layout_width="6dp"
+                                android:layout_height="45dp"
+                                android:background="@color/color_bar_chart_background" />
                         </LinearLayout>
-                        <LinearLayout android:layout_width="0dp" android:layout_height="match_parent" android:layout_weight="1" android:gravity="bottom|center_horizontal" android:orientation="horizontal">
-                            <View android:layout_width="6dp" android:layout_height="20dp" android:background="@color/color_primary" android:layout_marginEnd="2dp" />
-                            <View android:layout_width="6dp" android:layout_height="15dp" android:background="#E0E0E0" />
+
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1"
+                            android:gravity="bottom|center_horizontal"
+                            android:orientation="horizontal">
+
+                            <View
+                                android:layout_width="6dp"
+                                android:layout_height="20dp"
+                                android:layout_marginEnd="2dp"
+                                android:background="@color/color_primary" />
+
+                            <View
+                                android:layout_width="6dp"
+                                android:layout_height="15dp"
+                                android:background="@color/color_bar_chart_background" />
                         </LinearLayout>
                     </LinearLayout>
 
@@ -258,26 +367,107 @@
                         android:layout_marginTop="@dimen/space_sm"
                         android:orientation="horizontal"
                         android:weightSum="7">
-                        <TextView android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:text="@string/material_wood" android:gravity="center" style="@style/TextAppearance.UpAgain.BodySmall" android:alpha="0.6" />
-                        <TextView android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:text="@string/material_metal" android:gravity="center" style="@style/TextAppearance.UpAgain.BodySmall" android:alpha="0.6" />
-                        <TextView android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:text="@string/material_textile" android:gravity="center" style="@style/TextAppearance.UpAgain.BodySmall" android:alpha="0.6" />
-                        <TextView android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:text="@string/material_glass" android:gravity="center" style="@style/TextAppearance.UpAgain.BodySmall" android:alpha="0.6" />
-                        <TextView android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:text="@string/material_plastic" android:gravity="center" style="@style/TextAppearance.UpAgain.BodySmall" android:alpha="0.6" />
-                        <TextView android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:text="@string/material_mixed" android:gravity="center" style="@style/TextAppearance.UpAgain.BodySmall" android:alpha="0.6" />
-                        <TextView android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:text="@string/material_other" android:gravity="center" style="@style/TextAppearance.UpAgain.BodySmall" android:alpha="0.6" />
+
+                        <TextView
+                            style="@style/TextAppearance.UpAgain.BodySmall"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:alpha="0.6"
+                            android:gravity="center"
+                            android:text="@string/material_wood" />
+
+                        <TextView
+                            style="@style/TextAppearance.UpAgain.BodySmall"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:alpha="0.6"
+                            android:gravity="center"
+                            android:text="@string/material_metal" />
+
+                        <TextView
+                            style="@style/TextAppearance.UpAgain.BodySmall"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:alpha="0.6"
+                            android:gravity="center"
+                            android:text="@string/material_textile" />
+
+                        <TextView
+                            style="@style/TextAppearance.UpAgain.BodySmall"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:alpha="0.6"
+                            android:gravity="center"
+                            android:text="@string/material_glass" />
+
+                        <TextView
+                            style="@style/TextAppearance.UpAgain.BodySmall"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:alpha="0.6"
+                            android:gravity="center"
+                            android:text="@string/material_plastic" />
+
+                        <TextView
+                            style="@style/TextAppearance.UpAgain.BodySmall"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:alpha="0.6"
+                            android:gravity="center"
+                            android:text="@string/material_mixed" />
+
+                        <TextView
+                            style="@style/TextAppearance.UpAgain.BodySmall"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:alpha="0.6"
+                            android:gravity="center"
+                            android:text="@string/material_other" />
                     </LinearLayout>
 
                     <!-- Legend -->
                     <LinearLayout
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/space_lg"
                         android:layout_gravity="center"
+                        android:layout_marginTop="@dimen/space_lg"
                         android:orientation="horizontal">
-                        <View android:layout_width="12dp" android:layout_height="12dp" android:background="@color/color_primary" android:layout_gravity="center_vertical" />
-                        <TextView style="@style/TextAppearance.UpAgain.BodySmall" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/stock" android:layout_marginStart="4dp" android:alpha="0.6" />
-                        <View android:layout_width="12dp" android:layout_height="12dp" android:background="#E0E0E0" android:layout_gravity="center_vertical" android:layout_marginStart="@dimen/space_lg" />
-                        <TextView style="@style/TextAppearance.UpAgain.BodySmall" android:text="@string/sold" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginStart="4dp" android:alpha="0.6" />
+
+                        <View
+                            android:layout_width="12dp"
+                            android:layout_height="12dp"
+                            android:layout_gravity="center_vertical"
+                            android:background="@color/color_primary" />
+
+                        <TextView
+                            style="@style/TextAppearance.UpAgain.BodySmall"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="4dp"
+                            android:alpha="0.6"
+                            android:text="@string/stock" />
+
+                            <View
+                                android:layout_width="12dp"
+                                android:layout_height="12dp"
+                                android:layout_gravity="center_vertical"
+                                android:layout_marginStart="@dimen/space_lg"
+                                android:background="@color/color_bar_chart_background" />
+
+                        <TextView
+                            style="@style/TextAppearance.UpAgain.BodySmall"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="4dp"
+                            android:alpha="0.6"
+                            android:text="@string/sold" />
                     </LinearLayout>
                 </LinearLayout>
             </com.google.android.material.card.MaterialCardView>
@@ -302,9 +492,9 @@
                         android:layout_height="wrap_content">
 
                         <TextView
+                            style="@style/TextAppearance.UpAgain.H3"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            style="@style/TextAppearance.UpAgain.H3"
                             android:text="@string/financial_overview"
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintTop_toTopOf="parent" />
@@ -330,120 +520,132 @@
                         <com.google.android.material.card.MaterialCardView
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
-                            android:layout_margin="4dp"
                             android:layout_columnWeight="1"
-                            app:cardBackgroundColor="#F9F7F2"
+                            android:layout_margin="4dp"
+                            app:cardBackgroundColor="@color/color_background"
                             app:cardCornerRadius="@dimen/input_radius"
                             app:cardElevation="0dp"
                             app:strokeWidth="0dp">
+
                             <LinearLayout
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:orientation="vertical"
                                 android:padding="@dimen/space_md">
+
                                 <TextView
+                                    style="@style/TextAppearance.UpAgain.BodySmall"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    style="@style/TextAppearance.UpAgain.BodySmall"
-                                    android:text="@string/total_spent"
                                     android:alpha="0.5"
+                                    android:ellipsize="end"
                                     android:maxLines="1"
-                                    android:ellipsize="end" />
+                                    android:text="@string/total_spent" />
+
                                 <TextView
                                     style="@style/TextAppearance.UpAgain.H2"
-                                    android:text="$1.2k"
                                     android:layout_width="match_parent"
-                                    android:layout_height="wrap_content" />
+                                    android:layout_height="wrap_content"
+                                    tools:text="$1.2k" />
                             </LinearLayout>
                         </com.google.android.material.card.MaterialCardView>
 
                         <com.google.android.material.card.MaterialCardView
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
-                            android:layout_margin="4dp"
                             android:layout_columnWeight="1"
-                            app:cardBackgroundColor="#F9F7F2"
+                            android:layout_margin="4dp"
+                            app:cardBackgroundColor="@color/color_background"
                             app:cardCornerRadius="@dimen/input_radius"
                             app:cardElevation="0dp"
                             app:strokeWidth="0dp">
+
                             <LinearLayout
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:orientation="vertical"
                                 android:padding="@dimen/space_md">
+
                                 <TextView
+                                    style="@style/TextAppearance.UpAgain.BodySmall"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    style="@style/TextAppearance.UpAgain.BodySmall"
-                                    android:text="@string/items_bought"
                                     android:alpha="0.5"
+                                    android:ellipsize="end"
                                     android:maxLines="1"
-                                    android:ellipsize="end" />
+                                    android:text="@string/items_bought" />
+
                                 <TextView
                                     style="@style/TextAppearance.UpAgain.H2"
-                                    android:text="42"
                                     android:layout_width="match_parent"
-                                    android:layout_height="wrap_content" />
+                                    android:layout_height="wrap_content"
+                                    android:text="42" />
                             </LinearLayout>
                         </com.google.android.material.card.MaterialCardView>
 
                         <com.google.android.material.card.MaterialCardView
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
-                            android:layout_margin="4dp"
                             android:layout_columnWeight="1"
-                            app:cardBackgroundColor="#F9F7F2"
+                            android:layout_margin="4dp"
+                            app:cardBackgroundColor="@color/color_background"
                             app:cardCornerRadius="@dimen/input_radius"
                             app:cardElevation="0dp"
                             app:strokeWidth="0dp">
+
                             <LinearLayout
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:orientation="vertical"
                                 android:padding="@dimen/space_md">
+
                                 <TextView
+                                    style="@style/TextAppearance.UpAgain.BodySmall"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    style="@style/TextAppearance.UpAgain.BodySmall"
-                                    android:text="@string/event_fees"
                                     android:alpha="0.5"
+                                    android:ellipsize="end"
                                     android:maxLines="1"
-                                    android:ellipsize="end" />
+                                    android:text="@string/event_fees" />
+
                                 <TextView
                                     style="@style/TextAppearance.UpAgain.H2"
-                                    android:text="$150"
                                     android:layout_width="match_parent"
-                                    android:layout_height="wrap_content" />
+                                    android:layout_height="wrap_content"
+                                    tools:text="$150" />
                             </LinearLayout>
                         </com.google.android.material.card.MaterialCardView>
 
                         <com.google.android.material.card.MaterialCardView
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
-                            android:layout_margin="4dp"
                             android:layout_columnWeight="1"
-                            app:cardBackgroundColor="#F9F7F2"
+                            android:layout_margin="4dp"
+                            app:cardBackgroundColor="@color/color_background"
                             app:cardCornerRadius="@dimen/input_radius"
                             app:cardElevation="0dp"
                             app:strokeWidth="0dp">
+
                             <LinearLayout
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:orientation="vertical"
                                 android:padding="@dimen/space_md">
+
                                 <TextView
+                                    style="@style/TextAppearance.UpAgain.BodySmall"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    style="@style/TextAppearance.UpAgain.BodySmall"
-                                    android:text="@string/total_projects"
                                     android:alpha="0.5"
+                                    android:ellipsize="end"
                                     android:maxLines="1"
-                                    android:ellipsize="end" />
+                                    android:text="@string/total_projects" />
+
                                 <TextView
                                     style="@style/TextAppearance.UpAgain.H2"
-                                    android:text="12"
                                     android:layout_width="match_parent"
-                                    android:layout_height="wrap_content" />
+                                    android:layout_height="wrap_content"
+                                    android:text="12" />
                             </LinearLayout>
                         </com.google.android.material.card.MaterialCardView>
                     </GridLayout>
@@ -458,49 +660,252 @@
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:orientation="vertical"
-                        android:layout_marginTop="@dimen/space_md">
+                        android:layout_marginTop="@dimen/space_md"
+                        android:orientation="vertical">
 
-                        <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal" android:gravity="center_vertical" android:layout_marginTop="@dimen/space_sm">
-                            <TextView style="@style/TextAppearance.UpAgain.BodySmall" android:layout_width="100dp" android:layout_height="wrap_content" android:text="@string/material_wood" android:maxLines="1" android:ellipsize="end" />
-                            <com.google.android.material.progressindicator.LinearProgressIndicator android:layout_width="0dp" android:layout_weight="1" android:layout_height="wrap_content" android:progress="80" app:indicatorColor="#7A5C3E" app:trackColor="#F0F0F0" app:trackCornerRadius="4dp" />
-                            <TextView style="@style/TextAppearance.UpAgain.BodySmall" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="$840" android:layout_marginStart="@dimen/space_md" android:textStyle="bold" android:minWidth="80dp" android:gravity="end" />
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/space_sm"
+                            android:gravity="center_vertical"
+                            android:orientation="horizontal">
+
+                            <TextView
+                                style="@style/TextAppearance.UpAgain.BodySmall"
+                                android:layout_width="100dp"
+                                android:layout_height="wrap_content"
+                                android:ellipsize="end"
+                                android:maxLines="1"
+                                android:text="@string/material_wood" />
+
+                            <com.google.android.material.progressindicator.LinearProgressIndicator
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:progress="80"
+                                app:indicatorColor="@color/material_wood"
+                                app:trackColor="@color/color_progress_track"
+                                app:trackCornerRadius="4dp" />
+
+                            <TextView
+                                style="@style/TextAppearance.UpAgain.BodySmall"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="@dimen/space_md"
+                                android:gravity="end"
+                                android:minWidth="80dp"
+                                android:text="$840"
+                                android:textStyle="bold" />
                         </LinearLayout>
 
-                        <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal" android:gravity="center_vertical" android:layout_marginTop="@dimen/space_sm">
-                            <TextView style="@style/TextAppearance.UpAgain.BodySmall" android:layout_width="100dp" android:layout_height="wrap_content" android:text="@string/material_metal" android:maxLines="1" android:ellipsize="end" />
-                            <com.google.android.material.progressindicator.LinearProgressIndicator android:layout_width="0dp" android:layout_weight="1" android:layout_height="wrap_content" android:progress="40" app:indicatorColor="#8E8E8E" app:trackColor="#F0F0F0" app:trackCornerRadius="4dp" />
-                            <TextView style="@style/TextAppearance.UpAgain.BodySmall" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="$320" android:layout_marginStart="@dimen/space_md" android:textStyle="bold" android:minWidth="80dp" android:gravity="end" />
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/space_sm"
+                            android:gravity="center_vertical"
+                            android:orientation="horizontal">
+
+                            <TextView
+                                style="@style/TextAppearance.UpAgain.BodySmall"
+                                android:layout_width="100dp"
+                                android:layout_height="wrap_content"
+                                android:ellipsize="end"
+                                android:maxLines="1"
+                                android:text="@string/material_metal" />
+
+                            <com.google.android.material.progressindicator.LinearProgressIndicator
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:progress="40"
+                                app:indicatorColor="@color/material_metal"
+                                app:trackColor="@color/color_progress_track"
+                                app:trackCornerRadius="4dp" />
+
+                            <TextView
+                                style="@style/TextAppearance.UpAgain.BodySmall"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="@dimen/space_md"
+                                android:gravity="end"
+                                android:minWidth="80dp"
+                                android:text="$320"
+                                android:textStyle="bold" />
                         </LinearLayout>
 
-                        <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal" android:gravity="center_vertical" android:layout_marginTop="@dimen/space_sm">
-                            <TextView style="@style/TextAppearance.UpAgain.BodySmall" android:layout_width="100dp" android:layout_height="wrap_content" android:text="@string/material_textile" android:maxLines="1" android:ellipsize="end" />
-                            <com.google.android.material.progressindicator.LinearProgressIndicator android:layout_width="0dp" android:layout_weight="1" android:layout_height="wrap_content" android:progress="30" app:indicatorColor="@color/color_primary" app:trackColor="#F0F0F0" app:trackCornerRadius="4dp" />
-                            <TextView style="@style/TextAppearance.UpAgain.BodySmall" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="$120" android:layout_marginStart="@dimen/space_md" android:textStyle="bold" android:minWidth="80dp" android:gravity="end" />
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/space_sm"
+                            android:gravity="center_vertical"
+                            android:orientation="horizontal">
+
+                            <TextView
+                                style="@style/TextAppearance.UpAgain.BodySmall"
+                                android:layout_width="100dp"
+                                android:layout_height="wrap_content"
+                                android:ellipsize="end"
+                                android:maxLines="1"
+                                android:text="@string/material_textile" />
+
+                            <com.google.android.material.progressindicator.LinearProgressIndicator
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:progress="30"
+                                app:indicatorColor="@color/material_textile"
+                                app:trackColor="@color/color_progress_track"
+                                app:trackCornerRadius="4dp" />
+
+                            <TextView
+                                style="@style/TextAppearance.UpAgain.BodySmall"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="@dimen/space_md"
+                                android:gravity="end"
+                                android:minWidth="80dp"
+                                android:text="$120"
+                                android:textStyle="bold" />
                         </LinearLayout>
 
-                        <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal" android:gravity="center_vertical" android:layout_marginTop="@dimen/space_sm">
-                            <TextView style="@style/TextAppearance.UpAgain.BodySmall" android:layout_width="100dp" android:layout_height="wrap_content" android:text="@string/material_glass" android:maxLines="1" android:ellipsize="end" />
-                            <com.google.android.material.progressindicator.LinearProgressIndicator android:layout_width="0dp" android:layout_weight="1" android:layout_height="wrap_content" android:progress="20" app:indicatorColor="#4A90E2" app:trackColor="#F0F0F0" app:trackCornerRadius="4dp" />
-                            <TextView style="@style/TextAppearance.UpAgain.BodySmall" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="$80" android:layout_marginStart="@dimen/space_md" android:textStyle="bold" android:minWidth="80dp" android:gravity="end" />
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/space_sm"
+                            android:gravity="center_vertical"
+                            android:orientation="horizontal">
+
+                            <TextView
+                                style="@style/TextAppearance.UpAgain.BodySmall"
+                                android:layout_width="100dp"
+                                android:layout_height="wrap_content"
+                                android:ellipsize="end"
+                                android:maxLines="1"
+                                android:text="@string/material_glass" />
+
+                            <com.google.android.material.progressindicator.LinearProgressIndicator
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:progress="20"
+                                app:indicatorColor="@color/material_glass"
+                                app:trackColor="@color/color_progress_track"
+                                app:trackCornerRadius="4dp" />
+
+                            <TextView
+                                style="@style/TextAppearance.UpAgain.BodySmall"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="@dimen/space_md"
+                                android:gravity="end"
+                                android:minWidth="80dp"
+                                android:text="$80"
+                                android:textStyle="bold" />
                         </LinearLayout>
 
-                        <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal" android:gravity="center_vertical" android:layout_marginTop="@dimen/space_sm">
-                            <TextView style="@style/TextAppearance.UpAgain.BodySmall" android:layout_width="100dp" android:layout_height="wrap_content" android:text="@string/material_plastic" android:maxLines="1" android:ellipsize="end" />
-                            <com.google.android.material.progressindicator.LinearProgressIndicator android:layout_width="0dp" android:layout_weight="1" android:layout_height="wrap_content" android:progress="15" app:indicatorColor="@color/color_accent" app:trackColor="#F0F0F0" app:trackCornerRadius="4dp" />
-                            <TextView style="@style/TextAppearance.UpAgain.BodySmall" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="$45" android:layout_marginStart="@dimen/space_md" android:textStyle="bold" android:minWidth="80dp" android:gravity="end" />
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/space_sm"
+                            android:gravity="center_vertical"
+                            android:orientation="horizontal">
+
+                            <TextView
+                                style="@style/TextAppearance.UpAgain.BodySmall"
+                                android:layout_width="100dp"
+                                android:layout_height="wrap_content"
+                                android:ellipsize="end"
+                                android:maxLines="1"
+                                android:text="@string/material_plastic" />
+
+                            <com.google.android.material.progressindicator.LinearProgressIndicator
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:progress="15"
+                                app:indicatorColor="@color/material_plastic"
+                                app:trackColor="@color/color_progress_track"
+                                app:trackCornerRadius="4dp" />
+
+                            <TextView
+                                style="@style/TextAppearance.UpAgain.BodySmall"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="@dimen/space_md"
+                                android:gravity="end"
+                                android:minWidth="80dp"
+                                android:text="$45"
+                                android:textStyle="bold" />
                         </LinearLayout>
 
-                        <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal" android:gravity="center_vertical" android:layout_marginTop="@dimen/space_sm">
-                            <TextView style="@style/TextAppearance.UpAgain.BodySmall" android:layout_width="100dp" android:layout_height="wrap_content" android:text="@string/material_mixed" android:maxLines="1" android:ellipsize="end" />
-                            <com.google.android.material.progressindicator.LinearProgressIndicator android:layout_width="0dp" android:layout_weight="1" android:layout_height="wrap_content" android:progress="10" app:indicatorColor="@color/color_on_background" app:trackColor="#F0F0F0" app:trackCornerRadius="4dp" />
-                            <TextView style="@style/TextAppearance.UpAgain.BodySmall" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="$30" android:layout_marginStart="@dimen/space_md" android:textStyle="bold" android:minWidth="80dp" android:gravity="end" />
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/space_sm"
+                            android:gravity="center_vertical"
+                            android:orientation="horizontal">
+
+                            <TextView
+                                style="@style/TextAppearance.UpAgain.BodySmall"
+                                android:layout_width="100dp"
+                                android:layout_height="wrap_content"
+                                android:ellipsize="end"
+                                android:maxLines="1"
+                                android:text="@string/material_mixed" />
+
+                            <com.google.android.material.progressindicator.LinearProgressIndicator
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:progress="10"
+                                app:indicatorColor="@color/color_on_background"
+                                app:trackColor="@color/color_progress_track"
+                                app:trackCornerRadius="4dp" />
+
+                            <TextView
+                                style="@style/TextAppearance.UpAgain.BodySmall"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="@dimen/space_md"
+                                android:gravity="end"
+                                android:minWidth="80dp"
+                                android:text="$30"
+                                android:textStyle="bold" />
                         </LinearLayout>
 
-                        <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal" android:gravity="center_vertical" android:layout_marginTop="@dimen/space_sm">
-                            <TextView style="@style/TextAppearance.UpAgain.BodySmall" android:layout_width="100dp" android:layout_height="wrap_content" android:text="@string/material_other" android:maxLines="1" android:ellipsize="end" />
-                            <com.google.android.material.progressindicator.LinearProgressIndicator android:layout_width="0dp" android:layout_weight="1" android:layout_height="wrap_content" android:progress="5" app:indicatorColor="@color/color_outline" app:trackColor="#F0F0F0" app:trackCornerRadius="4dp" />
-                            <TextView style="@style/TextAppearance.UpAgain.BodySmall" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="$15" android:layout_marginStart="@dimen/space_md" android:textStyle="bold" android:minWidth="80dp" android:gravity="end" />
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/space_sm"
+                            android:gravity="center_vertical"
+                            android:orientation="horizontal">
+
+                            <TextView
+                                style="@style/TextAppearance.UpAgain.BodySmall"
+                                android:layout_width="100dp"
+                                android:layout_height="wrap_content"
+                                android:ellipsize="end"
+                                android:maxLines="1"
+                                android:text="@string/material_other" />
+
+                            <com.google.android.material.progressindicator.LinearProgressIndicator
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:progress="5"
+                                app:indicatorColor="@color/color_outline"
+                                app:trackColor="@color/color_progress_track"
+                                app:trackCornerRadius="4dp" />
+
+                            <TextView
+                                style="@style/TextAppearance.UpAgain.BodySmall"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="@dimen/space_md"
+                                android:gravity="end"
+                                android:minWidth="80dp"
+                                android:text="$15"
+                                android:textStyle="bold" />
                         </LinearLayout>
                     </LinearLayout>
 
@@ -515,34 +920,34 @@
         android:id="@+id/layout_premium_gate"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical"
         android:gravity="center"
+        android:orientation="vertical"
         android:padding="@dimen/space_xxl"
         android:visibility="gone">
 
         <ImageView
             android:layout_width="80dp"
             android:layout_height="80dp"
+            android:contentDescription="@string/premium_gate_title"
             android:src="@drawable/ic_crown"
-            app:tint="@color/color_accent"
-            android:contentDescription="@string/premium_gate_title" />
+            app:tint="@color/color_accent" />
 
         <TextView
             style="@style/TextAppearance.UpAgain.H1"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/space_lg"
-            android:text="@string/premium_gate_title"
-            android:gravity="center" />
+            android:gravity="center"
+            android:text="@string/premium_gate_title" />
 
         <TextView
             style="@style/TextAppearance.Material3.BodyMedium"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/space_md"
+            android:gravity="center"
             android:text="@string/premium_gate_message"
-            android:textColor="@color/color_secondary"
-            android:gravity="center" />
+            android:textColor="@color/color_secondary" />
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/btn_upgrade_premium"
