@@ -42,18 +42,15 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="@string/time_24h"
-                    android:textColor="@color/color_secondary" />
+                    android:text="@string/time_24h" />
 
                 <com.google.android.material.button.MaterialButton
                     android:id="@+id/btn_7d"
-                    style="@style/Widget.Material3.Button.TonalButton"
+                    style="@style/Widget.Material3.Button.TextButton"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="@string/time_7d"
-                    android:textColor="@color/white"
-                    app:backgroundTint="@color/color_primary" />
+                    android:text="@string/time_7d" />
 
                 <com.google.android.material.button.MaterialButton
                     android:id="@+id/btn_30d"
@@ -61,8 +58,7 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="@string/time_30d"
-                    android:textColor="@color/color_secondary" />
+                    android:text="@string/time_30d" />
 
                 <com.google.android.material.button.MaterialButton
                     android:id="@+id/btn_year"
@@ -70,8 +66,7 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="@string/time_year"
-                    android:textColor="@color/color_secondary" />
+                    android:text="@string/time_year" />
             </com.google.android.material.button.MaterialButtonToggleGroup>
 
         </LinearLayout>
@@ -238,20 +233,37 @@
                             android:layout_height="match_parent"
                             android:layout_weight="1"
                             android:gravity="bottom|center_horizontal"
-                            android:orientation="horizontal">
+                            android:orientation="vertical">
 
-                            <View
-                                android:id="@+id/v_bar_wood_available"
-                                android:layout_width="6dp"
-                                android:layout_height="80dp"
-                                android:layout_marginEnd="2dp"
-                                android:background="@color/color_primary" />
+                            <TextView
+                                android:id="@+id/tv_bar_wood_qty"
+                                style="@style/TextAppearance.UpAgain.BodySmall"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginBottom="2dp"
+                                android:textSize="10sp"
+                                android:textStyle="bold"
+                                tools:text="5" />
 
-                            <View
-                                android:id="@+id/v_bar_wood_other"
-                                android:layout_width="6dp"
-                                android:layout_height="50dp"
-                                android:background="@color/color_bar_chart_background" />
+                            <LinearLayout
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:gravity="bottom"
+                                android:orientation="horizontal">
+
+                                <View
+                                    android:id="@+id/v_bar_wood_available"
+                                    android:layout_width="6dp"
+                                    android:layout_height="80dp"
+                                    android:layout_marginEnd="2dp"
+                                    android:background="@color/color_primary" />
+
+                                <View
+                                    android:id="@+id/v_bar_wood_other"
+                                    android:layout_width="6dp"
+                                    android:layout_height="50dp"
+                                    android:background="@color/color_bar_chart_background" />
+                            </LinearLayout>
                         </LinearLayout>
 
                         <LinearLayout
@@ -259,20 +271,37 @@
                             android:layout_height="match_parent"
                             android:layout_weight="1"
                             android:gravity="bottom|center_horizontal"
-                            android:orientation="horizontal">
+                            android:orientation="vertical">
 
-                            <View
-                                android:id="@+id/v_bar_metal_available"
-                                android:layout_width="6dp"
-                                android:layout_height="60dp"
-                                android:layout_marginEnd="2dp"
-                                android:background="@color/color_primary" />
+                            <TextView
+                                android:id="@+id/tv_bar_metal_qty"
+                                style="@style/TextAppearance.UpAgain.BodySmall"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginBottom="2dp"
+                                android:textSize="10sp"
+                                android:textStyle="bold"
+                                tools:text="2" />
 
-                            <View
-                                android:id="@+id/v_bar_metal_other"
-                                android:layout_width="6dp"
-                                android:layout_height="70dp"
-                                android:background="@color/color_bar_chart_background" />
+                            <LinearLayout
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:gravity="bottom"
+                                android:orientation="horizontal">
+
+                                <View
+                                    android:id="@+id/v_bar_metal_available"
+                                    android:layout_width="6dp"
+                                    android:layout_height="60dp"
+                                    android:layout_marginEnd="2dp"
+                                    android:background="@color/color_primary" />
+
+                                <View
+                                    android:id="@+id/v_bar_metal_other"
+                                    android:layout_width="6dp"
+                                    android:layout_height="70dp"
+                                    android:background="@color/color_bar_chart_background" />
+                            </LinearLayout>
                         </LinearLayout>
 
                         <LinearLayout
@@ -280,20 +309,37 @@
                             android:layout_height="match_parent"
                             android:layout_weight="1"
                             android:gravity="bottom|center_horizontal"
-                            android:orientation="horizontal">
+                            android:orientation="vertical">
 
-                            <View
-                                android:id="@+id/v_bar_textile_available"
-                                android:layout_width="6dp"
-                                android:layout_height="40dp"
-                                android:layout_marginEnd="2dp"
-                                android:background="@color/color_primary" />
+                            <TextView
+                                android:id="@+id/tv_bar_textile_qty"
+                                style="@style/TextAppearance.UpAgain.BodySmall"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginBottom="2dp"
+                                android:textSize="10sp"
+                                android:textStyle="bold"
+                                tools:text="1" />
 
-                            <View
-                                android:id="@+id/v_bar_textile_other"
-                                android:layout_width="6dp"
-                                android:layout_height="30dp"
-                                android:background="@color/color_bar_chart_background" />
+                            <LinearLayout
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:gravity="bottom"
+                                android:orientation="horizontal">
+
+                                <View
+                                    android:id="@+id/v_bar_textile_available"
+                                    android:layout_width="6dp"
+                                    android:layout_height="40dp"
+                                    android:layout_marginEnd="2dp"
+                                    android:background="@color/color_primary" />
+
+                                <View
+                                    android:id="@+id/v_bar_textile_other"
+                                    android:layout_width="6dp"
+                                    android:layout_height="30dp"
+                                    android:background="@color/color_bar_chart_background" />
+                            </LinearLayout>
                         </LinearLayout>
 
                         <LinearLayout
@@ -301,20 +347,37 @@
                             android:layout_height="match_parent"
                             android:layout_weight="1"
                             android:gravity="bottom|center_horizontal"
-                            android:orientation="horizontal">
+                            android:orientation="vertical">
 
-                            <View
-                                android:id="@+id/v_bar_glass_available"
-                                android:layout_width="6dp"
-                                android:layout_height="90dp"
-                                android:layout_marginEnd="2dp"
-                                android:background="@color/color_primary" />
+                            <TextView
+                                android:id="@+id/tv_bar_glass_qty"
+                                style="@style/TextAppearance.UpAgain.BodySmall"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginBottom="2dp"
+                                android:textSize="10sp"
+                                android:textStyle="bold"
+                                tools:text="0" />
 
-                            <View
-                                android:id="@+id/v_bar_glass_other"
-                                android:layout_width="6dp"
-                                android:layout_height="40dp"
-                                android:background="@color/color_bar_chart_background" />
+                            <LinearLayout
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:gravity="bottom"
+                                android:orientation="horizontal">
+
+                                <View
+                                    android:id="@+id/v_bar_glass_available"
+                                    android:layout_width="6dp"
+                                    android:layout_height="90dp"
+                                    android:layout_marginEnd="2dp"
+                                    android:background="@color/color_primary" />
+
+                                <View
+                                    android:id="@+id/v_bar_glass_other"
+                                    android:layout_width="6dp"
+                                    android:layout_height="40dp"
+                                    android:background="@color/color_bar_chart_background" />
+                            </LinearLayout>
                         </LinearLayout>
 
                         <LinearLayout
@@ -322,20 +385,37 @@
                             android:layout_height="match_parent"
                             android:layout_weight="1"
                             android:gravity="bottom|center_horizontal"
-                            android:orientation="horizontal">
+                            android:orientation="vertical">
 
-                            <View
-                                android:id="@+id/v_bar_plastic_available"
-                                android:layout_width="6dp"
-                                android:layout_height="55dp"
-                                android:layout_marginEnd="2dp"
-                                android:background="@color/color_primary" />
+                            <TextView
+                                android:id="@+id/tv_bar_plastic_qty"
+                                style="@style/TextAppearance.UpAgain.BodySmall"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginBottom="2dp"
+                                android:textSize="10sp"
+                                android:textStyle="bold"
+                                tools:text="3" />
 
-                            <View
-                                android:id="@+id/v_bar_plastic_other"
-                                android:layout_width="6dp"
-                                android:layout_height="25dp"
-                                android:background="@color/color_bar_chart_background" />
+                            <LinearLayout
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:gravity="bottom"
+                                android:orientation="horizontal">
+
+                                <View
+                                    android:id="@+id/v_bar_plastic_available"
+                                    android:layout_width="6dp"
+                                    android:layout_height="55dp"
+                                    android:layout_marginEnd="2dp"
+                                    android:background="@color/color_primary" />
+
+                                <View
+                                    android:id="@+id/v_bar_plastic_other"
+                                    android:layout_width="6dp"
+                                    android:layout_height="25dp"
+                                    android:background="@color/color_bar_chart_background" />
+                            </LinearLayout>
                         </LinearLayout>
 
                         <LinearLayout
@@ -343,20 +423,37 @@
                             android:layout_height="match_parent"
                             android:layout_weight="1"
                             android:gravity="bottom|center_horizontal"
-                            android:orientation="horizontal">
+                            android:orientation="vertical">
 
-                            <View
-                                android:id="@+id/v_bar_mixed_available"
-                                android:layout_width="6dp"
-                                android:layout_height="30dp"
-                                android:layout_marginEnd="2dp"
-                                android:background="@color/color_primary" />
+                            <TextView
+                                android:id="@+id/tv_bar_mixed_qty"
+                                style="@style/TextAppearance.UpAgain.BodySmall"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginBottom="2dp"
+                                android:textSize="10sp"
+                                android:textStyle="bold"
+                                tools:text="4" />
 
-                            <View
-                                android:id="@+id/v_bar_mixed_other"
-                                android:layout_width="6dp"
-                                android:layout_height="45dp"
-                                android:background="@color/color_bar_chart_background" />
+                            <LinearLayout
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:gravity="bottom"
+                                android:orientation="horizontal">
+
+                                <View
+                                    android:id="@+id/v_bar_mixed_available"
+                                    android:layout_width="6dp"
+                                    android:layout_height="30dp"
+                                    android:layout_marginEnd="2dp"
+                                    android:background="@color/color_primary" />
+
+                                <View
+                                    android:id="@+id/v_bar_mixed_other"
+                                    android:layout_width="6dp"
+                                    android:layout_height="45dp"
+                                    android:background="@color/color_bar_chart_background" />
+                            </LinearLayout>
                         </LinearLayout>
 
                         <LinearLayout
@@ -364,20 +461,37 @@
                             android:layout_height="match_parent"
                             android:layout_weight="1"
                             android:gravity="bottom|center_horizontal"
-                            android:orientation="horizontal">
+                            android:orientation="vertical">
 
-                            <View
-                                android:id="@+id/v_bar_other_available"
-                                android:layout_width="6dp"
-                                android:layout_height="20dp"
-                                android:layout_marginEnd="2dp"
-                                android:background="@color/color_primary" />
+                            <TextView
+                                android:id="@+id/tv_bar_other_qty"
+                                style="@style/TextAppearance.UpAgain.BodySmall"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginBottom="2dp"
+                                android:textSize="10sp"
+                                android:textStyle="bold"
+                                tools:text="0" />
 
-                            <View
-                                android:id="@+id/v_bar_other_other"
-                                android:layout_width="6dp"
-                                android:layout_height="15dp"
-                                android:background="@color/color_bar_chart_background" />
+                            <LinearLayout
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:gravity="bottom"
+                                android:orientation="horizontal">
+
+                                <View
+                                    android:id="@+id/v_bar_other_available"
+                                    android:layout_width="6dp"
+                                    android:layout_height="20dp"
+                                    android:layout_marginEnd="2dp"
+                                    android:background="@color/color_primary" />
+
+                                <View
+                                    android:id="@+id/v_bar_other_other"
+                                    android:layout_width="6dp"
+                                    android:layout_height="15dp"
+                                    android:background="@color/color_bar_chart_background" />
+                            </LinearLayout>
                         </LinearLayout>
                     </LinearLayout>
 

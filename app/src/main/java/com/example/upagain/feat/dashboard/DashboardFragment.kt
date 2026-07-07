@@ -29,7 +29,6 @@ import com.example.upagain.viewmodel.UiState
 import com.example.upagain.viewmodel.ViewModelFactory
 import kotlinx.coroutines.launch
 
-private const val ARG_JUST_LOGGED_IN = "key_just_logged_in"
 
 class DashboardFragment : Fragment() {
     private var _binding: FragmentDashboardBinding? = null
@@ -54,9 +53,7 @@ class DashboardFragment : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        arguments?.let {
-            justLoggedIn = it.getBoolean(ARG_JUST_LOGGED_IN)
-        }
+        arguments?.let {}
     }
 
     override fun onCreateView(
@@ -77,6 +74,9 @@ class DashboardFragment : Fragment() {
         setupListeners()
         observeState()
 
+        // Highlight default checked timeframe button
+        updateTimeframeButtonsUi(binding.toggleTime.checkedButtonId)
+
         val currentId = SessionManager.accountId ?: return
         accountViewModel.getAccountDetails(currentId)
     }
@@ -88,10 +88,9 @@ class DashboardFragment : Fragment() {
 
     companion object {
         @JvmStatic
-        fun newInstance(justLoggedIn: Boolean) =
+        fun newInstance() =
             DashboardFragment().apply {
                 arguments = Bundle().apply {
-                    putBoolean(ARG_JUST_LOGGED_IN, justLoggedIn)
                 }
             }
     }
@@ -105,8 +104,22 @@ class DashboardFragment : Fragment() {
 
         binding.toggleTime.addOnButtonCheckedListener { _, checkedId, isChecked ->
             if (isChecked) {
+                updateTimeframeButtonsUi(checkedId)
                 val currentId = SessionManager.accountId ?: return@addOnButtonCheckedListener
                 dashboardViewModel.getProAnalytics(currentId, getSelectedTimeframeCode())
+            }
+        }
+    }
+
+    private fun updateTimeframeButtonsUi(checkedId: Int) {
+        val buttons = listOf(binding.btn24h, binding.btn7d, binding.btn30d, binding.btnYear)
+        buttons.forEach { button ->
+            if (button.id == checkedId) {
+                button.setBackgroundColor(resources.getColor(R.color.color_primary, null))
+                button.setTextColor(resources.getColor(R.color.white, null))
+            } else {
+                button.setBackgroundColor(resources.getColor(android.R.color.transparent, null))
+                button.setTextColor(resources.getColor(R.color.color_secondary, null))
             }
         }
     }
@@ -139,7 +152,10 @@ class DashboardFragment : Fragment() {
                                     showDashboardContent()
                                     // Sourced live pro analytics on verification
                                     SessionManager.accountId?.let { id ->
-                                        dashboardViewModel.getProAnalytics(id, getSelectedTimeframeCode())
+                                        dashboardViewModel.getProAnalytics(
+                                            id,
+                                            getSelectedTimeframeCode()
+                                        )
                                     }
                                 } else {
                                     binding.loadingOverlay.root.toggleFullScreenLoading(false)
@@ -269,49 +285,56 @@ class DashboardFragment : Fragment() {
             analytics,
             maxQty,
             binding.vBarWoodAvailable,
-            binding.vBarWoodOther
+            binding.vBarWoodOther,
+            binding.tvBarWoodQty
         )
         bindBarChartColumn(
             "metal",
             analytics,
             maxQty,
             binding.vBarMetalAvailable,
-            binding.vBarMetalOther
+            binding.vBarMetalOther,
+            binding.tvBarMetalQty
         )
         bindBarChartColumn(
             "textile",
             analytics,
             maxQty,
             binding.vBarTextileAvailable,
-            binding.vBarTextileOther
+            binding.vBarTextileOther,
+            binding.tvBarTextileQty
         )
         bindBarChartColumn(
             "glass",
             analytics,
             maxQty,
             binding.vBarGlassAvailable,
-            binding.vBarGlassOther
+            binding.vBarGlassOther,
+            binding.tvBarGlassQty
         )
         bindBarChartColumn(
             "plastic",
             analytics,
             maxQty,
             binding.vBarPlasticAvailable,
-            binding.vBarPlasticOther
+            binding.vBarPlasticOther,
+            binding.tvBarPlasticQty
         )
         bindBarChartColumn(
             "mixed",
             analytics,
             maxQty,
             binding.vBarMixedAvailable,
-            binding.vBarMixedOther
+            binding.vBarMixedOther,
+            binding.tvBarMixedQty
         )
         bindBarChartColumn(
             "other",
             analytics,
             maxQty,
             binding.vBarOtherAvailable,
-            binding.vBarOtherOther
+            binding.vBarOtherOther,
+            binding.tvBarOtherQty
         )
     }
 
@@ -354,11 +377,14 @@ class DashboardFragment : Fragment() {
         analytics: ProAnalyticsResponse,
         maxQty: Int,
         vAvailable: View,
-        vOther: View
+        vOther: View,
+        qtyTextView: android.widget.TextView
     ) {
-        val stats = analytics.inventory.find { it.material.equals(materialName, true) }
+        val stats = analytics.inventory.find { it.material.trim().equals(materialName.trim(), true) }
         val availableVal = stats?.available ?: 0
         val otherVal = (stats?.added ?: 0) + (stats?.recycled ?: 0)
+
+        qtyTextView.text = (availableVal + otherVal).toString()
 
         // Max height: 100dp
         val maxBarHeightDp = 100
