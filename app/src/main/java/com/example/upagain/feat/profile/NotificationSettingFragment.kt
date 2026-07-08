@@ -38,6 +38,15 @@ class NotificationSettingFragment : Fragment() {
 
     private var isBinding = false
 
+    // Local caches for optimistic updates and rollbacks
+    private val currentNotiStates = mutableMapOf<String, Boolean>()
+    private val currentMaterialStates = mutableListOf<String>()
+
+    // Track last initiated background updates
+    private var lastUpdatedNotiType: String? = null
+    private var lastUpdatedNotiValue: Boolean = false
+    private var lastUpdatedMaterials: List<String>? = null
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -70,16 +79,18 @@ class NotificationSettingFragment : Fragment() {
             val accountId = SessionManager.accountId ?: return@OnCheckedChangeListener
 
             when (buttonView.id) {
-                R.id.switch_pro_material_available -> viewModel.updateNotificationSetting(accountId, "pro_material_available", isChecked)
-                R.id.switch_pro_object_deposited -> viewModel.updateNotificationSetting(accountId, "pro_object_deposited", isChecked)
-                R.id.switch_pro_object_expired -> viewModel.updateNotificationSetting(accountId, "pro_object_expired", isChecked)
-                R.id.switch_pro_subscription_end -> viewModel.updateNotificationSetting(accountId, "pro_subscription_end", isChecked)
-                R.id.switch_pro_code_expiring -> viewModel.updateNotificationSetting(accountId, "pro_code_expiring", isChecked)
+                R.id.switch_pro_material_available -> triggerNotiUpdate(accountId, "pro_material_available", isChecked)
+                R.id.switch_pro_object_deposited -> triggerNotiUpdate(accountId, "pro_object_deposited", isChecked)
+                R.id.switch_pro_object_expired -> triggerNotiUpdate(accountId, "pro_object_expired", isChecked)
+                R.id.switch_pro_subscription_end -> triggerNotiUpdate(accountId, "pro_subscription_end", isChecked)
+                R.id.switch_pro_code_expiring -> triggerNotiUpdate(accountId, "pro_code_expiring", isChecked)
 
                 R.id.switch_alert_wood, R.id.switch_alert_metal, R.id.switch_alert_textile,
                 R.id.switch_alert_glass, R.id.switch_alert_plastic, R.id.switch_alert_mixed,
                 R.id.switch_alert_other -> {
-                    viewModel.updateProAlertMaterials(accountId, getSelectedMaterialsFromUi())
+                    val newMaterials = getSelectedMaterialsFromUi()
+                    lastUpdatedMaterials = newMaterials
+                    viewModel.updateProAlertMaterials(accountId, newMaterials)
                 }
             }
         }
@@ -99,6 +110,12 @@ class NotificationSettingFragment : Fragment() {
             binding.switchAlertOther
         )
         switches.forEach { it.setOnCheckedChangeListener(switchListener) }
+    }
+
+    private fun triggerNotiUpdate(accountId: Int, notiType: String, isChecked: Boolean) {
+        lastUpdatedNotiType = notiType
+        lastUpdatedNotiValue = isChecked
+        viewModel.updateNotificationSetting(accountId, notiType, isChecked)
     }
 
     private fun getSelectedMaterialsFromUi(): List<String> {
@@ -126,12 +143,14 @@ class NotificationSettingFragment : Fragment() {
                             }
                             is UiState.Success -> {
                                 binding.loadingOverlay.root.toggleFullScreenLoading(false)
+                                // Hydrate initial states cache
+                                state.data.forEach { currentNotiStates[it.notiType] = it.isEnabled }
                                 bindNotiSettings(state.data)
                             }
                             is UiState.Error -> {
                                 binding.loadingOverlay.root.toggleFullScreenLoading(false)
                                 binding.main.showTopSnackbar(R.string.snack_noti_load_fail, SnackbarLevel.ERROR)
-                                Log.e("NotiSettingFragment", "Failed to load settings", state.exception)
+                                Log.e("NotificationSettingFragment", "Failed to load settings", state.exception)
                             }
                         }
                     }
@@ -147,11 +166,14 @@ class NotificationSettingFragment : Fragment() {
                             }
                             is UiState.Success -> {
                                 binding.loadingOverlay.root.toggleFullScreenLoading(false)
+                                // Hydrate initial states cache
+                                currentMaterialStates.clear()
+                                currentMaterialStates.addAll(state.data)
                                 bindMaterialAlerts(state.data)
                             }
                             is UiState.Error -> {
                                 binding.loadingOverlay.root.toggleFullScreenLoading(false)
-                                Log.e("NotiSettingFragment", "Failed to load alert materials", state.exception)
+                                Log.e("NotificationSettingFragment", "Failed to load alert materials", state.exception)
                             }
                         }
                     }
@@ -163,14 +185,20 @@ class NotificationSettingFragment : Fragment() {
                         when (state) {
                             is UiState.Idle -> {}
                             is UiState.Loading -> {
-                                binding.loadingOverlay.root.toggleFullScreenLoading(true)
+                                // Background processing, no full-screen blocker for optimistic updates
                             }
                             is UiState.Success -> {
-                                binding.loadingOverlay.root.toggleFullScreenLoading(false)
+                                lastUpdatedNotiType?.let { type ->
+                                    currentNotiStates[type] = lastUpdatedNotiValue
+                                }
                                 binding.main.showTopSnackbar(R.string.snack_noti_update_success, SnackbarLevel.SUCCESS)
                             }
                             is UiState.Error -> {
-                                binding.loadingOverlay.root.toggleFullScreenLoading(false)
+                                // Rollback to original value
+                                lastUpdatedNotiType?.let { type ->
+                                    val originalVal = currentNotiStates[type] ?: !lastUpdatedNotiValue
+                                    rollbackNotificationSwitch(type, originalVal)
+                                }
                                 val errMsg = state.exception?.message ?: ""
                                 binding.main.showTopSnackbar(
                                     getString(R.string.snack_noti_update_fail, errMsg),
@@ -187,14 +215,18 @@ class NotificationSettingFragment : Fragment() {
                         when (state) {
                             is UiState.Idle -> {}
                             is UiState.Loading -> {
-                                binding.loadingOverlay.root.toggleFullScreenLoading(true)
+                                // Background processing
                             }
                             is UiState.Success -> {
-                                binding.loadingOverlay.root.toggleFullScreenLoading(false)
+                                lastUpdatedMaterials?.let { list ->
+                                    currentMaterialStates.clear()
+                                    currentMaterialStates.addAll(list)
+                                }
                                 binding.main.showTopSnackbar(R.string.snack_alerts_update_success, SnackbarLevel.SUCCESS)
                             }
                             is UiState.Error -> {
-                                binding.loadingOverlay.root.toggleFullScreenLoading(false)
+                                // Rollback to original list
+                                bindMaterialAlerts(currentMaterialStates)
                                 val errMsg = state.exception?.message ?: ""
                                 binding.main.showTopSnackbar(
                                     getString(R.string.snack_alerts_update_fail, errMsg),
@@ -206,6 +238,18 @@ class NotificationSettingFragment : Fragment() {
                 }
             }
         }
+    }
+
+    private fun rollbackNotificationSwitch(notiType: String, originalValue: Boolean) {
+        isBinding = true
+        when (notiType) {
+            "pro_material_available" -> binding.switchProMaterialAvailable.isChecked = originalValue
+            "pro_object_deposited" -> binding.switchProObjectDeposited.isChecked = originalValue
+            "pro_object_expired" -> binding.switchProObjectExpired.isChecked = originalValue
+            "pro_subscription_end" -> binding.switchProSubscriptionEnd.isChecked = originalValue
+            "pro_code_expiring" -> binding.switchProCodeExpiring.isChecked = originalValue
+        }
+        isBinding = false
     }
 
     private fun bindNotiSettings(settings: List<NotiSetting>) {
