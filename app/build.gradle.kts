@@ -29,11 +29,12 @@ android {
 
         // 2. Inject the variable into BuildConfig
         buildConfigField("String", "API_BASE_URL", properties.getProperty("API_BASE_URL"))
-        buildConfigField("String", "MAP_API_KEY", properties.getProperty("MAP_API_KEY"))
+        buildConfigField("String", "MAPS_API_KEY", properties.getProperty("MAPS_API_KEY"))
         buildConfigField("String", "FRONTEND_BASE_URL", properties.getProperty("FRONTEND_BASE_URL"))
         buildConfigField("String", "PAYMENT_DEEPLINK", properties.getProperty("PAYMENT_DEEPLINK"))
-        
-        manifestPlaceholders["MAPS_API_KEY"] = properties.getProperty("MAP_API_KEY") ?: ""
+
+        val rawMapsKey = (properties.getProperty("MAPS_API_KEY") ?: "").trim('"', '\'')
+        manifestPlaceholders["MAPS_API_KEY"] = rawMapsKey
     }
 
     buildTypes {
