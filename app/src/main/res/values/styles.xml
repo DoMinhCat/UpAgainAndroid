@@ -24,6 +24,13 @@
         <item name="android:lineHeight">26sp</item>
     </style>
 
+    <!-- H4 -->
+    <style name="TextAppearance.UpAgain.H4">
+        <item name="android:textSize">16sp</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:lineHeight">24sp</item>
+    </style>
+
     <!-- Body Large -->
     <style name="TextAppearance.UpAgain.BodyLarge">
         <item name="android:textSize">16sp</item>

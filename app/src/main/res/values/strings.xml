@@ -310,4 +310,25 @@
     <string name="premium_gate_message">The dashboard is a Premium feature. Upgrade your plan to access detailed analytics, inventory insights and financial reports.</string>
     <string name="premium_gate_cta">Upgrade on upcycleconnect.org</string>
 
+    <!-- Notification & Alert Settings -->
+    <string name="noti_settings_title">Notification Settings</string>
+    <string name="category_push_noti">Push Notifications</string>
+    <string name="category_material_alerts">Material Alerts</string>
+    
+    <string name="noti_pro_material_available">New Material Alert</string>
+    <string name="noti_pro_material_available_desc">Get notified when a material from your preferences becomes available</string>
+    <string name="noti_pro_object_deposited">Item Dropped Off</string>
+    <string name="noti_pro_object_deposited_desc">Get notified when an item is dropped off at a container</string>
+    <string name="noti_pro_object_expired">Reservation Expired</string>
+    <string name="noti_pro_object_expired_desc">Get notified when your item reservation expires</string>
+    <string name="noti_pro_subscription_end">Subscription Renewal</string>
+    <string name="noti_pro_subscription_end_desc">Get notified when your partner subscription is about to end</string>
+    <string name="noti_pro_code_expiring">Handover Code Expiring</string>
+    <string name="noti_pro_code_expiring_desc">Get notified when your collection/handover codes are close to expiring</string>
+    
+    <string name="snack_noti_update_success">Notification preference updated</string>
+    <string name="snack_noti_update_fail">Notification update failed: %1$s</string>
+    <string name="snack_noti_load_fail">Failed to load notification settings: %1$s</string>
+    <string name="snack_alerts_update_success">Material alerts updated</string>
+    <string name="snack_alerts_update_fail">Failed to update material alerts: %1$s</string>
 </resources>

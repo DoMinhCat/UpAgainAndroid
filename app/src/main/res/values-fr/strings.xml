@@ -262,4 +262,25 @@
     <string name="time_7d">7j</string>
     <string name="time_30d">30j</string>
 
+    <!-- Notification & Alert Settings -->
+    <string name="noti_settings_title">Paramètres de notification</string>
+    <string name="category_push_noti">Notifications Push</string>
+    <string name="category_material_alerts">Alertes Matériaux</string>
+    
+    <string name="noti_pro_material_available">Alerte Nouveaux Matériaux</string>
+    <string name="noti_pro_material_available_desc">Recevoir une notification lorsqu\'un matériau de vos préférences devient disponible</string>
+    <string name="noti_pro_object_deposited">Objet déposé</string>
+    <string name="noti_pro_object_deposited_desc">Recevoir une notification lorsqu\'un objet est déposé dans un conteneur</string>
+    <string name="noti_pro_object_expired">Réservation expirée</string>
+    <string name="noti_pro_object_expired_desc">Recevoir une notification lorsque votre réservation d\'objet expire</string>
+    <string name="noti_pro_subscription_end">Renouvellement d\'abonnement</string>
+    <string name="noti_pro_subscription_end_desc">Recevoir une notification lorsque votre abonnement partenaire va bientôt expirer</string>
+    <string name="noti_pro_code_expiring">Code de remise expirant</string>
+    <string name="noti_pro_code_expiring_desc">Recevoir une notification lorsque vos codes de collecte/remise sont proches de l\'expiration</string>
+    
+    <string name="snack_noti_update_success">Préférence de notification mise à jour</string>
+    <string name="snack_noti_update_fail">Échec de la mise à jour : %1$s</string>
+    <string name="snack_noti_load_fail">Échec du chargement des préférences : %1$s</string>
+    <string name="snack_alerts_update_success">Alertes matériaux mises à jour</string>
+    <string name="snack_alerts_update_fail">Échec de la mise à jour des alertes : %1$s</string>
 </resources>

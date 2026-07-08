@@ -239,4 +239,22 @@ interface ApiService {
         @Path("id") id: Int,
         @Query("timeframe") timeframe: String?
     ): Call<ProAnalyticsResponse>
+
+    @GET(Endpoints.NOTIFICATION_SETTINGS)
+    fun getNotificationSettings(@Path("id") id: Int): Call<List<com.example.upagain.model.noti.NotiSetting>>
+
+    @PATCH(Endpoints.NOTIFICATION_SETTINGS)
+    fun updateNotificationSetting(
+        @Path("id") id: Int,
+        @Body payload: com.example.upagain.model.noti.UpdateNotiSettingRequest
+    ): Call<ResponseBody>
+
+    @GET(Endpoints.PRO_MATERIAL_ALERTS)
+    fun getProAlertMaterials(@Path("id") id: Int): Call<List<String>>
+
+    @PUT(Endpoints.PRO_MATERIAL_ALERTS)
+    fun updateProAlertMaterials(
+        @Path("id") id: Int,
+        @Body payload: com.example.upagain.model.noti.UpdateMaterialAlertsRequest
+    ): Call<ResponseBody>
 }

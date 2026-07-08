@@ -141,6 +141,14 @@ class ProfileFragment : Fragment() {
         binding.btnSettingSecurity.setOnClickListener {
             loadSecurityFragment()
         }
+        // NOTI SETTING
+        binding.btnSettingNoti.setOnClickListener {
+            val notiFrag = NotificationSettingFragment.newInstance()
+            parentFragmentManager.beginTransaction()
+                .replace(R.id.fragment_container, notiFrag)
+                .addToBackStack(null)
+                .commit()
+        }
         // EMAIL FIELD
         binding.tvProfileEmail.setOnClickListener {
             // navigate to security fragment to edit

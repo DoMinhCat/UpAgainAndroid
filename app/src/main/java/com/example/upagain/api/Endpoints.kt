@@ -15,6 +15,8 @@ object Endpoints {
     const val PASSWORD_UPDATE = "accounts/{id}/password"
     const val AVATAR_UPDATE = "accounts/{id}/avatar"
     const val PRO_ANALYTICS = "accounts/{id}/pro-analytics"
+    const val NOTIFICATION_SETTINGS = "accounts/{id}/notifications"
+    const val PRO_MATERIAL_ALERTS = "accounts/{id}/pro-analytics/alerts"
 
     // Container Endpoints
     const val CONTAINER_OPEN = "containers/{id}/open"
